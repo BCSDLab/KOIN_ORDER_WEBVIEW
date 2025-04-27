@@ -71,13 +71,6 @@ export default tseslint.config(
       'react/react-in-jsx-scope': 'off',
       'react/require-default-props': 'off',
       'react/jsx-props-no-spreading': 'off',
-      'react/function-component-definition': [
-        'error',
-        {
-          namedComponents: 'arrow-function',
-          unnamedComponents: 'arrow-function',
-        },
-      ],
 
       'import/prefer-default-export': 'off',
       'import/order': [

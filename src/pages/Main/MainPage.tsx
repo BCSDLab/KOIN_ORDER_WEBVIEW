@@ -1,11 +1,9 @@
 import AllCategory from '@/assets/Main/all-category.svg';
 
-const MainPage = () => {
+export default function MainPage() {
   return (
     <div>
       <AllCategory />
     </div>
   );
-};
-
-export default MainPage;
+}

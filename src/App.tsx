@@ -4,7 +4,7 @@ import MainPage from '@/pages/Main/MainPage';
 import MenuPage from '@/pages/Menu/MenuPage';
 import StoreDetailPage from '@/pages/StoreDetail/StoreDetailPage';
 
-const App = () => {
+export default function App() {
   return (
     <BrowserRouter>
       <Routes>
@@ -15,6 +15,4 @@ const App = () => {
       </Routes>
     </BrowserRouter>
   );
-};
-
-export default App;
+}
