@@ -18,6 +18,8 @@ export const apiClient = {
     sendRequest<T>(endPoint, { ...options, method: 'PUT' }),
   delete: <T = unknown>(endPoint: string, options: FetchOptions = {}) =>
     sendRequest<T>(endPoint, { ...options, method: 'DELETE' }),
+  patch: <T = unknown>(endPoint: string, options: FetchOptions = {}) =>
+    sendRequest<T>(endPoint, { ...options, method: 'PATCH' }),
 };
 
 async function sendRequest<T = unknown>(
