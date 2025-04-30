@@ -1,5 +1,20 @@
 @import "tailwindcss";
 
+@theme {
+  --breakpoint-sm: 480px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 976px;
+
+  --color-primary-300: #CE86FD;
+  --color-primary-500: #B611F5;
+
+  --color-neutral-300: #E1E1E1;
+  --color-neutral-400: #CACACA;
+  --color-neutral-500: #727272;  
+  --color-neutral-600: #4B4B4B;
+  --color-neutral-800: #000000;
+}
+
 @font-face {
   font-family: 'Pretendard';
   src: url('/fonts/Pretendard-Regular.woff2') format('woff2');
