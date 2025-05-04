@@ -1,20 +1,20 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 @theme {
   --breakpoint-sm: 480px;
   --breakpoint-md: 768px;
   --breakpoint-lg: 976px;
 
-  --color-primary-300: #CE86FD;
-  --color-primary-500: #B611F5;
+  --color-primary-300: #ce86fd;
+  --color-primary-500: #b611f5;
 
-  --color-neutral-300: #E1E1E1;
-  --color-neutral-400: #CACACA;
-  --color-neutral-500: #727272;  
-  --color-neutral-600: #4B4B4B;
+  --color-neutral-300: #e1e1e1;
+  --color-neutral-400: #cacaca;
+  --color-neutral-500: #727272;
+  --color-neutral-600: #4b4b4b;
   --color-neutral-800: #000000;
 
-  --shadow-input-sm: 0 1px 1px #00000005 0 2px 4px #0000000A;
+  --shadow-subtle: 0px 1px 1px 0px rgba(0, 0, 0, 0.02), 0px 2px 4px 0px rgba(0, 0, 0, 0.04);
 }
 
 @font-face {
@@ -34,15 +34,7 @@
 }
 
 #root {
-  font-family: 
-  'Pretendard',
-  system-ui,
-  "Segoe UI",
-  Roboto,
-  Helvetica,
-  Arial,
-  sans-serif,
-  "Apple Color Emoji",
-  "Segoe UI Emoji",
-  "Segoe UI Symbol";
+  font-family:
+    'Pretendard', system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+    'Segoe UI Symbol';
 }
