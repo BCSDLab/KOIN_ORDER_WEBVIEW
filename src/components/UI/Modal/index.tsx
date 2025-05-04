@@ -1,5 +1,5 @@
 import { ReactNode, useRef, useEffect } from 'react';
-import { createPortal } from 'react-dom';
+import Portal from '@/components/Portal/index';
 
 interface ModalProps {
   isOpen: boolean;
@@ -48,13 +48,14 @@ export default function Modal({ isOpen, onClose, children }: ModalProps) {
 
   if (!isOpen) return null;
 
-  return createPortal(
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70">
-      <div ref={modalRef} className={'min-w-4/5 rounded-lg bg-white'}>
-        {children}
+  return (
+    <Portal>
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70">
+        <div ref={modalRef} className={'min-w-4/5 rounded-lg bg-white'}>
+          {children}
+        </div>
       </div>
-    </div>,
-    document.body,
+    </Portal>
   );
 }
 

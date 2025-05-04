@@ -6,7 +6,6 @@ export default function Header() {
 
   const backToPreviousPage = () => {
     void navigate(-1);
-    console.log('뒤로가기');
   };
 
   return (
