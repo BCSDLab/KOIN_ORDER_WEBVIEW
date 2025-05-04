@@ -1,0 +1,25 @@
+import { useNavigate } from 'react-router-dom';
+import ArrowBackIcon from '@/assets/Main/arrow-back-icon.svg';
+
+export default function Header() {
+  const navigate = useNavigate();
+
+  const backToPreviousPage = () => {
+    void navigate(-1);
+    console.log('뒤로가기');
+  };
+
+  return (
+    <header className="fixed top-0 right-0 left-0 z-40 flex items-center justify-center px-6 py-3">
+      <button
+        type="button"
+        aria-label="뒤로가기 버튼"
+        onClick={() => void backToPreviousPage()}
+        className="absolute top-1/2 left-6 -translate-y-1/2"
+      >
+        <ArrowBackIcon />
+      </button>
+      <span className="font-[Pretendard] text-lg font-medium">주문</span>
+    </header>
+  );
+}
