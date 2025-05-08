@@ -1,11 +1,15 @@
+import { ReactElement, SVGProps } from 'react';
+import clsx from 'clsx';
+import { twMerge } from 'tailwind-merge';
+
 interface BadgeProps {
   variant?: 'default' | 'outlined';
-  color?: 'primary' | 'primaryLight' | 'neutral';
+  color?: 'primary' | 'primaryLight';
   size?: 'sm' | 'md' | 'lg';
   label?: string;
-  leftIcon?: React.ReactElement<React.SVGProps<SVGSVGElement>>;
-  rightIcon?: React.ReactElement<React.SVGProps<SVGSVGElement>>;
-  onClick?: () => void;
+  startIcon?: ReactElement<SVGProps<SVGSVGElement>>;
+  endIcon?: ReactElement<SVGProps<SVGSVGElement>>;
+  className?: string;
 }
 
 const COLOR = {
@@ -16,10 +20,6 @@ const COLOR = {
   primaryLight: {
     default: 'bg-primary-300 text-white',
     outlined: 'bg-white text-primary-300 border border-primary-300',
-  },
-  neutral: {
-    default: 'bg-neutral text-white',
-    outlined: 'bg-white text-neutral-500 border border-neutral-300',
   },
 };
 
@@ -34,29 +34,24 @@ export default function Badge({
   color = 'primary',
   size = 'lg',
   label,
-  leftIcon,
-  rightIcon,
-  onClick,
+  startIcon: startIcon,
+  endIcon: endIcon,
+  className,
 }: BadgeProps) {
-  const base = 'inline-flex items-center rounded-full py-1 font-[Pretendard] font-semibold text-sm gap-1.5 ';
-  const colorClass = COLOR[color][variant];
-  const sizeClass = SIZE[size];
-
-  const content = (
-    <>
-      {leftIcon && <span className="h-4 w-4">{leftIcon}</span>}
-      {label && <span>{label}</span>}
-      {rightIcon && <span className="h-4 w-4">{rightIcon}</span>}
-    </>
+  const composedClass = twMerge(
+    clsx(
+      'inline-flex items-center rounded-full py-1 font-[Pretendard] font-semibold text-sm gap-1.5 h-fit',
+      SIZE[size],
+      COLOR[color][variant],
+      className,
+    ),
   );
 
-  if (onClick) {
-    return (
-      <button type="button" onClick={onClick} className={`${base} ${sizeClass} ${colorClass}`}>
-        {content}
-      </button>
-    );
-  }
-
-  return <div className={`${base} ${sizeClass} ${colorClass}`}>{content}</div>;
+  return (
+    <div className={composedClass}>
+      {startIcon && <span className="h-4 w-4">{startIcon}</span>}
+      {label && <span>{label}</span>}
+      {endIcon && <span className="h-4 w-4">{endIcon}</span>}
+    </div>
+  );
 }
