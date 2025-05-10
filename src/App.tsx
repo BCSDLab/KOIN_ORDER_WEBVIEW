@@ -3,6 +3,7 @@ import DeliveryOutside from './pages/Delivery/Outside';
 import CartPage from '@/pages/Cart/CartPage';
 import MainPage from '@/pages/Main/MainPage';
 import MenuPage from '@/pages/Menu/MenuPage';
+import Payment from '@/pages/Payment/index';
 import StoreDetailPage from '@/pages/StoreDetail/StoreDetailPage';
 
 export default function App() {
@@ -13,12 +14,8 @@ export default function App() {
         <Route path="/store/:storeId" element={<StoreDetailPage />} />
         <Route path="/store/:storeId/menu/:menuId" element={<MenuPage />} />
         <Route path="/cart" element={<CartPage />} />
-        {/* 
-          TODO: 공통 컴포넌트 작업 후 Layout 추가 
-          Payment 라우트 구조 추가
-        */}
-        <Route path="/payment" /*element={<PaymentLayout /> }*/>
-          {/* <Route index element={<Payment />} /> */}
+        <Route path="/payment" /*element={<PaymentLayout />}*/>
+          <Route index element={<Payment />} />
           <Route path="delivery/outside" element={<DeliveryOutside />} />
         </Route>
       </Routes>
