@@ -9,7 +9,7 @@ export default function Header() {
   };
 
   return (
-    <header className="fixed top-0 right-0 left-0 z-40 flex items-center justify-center px-6 py-3">
+    <header className="fixed top-0 right-0 left-0 z-40 flex items-center justify-center px-6 py-4">
       <button
         type="button"
         aria-label="뒤로가기 버튼"

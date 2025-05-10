@@ -66,9 +66,9 @@ export const BottomModalHeader = ({ children }: { children: ReactNode }) => (
 );
 
 export const BottomModalContent = ({ children }: { children: ReactNode }) => (
-  <div className="flex flex-col gap-4 px-8 py-3 font-[Pretendard] text-sm text-neutral-600">{children}</div>
+  <div className="flex flex-col gap-4 px-8 py-4 font-[Pretendard] text-sm text-neutral-600">{children}</div>
 );
 
-export const BottomModalFooter = ({ children }: { children: ReactNode }) => (
+export const BottomModalFooter = ({ children }: { children?: ReactNode }) => (
   <div className="border-t border-t-neutral-300 px-8 py-3">{children}</div>
 );
