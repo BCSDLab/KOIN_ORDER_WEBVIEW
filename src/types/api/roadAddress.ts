@@ -1,3 +1,4 @@
+/** 요청/응답 참고: https://business.juso.go.kr/addrlink/openApi/searchApi.do */
 export interface AddressSearchRequest {
   confmKey: string;
   currentPage: number;
