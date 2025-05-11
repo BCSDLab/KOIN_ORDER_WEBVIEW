@@ -24,7 +24,7 @@ export default function DeliveryOutside() {
   return (
     <div className="mx-6 mt-4">
       <span className="text-primary-500 text-[16px] font-semibold">배달주소</span>
-      <div className="shadow-input-sm my-2 flex h-10 items-center gap-2 rounded-xl border-[1px] border-neutral-400 px-3 py-2">
+      <div className="shadow-1 my-2 flex h-10 items-center gap-2 rounded-xl border-[1px] border-neutral-400 px-3 py-2">
         <SearchIcon />
         <input
           ref={(inputRef) => {
@@ -65,7 +65,7 @@ export default function DeliveryOutside() {
         </div>
       )}
       {isSuccess && data && data.juso.length > 0 && (
-        <div className="shadow-input-sm mt-4 flex flex-col divide-y divide-neutral-300 rounded-xl border-[1px] border-neutral-300">
+        <div className="shadow-1 mt-4 flex flex-col divide-y divide-neutral-300 rounded-xl border-[1px] border-neutral-300">
           {data.juso.map((address) => (
             <div key={address.bdMgtSn} className="p-4">
               <div className="text-sm leading-[1.6] font-medium text-neutral-800">{address.bdNm}</div>
