@@ -119,7 +119,7 @@ export default function Payment() {
         <TossWidget widgets={widgets} setWidgets={setWidgets} setReady={setReady} amount={AMOUNT} />
         <Agreement />
         <PaymentAmount />
-        <div className="text-center align-middle font-[Pretendard] text-[12px] font-normal text-neutral-600">
+        <div className="text-center align-middle text-[12px] text-neutral-600">
           위 내용을 확인하였으며 결제에 동의합니다.
         </div>
       </div>
