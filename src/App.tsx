@@ -17,7 +17,7 @@ export default function App() {
         <Route path="/cart" element={<CartPage />} />
         <Route path="/payment" element={<PaymentLayout />}>
           <Route index element={<Payment />} />
-          <Route path="/delivery/outside" element={<DeliveryOutside />} />
+          <Route path="delivery/outside" element={<DeliveryOutside />} />
         </Route>
       </Routes>
     </BrowserRouter>
