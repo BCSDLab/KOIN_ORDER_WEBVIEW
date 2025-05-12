@@ -5,6 +5,7 @@
   --breakpoint-md: 768px;
   --breakpoint-lg: 976px;
 
+  --color-primary-100: #EAD3FE;
   --color-primary-300: #ce86fd;
   --color-primary-500: #b611f5;
 
@@ -37,4 +38,16 @@
   font-family:
     'Pretendard', system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
     'Segoe UI Symbol';
+}
+
+
+@layer components {
+  .request-label {
+    @apply flex h-[3.125rem]  items-center gap-2
+           rounded-lg border border-neutral-300 p-2
+           shadow-[var(--shadow-subtle)];
+  }
+  .request-label-checked {
+    @apply border-2 border-primary-500 bg-primary-100;
+  }
 }
