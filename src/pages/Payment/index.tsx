@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import clsx from 'clsx';
+import { useNavigate } from 'react-router-dom';
 import ContactModal from './components/ContactModal/ContactModal';
 import StoreRequestModal from './components/StoreRequestModal/StoreRequestModal';
 import Bike from '@/assets/Main/agriculture.svg';
@@ -16,6 +17,7 @@ export default function Payment() {
   const [contact, setContact] = useState('');
   const [request, setRequest] = useState('');
   const [noCutlery, setNoCutlery] = useState(true);
+  const navigate = useNavigate();
 
   return (
     <div className="mx-6 mt-4">
@@ -37,7 +39,13 @@ export default function Payment() {
                   <div>받을게요!</div>
                 </div>
               </Button>
-              <Button color="neutral" size="md" endIcon={<Home />} className="text-xs">
+              <Button
+                color="neutral"
+                size="md"
+                endIcon={<Home />}
+                className="text-xs"
+                onClick={() => void navigate('delivery/outside')}
+              >
                 <div>
                   <div>밖에서</div>
                   <div>받을게요!</div>
