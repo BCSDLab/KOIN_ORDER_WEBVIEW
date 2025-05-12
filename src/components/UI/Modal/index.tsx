@@ -50,7 +50,7 @@ export default function Modal({ isOpen, onClose, children }: ModalProps) {
 
   return (
     <Portal>
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70">
+      <div className="fixed inset-0 z-100 flex items-center justify-center bg-black/70">
         <div ref={modalRef} className={'min-w-4/5 rounded-lg bg-white'}>
           {children}
         </div>

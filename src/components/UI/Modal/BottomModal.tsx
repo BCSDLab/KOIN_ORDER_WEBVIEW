@@ -50,7 +50,7 @@ export default function BottomModal({ isOpen, onClose, children }: ModalProps) {
 
   return (
     <Portal>
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70">
+      <div className="fixed inset-0 z-100 flex items-center justify-center bg-black/70">
         <div ref={modalRef} className={'mt-auto w-full max-w-none rounded-t-4xl bg-white'}>
           {children}
         </div>
