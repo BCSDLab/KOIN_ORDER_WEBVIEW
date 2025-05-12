@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { TossPaymentsWidgets } from '@tosspayments/tosspayments-sdk';
 import clsx from 'clsx';
+import { useNavigate } from 'react-router-dom';
 import Agreement from './components/Agreement';
 import ContactModal from './components/ContactModal/ContactModal';
 import PaymentAmount from './components/PaymentAmount';
@@ -29,6 +30,8 @@ export default function Payment() {
 
   const [ready, setReady] = useState(false);
   const [widgets, setWidgets] = useState<TossPaymentsWidgets | null>(null);
+
+  const navigate = useNavigate();
 
   const pay = async () => {
     try {
@@ -70,7 +73,13 @@ export default function Payment() {
                   <div>받을게요!</div>
                 </div>
               </Button>
-              <Button color="neutral" size="md" endIcon={<Home />} className="text-xs">
+              <Button
+                color="neutral"
+                size="md"
+                endIcon={<Home />}
+                className="text-xs"
+                onClick={() => void navigate('delivery/outside')}
+              >
                 <div>
                   <div>밖에서</div>
                   <div>받을게요!</div>
