@@ -15,7 +15,7 @@
   --color-neutral-600: #4b4b4b;
   --color-neutral-800: #000000;
 
-  --shadow-subtle: 0px 1px 1px 0px rgba(0, 0, 0, 0.02), 0px 2px 4px 0px rgba(0, 0, 0, 0.04);
+  --shadow-1: 0px 1px 1px 0px rgba(0, 0, 0, 0.02), 0px 2px 4px 0px rgba(0, 0, 0, 0.04);
 }
 
 @font-face {
@@ -40,7 +40,6 @@
     'Segoe UI Symbol';
 }
 
-
 @layer components {
   .request-label {
     @apply flex h-[3.125rem]  items-center gap-2
@@ -49,5 +48,11 @@
   }
   .request-label-checked {
     @apply border-2 border-primary-500 bg-primary-100;
+  }
+}
+
+@layer base {
+  body {
+    @apply bg-[#f8f8fa];
   }
 }
