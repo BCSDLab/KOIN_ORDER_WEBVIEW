@@ -48,9 +48,9 @@ export default function DetailAddress() {
   const handleCloseModal = () => setModalIsOpen(false);
 
   const handleSelectRequest = (detail: string) => setSelectedRequest(detail);
-  const getCustomInput = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+  const getCustomInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCustomInputValue(e.target.value.trimStart());
-  }, []);
+  };
 
   const handleSubmitRequest = () => handleCloseBottomModal();
 
