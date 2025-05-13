@@ -47,7 +47,7 @@ export default function DetailAddress() {
   const handleOpenModal = () => setModalIsOpen(true);
   const handleCloseModal = () => setModalIsOpen(false);
 
-  const handleSelectedRequest = (detail: string) => setSelectedRequest(detail);
+  const handleSelectRequest = (detail: string) => setSelectedRequest(detail);
   const getCustomInput = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setCustomInputValue(e.target.value.trimStart());
   }, []);
@@ -121,7 +121,7 @@ export default function DetailAddress() {
                     id={detail}
                     type="radio"
                     checked={selectedRequest === detail}
-                    onChange={() => handleSelectedRequest(detail)}
+                    onChange={() => handleSelectRequest(detail)}
                     className="peer border-primary-500 absolute h-5 w-5 appearance-none rounded-full border-2 bg-white"
                   />
                   <div className="bg-primary-500 pointer-events-none absolute inset-1 rounded-full opacity-0 peer-checked:opacity-100" />
@@ -139,7 +139,7 @@ export default function DetailAddress() {
                   id="customRequest"
                   type="radio"
                   checked={selectedRequest === 'customRequest'}
-                  onChange={() => handleselectedRequest('customRequest')}
+                  onChange={() => handleSelectRequest('customRequest')}
                   className="peer border-primary-500 absolute h-5 w-5 appearance-none rounded-full border-2 bg-white"
                 />
                 <div className="bg-primary-500 pointer-events-none absolute inset-1 rounded-full opacity-0 peer-checked:opacity-100" />
