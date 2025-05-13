@@ -113,7 +113,7 @@ export default function DetailAddress() {
               <label
                 key={index}
                 htmlFor={detail}
-                className={`request-label ${selectedRequest === detail ? 'request-label-checked' : ''}`}
+                className={`request-label ${selectedRequest === detail && 'request-label-checked'}`}
               >
                 <div className="relative h-5 w-5">
                   <input
