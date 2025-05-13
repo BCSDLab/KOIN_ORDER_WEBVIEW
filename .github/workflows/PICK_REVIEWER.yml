@@ -32,7 +32,7 @@ jobs:
             else setOutput(prCreatorJson.name, prUrl, randomReviewers[0], randomReviewers[1]);
 
             function getUniqueReviewers(reviewers, count) {
-              const shuffled = reviewer.sort(() => 0.5 - Math.random());
+              const shuffled = reviewers.sort(() => 0.5 - Math.random());
               return shuffled.slice(0, count);
             }
 
