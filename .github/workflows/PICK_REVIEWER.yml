@@ -27,12 +27,13 @@ jobs:
             const prCreatorJson = developers.reviewers.find(person => person.githubName === prCreator);
 
             const teamOrderMembers = developers.reviewers.filter((person) => person.team === "order" && person.githubName !== prCreator);
-            const randomReviewers = Array.from({ length : REVIEWER_COUNT }).map(() => getRandomReviewer(teamOrderMembers));
+            const randomReviewers = getUniqueReviewers(teamOrderMembers, REVIEWER_COUNT);
             if(!prCreatorJson) setOutput(prCreator, prUrl, randomReviewers[0], randomReviewers[1]);
             else setOutput(prCreatorJson.name, prUrl, randomReviewers[0], randomReviewers[1]);
 
-            function getRandomReviewer(reviewers) {
-              return reviewers[Math.floor(Math.random() * reviewers.length)];
+            function getUniqueReviewers(reviewers, count) {
+              const shuffled = reviewer.sort(() => 0.5 - Math.random());
+              return shuffled.slice(0, count);
             }
 
             function setOutput(prCreator, prUrl, reviewer1, reviewer2) {
