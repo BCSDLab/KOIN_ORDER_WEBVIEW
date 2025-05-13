@@ -28,6 +28,7 @@ jobs:
 
             const teamOrderMembers = developers.reviewers.filter((person) => person.team === "order" && person.githubName !== prCreator);
             const randomReviewers = getUniqueReviewers(teamOrderMembers, REVIEWER_COUNT);
+            if(!prCreatorJson) setOutput(prCreator, prUrl, randomReviewers[0], randomReviewers[1]);
             else setOutput(prCreatorJson.name, prUrl, randomReviewers[0], randomReviewers[1]);
 
             function getUniqueReviewers(reviewers, count) {
