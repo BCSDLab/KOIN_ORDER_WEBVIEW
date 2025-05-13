@@ -1,10 +1,8 @@
 import { useEffect, useState } from 'react';
 
-interface MarkerProps {
-  map: naver.maps.Map | null;
-}
+type map = naver.maps.Map | null;
 
-function useMarker({ map }: MarkerProps) {
+function useMarker(map: map) {
   const [marker, setMarker] = useState<naver.maps.Marker | null>(null);
 
   useEffect(() => {
@@ -23,7 +21,7 @@ function useMarker({ map }: MarkerProps) {
     };
   }, [map]);
 
-  return { marker };
+  return marker;
 }
 
 export default useMarker;

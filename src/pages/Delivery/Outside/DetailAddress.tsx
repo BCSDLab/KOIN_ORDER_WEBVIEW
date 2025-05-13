@@ -29,7 +29,7 @@ export default function DetailAddress() {
   const [customInputValue, setCustomInputValue] = useState<string>('');
 
   const map = useNaverMap(...sample);
-  useMarker({ map });
+  useMarker(map);
 
   const requestLabel = () => {
     if (!selectedRequest) {
