@@ -12,16 +12,16 @@ import BottomModal, {
   BottomModalFooter,
 } from '@/components/UI/Modal/BottomModal';
 
-export default function DetailAddress() {
-  const sample: [number, number] = [36.767, 127.284];
-  const DetailRequest: string[] = [
-    '문 앞에 놔주세요 (벨 눌러주세요)',
-    '문 앞에 놔주세요 (노크해주세요)',
-    '문 앞에 놔주세요 (벨X, 노크 X)',
-    '직접 받을게요 ',
-    '전화주시면 마중 나갈게요',
-  ];
+const sample: [number, number] = [36.767, 127.284];
+const DetailRequest: string[] = [
+  '문 앞에 놔주세요 (벨 눌러주세요)',
+  '문 앞에 놔주세요 (노크해주세요)',
+  '문 앞에 놔주세요 (벨X, 노크 X)',
+  '직접 받을게요',
+  '전화주시면 마중 나갈게요',
+];
 
+export default function DetailAddress() {
   const [bottomModalIsOpen, setBottomModalIsOpen] = useState<boolean>(false);
   const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
 
