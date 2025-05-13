@@ -56,7 +56,7 @@ export default function DetailAddress() {
   return (
     <div className="flex flex-col items-center">
       <div className="p-1"> 위에 구분</div>
-      <div className="shadow-subtle w-[21.375rem] rounded-xl">
+      <div className="shadow-1 w-[21.375rem] rounded-xl">
         <div id="map" className="h-40 w-full rounded-t-xl border border-neutral-300"></div>
         <div className="flex h-[3.5rem] w-full items-center justify-between rounded-b-xl bg-white px-6 text-[0.813rem] text-neutral-600">
           충남 천안시 동남구 병천면 가전8길 102
@@ -136,7 +136,7 @@ export default function DetailAddress() {
             ))}
             <label
               htmlFor="customRequest"
-              className="has-[input[type=radio]:checked]:border-primary-500 has-[input[type=radio]:checked]:bg-primary-100 shadow-subtle flex h-[3.125rem] items-center gap-2 rounded-lg border border-neutral-300 p-2 has-[input[type=radio]:checked]:border-2"
+              className="has-[input[type=radio]:checked]:border-primary-500 has-[input[type=radio]:checked]:bg-primary-100 shadow-1 flex h-[3.125rem] items-center gap-2 rounded-lg border border-neutral-300 p-2 has-[input[type=radio]:checked]:border-2"
             >
               <div className="relative h-5 w-5">
                 <input
