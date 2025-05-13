@@ -25,20 +25,20 @@ export default function DetailAddress() {
   const [bottomModalIsOpen, setBottomModalIsOpen] = useState<boolean>(false);
   const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
 
-  const [selectRequest, setSelectRequest] = useState<string>('');
+  const [selectedRequest, setSelectedRequest] = useState<string>('');
   const [customInputValue, setCustomInputValue] = useState<string>('');
 
   const map = useNaverMap(...sample);
   useMarker({ map });
 
   const requestLabel = () => {
-    if (!selectRequest) {
+    if (!selectedRequest) {
       return '상세 요청사항을 입력해주세요.';
     }
-    if (selectRequest === 'customRequest') {
+    if (selectedRequest === 'customRequest') {
       return customInputValue || '상세 요청사항을 입력해주세요.';
     }
-    return selectRequest;
+    return selectedRequest;
   };
 
   const handleOpenBottomModal = () => setBottomModalIsOpen(true);
@@ -47,7 +47,7 @@ export default function DetailAddress() {
   const handleOpenModal = () => setModalIsOpen(true);
   const handleCloseModal = () => setModalIsOpen(false);
 
-  const handleSelectRequest = (detail: string) => setSelectRequest(detail);
+  const handleSelectedRequest = (detail: string) => setSelectedRequest(detail);
   const getCustomInput = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setCustomInputValue(e.target.value.trimStart());
   }, []);
@@ -113,15 +113,15 @@ export default function DetailAddress() {
               <label
                 key={index}
                 htmlFor={detail}
-                className={`request-label ${selectRequest === detail ? 'request-label-checked' : ''}`}
+                className={`request-label ${selectedRequest === detail ? 'request-label-checked' : ''}`}
               >
                 <div className="relative h-5 w-5">
                   <input
                     name="request"
                     id={detail}
                     type="radio"
-                    checked={selectRequest === detail}
-                    onChange={() => handleSelectRequest(detail)}
+                    checked={selectedRequest === detail}
+                    onChange={() => handleSelectedRequest(detail)}
                     className="peer border-primary-500 absolute h-5 w-5 appearance-none rounded-full border-2 bg-white"
                   />
                   <div className="bg-primary-500 pointer-events-none absolute inset-1 rounded-full opacity-0 peer-checked:opacity-100" />
@@ -138,15 +138,15 @@ export default function DetailAddress() {
                   name="request"
                   id="customRequest"
                   type="radio"
-                  checked={selectRequest === 'customRequest'}
-                  onChange={() => handleSelectRequest('customRequest')}
+                  checked={selectedRequest === 'customRequest'}
+                  onChange={() => handleselectedRequest('customRequest')}
                   className="peer border-primary-500 absolute h-5 w-5 appearance-none rounded-full border-2 bg-white"
                 />
                 <div className="bg-primary-500 pointer-events-none absolute inset-1 rounded-full opacity-0 peer-checked:opacity-100" />
               </div>
               <div className="text-base">직접 입력</div>
             </label>
-            {selectRequest === 'customRequest' && (
+            {selectedRequest === 'customRequest' && (
               <input
                 type="text"
                 value={customInputValue}
