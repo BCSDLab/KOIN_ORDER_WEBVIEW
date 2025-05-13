@@ -4,6 +4,7 @@ import useNaverMap from './hooks/useNaverMap';
 import CloseIcon from '@/assets/Main/close-icon.svg';
 import ArrowDown from '@/assets/Payment/arrow-down-icon.svg';
 import ArrowGo from '@/assets/Payment/arrow-go-icon.svg';
+import Button from '@/components/UI/Button';
 import Modal, { ModalContent, ModalFooter } from '@/components/UI/Modal';
 import BottomModal, {
   BottomModalHeader,
@@ -88,21 +89,15 @@ export default function DetailAddress() {
           </div>
         </button>
       </div>
-      <button
-        onClick={handleOpenModal}
-        className="bg-primary-500 fixed bottom-4 h-[2.875rem] w-[21.375rem] rounded-lg font-semibold text-white"
-      >
-        주소 선택
-      </button>
+      <Button className="mt-[18.188rem] h-[2.875rem] w-[21.375rem]" onClick={handleOpenModal}>
+        주소선택
+      </Button>
       <Modal isOpen={modalIsOpen} onClose={handleCloseModal}>
         <ModalContent>정확한 상세 주소를 입력해주세요.</ModalContent>
         <ModalFooter>
-          <button
-            onClick={handleCloseModal}
-            className="bg-primary-500 h-12 w-[16rem] rounded-lg font-semibold text-white"
-          >
+          <Button onClick={handleCloseModal} className="h-12 w-[16rem]">
             확인
-          </button>
+          </Button>
         </ModalFooter>
       </Modal>
       <BottomModal isOpen={bottomModalIsOpen} onClose={handleCloseBottomModal}>
@@ -161,16 +156,11 @@ export default function DetailAddress() {
               />
             )}
           </form>
-        </BottomModalContent>
-        <BottomModalFooter>
-          <button
-            type="button"
-            onClick={handleSubmitRequest}
-            className="bg-primary-500 h-[2.875rem] w-[20.375rem] rounded-lg font-semibold text-white"
-          >
+          <Button onClick={handleSubmitRequest} className="h-[2.875rem] w-[20.375rem]">
             선택하기
-          </button>
-        </BottomModalFooter>
+          </Button>
+        </BottomModalContent>
+        <BottomModalFooter></BottomModalFooter>
       </BottomModal>
     </div>
   );
