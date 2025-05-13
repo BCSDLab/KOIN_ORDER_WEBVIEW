@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState } from 'react';
 import useMarker from './hooks/useMarker';
 import useNaverMap from './hooks/useNaverMap';
 import CloseIcon from '@/assets/Main/close-icon.svg';
