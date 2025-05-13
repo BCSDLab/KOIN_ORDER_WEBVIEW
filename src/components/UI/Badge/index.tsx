@@ -1,4 +1,4 @@
-import { ReactElement, SVGProps } from 'react';
+import type { ReactElement, SVGProps } from 'react';
 import clsx from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
