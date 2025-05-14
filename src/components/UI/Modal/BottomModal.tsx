@@ -1,8 +1,8 @@
 import { type ReactNode, useRef } from 'react';
 import { twMerge } from 'tailwind-merge';
 import Portal from '@/components/Portal';
+import useClickTouchOutside from '@/util/hooks/useClickTouchOutside';
 import useEscapeKeyDown from '@/util/hooks/useEscapeKeyDown';
-import useOnClickOutside from '@/util/hooks/useOnClickOutside';
 import useScrollLock from '@/util/hooks/useScrollLock';
 
 interface ModalProps {
@@ -15,7 +15,7 @@ interface ModalProps {
 export default function BottomModal({ isOpen, onClose, children, className }: ModalProps) {
   const modalRef = useRef<HTMLDialogElement>(null);
 
-  useOnClickOutside(modalRef, onClose);
+  useClickTouchOutside(modalRef, onClose);
   useEscapeKeyDown(onClose);
   useScrollLock(isOpen);
 
@@ -34,14 +34,14 @@ export default function BottomModal({ isOpen, onClose, children, className }: Mo
 
 interface ModalSectionProps {
   children: ReactNode;
-  className?: string;
+  className?: React.HTMLAttributes<HTMLDialogElement>['className'];
 }
 
-export const ModalHeader = ({ children, className }: ModalSectionProps) => (
+export const BottomModalHeader = ({ children, className }: ModalSectionProps) => (
   <div className={twMerge('px-8 py-3 text-lg font-semibold', className)}>{children}</div>
 );
 
-export const ModalContent = ({ children, className }: ModalSectionProps) => (
+export const BottomModalContent = ({ children, className }: ModalSectionProps) => (
   <div
     className={twMerge(
       'flex flex-col items-center justify-center gap-6 px-8 py-6 font-[Pretendard] text-[15px] font-medium text-neutral-600',
@@ -52,6 +52,6 @@ export const ModalContent = ({ children, className }: ModalSectionProps) => (
   </div>
 );
 
-export const ModalFooter = ({ children, className }: ModalSectionProps) => (
+export const BottomModalFooter = ({ children, className }: ModalSectionProps) => (
   <div className={twMerge('px-8 py-3', className)}>{children}</div>
 );

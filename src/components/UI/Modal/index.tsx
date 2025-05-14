@@ -1,8 +1,8 @@
 import { type ReactNode, useRef } from 'react';
 import { twMerge } from 'tailwind-merge';
 import Portal from '@/components/Portal/index';
+import useClickTouchOutside from '@/util/hooks/useClickTouchOutside';
 import useEscapeKeyDown from '@/util/hooks/useEscapeKeyDown';
-import useOnClickOutside from '@/util/hooks/useOnClickOutside';
 import useScrollLock from '@/util/hooks/useScrollLock';
 
 interface ModalProps {
@@ -15,7 +15,7 @@ interface ModalProps {
 export default function Modal({ isOpen, onClose, children, className }: ModalProps) {
   const modalRef = useRef<HTMLDialogElement>(null);
 
-  useOnClickOutside(modalRef, onClose);
+  useClickTouchOutside(modalRef, onClose);
   useEscapeKeyDown(onClose);
   useScrollLock(isOpen);
 
@@ -33,7 +33,7 @@ export default function Modal({ isOpen, onClose, children, className }: ModalPro
 }
 interface ModalSectionProps {
   children: ReactNode;
-  className?: string;
+  className?: React.HTMLAttributes<HTMLDialogElement>['className'];
 }
 
 export const ModalHeader = ({ children, className }: ModalSectionProps) => (
