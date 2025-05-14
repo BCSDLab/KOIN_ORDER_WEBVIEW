@@ -1,4 +1,4 @@
-import type { ReactElement, SVGProps } from 'react';
+import type { ReactElement, SVGProps, HTMLAttributes } from 'react';
 import clsx from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
@@ -9,7 +9,7 @@ interface BadgeProps {
   label?: string;
   startIcon?: ReactElement<SVGProps<SVGSVGElement>>;
   endIcon?: ReactElement<SVGProps<SVGSVGElement>>;
-  className?: string;
+  className?: HTMLAttributes<HTMLDivElement>['className'];
 }
 
 const COLOR = {

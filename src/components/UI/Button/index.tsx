@@ -1,4 +1,4 @@
-import type { ReactNode, ReactElement, SVGProps } from 'react';
+import type { ReactNode, ReactElement, SVGProps, HTMLAttributes } from 'react';
 import clsx from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
@@ -10,7 +10,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children?: ReactNode;
   state?: 'default' | 'disabled';
   fullWidth?: boolean;
-  className?: string;
+  className?: HTMLAttributes<HTMLButtonElement>['className'];
 }
 
 const COLOR = {

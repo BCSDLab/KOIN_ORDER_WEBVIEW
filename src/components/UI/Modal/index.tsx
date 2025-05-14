@@ -1,4 +1,4 @@
-import { type ReactNode, useRef } from 'react';
+import { type ReactNode, useRef, HTMLAttributes } from 'react';
 import { twMerge } from 'tailwind-merge';
 import Portal from '@/components/Portal/index';
 import useClickTouchOutside from '@/util/hooks/useClickTouchOutside';
@@ -9,7 +9,7 @@ interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
   children?: ReactNode;
-  className?: string;
+  className?: HTMLAttributes<HTMLDialogElement>['className'];
 }
 
 export default function Modal({ isOpen, onClose, children, className }: ModalProps) {
@@ -33,7 +33,7 @@ export default function Modal({ isOpen, onClose, children, className }: ModalPro
 }
 interface ModalSectionProps {
   children: ReactNode;
-  className?: React.HTMLAttributes<HTMLDialogElement>['className'];
+  className?: React.HTMLAttributes<HTMLDivElement>['className'];
 }
 
 export const ModalHeader = ({ children, className }: ModalSectionProps) => (
