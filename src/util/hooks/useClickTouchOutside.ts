@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-export default function useOnClickOutside<T extends HTMLElement>(
+export default function useClickTouchOutside<T extends HTMLElement>(
   ref: React.RefObject<T | null>,
   handler: (event: Event | MouseEvent | TouchEvent) => void,
 ) {
