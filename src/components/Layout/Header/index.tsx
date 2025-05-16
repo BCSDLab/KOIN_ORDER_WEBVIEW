@@ -5,7 +5,6 @@ export default function Header() {
   const navigate = useNavigate();
 
   const backToPreviousPage = () => {
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     navigate(-1);
   };
 

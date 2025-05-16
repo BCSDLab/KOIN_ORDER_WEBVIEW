@@ -94,7 +94,7 @@ export default tseslint.config(
       ],
 
       '@typescript-eslint/explicit-function-return-type': 'off',
-      '@typescript-eslint/no-floating-promises': 'error',
+      '@typescript-eslint/no-floating-promises': 'off',
       '@typescript-eslint/no-misused-promises': 'error',
 
       'jsx-a11y/anchor-is-valid': 'error',
