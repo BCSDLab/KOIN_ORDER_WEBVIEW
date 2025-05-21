@@ -80,7 +80,7 @@ export default function OrderFinish() {
       </div>
       <div className="mt-10 px-6">
         <div className="text-primary-500 mb-5 text-lg font-semibold">배달정보</div>
-        <div className="shadow-1 flex flex-col gap-3 rounded-2xl border border-neutral-300 bg-white px-6 py-4 text-sm leading-[160%] font-semibold">
+        <div className="shadow-1 flex flex-col gap-3 rounded-2xl border border-white bg-white px-6 py-4 text-sm leading-[160%] font-semibold">
           <div>
             배달주소
             <div className="border-b border-neutral-200 pb-3 font-normal text-neutral-500">
@@ -96,7 +96,7 @@ export default function OrderFinish() {
           </div>
         </div>
         <div className="text-primary-500 my-5 text-lg font-semibold">주문정보</div>
-        <div className="shadow-1 flex flex-col gap-3 rounded-2xl border border-neutral-300 bg-white px-6 py-4 text-sm leading-[160%] font-semibold">
+        <div className="shadow-1 mb-16 flex flex-col gap-3 rounded-2xl border border-white bg-white px-6 py-4 text-sm leading-[160%] font-semibold">
           <div className="flex flex-row border-b border-neutral-200 pt-1 pb-4 pl-1">
             맛있는 족발 - 병천점 <ArrowGo />
           </div>
