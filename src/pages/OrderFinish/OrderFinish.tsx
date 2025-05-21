@@ -19,18 +19,18 @@ export default function OrderFinish() {
 
   const [orderKind, setOrderKind] = useState<OrderKind>('order');
 
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [isBottomModalOpen, setIsBottomModalOpen] = useState<boolean>(false);
+  const [isCancelModalOpen, setIsCancelModalOpen] = useState<boolean>(false);
+  const [isDeliveryBottomModalOpen, setIsDeliveryBottomModalOpen] = useState<boolean>(false);
   const [isCallBottomModalOpen, setIsCallBottomModalOpen] = useState<boolean>(false);
 
-  //const handleOpenModal = () => setIsModalOpen(true);
-  const handleCloseModal = () => setIsModalOpen(false);
+  //const handleOpenCancelModal = () => setIsCancelModalOpen(true);
+  const handleCloseCancelModal = () => setIsCancelModalOpen(false);
 
-  const handleOpenBottomModal = () => setIsBottomModalOpen(true);
-  const handleCloseBottomModal = () => setIsBottomModalOpen(false);
+  const handleOpenDeliveryBottomModal = () => setIsDeliveryBottomModalOpen(true);
+  const handleCloseDeliveryBottomModal = () => setIsDeliveryBottomModalOpen(false);
 
   const handleOpenCallBottomModal = () => {
-    setIsBottomModalOpen(false);
+    setIsDeliveryBottomModalOpen(false);
     setIsCallBottomModalOpen(true);
     setOrderKind('order'); //lint 에러 떠서 그냥 추가해놓음
   };
@@ -44,14 +44,14 @@ export default function OrderFinish() {
           <div className="text-xs leading-[160%] font-normal text-neutral-500">사장님이 주문을 확인하고 있어요!</div>
         </div>
         <Button
-          onClick={handleOpenBottomModal}
+          onClick={handleOpenDeliveryBottomModal}
           className="h-[1.938rem] w-[4.125rem] self-end rounded-3xl px-3 text-xs leading-[160%]"
         >
           취소하기
         </Button>
       </div>
       <div>
-        <div className="flex flex-row justify-between px-6 pt-[16px] pb-[6px]">
+        <div className="flex flex-row justify-between px-6 pt-4 pb-1.5">
           <div className="isTextPurple">주문확인</div>
           <div className={orderKind === 'order' ? 'isTextGray' : 'isTextPurple'}>준비중</div>
           <div className={orderKind !== 'delivery' ? 'isTextGray' : 'isTextPurple'}>배달완료</div>
@@ -80,7 +80,7 @@ export default function OrderFinish() {
       </div>
       <div className="mt-10 px-6">
         <div className="text-primary-500 mb-5 text-lg font-semibold">배달정보</div>
-        <div className="shadow-1 flex flex-col gap-3 rounded-2xl border border-neutral-300 bg-white px-6 py-4 text-sm leading-[160%] font-semibold text-black">
+        <div className="shadow-1 flex flex-col gap-3 rounded-2xl border border-neutral-300 bg-white px-6 py-4 text-sm leading-[160%] font-semibold">
           <div>
             배달주소
             <div className="border-b border-neutral-200 pb-3 font-normal text-neutral-500">
@@ -96,7 +96,7 @@ export default function OrderFinish() {
           </div>
         </div>
         <div className="text-primary-500 my-5 text-lg font-semibold">주문정보</div>
-        <div className="shadow-1 flex flex-col gap-3 rounded-2xl border border-neutral-300 bg-white px-6 py-4 text-sm leading-[160%] font-semibold text-black">
+        <div className="shadow-1 flex flex-col gap-3 rounded-2xl border border-neutral-300 bg-white px-6 py-4 text-sm leading-[160%] font-semibold">
           <div className="flex flex-row border-b border-neutral-200 pt-1 pb-4 pl-1">
             맛있는 족발 - 병천점 <ArrowGo />
           </div>
@@ -112,38 +112,38 @@ export default function OrderFinish() {
           </Button>
         </div>
       </div>
-      <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
+      <Modal isOpen={isCancelModalOpen} onClose={handleCloseCancelModal}>
         <ModalContent>
           <div>정말 주문을 취소하시겠어요?</div>
-          <div className="flex h-12 flex-row gap-2 text-[15px]">
+          <div className="flex h-12 gap-2 text-[15px]">
             <Button
-              onClick={handleCloseModal}
+              onClick={handleCloseCancelModal}
               className="w-[7.125rem] border border-neutral-400 bg-white leading-[160%] font-medium text-neutral-600"
             >
               아니오
             </Button>
-            <Button onClick={handleCloseModal} className="w-[7.125rem] font-medium">
+            <Button onClick={handleCloseCancelModal} className="w-[7.125rem] font-medium">
               예
             </Button>
           </div>
         </ModalContent>
       </Modal>
       <div>
-        <BottomModal isOpen={isBottomModalOpen} onClose={handleCloseBottomModal}>
+        <BottomModal isOpen={isDeliveryBottomModalOpen} onClose={handleCloseDeliveryBottomModal}>
           <BottomModalHeader>
             <div className="text-primary-500 font-semibold"> 배달이 완료 되었나요?</div>
-            <button onClick={handleCloseBottomModal}>
+            <button onClick={handleCloseDeliveryBottomModal}>
               <CloseIcon />
             </button>
           </BottomModalHeader>
           <BottomModalContent>
             <div className="text-neutral-600">음식을 수령하셨다면 완료를 눌러주세요</div>
-            <Button onClick={handleCloseBottomModal} className="h-[3.063rem] rounded-xl text-lg">
+            <Button onClick={handleCloseDeliveryBottomModal} className="h-[3.063rem] rounded-xl text-lg">
               완료
             </Button>
             <Button
               onClick={handleOpenCallBottomModal}
-              className="h-[3.063rem] rounded-xl border border-neutral-400 bg-white text-lg text-black text-neutral-600"
+              className="h-[3.063rem] rounded-xl border border-neutral-400 bg-white text-lg text-neutral-600"
             >
               아직 못받았어요
             </Button>
