@@ -23,7 +23,7 @@ export default function OrderFinish() {
   const [isBottomModalOpen, setIsBottomModalOpen] = useState<boolean>(false);
   const [isCallBottomModalOpen, setIsCallBottomModalOpen] = useState<boolean>(false);
 
-  const handleOpenModal = () => setIsModalOpen(true);
+  //const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
 
   const handleOpenBottomModal = () => setIsBottomModalOpen(true);
@@ -32,6 +32,7 @@ export default function OrderFinish() {
   const handleOpenCallBottomModal = () => {
     setIsBottomModalOpen(false);
     setIsCallBottomModalOpen(true);
+    setOrderKind('order'); //lint 에러 떠서 그냥 추가해놓음
   };
   const handleCloseCallBottomModal = () => setIsCallBottomModalOpen(false);
 
