@@ -4,7 +4,25 @@
            rounded-lg border border-neutral-300 p-2
            shadow-1;
   }
+  
   .request-label-checked {
     @apply border-2 border-primary-500 bg-primary-100;
+  }
+
+  .isIconPurple {
+    @apply bg-primary-300 rounded-full h-10 w-10 justify-center items-center flex;
+  }
+
+  .isTextPurple {
+    @apply text-primary-500 font-semibold;
+  }
+
+  .isIconGray {
+    @apply bg-neutral-400 rounded-full h-10 w-10 justify-center items-center flex p-2
+    ;
+  }
+
+  .isTextGray {
+    @apply text-neutral-400 font-semibold;
   }
 }
