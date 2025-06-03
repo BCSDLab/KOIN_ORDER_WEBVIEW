@@ -1,5 +1,5 @@
 import { ReactNode, useRef, useEffect } from 'react';
-import Portal from '@/components/Portal/index';
+import Portal from '@/components/Portal';
 
 interface ModalProps {
   isOpen: boolean;
