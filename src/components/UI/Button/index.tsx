@@ -2,7 +2,7 @@ import type { ReactNode, ReactElement, SVGProps, HTMLAttributes } from 'react';
 import clsx from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
-interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLAttributes<HTMLButtonElement> {
   color?: 'primary' | 'neutral' | 'gray';
   size?: 'sm' | 'md' | 'lg';
   startIcon?: ReactElement<SVGProps<SVGSVGElement>>;
@@ -10,7 +10,6 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children?: ReactNode;
   state?: 'default' | 'disabled';
   fullWidth?: boolean;
-  className?: HTMLAttributes<HTMLButtonElement>['className'];
 }
 
 const COLOR = {

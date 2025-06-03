@@ -2,14 +2,13 @@ import type { ReactElement, SVGProps, HTMLAttributes } from 'react';
 import clsx from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
-interface BadgeProps {
+interface BadgeProps extends HTMLAttributes<HTMLDivElement> {
   variant?: 'default' | 'outlined';
   color?: 'primary' | 'primaryLight';
   size?: 'sm' | 'md' | 'lg';
   label?: string;
   startIcon?: ReactElement<SVGProps<SVGSVGElement>>;
   endIcon?: ReactElement<SVGProps<SVGSVGElement>>;
-  className?: HTMLAttributes<HTMLDivElement>['className'];
 }
 
 const COLOR = {
