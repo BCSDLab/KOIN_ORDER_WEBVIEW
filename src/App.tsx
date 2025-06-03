@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import DetailAddress from './pages/Delivery/Outside/DetailAddress';
-import OrderFinish from './pages/OrderFinish/OrderFinish';
 import PaymentLayout from '@/components/Layout/PaymentLayout';
+import DetailAddress from '@/pages/Delivery/Outside/DetailAddress';
+import OrderFinish from '@/pages/OrderFinish';
 import Payment from '@/pages/Payment';
 
 export default function App() {
@@ -11,7 +11,7 @@ export default function App() {
         <Route path="/payment" element={<PaymentLayout />}>
           <Route index element={<Payment />} />
         </Route>
-        <Route path="/add" element={<DetailAddress />} />
+        <Route path="/address" element={<DetailAddress />} />
         <Route path="/order" element={<OrderFinish />} />
       </Routes>
     </BrowserRouter>
