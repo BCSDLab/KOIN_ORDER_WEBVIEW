@@ -1,4 +1,4 @@
-import React, { ReactElement, MouseEvent, type ButtonHTMLAttributes } from 'react';
+import React, { ReactElement, type MouseEvent, type ButtonHTMLAttributes } from 'react';
 import { twMerge } from 'tailwind-merge';
 
 interface TriggerChildProps {
