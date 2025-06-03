@@ -1,15 +1,16 @@
 import { useState } from 'react';
 import useMarker from '../hooks/useMarker';
 import useNaverMap from '../hooks/useNaverMap';
+import CloseIcon from '@/assets/Main/close-icon.svg';
 import ArrowDown from '@/assets/Payment/arrow-down-icon.svg';
 import ArrowGo from '@/assets/Payment/arrow-go-icon.svg';
+import Button from '@/components/UI/Button';
+import Modal, { ModalContent, ModalFooter } from '@/components/UI/Modal';
 import BottomModal, {
+  BottomModalHeader,
   BottomModalContent,
   BottomModalFooter,
-  BottomModalHeader,
-} from '@/components/UI/BottomModal/BottomModal';
-import Button from '@/components/UI/Button';
-import Modal, { ModalContent } from '@/components/UI/CenterModal/Modal';
+} from '@/components/UI/Modal/BottomModal';
 
 const sample: [number, number] = [36.767, 127.284];
 const DetailRequest: string[] = [
@@ -20,7 +21,7 @@ const DetailRequest: string[] = [
   '전화주시면 마중 나갈게요',
 ];
 
-export default function DetailAddress() {
+export default function Campus() {
   const [bottomModalIsOpen, setBottomModalIsOpen] = useState<boolean>(false);
   const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
 
@@ -65,8 +66,8 @@ export default function DetailAddress() {
         </div>
       </div>
       <div className="mt-[1.813rem]">
-        <div className="text-primary-500 leading-[160%] font-semibold">상세주소</div>
-        <div className="pb-3 text-xs leading-[160%]">상세 주소를 입력해주세요</div>
+        <div className="text-primary-500 leading-[160%] font-semibold">배달주소</div>
+        <div className="pb-3 text-xs leading-[160%]">배달 받을 위치를 선택해주세요!</div>
         <input
           className="w-[21.375rem] rounded-sm border border-neutral-300 bg-white px-4 py-3 placeholder-neutral-400 placeholder:text-sm"
           type="text"
@@ -91,18 +92,21 @@ export default function DetailAddress() {
         주소 선택
       </Button>
       <Modal isOpen={modalIsOpen} onClose={handleCloseModal}>
-        <ModalContent>
-          정확한 상세 주소를 입력해주세요.
+        <ModalContent>정확한 상세 주소를 입력해주세요.</ModalContent>
+        <ModalFooter>
           <Button onClick={handleCloseModal} className="h-12 w-[16rem]">
             확인
           </Button>
-        </ModalContent>
+        </ModalFooter>
       </Modal>
       <BottomModal isOpen={bottomModalIsOpen} onClose={handleCloseBottomModal}>
-        <BottomModalHeader className="px-6">
+        <BottomModalHeader>
           <div className="text-primary-500 font-semibold">배달기사님에게</div>
+          <button onClick={handleCloseBottomModal}>
+            <CloseIcon />
+          </button>
         </BottomModalHeader>
-        <BottomModalContent className="px-6">
+        <BottomModalContent>
           <form className="flex w-[20.375rem] flex-col gap-2">
             {DetailRequest.map((detail, index) => (
               <label
