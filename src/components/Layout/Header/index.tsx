@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import ArrowBackIcon from '@/assets/Main/arrow-back-icon.svg';
 
-export default function Header() {
+export default function Header({ title }: { title: string }) {
   const navigate = useNavigate();
 
   const backToPreviousPage = () => {
@@ -18,7 +18,7 @@ export default function Header() {
       >
         <ArrowBackIcon />
       </button>
-      <span className="font-[Pretendard] text-lg font-medium">주문</span>
+      <span className="font-[Pretendard] text-lg font-medium">{title}</span>
     </header>
   );
 }
