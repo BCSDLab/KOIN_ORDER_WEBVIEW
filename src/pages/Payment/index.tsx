@@ -12,7 +12,7 @@ import University from '@/assets/Main/university-icon.svg';
 import RightArrow from '@/assets/Payment/arrow-go-icon.svg';
 import Badge from '@/components/UI/Badge';
 import Button from '@/components/UI/Button';
-import BottomModal from '@/components/UI/Modal/BottomModal';
+import BottomModal from '@/components/UI/Modal/BottomModal/index';
 import useBooleanState from '@/util/hooks/useBooleanState';
 
 // 샘플 데이터. 결제 api 연동 시 삭제 예정

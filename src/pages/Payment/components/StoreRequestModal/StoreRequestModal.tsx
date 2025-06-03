@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import Button from '@/components/UI/Button';
-import BottomModal from '@/components/UI/Modal/BottomModal';
+import BottomModal from '@/components/UI/Modal/BottomModal/index';
 
 interface StoreRequestModalProps {
   isOpen: boolean;
