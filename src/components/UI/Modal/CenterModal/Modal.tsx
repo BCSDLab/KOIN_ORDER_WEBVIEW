@@ -5,11 +5,11 @@ import {
   type HTMLAttributes,
   isValidElement,
   type ReactNode,
-  useContext,
   useRef,
 } from 'react';
 import { twMerge } from 'tailwind-merge';
 import Portal from '@/components/Portal';
+import useContextWrapper from '@/util/hooks/useContextWrapper';
 import useScrollLock from '@/util/hooks/useScrollLock';
 import useTouchOutside from '@/util/hooks/useTouchOutside';
 
@@ -21,11 +21,7 @@ interface ModalContextType {
 export const ModalContext = createContext<ModalContextType | null>(null);
 
 export const useModal = () => {
-  const context = useContext(ModalContext);
-  if (!context) {
-    throw new Error('useModal은 Modal 컴포넌트 내에서만 사용할 수 있습니다.');
-  }
-  return context;
+  return useContextWrapper(ModalContext, 'useModal', 'Modal');
 };
 
 interface ModalProps extends HTMLAttributes<HTMLDivElement> {

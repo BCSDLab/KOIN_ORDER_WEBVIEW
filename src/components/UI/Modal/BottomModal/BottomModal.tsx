@@ -1,6 +1,5 @@
 import {
   createContext,
-  useContext,
   type ReactNode,
   type HTMLAttributes,
   useRef,
@@ -10,6 +9,7 @@ import {
 } from 'react';
 import { twMerge } from 'tailwind-merge';
 import Portal from '@/components/Portal';
+import useContextWrapper from '@/util/hooks/useContextWrapper';
 import useScrollLock from '@/util/hooks/useScrollLock';
 import useTouchOutside from '@/util/hooks/useTouchOutside';
 
@@ -21,11 +21,7 @@ interface BottomModalContextType {
 export const BottomModalContext = createContext<BottomModalContextType | null>(null);
 
 export const useBottomModal = () => {
-  const context = useContext(BottomModalContext);
-  if (!context) {
-    throw new Error('useBottomModal은 BottomModal 컴포넌트 내에서만 사용할 수 있습니다.');
-  }
-  return context;
+  return useContextWrapper(BottomModalContext, 'useModal', 'Modal');
 };
 
 interface BottomModalProps extends HTMLAttributes<HTMLDivElement> {
