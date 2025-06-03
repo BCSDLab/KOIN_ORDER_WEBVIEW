@@ -1,9 +1,8 @@
-import React from 'react';
+import React, { type HTMLAttributes } from 'react';
 import { twMerge } from 'tailwind-merge';
 
-interface FooterProps {
+interface FooterProps extends HTMLAttributes<HTMLDivElement> {
   children?: React.ReactNode;
-  className?: React.HTMLAttributes<HTMLDivElement>['className'];
 }
 
 export default function Footer({ children, className }: FooterProps) {

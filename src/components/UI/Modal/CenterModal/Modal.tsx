@@ -10,7 +10,6 @@ import {
 } from 'react';
 import { twMerge } from 'tailwind-merge';
 import Portal from '@/components/Portal';
-import useEscapeKeyDown from '@/util/hooks/useEscapeKeyDown';
 import useScrollLock from '@/util/hooks/useScrollLock';
 import useTouchOutside from '@/util/hooks/useTouchOutside';
 
@@ -29,18 +28,16 @@ export const useModal = () => {
   return context;
 };
 
-interface ModalProps {
+interface ModalProps extends HTMLAttributes<HTMLDivElement> {
   isOpen: boolean;
   onClose: () => void;
   children?: ReactNode;
-  className?: HTMLAttributes<HTMLDialogElement>['className'];
 }
 
 export default function Modal({ isOpen, onClose, children, className }: ModalProps) {
   const modalRef = useRef<HTMLDialogElement>(null);
 
   useTouchOutside(modalRef, onClose);
-  useEscapeKeyDown(onClose);
   useScrollLock(isOpen);
 
   const enhancedChildren = Children.map(children, (child) => {

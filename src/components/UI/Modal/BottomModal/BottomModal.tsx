@@ -1,7 +1,15 @@
-import { createContext, useContext, type ReactNode, useRef, cloneElement, isValidElement, Children } from 'react';
+import {
+  createContext,
+  useContext,
+  type ReactNode,
+  type HTMLAttributes,
+  useRef,
+  cloneElement,
+  isValidElement,
+  Children,
+} from 'react';
 import { twMerge } from 'tailwind-merge';
 import Portal from '@/components/Portal';
-import useEscapeKeyDown from '@/util/hooks/useEscapeKeyDown';
 import useScrollLock from '@/util/hooks/useScrollLock';
 import useTouchOutside from '@/util/hooks/useTouchOutside';
 
@@ -20,18 +28,16 @@ export const useBottomModal = () => {
   return context;
 };
 
-interface BottomModalProps {
+interface BottomModalProps extends HTMLAttributes<HTMLDivElement> {
   isOpen: boolean;
   onClose: () => void;
   children: ReactNode;
-  className?: string;
 }
 
 export default function BottomModal({ isOpen, onClose, children, className }: BottomModalProps) {
   const modalRef = useRef<HTMLDialogElement>(null);
 
   useTouchOutside(modalRef, onClose);
-  useEscapeKeyDown(onClose);
   useScrollLock(isOpen);
 
   const enhancedChildren = Children.map(children, (child) => {

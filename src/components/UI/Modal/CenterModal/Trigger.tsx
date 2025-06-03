@@ -1,10 +1,9 @@
-import React, { ReactElement, MouseEvent } from 'react';
+import React, { ReactElement, MouseEvent, type HTMLAttributes } from 'react';
 import { twMerge } from 'tailwind-merge';
 
-interface TriggerProps {
+interface TriggerProps extends HTMLAttributes<HTMLDivElement> {
   onClick: () => void;
   children: React.ReactNode;
-  className?: string;
   asChild?: boolean;
 }
 

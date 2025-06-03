@@ -1,11 +1,10 @@
-import React from 'react';
+import React, { type HTMLAttributes } from 'react';
 import { twMerge } from 'tailwind-merge';
 import { useBottomModal } from './BottomModal';
 import CloseIcon from '@/assets/Main/close-icon.svg';
 
-interface HeaderProps {
+interface HeaderProps extends HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
-  className?: React.HTMLAttributes<HTMLDivElement>['className'];
   showCloseButton?: boolean;
 }
 
