@@ -7,34 +7,24 @@ import ShoppingCart from '@/assets/OrderFinish/shopping-cart-icon.svg';
 import Skillet from '@/assets/OrderFinish/skillet-icon.svg';
 import ArrowGo from '@/assets/Payment/arrow-go-icon.svg';
 import Button from '@/components/UI/Button';
-import Modal, { ModalContent } from '@/components/UI/Modal';
-import BottomModal, {
-  BottomModalHeader,
-  BottomModalContent,
-  BottomModalFooter,
-} from '@/components/UI/Modal/BottomModal';
+import BottomModal from '@/components/UI/Modal/BottomModal/index';
+import Modal from '@/components/UI/Modal/CenterModal/index';
+import useBooleanState from '@/util/hooks/useBooleanState';
 
 export default function OrderFinish() {
   type OrderKind = 'order' | 'preparation' | 'delivery';
 
   const [orderKind, setOrderKind] = useState<OrderKind>('order');
 
-  const [isCancelModalOpen, setIsCancelModalOpen] = useState<boolean>(false);
-  const [isDeliveryBottomModalOpen, setIsDeliveryBottomModalOpen] = useState<boolean>(false);
-  const [isCallBottomModalOpen, setIsCallBottomModalOpen] = useState<boolean>(false);
-
-  //const handleOpenCancelModal = () => setIsCancelModalOpen(true);
-  const handleCloseCancelModal = () => setIsCancelModalOpen(false);
-
-  const handleOpenDeliveryBottomModal = () => setIsDeliveryBottomModalOpen(true);
-  const handleCloseDeliveryBottomModal = () => setIsDeliveryBottomModalOpen(false);
+  const [isCancelModalOpen, , closeCancelModal] = useBooleanState(false);
+  const [isDeliveryBottomModalOpen, openDeliveryBottomModal, closeDeliveryBottomModal] = useBooleanState(false);
+  const [isCallBottomModalOpen, openCallBottomModal, closeCallBottomModal] = useBooleanState(false);
 
   const handleOpenCallBottomModal = () => {
-    setIsDeliveryBottomModalOpen(false);
-    setIsCallBottomModalOpen(true);
+    closeDeliveryBottomModal();
+    openCallBottomModal();
     setOrderKind('order'); //lint 에러 떠서 그냥 추가해놓음
   };
-  const handleCloseCallBottomModal = () => setIsCallBottomModalOpen(false);
 
   return (
     <div className="flex flex-col">
@@ -44,7 +34,7 @@ export default function OrderFinish() {
           <div className="text-xs leading-[160%] font-normal text-neutral-500">사장님이 주문을 확인하고 있어요!</div>
         </div>
         <Button
-          onClick={handleOpenDeliveryBottomModal}
+          onClick={openDeliveryBottomModal}
           className="h-[1.938rem] w-[4.125rem] self-end rounded-3xl px-3 text-xs leading-[160%]"
         >
           취소하기
@@ -112,33 +102,33 @@ export default function OrderFinish() {
           </Button>
         </div>
       </div>
-      <Modal isOpen={isCancelModalOpen} onClose={handleCloseCancelModal}>
-        <ModalContent>
+      <Modal isOpen={isCancelModalOpen} onClose={closeCancelModal}>
+        <Modal.Content>
           <div>정말 주문을 취소하시겠어요?</div>
           <div className="flex h-12 gap-2 text-[15px]">
             <Button
-              onClick={handleCloseCancelModal}
+              onClick={closeCancelModal}
               className="w-[7.125rem] border border-neutral-400 bg-white leading-[160%] font-medium text-neutral-600"
             >
               아니오
             </Button>
-            <Button onClick={handleCloseCancelModal} className="w-[7.125rem] font-medium">
+            <Button onClick={closeCancelModal} className="w-[7.125rem] font-medium">
               예
             </Button>
           </div>
-        </ModalContent>
+        </Modal.Content>
       </Modal>
       <div>
-        <BottomModal isOpen={isDeliveryBottomModalOpen} onClose={handleCloseDeliveryBottomModal}>
-          <BottomModalHeader>
+        <BottomModal isOpen={isDeliveryBottomModalOpen} onClose={closeDeliveryBottomModal}>
+          <BottomModal.Header>
             <div className="text-primary-500 font-semibold"> 배달이 완료 되었나요?</div>
-            <button onClick={handleCloseDeliveryBottomModal}>
+            <button onClick={closeDeliveryBottomModal}>
               <CloseIcon />
             </button>
-          </BottomModalHeader>
-          <BottomModalContent>
+          </BottomModal.Header>
+          <BottomModal.Content>
             <div className="text-neutral-600">음식을 수령하셨다면 완료를 눌러주세요</div>
-            <Button onClick={handleCloseDeliveryBottomModal} className="h-[3.063rem] rounded-xl text-lg">
+            <Button onClick={closeDeliveryBottomModal} className="h-[3.063rem] rounded-xl text-lg">
               완료
             </Button>
             <Button
@@ -147,25 +137,25 @@ export default function OrderFinish() {
             >
               아직 못받았어요
             </Button>
-          </BottomModalContent>
-          <BottomModalFooter></BottomModalFooter>
+          </BottomModal.Content>
+          <BottomModal.Footer></BottomModal.Footer>
         </BottomModal>
 
-        <BottomModal isOpen={isCallBottomModalOpen} onClose={handleCloseCallBottomModal}>
-          <BottomModalHeader>
+        <BottomModal isOpen={isCallBottomModalOpen} onClose={closeCallBottomModal}>
+          <BottomModal.Header>
             아직 못받으셨나요?
-            <button onClick={handleCloseCallBottomModal}>
+            <button onClick={closeCallBottomModal}>
               <CloseIcon />
             </button>
-          </BottomModalHeader>
-          <BottomModalContent>
+          </BottomModal.Header>
+          <BottomModal.Content>
             <div>빠른 해결을 위해 매장에 전화해 보시겠어요?</div>
             <Button className="h-[3.063rem] gap-3 rounded-xl text-lg">
               <CallIcon />
               전화하기
             </Button>
-          </BottomModalContent>
-          <BottomModalFooter></BottomModalFooter>
+          </BottomModal.Content>
+          <BottomModal.Footer></BottomModal.Footer>
         </BottomModal>
       </div>
     </div>
