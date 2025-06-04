@@ -1,8 +1,8 @@
+import Trigger from '../Common/Trigger';
 import Content from './Content';
 import Footer from './Footer';
 import Header from './Header';
 import Modal from './Modal';
-import Trigger from './Trigger';
 
 export default Object.assign(Modal, {
   Header,

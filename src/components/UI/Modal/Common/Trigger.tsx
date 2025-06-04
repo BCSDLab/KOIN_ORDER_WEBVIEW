@@ -1,25 +1,24 @@
-import React, { ReactElement, type MouseEvent, type ButtonHTMLAttributes } from 'react';
+import React, { type ReactElement, type MouseEvent, type HTMLAttributes } from 'react';
 import { twMerge } from 'tailwind-merge';
 
 interface TriggerChildProps {
   onClick?: (event: MouseEvent<HTMLElement>) => void;
 }
 
-interface TriggerProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'onClick'> {
+interface TriggerProps extends HTMLAttributes<HTMLButtonElement> {
   onClick: (event?: MouseEvent<HTMLElement>) => void;
-  children: React.ReactNode;
+  children: ReactElement<TriggerChildProps>;
   asChild?: boolean;
 }
 
 export default function Trigger({ onClick, children, className, asChild = false, ...rest }: TriggerProps) {
-  if (asChild && React.isValidElement(children)) {
-    const childElement = children as ReactElement<TriggerChildProps>;
-
-    return React.cloneElement(childElement, {
+  if (asChild) {
+    return React.cloneElement(children, {
+      ...children.props,
       onClick: (e: MouseEvent<HTMLElement>) => {
         onClick(e);
-        if (childElement.props.onClick) {
-          childElement.props.onClick(e);
+        if (children.props.onClick) {
+          children.props.onClick(e);
         }
       },
     });
