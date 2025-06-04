@@ -9,13 +9,14 @@ import NightShelter from '@/assets/Delivery/night-shelter.svg';
 import CloseIcon from '@/assets/Main/close-icon.svg';
 import ArrowDown from '@/assets/Payment/arrow-down-icon.svg';
 import ArrowGo from '@/assets/Payment/arrow-go-icon.svg';
-import Button from '@/components/UI/Button';
-import Modal, { ModalContent, ModalFooter } from '@/components/UI/Modal';
+import Badge from '@/components/UI/Badge';
 import BottomModal, {
   BottomModalHeader,
   BottomModalContent,
   BottomModalFooter,
-} from '@/components/UI/Modal/BottomModal';
+} from '@/components/UI/BottomModal/BottomModal';
+import Button from '@/components/UI/Button';
+import Modal, { ModalContent, ModalFooter } from '@/components/UI/CenterModal/Modal';
 
 const campusList = [
   {
@@ -58,7 +59,7 @@ const campusList = [
   },
 ] as const;
 
-const sample: [number, number] = [36.767, 127.284];
+const sample: [number, number] = [36.762, 127.2835];
 const DetailRequest: string[] = [
   '문 앞에 놔주세요 (벨 눌러주세요)',
   '문 앞에 놔주세요 (노크해주세요)',
@@ -84,7 +85,7 @@ export default function Campus() {
   useMarker(map);
 
   const [selectedCampusCategory, setSelectedCampusCategory] = useState<CampusCategory['name'] | null>(null);
-  const [selectedCampusBuilding, setSelectedCampusBuilding] = useState<string | null>(null);
+  const [selectedCampusBuilding, setSelectedCampusBuilding] = useState<string>('');
 
   const requestLabel = () => {
     if (!selectedRequest) {
@@ -114,7 +115,14 @@ export default function Campus() {
       <div className="shadow-1 w-[21.375rem] rounded-xl">
         <div id="map" className="h-40 w-full rounded-t-xl border border-neutral-300"></div>
         <div className="flex h-[3.5rem] w-full items-center justify-between rounded-b-xl bg-white px-6 text-[0.813rem] text-neutral-600">
-          충남 천안시 동남구 병천면 가전8길 102
+          {selectedCampusBuilding ? (
+            <div className="flex w-full items-center justify-center gap-2">
+              <Badge label={selectedCampusBuilding} color="primary" size="md" className="text-sm" />
+              <span>앞으로 배달돼요!</span>
+            </div>
+          ) : (
+            <span>배달 받을 위치를 선택해주세요!</span>
+          )}
           <div>
             <ArrowGo />
           </div>
@@ -164,19 +172,13 @@ export default function Campus() {
                     <div className="h-[1px] w-[310px] bg-[#eee]" />
                     <div className="mx-auto flex w-full flex-wrap justify-center gap-x-3 gap-y-2 bg-white px-4 py-4 break-all">
                       {campus.building.map((building) => (
-                        <button
+                        <Badge
                           key={building}
-                          type="button"
-                          className={twMerge(
-                            'shadow-1 flex h-[34px] items-center rounded-3xl border border-neutral-300 bg-white px-3 text-sm font-semibold break-keep text-neutral-500',
-                            selectedCampusBuilding === building && 'bg-primary-500 border-0 text-white',
-                          )}
-                          onClick={() => {
-                            setSelectedCampusBuilding(building);
-                          }}
-                        >
-                          {building}
-                        </button>
+                          label={building}
+                          color={selectedCampusBuilding === building ? 'primary' : 'neutral'}
+                          size="lg"
+                          onClick={() => setSelectedCampusBuilding(building)}
+                        />
                       ))}
                     </div>
                   </>
