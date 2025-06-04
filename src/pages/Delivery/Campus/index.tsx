@@ -1,6 +1,11 @@
 import { useState } from 'react';
+import clsx from 'clsx';
+import { twMerge } from 'tailwind-merge';
 import useMarker from '../hooks/useMarker';
 import useNaverMap from '../hooks/useNaverMap';
+import Building from '@/assets/Delivery/building.svg';
+import ChevronDown from '@/assets/Delivery/chevron-down.svg';
+import NightShelter from '@/assets/Delivery/night-shelter.svg';
 import CloseIcon from '@/assets/Main/close-icon.svg';
 import ArrowDown from '@/assets/Payment/arrow-down-icon.svg';
 import ArrowGo from '@/assets/Payment/arrow-go-icon.svg';
@@ -12,6 +17,47 @@ import BottomModal, {
   BottomModalFooter,
 } from '@/components/UI/Modal/BottomModal';
 
+const campusList = [
+  {
+    name: '기숙사',
+    icon: NightShelter,
+    building: [
+      '함지관',
+      '다솔관',
+      '은솔관',
+      '해울관',
+      '예솔관',
+      '예지관',
+      '솔빛관',
+      'IH',
+      '청솔관',
+      '참빛관',
+      '소울관',
+    ],
+  },
+  {
+    name: '공학관',
+    icon: Building,
+    building: [
+      '1공학관',
+      '2공학관',
+      '3공학관',
+      '4공학관',
+      '학생회관',
+      '미래학관',
+      '담헌실학관',
+      '다산정보관',
+      'R&D돔',
+      '복지관',
+    ],
+  },
+  {
+    name: '그 외',
+    icon: '',
+    building: ['기타'],
+  },
+] as const;
+
 const sample: [number, number] = [36.767, 127.284];
 const DetailRequest: string[] = [
   '문 앞에 놔주세요 (벨 눌러주세요)',
@@ -20,6 +66,12 @@ const DetailRequest: string[] = [
   '직접 받을게요',
   '전화주시면 마중 나갈게요',
 ];
+
+type CampusCategory = {
+  name: '기숙사' | '공학관' | '그 외';
+  icon: React.ReactNode | null;
+  building: string[];
+};
 
 export default function Campus() {
   const [bottomModalIsOpen, setBottomModalIsOpen] = useState<boolean>(false);
@@ -30,6 +82,9 @@ export default function Campus() {
 
   const map = useNaverMap(...sample);
   useMarker(map);
+
+  const [selectedCampusCategory, setSelectedCampusCategory] = useState<CampusCategory['name'] | null>(null);
+  const [selectedCampusBuilding, setSelectedCampusBuilding] = useState<string | null>(null);
 
   const requestLabel = () => {
     if (!selectedRequest) {
@@ -65,16 +120,73 @@ export default function Campus() {
           </div>
         </div>
       </div>
+
       <div className="mt-[1.813rem]">
         <div className="text-primary-500 leading-[160%] font-semibold">배달주소</div>
         <div className="pb-3 text-xs leading-[160%]">배달 받을 위치를 선택해주세요!</div>
-        <input
-          className="w-[21.375rem] rounded-sm border border-neutral-300 bg-white px-4 py-3 placeholder-neutral-400 placeholder:text-sm"
-          type="text"
-          name="DetailAddress"
-          placeholder="상세주소를 입력해주세요 (건물명, 동/호수 등)"
-        />
+        <div className="flex w-[342px] flex-col gap-3">
+          {campusList.map((campus) => {
+            const isSelected = selectedCampusCategory === campus.name;
+            return (
+              <div
+                key={campus.name}
+                className={twMerge(
+                  clsx(
+                    'box-content flex flex-col items-center bg-white',
+                    isSelected && 'w-full overflow-hidden rounded-lg border border-neutral-300',
+                    !isSelected && 'rounded-lg border border-neutral-300',
+                  ),
+                )}
+              >
+                <div className="flex w-full flex-col items-center gap-2">
+                  <button
+                    type="button"
+                    className="flex h-14 w-full items-center justify-between p-4 font-semibold transition-colors"
+                    onClick={() => {
+                      if (isSelected) {
+                        setSelectedCampusCategory(null);
+                        return;
+                      }
+                      setSelectedCampusCategory(campus.name);
+                    }}
+                  >
+                    <div className="flex items-center gap-2">
+                      <span className="text-primary-500 text-sm">{campus.name}</span>
+                      {campus.icon && <campus.icon />}
+                    </div>
+                    <span className={clsx('transition-transform', isSelected && 'rotate-180')}>
+                      <ChevronDown />
+                    </span>
+                  </button>
+                </div>
+                {isSelected && (
+                  <>
+                    <div className="h-[1px] w-[310px] bg-[#eee]" />
+                    <div className="mx-auto flex w-full flex-wrap justify-center gap-x-3 gap-y-2 bg-white px-4 py-4 break-all">
+                      {campus.building.map((building) => (
+                        <button
+                          key={building}
+                          type="button"
+                          className={twMerge(
+                            'shadow-1 flex h-[34px] items-center rounded-3xl border border-neutral-300 bg-white px-3 text-sm font-semibold break-keep text-neutral-500',
+                            selectedCampusBuilding === building && 'bg-primary-500 border-0 text-white',
+                          )}
+                          onClick={() => {
+                            setSelectedCampusBuilding(building);
+                          }}
+                        >
+                          {building}
+                        </button>
+                      ))}
+                    </div>
+                  </>
+                )}
+              </div>
+            );
+          })}
+        </div>
       </div>
+
       <div className="mt-[1.813rem]">
         <div className="text-primary-500 pb-2 font-semibold">배달기사님에게</div>
         <button
