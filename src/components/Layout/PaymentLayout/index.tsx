@@ -6,7 +6,7 @@ export default function PaymentLayout() {
   return (
     <>
       <Header />
-      <div className="pt-11">
+      <div className="pt-15 pb-7">
         <Suspense>
           <Outlet />
         </Suspense>
