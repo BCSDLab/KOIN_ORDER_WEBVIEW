@@ -12,7 +12,6 @@ import University from '@/assets/Main/university-icon.svg';
 import RightArrow from '@/assets/Payment/arrow-go-icon.svg';
 import Badge from '@/components/UI/Badge';
 import Button from '@/components/UI/Button';
-import BottomModal from '@/components/UI/Modal/BottomModal/index';
 import useBooleanState from '@/util/hooks/useBooleanState';
 
 // 샘플 데이터. 결제 api 연동 시 삭제 예정
@@ -84,33 +83,39 @@ export default function Payment() {
 
         <div>
           <p className="text-primary-500 text-lg font-semibold">연락처</p>
-          <BottomModal.Trigger onClick={openContactModal} asChild>
-            <Button color="gray" fullWidth className="mt-2 justify-normal border-0 py-4 pr-3 pl-6">
-              <div className="flex w-full items-center justify-between">
-                <p className={clsx('text-sm font-normal', contact ? 'text-neutral-600' : 'text-neutral-300')}>
-                  {contact || '연락처를 입력하세요'}
-                </p>
-                <RightArrow />
-              </div>
-            </Button>
-          </BottomModal.Trigger>
+          <Button
+            onClick={openContactModal}
+            color="gray"
+            fullWidth
+            className="mt-2 justify-normal border-0 py-4 pr-3 pl-6"
+          >
+            <div className="flex w-full items-center justify-between">
+              <p className={clsx('text-sm font-normal', contact ? 'text-neutral-600' : 'text-neutral-300')}>
+                {contact || '연락처를 입력하세요'}
+              </p>
+              <RightArrow />
+            </div>
+          </Button>
         </div>
 
         <div>
           <p className="text-primary-500 text-lg font-semibold">사장님에게</p>
-          <BottomModal.Trigger onClick={openStoreRequestModal} asChild>
-            <Button color="gray" fullWidth className="mt-2 justify-normal border-0 py-4 pr-3 pl-6">
-              <div className="flex w-full flex-col gap-1">
-                <div className="flex w-full items-center justify-between">
-                  <p className="text-sm font-normal text-neutral-600">{request || '요청사항 없음'}</p>
-                  <RightArrow />
-                </div>
-                <p className="text-start text-sm font-medium text-[#3a903e]">
-                  {noCutlery ? '수저 · 포크 안받기' : '수저 · 포크 받기'}
-                </p>
+          <Button
+            onClick={openStoreRequestModal}
+            color="gray"
+            fullWidth
+            className="mt-2 justify-normal border-0 py-4 pr-3 pl-6"
+          >
+            <div className="flex w-full flex-col gap-1">
+              <div className="flex w-full items-center justify-between">
+                <p className="text-sm font-normal text-neutral-600">{request || '요청사항 없음'}</p>
+                <RightArrow />
               </div>
-            </Button>
-          </BottomModal.Trigger>
+              <p className="text-start text-sm font-medium text-[#3a903e]">
+                {noCutlery ? '수저 · 포크 안받기' : '수저 · 포크 받기'}
+              </p>
+            </div>
+          </Button>
         </div>
         <TossWidget widgets={widgets} setWidgets={setWidgets} setReady={setReady} amount={AMOUNT} />
         <Agreement />
@@ -128,12 +133,14 @@ export default function Payment() {
       >
         {AMOUNT.value.toLocaleString()}원 결제하기
       </Button>
+
       <ContactModal
         isOpen={isContactModalOpen}
         onClose={closeContactModal}
         currentContact={contact}
         onSubmit={(newContact) => setContact(newContact)}
       />
+
       <StoreRequestModal
         isOpen={isStoreRequestModalOpen}
         onClose={closeStoreRequestModal}

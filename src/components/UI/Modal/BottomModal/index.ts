@@ -1,4 +1,3 @@
-import Trigger from '../Common/Trigger';
 import BottomModal from './BottomModal';
 import { useBottomModal } from './BottomModal';
 import Content from './Content';
@@ -11,5 +10,4 @@ export default Object.assign(BottomModal, {
   Header,
   Content,
   Footer,
-  Trigger,
 });

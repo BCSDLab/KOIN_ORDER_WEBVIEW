@@ -1,12 +1,4 @@
-import {
-  Children,
-  cloneElement,
-  createContext,
-  type HTMLAttributes,
-  isValidElement,
-  type ReactNode,
-  useRef,
-} from 'react';
+import { createContext, type HTMLAttributes, type ReactNode, useRef } from 'react';
 import { twMerge } from 'tailwind-merge';
 import Portal from '@/components/Portal';
 import useContextWrapper from '@/util/hooks/useContextWrapper';
@@ -36,15 +28,6 @@ export default function Modal({ isOpen, onClose, children, className }: ModalPro
   useTouchOutside(modalRef, onClose);
   useScrollLock(isOpen);
 
-  const enhancedChildren = Children.map(children, (child) => {
-    if (isValidElement(child)) {
-      return cloneElement(child);
-    }
-    return child;
-  });
-
-  if (!isOpen) return null;
-
   return (
     <>
       {isOpen && (
@@ -52,7 +35,7 @@ export default function Modal({ isOpen, onClose, children, className }: ModalPro
           <ModalContext.Provider value={{ isOpen, onClose }}>
             <div className="fixed inset-0 z-100 flex items-center justify-center bg-black/70">
               <dialog ref={modalRef} className={twMerge('min-w-4/5 rounded-lg bg-white', className)} open>
-                {enhancedChildren}
+                {children}
               </dialog>
             </div>
           </ModalContext.Provider>
