@@ -1,16 +1,11 @@
 import { useState } from 'react';
 import useMarker from './hooks/useMarker';
 import useNaverMap from './hooks/useNaverMap';
-import CloseIcon from '@/assets/Main/close-icon.svg';
 import ArrowDown from '@/assets/Payment/arrow-down-icon.svg';
 import ArrowGo from '@/assets/Payment/arrow-go-icon.svg';
 import Button from '@/components/UI/Button';
-import Modal, { ModalContent, ModalFooter } from '@/components/UI/Modal';
-import BottomModal, {
-  BottomModalHeader,
-  BottomModalContent,
-  BottomModalFooter,
-} from '@/components/UI/Modal/BottomModal';
+import BottomModal from '@/components/UI/Modal/BottomModal/index';
+import Modal from '@/components/UI/Modal/CenterModal/index';
 
 const sample: [number, number] = [36.767, 127.284];
 const DetailRequest: string[] = [
@@ -92,22 +87,19 @@ export default function DetailAddress() {
       <Button className="mt-[18.188rem] h-[2.875rem] w-[21.375rem]" onClick={handleOpenModal}>
         주소선택
       </Button>
-      <Modal isOpen={modalIsOpen} onClose={handleCloseModal}>
-        <ModalContent>정확한 상세 주소를 입력해주세요.</ModalContent>
-        <ModalFooter>
+      <Modal className="centerModal" isOpen={modalIsOpen} onClose={handleCloseModal}>
+        <Modal.Content className="centerModalContent">
+          정확한 상세 주소를 입력해주세요.
           <Button onClick={handleCloseModal} className="h-12 w-[16rem]">
             확인
           </Button>
-        </ModalFooter>
+        </Modal.Content>
       </Modal>
-      <BottomModal isOpen={bottomModalIsOpen} onClose={handleCloseBottomModal}>
-        <BottomModalHeader>
+      <BottomModal className="bottomModal" isOpen={bottomModalIsOpen} onClose={handleCloseBottomModal}>
+        <BottomModal.Header className="bottomModalHeader px-6" showCloseButton>
           <div className="text-primary-500 font-semibold">배달기사님에게</div>
-          <button onClick={handleCloseBottomModal}>
-            <CloseIcon />
-          </button>
-        </BottomModalHeader>
-        <BottomModalContent>
+        </BottomModal.Header>
+        <BottomModal.Content className="bottomModalContent px-6">
           <form className="flex w-[20.375rem] flex-col gap-2">
             {DetailRequest.map((detail, index) => (
               <label
@@ -159,8 +151,8 @@ export default function DetailAddress() {
           <Button onClick={handleSubmitRequest} className="h-[2.875rem] w-[20.375rem]">
             선택하기
           </Button>
-        </BottomModalContent>
-        <BottomModalFooter></BottomModalFooter>
+        </BottomModal.Content>
+        <BottomModal.Footer className="bottomModalFooter"></BottomModal.Footer>
       </BottomModal>
     </div>
   );

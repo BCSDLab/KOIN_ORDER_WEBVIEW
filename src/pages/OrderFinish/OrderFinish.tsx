@@ -102,8 +102,8 @@ export default function OrderFinish() {
           </Button>
         </div>
       </div>
-      <Modal isOpen={isCancelModalOpen} onClose={closeCancelModal}>
-        <Modal.Content>
+      <Modal className="centerModal" isOpen={isCancelModalOpen} onClose={closeCancelModal}>
+        <Modal.Content className="centerModalContent">
           <div>정말 주문을 취소하시겠어요?</div>
           <div className="flex h-12 gap-2 text-[15px]">
             <Button
@@ -119,14 +119,14 @@ export default function OrderFinish() {
         </Modal.Content>
       </Modal>
       <div>
-        <BottomModal isOpen={isDeliveryBottomModalOpen} onClose={closeDeliveryBottomModal}>
-          <BottomModal.Header>
+        <BottomModal className="bottomModal" isOpen={isDeliveryBottomModalOpen} onClose={closeDeliveryBottomModal}>
+          <BottomModal.Header className="bottomModalHeader">
             <div className="text-primary-500 font-semibold"> 배달이 완료 되었나요?</div>
             <button onClick={closeDeliveryBottomModal}>
               <CloseIcon />
             </button>
           </BottomModal.Header>
-          <BottomModal.Content>
+          <BottomModal.Content className="bottomModalContent">
             <div className="text-neutral-600">음식을 수령하셨다면 완료를 눌러주세요</div>
             <Button onClick={closeDeliveryBottomModal} className="h-[3.063rem] rounded-xl text-lg">
               완료
@@ -138,24 +138,24 @@ export default function OrderFinish() {
               아직 못받았어요
             </Button>
           </BottomModal.Content>
-          <BottomModal.Footer></BottomModal.Footer>
+          <BottomModal.Footer className="bottomModalFooter"></BottomModal.Footer>
         </BottomModal>
 
-        <BottomModal isOpen={isCallBottomModalOpen} onClose={closeCallBottomModal}>
-          <BottomModal.Header>
+        <BottomModal className="bottomModal" isOpen={isCallBottomModalOpen} onClose={closeCallBottomModal}>
+          <BottomModal.Header className="bottomModalHeader">
             아직 못받으셨나요?
             <button onClick={closeCallBottomModal}>
               <CloseIcon />
             </button>
           </BottomModal.Header>
-          <BottomModal.Content>
+          <BottomModal.Content className="bottomModalContent">
             <div>빠른 해결을 위해 매장에 전화해 보시겠어요?</div>
             <Button className="h-[3.063rem] gap-3 rounded-xl text-lg">
               <CallIcon />
               전화하기
             </Button>
           </BottomModal.Content>
-          <BottomModal.Footer></BottomModal.Footer>
+          <BottomModal.Footer className="bottomModalFooter"></BottomModal.Footer>
         </BottomModal>
       </div>
     </div>

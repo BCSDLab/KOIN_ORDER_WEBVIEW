@@ -28,11 +28,11 @@ export default function ContactModal({ isOpen, onClose, currentContact, onSubmit
   const [phone, setPhone] = useState(currentContact);
 
   return (
-    <BottomModal isOpen={isOpen} onClose={onClose}>
-      <BottomModal.Header showCloseButton>
+    <BottomModal className="bottomModal" isOpen={isOpen} onClose={onClose}>
+      <BottomModal.Header className="bottomModalHeader" showCloseButton>
         <div className="flex w-full justify-between">연락처</div>
       </BottomModal.Header>
-      <BottomModal.Content>
+      <BottomModal.Content className="bottomModalContent">
         <div className="relative">
           <input
             type="tel"
@@ -58,7 +58,7 @@ export default function ContactModal({ isOpen, onClose, currentContact, onSubmit
           변경하기
         </Button>
       </BottomModal.Content>
-      <BottomModal.Footer />
+      <BottomModal.Footer className="bottomModalFooter" />
     </BottomModal>
   );
 }

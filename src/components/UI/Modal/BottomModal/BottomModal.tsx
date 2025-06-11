@@ -1,5 +1,4 @@
 import { createContext, type ReactNode, type HTMLAttributes, useRef } from 'react';
-import { twMerge } from 'tailwind-merge';
 import Portal from '@/components/Portal';
 import useContextWrapper from '@/util/hooks/useContextWrapper';
 import useScrollLock from '@/util/hooks/useScrollLock';
@@ -28,19 +27,17 @@ export default function BottomModal({ isOpen, onClose, children, className }: Bo
   useTouchOutside(modalRef, onClose);
   useScrollLock(isOpen);
 
+  if (!isOpen) return null;
+
   return (
-    <>
-      {isOpen && (
-        <Portal>
-          <BottomModalContext.Provider value={{ isOpen, onClose }}>
-            <div className="fixed inset-0 z-100 flex flex-col justify-end bg-black/70">
-              <dialog ref={modalRef} className={twMerge('w-full max-w-none rounded-t-4xl bg-white', className)} open>
-                {children}
-              </dialog>
-            </div>
-          </BottomModalContext.Provider>
-        </Portal>
-      )}
-    </>
+    <Portal>
+      <BottomModalContext.Provider value={{ isOpen, onClose }}>
+        <div className="fixed inset-0 z-100 flex flex-col justify-end bg-black/70">
+          <dialog ref={modalRef} className={className} open>
+            {children}
+          </dialog>
+        </div>
+      </BottomModalContext.Provider>
+    </Portal>
   );
 }

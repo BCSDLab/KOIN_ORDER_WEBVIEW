@@ -1,5 +1,4 @@
 import { createContext, type HTMLAttributes, type ReactNode, useRef } from 'react';
-import { twMerge } from 'tailwind-merge';
 import Portal from '@/components/Portal';
 import useContextWrapper from '@/util/hooks/useContextWrapper';
 import useScrollLock from '@/util/hooks/useScrollLock';
@@ -34,7 +33,7 @@ export default function Modal({ isOpen, onClose, children, className }: ModalPro
         <Portal>
           <ModalContext.Provider value={{ isOpen, onClose }}>
             <div className="fixed inset-0 z-100 flex items-center justify-center bg-black/70">
-              <dialog ref={modalRef} className={twMerge('min-w-4/5 rounded-lg bg-white', className)} open>
+              <dialog ref={modalRef} className={className} open>
                 {children}
               </dialog>
             </div>

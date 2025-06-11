@@ -21,11 +21,11 @@ export default function StoreRequestModal({
   const [noCutlery, setNoCutlery] = useState(currentNoCutlery);
 
   return (
-    <BottomModal isOpen={isOpen} onClose={onClose}>
-      <BottomModal.Header showCloseButton>
+    <BottomModal className="bottomModal" isOpen={isOpen} onClose={onClose}>
+      <BottomModal.Header className="bottomModalHeader" showCloseButton>
         <div className="flex w-full justify-between">사장님에게</div>
       </BottomModal.Header>
-      <BottomModal.Content>
+      <BottomModal.Content className="bottomModalContent">
         <input
           type="text"
           value={request}
@@ -54,7 +54,7 @@ export default function StoreRequestModal({
           변경하기
         </Button>
       </BottomModal.Content>
-      <BottomModal.Footer />
+      <BottomModal.Footer className="bottomModalFooter" />
     </BottomModal>
   );
 }
