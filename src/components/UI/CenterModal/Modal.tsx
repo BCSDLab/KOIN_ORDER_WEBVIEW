@@ -10,6 +10,11 @@ interface ModalProps extends HTMLAttributes<HTMLDivElement> {
   children?: ReactNode;
 }
 
+const HeaderTw = 'px-8 py-3 font-[Pretendard] text-lg font-semibold';
+const ContentTw =
+  'flex flex-col items-center justify-center gap-6 px-8 py-6 font-[Pretendard] text-[15px] font-medium text-neutral-600';
+const FooterTw = 'px-8 py-3';
+
 export default function Modal({ isOpen, onClose, children, className }: ModalProps) {
   const modalRef = useRef<HTMLDialogElement>(null);
 
@@ -43,22 +48,13 @@ interface ModalSectionProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 export function ModalHeader({ children, className }: ModalSectionProps) {
-  return <div className={twMerge('px-8 py-3 font-[Pretendard] text-lg font-semibold', className)}>{children}</div>;
+  return <div className={twMerge(HeaderTw, className)}>{children}</div>;
 }
 
 export function ModalContent({ children, className }: ModalSectionProps) {
-  return (
-    <div
-      className={twMerge(
-        'flex flex-col items-center justify-center gap-6 px-8 py-6 font-[Pretendard] text-[15px] font-medium text-neutral-600',
-        className,
-      )}
-    >
-      {children}
-    </div>
-  );
+  return <div className={twMerge(ContentTw, className)}>{children}</div>;
 }
 
 export function ModalFooter({ children, className }: ModalSectionProps) {
-  return <div className={twMerge('px-8 py-3', className)}>{children}</div>;
+  return <div className={twMerge(FooterTw, className)}>{children}</div>;
 }
