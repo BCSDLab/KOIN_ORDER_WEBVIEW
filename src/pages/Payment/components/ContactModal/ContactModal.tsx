@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import CloseIcon from '@/assets/Main/close-icon.svg';
 import InputDeleteIcon from '@/assets/Payment/input-delete-icon.svg';
-import Button from '@/components/UI/Button';
 import BottomModal, {
   BottomModalContent,
   BottomModalFooter,
   BottomModalHeader,
 } from '@/components/UI/BottomModal/BottomModal';
+import Button from '@/components/UI/Button';
 
 function formatPhoneNumber(phone: string) {
   const digits = phone.replace(/\D/g, '');
