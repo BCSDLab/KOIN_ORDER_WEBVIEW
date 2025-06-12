@@ -10,11 +10,6 @@ interface BottomModalProps extends HTMLAttributes<HTMLDivElement> {
   children: ReactNode;
 }
 
-const HeaderTw =
-  'text-primary-500 flex items-center justify-between border-b-[0.5px] border-b-neutral-300 px-8 py-3 font-[Pretendard] text-lg font-semibold';
-const ContentTw = 'flex flex-col gap-4 px-8 pt-4 pb-3 font-[Pretendard] text-sm text-neutral-600';
-const FooterTw = 'border-t-[0.5px] border-t-neutral-300 px-8 py-3 font-[Pretendard] text-sm text-neutral-600';
-
 export default function BottomModal({ isOpen, onClose, children, className }: BottomModalProps) {
   const modalRef = useRef<HTMLDialogElement>(null);
 
@@ -39,13 +34,13 @@ interface BottomModalSectionProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 export function BottomModalHeader({ children, className }: BottomModalSectionProps) {
-  return <div className={twMerge(HeaderTw, className)}>{children}</div>;
+  return <div className={twMerge('bottomModalHeader', className)}>{children}</div>;
 }
 
 export function BottomModalContent({ children, className }: BottomModalSectionProps) {
-  return <div className={twMerge(ContentTw, className)}>{children}</div>;
+  return <div className={twMerge('bottomModalContent', className)}>{children}</div>;
 }
 
 export function BottomModalFooter({ children, className }: BottomModalSectionProps) {
-  return <div className={twMerge(FooterTw, className)}>{children}</div>;
+  return <div className={twMerge('bottomModalFooter', className)}>{children}</div>;
 }
