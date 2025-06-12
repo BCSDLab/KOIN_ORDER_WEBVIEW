@@ -12,6 +12,7 @@ import University from '@/assets/Main/university-icon.svg';
 import RightArrow from '@/assets/Payment/arrow-go-icon.svg';
 import Badge from '@/components/UI/Badge';
 import Button from '@/components/UI/Button';
+import useBooleanState from '@/util/hooks/useBooleanState';
 
 // 샘플 데이터. 결제 api 연동 시 삭제 예정
 const AMOUNT = {
@@ -20,8 +21,8 @@ const AMOUNT = {
 };
 
 export default function Payment() {
-  const [isContactModalOpen, setIsContactModalOpen] = useState(false);
-  const [isStoreRequestModalOpen, setIsStoreRequestModalOpen] = useState(false);
+  const [isContactModalOpen, openContactModal, closeContactModal] = useBooleanState(false);
+  const [isStoreRequestModalOpen, openStoreRequestModal, closeStoreRequestModal] = useBooleanState(false);
 
   const [contact, setContact] = useState('');
   const [request, setRequest] = useState('');
@@ -83,9 +84,9 @@ export default function Payment() {
         <div>
           <p className="text-primary-500 text-lg font-semibold">연락처</p>
           <Button
+            onClick={openContactModal}
             color="gray"
             fullWidth
-            onClick={() => setIsContactModalOpen(true)}
             className="mt-2 justify-normal border-0 py-4 pr-3 pl-6"
           >
             <div className="flex w-full items-center justify-between">
@@ -100,9 +101,9 @@ export default function Payment() {
         <div>
           <p className="text-primary-500 text-lg font-semibold">사장님에게</p>
           <Button
+            onClick={openStoreRequestModal}
             color="gray"
             fullWidth
-            onClick={() => setIsStoreRequestModalOpen(true)}
             className="mt-2 justify-normal border-0 py-4 pr-3 pl-6"
           >
             <div className="flex w-full flex-col gap-1">
@@ -132,15 +133,17 @@ export default function Payment() {
       >
         {AMOUNT.value.toLocaleString()}원 결제하기
       </Button>
+
       <ContactModal
         isOpen={isContactModalOpen}
-        onClose={() => setIsContactModalOpen(false)}
+        onClose={closeContactModal}
         currentContact={contact}
         onSubmit={(newContact) => setContact(newContact)}
       />
+
       <StoreRequestModal
         isOpen={isStoreRequestModalOpen}
-        onClose={() => setIsStoreRequestModalOpen(false)}
+        onClose={closeStoreRequestModal}
         currentRequest={request}
         currentNoCutlery={noCutlery}
         onSubmit={(newRequest, newNoCutlery) => {

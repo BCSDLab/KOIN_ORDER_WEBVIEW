@@ -1,9 +1,8 @@
-import { ReactNode, ReactElement, SVGProps } from 'react';
+import type { ReactNode, ReactElement, SVGProps, HTMLAttributes } from 'react';
 import clsx from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
-interface ButtonProps {
-  variant?: 'default' | 'outlined';
+interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLAttributes<HTMLButtonElement> {
   color?: 'primary' | 'neutral' | 'gray';
   size?: 'sm' | 'md' | 'lg';
   startIcon?: ReactElement<SVGProps<SVGSVGElement>>;
@@ -11,8 +10,6 @@ interface ButtonProps {
   children?: ReactNode;
   state?: 'default' | 'disabled';
   fullWidth?: boolean;
-  onClick?: () => void;
-  className?: string;
 }
 
 const COLOR = {
@@ -37,8 +34,8 @@ export default function Button({
   children,
   state = 'default',
   fullWidth = false,
-  onClick,
   className,
+  ...props
 }: ButtonProps) {
   const isDisabled = state === 'disabled';
 
@@ -53,7 +50,7 @@ export default function Button({
   );
 
   return (
-    <button onClick={onClick} disabled={isDisabled} className={composedClass}>
+    <button disabled={isDisabled} className={composedClass} {...props}>
       {startIcon && <span className="mr-2 h-6 w-6">{startIcon}</span>}
       {children}
       {endIcon && <span className="ml-2 h-6 w-6">{endIcon}</span>}

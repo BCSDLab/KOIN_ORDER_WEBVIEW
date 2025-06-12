@@ -1,16 +1,15 @@
 import { useState } from 'react';
 import useMarker from './hooks/useMarker';
 import useNaverMap from './hooks/useNaverMap';
-import CloseIcon from '@/assets/Main/close-icon.svg';
 import ArrowDown from '@/assets/Payment/arrow-down-icon.svg';
 import ArrowGo from '@/assets/Payment/arrow-go-icon.svg';
-import Button from '@/components/UI/Button';
-import Modal, { ModalContent, ModalFooter } from '@/components/UI/Modal';
 import BottomModal, {
-  BottomModalHeader,
   BottomModalContent,
   BottomModalFooter,
-} from '@/components/UI/Modal/BottomModal';
+  BottomModalHeader,
+} from '@/components/UI/BottomModal/BottomModal';
+import Button from '@/components/UI/Button';
+import Modal, { ModalContent } from '@/components/UI/CenterModal/Modal';
 
 const sample: [number, number] = [36.767, 127.284];
 const DetailRequest: string[] = [
@@ -93,21 +92,18 @@ export default function DetailAddress() {
         주소선택
       </Button>
       <Modal isOpen={modalIsOpen} onClose={handleCloseModal}>
-        <ModalContent>정확한 상세 주소를 입력해주세요.</ModalContent>
-        <ModalFooter>
+        <ModalContent>
+          정확한 상세 주소를 입력해주세요.
           <Button onClick={handleCloseModal} className="h-12 w-[16rem]">
             확인
           </Button>
-        </ModalFooter>
+        </ModalContent>
       </Modal>
       <BottomModal isOpen={bottomModalIsOpen} onClose={handleCloseBottomModal}>
-        <BottomModalHeader>
+        <BottomModalHeader className="px-6">
           <div className="text-primary-500 font-semibold">배달기사님에게</div>
-          <button onClick={handleCloseBottomModal}>
-            <CloseIcon />
-          </button>
         </BottomModalHeader>
-        <BottomModalContent>
+        <BottomModalContent className="px-6">
           <form className="flex w-[20.375rem] flex-col gap-2">
             {DetailRequest.map((detail, index) => (
               <label
