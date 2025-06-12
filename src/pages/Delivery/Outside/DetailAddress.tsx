@@ -3,9 +3,13 @@ import useMarker from './hooks/useMarker';
 import useNaverMap from './hooks/useNaverMap';
 import ArrowDown from '@/assets/Payment/arrow-down-icon.svg';
 import ArrowGo from '@/assets/Payment/arrow-go-icon.svg';
+import BottomModal, {
+  BottomModalContent,
+  BottomModalFooter,
+  BottomModalHeader,
+} from '@/components/UI/BottomModal/BottomModal';
 import Button from '@/components/UI/Button';
-import BottomModal from '@/components/UI/Modal/BottomModal/index';
-import Modal from '@/components/UI/Modal/CenterModal/index';
+import Modal, { ModalContent } from '@/components/UI/CenterModal/Modal';
 
 const sample: [number, number] = [36.767, 127.284];
 const DetailRequest: string[] = [
@@ -87,19 +91,19 @@ export default function DetailAddress() {
       <Button className="mt-[18.188rem] h-[2.875rem] w-[21.375rem]" onClick={handleOpenModal}>
         주소선택
       </Button>
-      <Modal className="centerModal" isOpen={modalIsOpen} onClose={handleCloseModal}>
-        <Modal.Content className="centerModalContent">
+      <Modal isOpen={modalIsOpen} onClose={handleCloseModal}>
+        <ModalContent>
           정확한 상세 주소를 입력해주세요.
           <Button onClick={handleCloseModal} className="h-12 w-[16rem]">
             확인
           </Button>
-        </Modal.Content>
+        </ModalContent>
       </Modal>
-      <BottomModal className="bottomModal" isOpen={bottomModalIsOpen} onClose={handleCloseBottomModal}>
-        <BottomModal.Header className="bottomModalHeader px-6" showCloseButton>
+      <BottomModal isOpen={bottomModalIsOpen} onClose={handleCloseBottomModal}>
+        <BottomModalHeader className="px-6">
           <div className="text-primary-500 font-semibold">배달기사님에게</div>
-        </BottomModal.Header>
-        <BottomModal.Content className="bottomModalContent px-6">
+        </BottomModalHeader>
+        <BottomModalContent className="px-6">
           <form className="flex w-[20.375rem] flex-col gap-2">
             {DetailRequest.map((detail, index) => (
               <label
@@ -151,8 +155,8 @@ export default function DetailAddress() {
           <Button onClick={handleSubmitRequest} className="h-[2.875rem] w-[20.375rem]">
             선택하기
           </Button>
-        </BottomModal.Content>
-        <BottomModal.Footer className="bottomModalFooter"></BottomModal.Footer>
+        </BottomModalContent>
+        <BottomModalFooter></BottomModalFooter>
       </BottomModal>
     </div>
   );

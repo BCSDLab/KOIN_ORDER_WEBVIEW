@@ -1,6 +1,11 @@
 import { useState } from 'react';
+import CloseIcon from '@/assets/Main/close-icon.svg';
+import BottomModal, {
+  BottomModalContent,
+  BottomModalFooter,
+  BottomModalHeader,
+} from '@/components/UI/BottomModal/BottomModal';
 import Button from '@/components/UI/Button';
-import BottomModal from '@/components/UI/Modal/BottomModal/index';
 
 interface StoreRequestModalProps {
   isOpen: boolean;
@@ -21,11 +26,14 @@ export default function StoreRequestModal({
   const [noCutlery, setNoCutlery] = useState(currentNoCutlery);
 
   return (
-    <BottomModal className="bottomModal" isOpen={isOpen} onClose={onClose}>
-      <BottomModal.Header className="bottomModalHeader" showCloseButton>
+    <BottomModal isOpen={isOpen} onClose={onClose}>
+      <BottomModalHeader>
         <div className="flex w-full justify-between">사장님에게</div>
-      </BottomModal.Header>
-      <BottomModal.Content className="bottomModalContent">
+        <button type="button" onClick={onClose}>
+          <CloseIcon />
+        </button>
+      </BottomModalHeader>
+      <BottomModalContent>
         <input
           type="text"
           value={request}
@@ -53,8 +61,8 @@ export default function StoreRequestModal({
         >
           변경하기
         </Button>
-      </BottomModal.Content>
-      <BottomModal.Footer className="bottomModalFooter" />
+      </BottomModalContent>
+      <BottomModalFooter />
     </BottomModal>
   );
 }

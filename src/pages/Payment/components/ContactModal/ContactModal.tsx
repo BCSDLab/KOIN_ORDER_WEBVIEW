@@ -1,7 +1,12 @@
 import { useState } from 'react';
+import CloseIcon from '@/assets/Main/close-icon.svg';
 import InputDeleteIcon from '@/assets/Payment/input-delete-icon.svg';
 import Button from '@/components/UI/Button';
-import BottomModal from '@/components/UI/Modal/BottomModal/index';
+import BottomModal, {
+  BottomModalContent,
+  BottomModalFooter,
+  BottomModalHeader,
+} from '@/components/UI/BottomModal/BottomModal';
 
 function formatPhoneNumber(phone: string) {
   const digits = phone.replace(/\D/g, '');
@@ -29,10 +34,13 @@ export default function ContactModal({ isOpen, onClose, currentContact, onSubmit
 
   return (
     <BottomModal className="bottomModal" isOpen={isOpen} onClose={onClose}>
-      <BottomModal.Header className="bottomModalHeader" showCloseButton>
+      <BottomModalHeader>
         <div className="flex w-full justify-between">연락처</div>
-      </BottomModal.Header>
-      <BottomModal.Content className="bottomModalContent">
+        <button type="button" onClick={onClose}>
+          <CloseIcon />
+        </button>
+      </BottomModalHeader>
+      <BottomModalContent>
         <div className="relative">
           <input
             type="tel"
@@ -57,8 +65,8 @@ export default function ContactModal({ isOpen, onClose, currentContact, onSubmit
         >
           변경하기
         </Button>
-      </BottomModal.Content>
-      <BottomModal.Footer className="bottomModalFooter" />
+      </BottomModalContent>
+      <BottomModalFooter />
     </BottomModal>
   );
 }
