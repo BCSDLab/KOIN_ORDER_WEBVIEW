@@ -1,4 +1,4 @@
-@component {
+@layer components {
   .modalHeader {
     @apply px-8 py-3 font-[Pretendard] text-lg font-semibold
   }
