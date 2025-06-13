@@ -5,8 +5,8 @@ import Header from '../Header';
 export default function PaymentLayout() {
   return (
     <>
-      <Header />
-      <div className="pt-15 pb-7">
+      <Header title="주문" />
+      <div className="pt-11">
         <Suspense>
           <Outlet />
         </Suspense>
