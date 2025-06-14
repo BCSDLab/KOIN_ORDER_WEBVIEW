@@ -11,14 +11,13 @@ export default function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/delivery" element={<DeliveryLayout />}>
-          <Route path="/delivery/outside/detail-address" element={<DetailAddress />} />
+          <Route path="/delivery/outside" element={<DetailAddress />} />
           <Route path="/delivery/campus" element={<Campus />} />
         </Route>
         <Route path="/payment" element={<PaymentLayout />}>
           <Route index element={<Payment />} />
         </Route>
-        <Route path="/address" element={<DetailAddress />} />
-        <Route path="/order" element={<OrderFinish />} />
+        <Route path="/result" element={<OrderFinish />} />
       </Routes>
     </BrowserRouter>
   );
