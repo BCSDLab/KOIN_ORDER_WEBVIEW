@@ -10,6 +10,7 @@ import BottomModal, {
 } from '@/components/UI/BottomModal/BottomModal';
 import Button from '@/components/UI/Button';
 import Modal, { ModalContent } from '@/components/UI/CenterModal/Modal';
+import useBooleanState from '@/util/hooks/useBooleanState';
 
 const sample: [number, number] = [36.767, 127.284];
 const DetailRequest: string[] = [
@@ -21,8 +22,9 @@ const DetailRequest: string[] = [
 ];
 
 export default function DetailAddress() {
-  const [bottomModalIsOpen, setBottomModalIsOpen] = useState<boolean>(false);
-  const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
+  const [isDeliveryBottomModalOpen, openDeliveryBottomModal, closeDeliveryBottomModal] = useBooleanState(false);
+
+  const [isModalOpen, openModal, closeModal] = useBooleanState(false);
 
   const [selectedRequest, setSelectedRequest] = useState<string>('');
   const [customInputValue, setCustomInputValue] = useState<string>('');
@@ -40,18 +42,18 @@ export default function DetailAddress() {
     return selectedRequest;
   };
 
-  const handleOpenBottomModal = () => setBottomModalIsOpen(true);
-  const handleCloseBottomModal = () => setBottomModalIsOpen(false);
+  const handleOpenBottomModal = () => openDeliveryBottomModal();
+  const handleCloseBottomModal = () => closeDeliveryBottomModal();
 
-  const handleOpenModal = () => setModalIsOpen(true);
-  const handleCloseModal = () => setModalIsOpen(false);
+  const handleOpenModal = () => openModal();
+  const handleCloseModal = () => closeModal();
 
   const handleSelectRequest = (detail: string) => setSelectedRequest(detail);
   const getCustomInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCustomInputValue(e.target.value.trimStart());
   };
 
-  const handleSubmitRequest = () => handleCloseBottomModal();
+  const handleSubmitRequest = () => closeDeliveryBottomModal();
 
   return (
     <div className="flex flex-col items-center">
@@ -90,7 +92,7 @@ export default function DetailAddress() {
       <Button className="mt-[18.188rem] h-[2.875rem] w-[21.375rem]" onClick={handleOpenModal}>
         주소 선택
       </Button>
-      <Modal isOpen={modalIsOpen} onClose={handleCloseModal}>
+      <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
         <ModalContent>
           정확한 상세 주소를 입력해주세요.
           <Button onClick={handleCloseModal} className="h-12 w-[16rem]">
@@ -98,7 +100,7 @@ export default function DetailAddress() {
           </Button>
         </ModalContent>
       </Modal>
-      <BottomModal isOpen={bottomModalIsOpen} onClose={handleCloseBottomModal}>
+      <BottomModal isOpen={isDeliveryBottomModalOpen} onClose={handleCloseBottomModal}>
         <BottomModalHeader className="px-6">
           <div className="text-primary-500 font-semibold">배달기사님에게</div>
         </BottomModalHeader>

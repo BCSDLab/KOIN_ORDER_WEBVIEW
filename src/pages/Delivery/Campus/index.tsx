@@ -17,6 +17,7 @@ import BottomModal, {
 } from '@/components/UI/BottomModal/BottomModal';
 import Button from '@/components/UI/Button';
 import Modal, { ModalContent, ModalFooter } from '@/components/UI/CenterModal/Modal';
+import useBooleanState from '@/util/hooks/useBooleanState';
 
 const campusList = [
   {
@@ -63,7 +64,7 @@ type CampusCategory = {
 };
 
 export default function Campus() {
-  const [bottomModalIsOpen, setBottomModalIsOpen] = useState<boolean>(false);
+  const [bottomModalIsOpen, openBottomModal, closeBottomModal] = useBooleanState(false);
   const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
 
   const [selectedRequest, setSelectedRequest] = useState<string>('');
@@ -85,8 +86,8 @@ export default function Campus() {
     return selectedRequest;
   };
 
-  const handleOpenBottomModal = () => setBottomModalIsOpen(true);
-  const handleCloseBottomModal = () => setBottomModalIsOpen(false);
+  const handleOpenBottomModal = () => openBottomModal();
+  const handleCloseBottomModal = () => closeBottomModal();
 
   const handleOpenModal = () => setModalIsOpen(true);
   const handleCloseModal = () => setModalIsOpen(false);
