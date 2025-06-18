@@ -22,19 +22,7 @@ const campusList = [
   {
     name: '기숙사',
     icon: NightShelter,
-    building: [
-      '함지관',
-      '다솔관',
-      '은솔관',
-      '해울관',
-      '예솔관',
-      '예지관',
-      '솔빛관',
-      'IH',
-      '청솔관',
-      '참빛관',
-      '소울관',
-    ],
+    building: ['101동(해울)', '103동(예솔)', '104동(다솔)'],
   },
   {
     name: '공학관',
@@ -172,13 +160,14 @@ export default function Campus() {
                     <div className="h-[1px] w-[310px] bg-[#eee]" />
                     <div className="mx-auto flex w-full flex-wrap justify-center gap-x-3 gap-y-2 bg-white px-4 py-4 break-all">
                       {campus.building.map((building) => (
-                        <Badge
+                        <Button
                           key={building}
-                          label={building}
-                          color={selectedCampusBuilding === building ? 'primary' : 'neutral'}
-                          size="lg"
+                          color={selectedCampusBuilding === building ? 'primary' : 'gray'}
+                          size="sm"
                           onClick={() => setSelectedCampusBuilding(building)}
-                        />
+                        >
+                          {building}
+                        </Button>
                       ))}
                     </div>
                   </>

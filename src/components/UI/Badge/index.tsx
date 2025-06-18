@@ -9,8 +9,6 @@ interface BadgeProps extends HTMLAttributes<HTMLDivElement> {
   label?: string;
   startIcon?: ReactElement<SVGProps<SVGSVGElement>>;
   endIcon?: ReactElement<SVGProps<SVGSVGElement>>;
-  className?: string;
-  onClick?: () => void;
 }
 
 const COLOR: Record<string, Record<string, string>> = {
@@ -40,7 +38,6 @@ export default function Badge({
   label,
   startIcon: startIcon,
   endIcon: endIcon,
-  onClick,
   className,
 }: BadgeProps) {
   const composedClass = twMerge(
@@ -53,7 +50,7 @@ export default function Badge({
   );
 
   return (
-    <button type="button" className={composedClass} onClick={onClick}>
+    <button type="button" className={composedClass}>
       {startIcon && <span className="h-4 w-4">{startIcon}</span>}
       {label && <span>{label}</span>}
       {endIcon && <span className="h-4 w-4">{endIcon}</span>}
