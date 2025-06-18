@@ -210,7 +210,7 @@ export default function Campus() {
             <CloseIcon />
           </button>
         </BottomModalHeader>
-        <BottomModalContent>
+        <BottomModalContent className="px-6">
           <form className="flex w-[20.375rem] flex-col gap-2">
             {DetailRequest.map((detail, index) => (
               <label
