@@ -13,7 +13,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement>, HTM
 }
 
 const COLOR = {
-  primary: 'bg-primary-500 text-white',
+  primary: 'bg-primary-500 text-white border border-primary-500',
   neutral: 'bg-white text-primary-500 border border-neutral-200',
   gray: 'bg-white text-neutral-500 border border-neutral-300',
 };
