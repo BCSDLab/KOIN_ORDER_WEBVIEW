@@ -106,7 +106,7 @@ export default function Campus() {
         <div className="flex h-[3.5rem] w-full items-center justify-between rounded-b-xl bg-white px-6 text-[0.813rem] text-neutral-600">
           {selectedCampusBuilding ? (
             <div className="flex w-full items-center justify-center gap-2">
-              <Badge label={selectedCampusBuilding} color="primary" size="md" className="text-sm" />
+              <Badge label={selectedCampusBuilding} color="primary" size="sm" className="text-sm" />
               <span>앞으로 배달돼요!</span>
             </div>
           ) : (

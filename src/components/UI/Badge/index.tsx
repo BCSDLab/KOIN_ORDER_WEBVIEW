@@ -26,8 +26,8 @@ const COLOR: Record<string, Record<string, string>> = {
 };
 
 const SIZE = {
-  sm: 'px-2 py-0.5',
-  md: 'px-2 py-1.5',
+  sm: 'px-2 py-1.5',
+  md: 'px-3 py-1',
   lg: 'px-3 py-1.5',
 };
 
@@ -50,10 +50,10 @@ export default function Badge({
   );
 
   return (
-    <button type="button" className={composedClass}>
+    <div className={composedClass}>
       {startIcon && <span className="h-4 w-4">{startIcon}</span>}
       {label && <span>{label}</span>}
       {endIcon && <span className="h-4 w-4">{endIcon}</span>}
-    </button>
+    </div>
   );
 }
