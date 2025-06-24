@@ -154,7 +154,10 @@ export default function OrderFinish() {
           </BottomModalHeader>
           <BottomModalContent>
             <div>빠른 해결을 위해 매장에 전화해 보시겠어요?</div>
-            <Button className="h-[3.063rem] gap-3 rounded-xl text-lg">
+            <Button
+              className="h-[3.063rem] gap-3 rounded-xl text-lg"
+              onClick={() => (window.location.href = `tel:010-1234-5678`)} //테스트용 전화번호, api 연동 시 변경
+            >
               <CallIcon />
               전화하기
             </Button>

@@ -53,7 +53,13 @@ export default function Payment() {
   return (
     <div className="mx-6 mt-4">
       <div className="flex items-center gap-3 text-xl font-bold">
-        <Badge variant="outlined" size="md" color="primaryLight" startIcon={<Bike />} label="배달" />
+        <Badge
+          variant="outlined"
+          color="primaryLight"
+          className="px-3 py-2 leading-[16px]"
+          startIcon={<Bike />}
+          label="배달"
+        />
         맛있는 족발 - 병천점
       </div>
 

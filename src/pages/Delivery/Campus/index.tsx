@@ -65,7 +65,7 @@ type CampusCategory = {
 
 export default function Campus() {
   const [bottomModalIsOpen, openBottomModal, closeBottomModal] = useBooleanState(false);
-  const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
+  const [modalIsOpen, openModal, closeModal] = useBooleanState(false);
 
   const [selectedRequest, setSelectedRequest] = useState<string>('');
   const [customInputValue, setCustomInputValue] = useState<string>('');
@@ -86,18 +86,12 @@ export default function Campus() {
     return selectedRequest;
   };
 
-  const handleOpenBottomModal = () => openBottomModal();
-  const handleCloseBottomModal = () => closeBottomModal();
-
-  const handleOpenModal = () => setModalIsOpen(true);
-  const handleCloseModal = () => setModalIsOpen(false);
-
   const handleSelectRequest = (detail: string) => setSelectedRequest(detail);
   const getCustomInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCustomInputValue(e.target.value.trimStart());
   };
 
-  const handleSubmitRequest = () => handleCloseBottomModal();
+  const handleSubmitRequest = () => closeBottomModal();
 
   return (
     <div className="flex flex-col items-center">
@@ -183,7 +177,7 @@ export default function Campus() {
         <div className="text-primary-500 pb-2 font-semibold">배달기사님에게</div>
         <button
           type="button"
-          onClick={handleOpenBottomModal}
+          onClick={openBottomModal}
           className="flex w-[21.375rem] items-center justify-between rounded-sm border border-neutral-300 bg-white px-4 py-3 text-sm text-neutral-400"
         >
           {requestLabel()}
@@ -192,21 +186,21 @@ export default function Campus() {
           </div>
         </button>
       </div>
-      <Button className="mt-[18.188rem] h-[2.875rem] w-[21.375rem]" onClick={handleOpenModal}>
+      <Button className="mt-[18.188rem] h-[2.875rem] w-[21.375rem]" onClick={openModal}>
         주소 선택
       </Button>
-      <Modal isOpen={modalIsOpen} onClose={handleCloseModal}>
+      <Modal isOpen={modalIsOpen} onClose={closeModal}>
         <ModalContent>정확한 상세 주소를 입력해주세요.</ModalContent>
         <ModalFooter>
-          <Button onClick={handleCloseModal} className="h-12 w-[16rem]">
+          <Button onClick={closeModal} className="h-12 w-[16rem]">
             확인
           </Button>
         </ModalFooter>
       </Modal>
-      <BottomModal isOpen={bottomModalIsOpen} onClose={handleCloseBottomModal}>
+      <BottomModal isOpen={bottomModalIsOpen} onClose={closeBottomModal}>
         <BottomModalHeader>
           <div className="text-primary-500 font-semibold">배달기사님에게</div>
-          <button onClick={handleCloseBottomModal}>
+          <button onClick={closeBottomModal}>
             <CloseIcon />
           </button>
         </BottomModalHeader>
