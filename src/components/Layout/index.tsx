@@ -1,11 +1,11 @@
 import { Suspense } from 'react';
 import { Outlet } from 'react-router-dom';
-import Header from '../Header';
+import Header from './Header';
 
-export default function DeliveryLayout() {
+export default function AppLayout() {
   return (
     <>
-      <Header title="주소 상세" />
+      <Header />
       <div className="pt-15">
         <Suspense>
           <Outlet />
