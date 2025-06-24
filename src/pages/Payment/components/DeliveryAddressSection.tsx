@@ -72,7 +72,7 @@ export default function DeliveryAddressSection() {
         ) : (
           <>
             <div className="text-primary-500 text-sm font-semibold">어디로 배달할까요?</div>
-            <div className="flex items-center justify-between py-4">
+            <div className="flex items-center gap-5 py-4">
               <Button
                 color="primary"
                 size="md"
@@ -82,8 +82,9 @@ export default function DeliveryAddressSection() {
                 onClick={() =>
                   setDeliveryAddress({ type: 'campus', label: '105동(함지)', detail: '도착하실때 전화주세요' })
                 } // UI 테스트용 코드
+                fullWidth
               >
-                <div>
+                <div className="leading-[160%]">
                   <div>학교에서</div>
                   <div>받을게요!</div>
                 </div>
@@ -94,16 +95,17 @@ export default function DeliveryAddressSection() {
                 size="md"
                 endIcon={<Home />}
                 className="text-xs"
-                // onClick={() => navigate('/delivery/outside')} 기본 동작 코드
-                onClick={() =>
-                  setDeliveryAddress({
-                    type: 'outside',
-                    label: '충남 천안시 동남구 병천면 가전8길 102 라이프원룸 404동 404호',
-                    detail: '도착하실때 전화주세요',
-                  })
-                } // UI 테스트용 코드
+                onClick={() => navigate('/delivery/outside')}
+                // onClick={() =>
+                //   setDeliveryAddress({
+                //     type: 'outside',
+                //     label: '충남 천안시 동남구 병천면 가전8길 102 라이프원룸 404동 404호',
+                //     detail: '도착하실때 전화주세요',
+                //   })
+                // } // UI 테스트용 코드
+                fullWidth
               >
-                <div>
+                <div className="leading-[160%]">
                   <div>밖에서</div>
                   <div>받을게요!</div>
                 </div>
