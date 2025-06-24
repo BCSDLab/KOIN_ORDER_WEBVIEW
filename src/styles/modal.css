@@ -1,0 +1,25 @@
+@layer components {
+  .modalHeader {
+    @apply px-8 py-3 font-[Pretendard] text-lg font-semibold
+  }
+  
+  .modalContent {
+    @apply flex flex-col items-center justify-center gap-6 px-8 py-6 font-[Pretendard] text-[15px] font-medium text-neutral-600
+  }
+
+  .modalFooter {
+    @apply px-8 py-3
+  }
+  
+  .bottomModalHeader {
+    @apply text-primary-500 flex items-center justify-between border-b-[0.5px] border-b-neutral-300 px-8 py-3 font-[Pretendard] text-lg font-semibold
+  }
+
+  .bottomModalContent {
+    @apply flex flex-col gap-4 px-8 pt-4 pb-3 font-[Pretendard] text-sm text-neutral-600
+  }
+
+  .bottomModalFooter {
+    @apply border-t-[0.5px] border-t-neutral-300 px-8 py-3 font-[Pretendard] text-sm text-neutral-600
+  }
+}

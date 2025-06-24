@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import CloseIcon from '@/assets/Main/close-icon.svg';
-import Button from '@/components/UI/Button';
 import BottomModal, {
   BottomModalContent,
   BottomModalFooter,
   BottomModalHeader,
-} from '@/components/UI/Modal/BottomModal';
+} from '@/components/UI/BottomModal/BottomModal';
+import Button from '@/components/UI/Button';
 
 interface StoreRequestModalProps {
   isOpen: boolean;
@@ -28,12 +28,10 @@ export default function StoreRequestModal({
   return (
     <BottomModal isOpen={isOpen} onClose={onClose}>
       <BottomModalHeader>
-        <div className="flex w-full justify-between">
-          사장님에게
-          <button onClick={onClose}>
-            <CloseIcon />
-          </button>
-        </div>
+        <div className="flex w-full justify-between">사장님에게</div>
+        <button type="button" onClick={onClose}>
+          <CloseIcon />
+        </button>
       </BottomModalHeader>
       <BottomModalContent>
         <input

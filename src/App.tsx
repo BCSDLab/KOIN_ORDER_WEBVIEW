@@ -1,24 +1,23 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import DeliveryOutside from './pages/Delivery/Outside';
+import DeliveryLayout from './components/Layout/DeliveryLayout';
 import PaymentLayout from '@/components/Layout/PaymentLayout';
-import CartPage from '@/pages/Cart/CartPage';
-import MainPage from '@/pages/Main/MainPage';
-import MenuPage from '@/pages/Menu/MenuPage';
-import Payment from '@/pages/Payment/index';
-import StoreDetailPage from '@/pages/StoreDetail/StoreDetailPage';
+import Campus from '@/pages/Delivery/Campus';
+import DetailAddress from '@/pages/Delivery/Outside/DetailAddress';
+import OrderFinish from '@/pages/OrderFinish';
+import Payment from '@/pages/Payment';
 
 export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<MainPage />} />
-        <Route path="/store/:storeId" element={<StoreDetailPage />} />
-        <Route path="/store/:storeId/menu/:menuId" element={<MenuPage />} />
-        <Route path="/cart" element={<CartPage />} />
+        <Route path="/delivery" element={<DeliveryLayout />}>
+          <Route path="/delivery/outside" element={<DetailAddress />} />
+          <Route path="/delivery/campus" element={<Campus />} />
+        </Route>
         <Route path="/payment" element={<PaymentLayout />}>
           <Route index element={<Payment />} />
-          <Route path="delivery/outside" element={<DeliveryOutside />} />
         </Route>
+        <Route path="/result" element={<OrderFinish />} />
       </Routes>
     </BrowserRouter>
   );

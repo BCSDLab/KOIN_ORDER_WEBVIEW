@@ -1,46 +1,8 @@
 @import 'tailwindcss';
 
-@theme {
-  --breakpoint-sm: 480px;
-  --breakpoint-md: 768px;
-  --breakpoint-lg: 976px;
+@import './styles/base.css';
+@import './styles/component.css';
+@import './styles/font.css';
+@import './styles/theme.css';
+@import './styles/modal.css';
 
-  --color-primary-300: #ce86fd;
-  --color-primary-500: #b611f5;
-
-  --color-neutral-300: #e1e1e1;
-  --color-neutral-400: #cacaca;
-  --color-neutral-500: #727272;
-  --color-neutral-600: #4b4b4b;
-  --color-neutral-800: #000000;
-
-  --shadow-1: 0px 1px 1px 0px rgba(0, 0, 0, 0.02), 0px 2px 4px 0px rgba(0, 0, 0, 0.04);
-}
-
-@font-face {
-  font-family: 'Pretendard';
-  src: url('/fonts/Pretendard-Regular.woff2') format('woff2');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Pretendard';
-  src: url('/fonts/Pretendard-Bold.woff2') format('woff2');
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-
-#root {
-  font-family:
-    'Pretendard', system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-    'Segoe UI Symbol';
-}
-
-@layer base {
-  body {
-    @apply bg-[#f8f8fa];
-  }
-}
