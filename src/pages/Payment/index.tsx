@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { TossPaymentsWidgets } from '@tosspayments/tosspayments-sdk';
 import clsx from 'clsx';
-import { useNavigate } from 'react-router-dom';
 import Agreement from './components/Agreement';
 import ContactModal from './components/ContactModal';
 import DeliveryAddressSection from './components/DeliveryAddressSection';
@@ -30,8 +29,6 @@ export default function Payment() {
 
   const [ready, setReady] = useState(false);
   const [widgets, setWidgets] = useState<TossPaymentsWidgets | null>(null);
-
-  const navigate = useNavigate();
 
   const pay = async () => {
     try {
