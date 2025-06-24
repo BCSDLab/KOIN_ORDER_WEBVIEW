@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import DeliveryLayout from './components/Layout/DeliveryLayout';
+import DeliveryOutside from './pages/Delivery/Outside';
 import PaymentLayout from '@/components/Layout/PaymentLayout';
 import Campus from '@/pages/Delivery/Campus';
 import DetailAddress from '@/pages/Delivery/Outside/DetailAddress';
@@ -11,7 +12,8 @@ export default function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/delivery" element={<DeliveryLayout />}>
-          <Route path="/delivery/outside" element={<DetailAddress />} />
+          <Route path="/delivery/outside" element={<DeliveryOutside />} />
+          <Route path="/delivery/outside/detail" element={<DetailAddress />} />
           <Route path="/delivery/campus" element={<Campus />} />
         </Route>
         <Route path="/payment" element={<PaymentLayout />}>
