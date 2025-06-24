@@ -1,20 +1,15 @@
 /** 요청/응답 참고: https://business.juso.go.kr/addrlink/openApi/searchApi.do */
 export interface AddressSearchRequest {
-  confmKey: string;
-  currentPage: number;
-  countPerPage: number;
+  currentPage: string;
+  countPerPage: string;
   keyword: string;
-  resultType?: 'xml' | 'json';
-  hstryYn?: 'Y' | 'N';
-  firstSort?: 'none' | 'road' | 'location';
-  addInfoYn?: 'Y' | 'N';
 }
 
 export interface AddressSearchResponse {
-  results: {
-    common: CommonResponse;
-    juso: Juso[];
-  };
+  addresses: Juso[];
+  count_per_page: number;
+  current_page: number;
+  total_count: string;
 }
 
 export interface CommonResponse {
@@ -26,31 +21,14 @@ export interface CommonResponse {
 }
 
 export interface Juso {
-  roadAddr: string;
-  roadAddrPart1: string;
-  roadAddrPart2?: string;
-  jibunAddr: string;
-  engAddr: string;
-  zipNo: string;
-  admCd: string;
-  rnMgtSn: string;
-  bdMgtSn: string;
-  detBdNmList?: string;
-  bdNm?: string;
-  bdKdcd: string;
-  siNm: string;
-  sggNm: string;
-  emdNm: string;
-  liNm?: string;
+  bd_nm: string;
+  emd_nm: string;
+  eng_address: string;
+  jibun_address: string;
+  li_nm: string;
   rn: string;
-  udrtYn: string; // '0' | '1'
-  buldMnnm: number;
-  buldSlno: number;
-  mtYn: string; // '0' | '1'
-  lnbrMnnm: number;
-  lnbrSlno: number;
-  emdNo: string;
-  hstryYn: string;
-  relJibun?: string;
-  hemdNm?: string;
+  road_address: string;
+  sgg_nm: string;
+  si_nm: string;
+  zip_no: string;
 }
