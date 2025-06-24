@@ -42,12 +42,6 @@ export default function DetailAddress() {
     return selectedRequest;
   };
 
-  const handleOpenBottomModal = () => openDeliveryBottomModal();
-  const handleCloseBottomModal = () => closeDeliveryBottomModal();
-
-  const handleOpenModal = () => openModal();
-  const handleCloseModal = () => closeModal();
-
   const handleSelectRequest = (detail: string) => setSelectedRequest(detail);
   const getCustomInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCustomInputValue(e.target.value.trimStart());
@@ -80,7 +74,7 @@ export default function DetailAddress() {
         <div className="text-primary-500 pb-2 font-semibold">배달기사님에게</div>
         <button
           type="button"
-          onClick={handleOpenBottomModal}
+          onClick={openDeliveryBottomModal}
           className="flex w-[21.375rem] items-center justify-between rounded-sm border border-neutral-300 bg-white px-4 py-3 text-sm text-neutral-400"
         >
           {requestLabel()}
@@ -89,18 +83,18 @@ export default function DetailAddress() {
           </div>
         </button>
       </div>
-      <Button className="mt-[18.188rem] h-[2.875rem] w-[21.375rem]" onClick={handleOpenModal}>
+      <Button className="mt-[18.188rem] h-[2.875rem] w-[21.375rem]" onClick={openModal}>
         주소 선택
       </Button>
-      <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
+      <Modal isOpen={isModalOpen} onClose={closeModal}>
         <ModalContent>
           정확한 상세 주소를 입력해주세요.
-          <Button onClick={handleCloseModal} className="h-12 w-[16rem]">
+          <Button onClick={closeModal} className="h-12 w-[16rem]">
             확인
           </Button>
         </ModalContent>
       </Modal>
-      <BottomModal isOpen={isDeliveryBottomModalOpen} onClose={handleCloseBottomModal}>
+      <BottomModal isOpen={isDeliveryBottomModalOpen} onClose={closeDeliveryBottomModal}>
         <BottomModalHeader className="px-6">
           <div className="text-primary-500 font-semibold">배달기사님에게</div>
         </BottomModalHeader>
