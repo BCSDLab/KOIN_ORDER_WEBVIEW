@@ -7,6 +7,7 @@ if (!BASE_URL) {
 interface FetchOptions extends Omit<RequestInit, 'body'> {
   headers?: Record<string, string>;
   body?: unknown;
+  params?: Record<string, string | number | boolean>;
 }
 
 export const apiClient = {
@@ -27,11 +28,27 @@ async function sendRequest<T = unknown>(
   options: FetchOptions = {},
   timeout: number = 10000,
 ): Promise<T> {
-  const { headers, body, method, ...restOptions } = options;
+  const { headers, body, method, params, ...restOptions } = options;
 
   if (!method) {
     throw new Error('HTTP method가 설정되지 않았습니다.');
   }
+
+  // GET 요청의 경우 body 대신 params를 사용하여 URL에 쿼리 문자열 추가
+  let url = `${BASE_URL}/${endPoint}`;
+  if (params && Object.keys(params).length > 0) {
+    const query = new URLSearchParams(
+      Object.entries(params).reduce(
+        (acc, [key, val]) => {
+          acc[key] = String(val);
+          return acc;
+        },
+        {} as Record<string, string>,
+      ),
+    ).toString();
+    url += `?${query}`;
+  }
+
   const abortController = new AbortController();
   const timeoutId = setTimeout(() => {
     abortController.abort();
@@ -54,7 +71,7 @@ async function sendRequest<T = unknown>(
       fetchOptions.body = typeof body === 'object' ? JSON.stringify(body) : (body as BodyInit);
     }
 
-    const response = await fetch(`${BASE_URL}/${endPoint}`, fetchOptions);
+    const response = await fetch(url, fetchOptions);
 
     if (!response.ok) {
       const errorMessage = await parseResponseText(response);
