@@ -1,7 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import DeliveryLayout from './components/Layout/DeliveryLayout';
 import DeliveryOutside from './pages/Delivery/Outside';
-import PaymentLayout from '@/components/Layout/PaymentLayout';
+import AppLayout from '@/components/Layout';
 import Campus from '@/pages/Delivery/Campus';
 import DetailAddress from '@/pages/Delivery/Outside/DetailAddress';
 import OrderFinish from '@/pages/OrderFinish';
@@ -11,15 +10,15 @@ export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/delivery" element={<DeliveryLayout />}>
-          <Route path="/delivery/outside" element={<DeliveryOutside />} />
-          <Route path="/delivery/outside/detail" element={<DetailAddress />} />
-          <Route path="/delivery/campus" element={<Campus />} />
+        <Route element={<AppLayout />}>
+          <Route path="delivery">
+            <Route path="outside/detail" element={<DetailAddress />} />
+            <Route path="outside" element={<DeliveryOutside />} />
+            <Route path="campus" element={<Campus />} />
+          </Route>
+          <Route path="payment" element={<Payment />} />
         </Route>
-        <Route path="/payment" element={<PaymentLayout />}>
-          <Route index element={<Payment />} />
-        </Route>
-        <Route path="/result" element={<OrderFinish />} />
+        <Route path="result" element={<OrderFinish />} />
       </Routes>
     </BrowserRouter>
   );
