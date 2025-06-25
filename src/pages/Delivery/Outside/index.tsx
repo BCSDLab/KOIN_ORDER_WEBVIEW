@@ -41,7 +41,7 @@ export default function DeliveryOutside() {
           <span className="text-[10px] leading-[1.6] text-neutral-500">주소지는 병천으로만 설정 가능해요</span>
         </div>
         {!isSuccess && !isFetched && (
-          <div className="mt-4 text-[13px] leading-relaxed font-normal text-neutral-600">
+          <div className="mt-4 text-[13px] leading-[1.6] font-normal text-neutral-600">
             <p className="mb-2 text-sm font-medium">이렇게 검색해보세요!</p>
             <ul className="space-y-2">
               <li className="relative pl-4">
@@ -103,7 +103,7 @@ export default function DeliveryOutside() {
         )}
       </div>
       <button
-        className="bg-primary-500 my-9 h-12 w-[342px] rounded-lg text-[15px] leading-[1.6] font-semibold text-white"
+        className="bg-primary-500 my-9 h-12 w-full rounded-lg text-[15px] leading-[1.6] font-semibold text-white"
         onClick={() => navigate('/delivery/outside/detail', { state: { address } })}
       >
         주소 선택
