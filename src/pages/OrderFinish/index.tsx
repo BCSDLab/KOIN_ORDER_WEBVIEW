@@ -45,7 +45,7 @@ export default function OrderFinish() {
         </Button>
       </div>
       <div>
-        <div className="flex flex-row justify-center gap-[23.5vw] pt-4 pb-1.5">
+        <div className="flex flex-row justify-between px-6 pt-4 pb-1.5">
           <div className="isTextPurple">주문확인</div>
           <div className={orderKind === 'order' ? 'isTextGray' : 'isTextPurple'}>준비중</div>
           <div className={orderKind !== 'delivery' ? 'isTextGray' : 'isTextPurple'}>배달완료</div>
@@ -54,18 +54,18 @@ export default function OrderFinish() {
           <div className="isIconPurple">
             <ShoppingCart />
           </div>
-          <div className="bg-primary-300 h-[5px] w-[5vw] self-center"></div>
+          <div className="bg-primary-300 h-[5px] w-[calc((100vw-184px)/8)] self-center"></div>
           <div
-            className={`h-[5px] w-[20vw] self-center ${orderKind === 'order' ? 'bg-neutral-400' : 'bg-primary-300'}`}
+            className={`h-[5px] w-[calc((100vw-184px)/8*3)] self-center ${orderKind === 'order' ? 'bg-neutral-400' : 'bg-primary-300'}`}
           ></div>
           <div className={orderKind === 'order' ? 'isIconGray' : 'isIconPurple'}>
             <Skillet />
           </div>
           <div
-            className={`h-[5px] w-[5vw] self-center ${orderKind === 'order' ? 'bg-neutral-400' : 'bg-primary-300'}`}
+            className={`h-[5px] w-[calc((100vw-184px)/8)] self-center ${orderKind === 'order' ? 'bg-neutral-400' : 'bg-primary-300'}`}
           ></div>
           <div
-            className={`h-[5px] w-[20vw] self-center ${orderKind !== 'delivery' ? 'bg-neutral-400' : 'bg-primary-300'}`}
+            className={`h-[5px] w-[calc((100vw-184px)/8*3)] self-center ${orderKind !== 'delivery' ? 'bg-neutral-400' : 'bg-primary-300'}`}
           ></div>
           <div className={orderKind !== 'delivery' ? 'isIconGray' : 'isIconPurple'}>
             <Motorcycle />

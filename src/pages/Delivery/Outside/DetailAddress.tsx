@@ -103,7 +103,7 @@ export default function DetailAddress() {
           </button>
         </BottomModalHeader>
         <BottomModalContent className="px-6">
-          <form className="flex w-[87vw] flex-col gap-2">
+          <form className="flex w-full flex-col gap-2">
             {DetailRequest.map((detail, index) => (
               <label
                 key={index}
@@ -151,7 +151,7 @@ export default function DetailAddress() {
               />
             )}
           </form>
-          <Button onClick={handleSubmitRequest} className="h-[2.875rem] w-[87vw]">
+          <Button onClick={handleSubmitRequest} className="h-[2.875rem] w-full">
             선택하기
           </Button>
         </BottomModalContent>
