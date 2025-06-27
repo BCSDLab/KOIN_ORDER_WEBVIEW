@@ -1,3 +1,6 @@
+import { useTokenStore } from '@/stores/auth';
+import { setCookie } from '@/util/ts/cookie';
+
 class Bridge {
   private callbackMap: { [key: string]: (result: unknown) => void } = {};
 
@@ -58,3 +61,55 @@ window.onNativeCallback = (callbackId: string, result: unknown) => {
 };
 
 window.onAndroidCallback = window.onNativeCallback; // 추후 안드로이드와 함수 이름 협의 후 제거 가능
+
+export function setTokensFromNative(tokens: { accessToken: string; refreshToken: string }) {
+  const { accessToken, refreshToken } = tokens;
+  if (accessToken) {
+    useTokenStore.getState().setToken(accessToken);
+    setCookie('AUTH_TOKEN_KEY', accessToken);
+  }
+  if (refreshToken) useTokenStore.getState().setRefreshToken(refreshToken);
+}
+
+export async function requestTokensFromNative(): Promise<{ accessToken: string; refreshToken: string }> {
+  const existingAccessToken = useTokenStore.getState().token;
+  const existingRefreshToken = useTokenStore.getState().refreshToken;
+
+  if (existingAccessToken && existingRefreshToken) {
+    return { accessToken: existingAccessToken, refreshToken: existingRefreshToken };
+  }
+
+  try {
+    const tokens = (await window.NativeBridge?.call('getUserTokens')) as {
+      accessToken?: string;
+      refreshToken?: string;
+    };
+    return {
+      accessToken: tokens?.accessToken || '',
+      refreshToken: tokens?.refreshToken || '',
+    };
+  } catch {
+    return {
+      accessToken: '',
+      refreshToken: '',
+    };
+  }
+}
+
+export async function saveTokensToNative(tokens: { accessToken: string; refreshToken: string }): Promise<boolean> {
+  try {
+    await window.NativeBridge?.call('saveUserTokens', tokens);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+export async function deleteTokensFromNative(): Promise<boolean> {
+  try {
+    await window.NativeBridge?.call('deleteUserTokens');
+    return true;
+  } catch {
+    return false;
+  }
+}
