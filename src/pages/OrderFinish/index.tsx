@@ -39,33 +39,33 @@ export default function OrderFinish() {
         </div>
         <Button
           onClick={openDeliveryBottomModal}
-          className="h-[1.938rem] w-[4.125rem] self-end rounded-3xl px-3 text-xs leading-[160%]"
+          className="h-[1.938rem] w-[4.125rem] self-end rounded-3xl px-2 text-xs leading-[160%] font-semibold"
         >
           취소하기
         </Button>
       </div>
       <div>
-        <div className="flex flex-row justify-between px-6 pt-4 pb-1.5">
+        <div className="flex flex-row justify-center gap-[23.5vw] pt-4 pb-1.5">
           <div className="isTextPurple">주문확인</div>
           <div className={orderKind === 'order' ? 'isTextGray' : 'isTextPurple'}>준비중</div>
           <div className={orderKind !== 'delivery' ? 'isTextGray' : 'isTextPurple'}>배달완료</div>
         </div>
-        <div className="flex flex-row px-8">
+        <div className="flex flex-row justify-center">
           <div className="isIconPurple">
             <ShoppingCart />
           </div>
-          <div className="bg-primary-300 h-[5px] w-5 self-center"></div>
+          <div className="bg-primary-300 h-[5px] w-[5vw] self-center"></div>
           <div
-            className={`h-[5px] w-19 self-center ${orderKind === 'order' ? 'bg-neutral-400' : 'bg-primary-300'}`}
+            className={`h-[5px] w-[20vw] self-center ${orderKind === 'order' ? 'bg-neutral-400' : 'bg-primary-300'}`}
           ></div>
           <div className={orderKind === 'order' ? 'isIconGray' : 'isIconPurple'}>
             <Skillet />
           </div>
           <div
-            className={`h-[5px] w-5 self-center ${orderKind === 'order' ? 'bg-neutral-400' : 'bg-primary-300'}`}
+            className={`h-[5px] w-[5vw] self-center ${orderKind === 'order' ? 'bg-neutral-400' : 'bg-primary-300'}`}
           ></div>
           <div
-            className={`h-[5px] w-19 self-center ${orderKind !== 'delivery' ? 'bg-neutral-400' : 'bg-primary-300'}`}
+            className={`h-[5px] w-[20vw] self-center ${orderKind !== 'delivery' ? 'bg-neutral-400' : 'bg-primary-300'}`}
           ></div>
           <div className={orderKind !== 'delivery' ? 'isIconGray' : 'isIconPurple'}>
             <Motorcycle />
