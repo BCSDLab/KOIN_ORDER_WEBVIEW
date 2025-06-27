@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import useMarker from '../hooks/useMarker';
 import useNaverMap from '../hooks/useNaverMap';
+import CloseIcon from '@/assets/Main/close-icon.svg';
 import ArrowDown from '@/assets/Payment/arrow-down-icon.svg';
 import ArrowGo from '@/assets/Payment/arrow-go-icon.svg';
 import BottomModal, {
@@ -95,11 +96,14 @@ export default function DetailAddress() {
         </ModalContent>
       </Modal>
       <BottomModal isOpen={isDeliveryBottomModalOpen} onClose={closeDeliveryBottomModal}>
-        <BottomModalHeader className="px-6">
+        <BottomModalHeader>
           <div className="text-primary-500 font-semibold">배달기사님에게</div>
+          <button onClick={closeDeliveryBottomModal}>
+            <CloseIcon />
+          </button>
         </BottomModalHeader>
         <BottomModalContent className="px-6">
-          <form className="flex w-[20.375rem] flex-col gap-2">
+          <form className="flex w-full flex-col gap-2">
             {DetailRequest.map((detail, index) => (
               <label
                 key={index}
@@ -147,7 +151,7 @@ export default function DetailAddress() {
               />
             )}
           </form>
-          <Button onClick={handleSubmitRequest} className="h-[2.875rem] w-[20.375rem]">
+          <Button onClick={handleSubmitRequest} className="h-[2.875rem] w-full">
             선택하기
           </Button>
         </BottomModalContent>
