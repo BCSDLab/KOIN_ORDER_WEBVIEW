@@ -44,7 +44,7 @@ export default function ShopDetail() {
       </div>
       <div className="bg-white px-6 py-3">
         <p className="py-3 text-[15px] leading-[1.6] font-semibold">가게 소개</p>
-        <p className="text-sm leading-[1.6] font-medium">{data.introduce}</p>
+        <p className="text-sm leading-[1.6] font-medium">{data.introduction}</p>
       </div>
       <div className="bg-white px-6 py-3">
         <p className="py-3 text-[15px] leading-[1.6] font-semibold">가게 알림</p>

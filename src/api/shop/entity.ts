@@ -31,7 +31,7 @@ export type ShopDetailInfoResponse = {
   close_time: string | null;
   closed_days: Day[];
   phone: string;
-  introduce: string | null;
+  introduction: string | null;
   notice: string | null;
   delivery_tips: DeliveryTips[];
   owner_info: OwnerInfo;
