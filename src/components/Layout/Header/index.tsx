@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { ROUTE_TITLES } from './routeTitles';
 import ArrowBackIcon from '@/assets/Main/arrow-back-icon.svg';
@@ -20,8 +21,13 @@ export default function Header() {
 
   const title = ROUTE_TITLES.find((item) => item.match(pathname))?.title ?? '';
 
+  const bgClass = clsx({
+    'bg-white': pathname.startsWith('/shop-detail'),
+    'bg-[#f8f8fa]': true,
+  });
+
   return (
-    <header className="fixed top-0 right-0 left-0 z-40 flex items-center justify-center bg-[#f8f8fa] px-6 py-4">
+    <header className={`fixed top-0 right-0 left-0 z-40 flex items-center justify-center ${bgClass} px-6 py-4`}>
       <button
         type="button"
         aria-label="뒤로가기 버튼"
