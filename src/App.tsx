@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import DeliveryOutside from './pages/Delivery/Outside';
-import { requestTokensFromNative, setTokensFromNative } from './util/ts/bridge';
 import ShopDetail from './pages/shop';
+import { requestTokensFromNative, setTokensFromNative } from './util/ts/bridge';
 import AppLayout from '@/components/Layout';
 import Campus from '@/pages/Delivery/Campus';
 import DetailAddress from '@/pages/Delivery/Outside/DetailAddress';
