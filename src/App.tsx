@@ -1,5 +1,8 @@
+import { useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import DeliveryOutside from './pages/Delivery/Outside';
+import ShopDetail from './pages/shop';
+import { requestTokensFromNative, setTokensFromNative } from './util/ts/bridge';
 import AppLayout from '@/components/Layout';
 import Campus from '@/pages/Delivery/Campus';
 import DetailAddress from '@/pages/Delivery/Outside/DetailAddress';
@@ -7,6 +10,23 @@ import OrderFinish from '@/pages/OrderFinish';
 import Payment from '@/pages/Payment';
 
 export default function App() {
+  useEffect(() => {
+    const initializeTokens = async () => {
+      const { accessToken, refreshToken } = await requestTokensFromNative();
+      if (accessToken || refreshToken) {
+        setTokensFromNative({ accessToken, refreshToken });
+      }
+    };
+
+    const isIOS = !!window.webkit?.messageHandlers;
+    const isAndroid = !!window.Android;
+
+    if (typeof window !== 'undefined' && (isIOS || isAndroid)) {
+      window.setTokens = setTokensFromNative;
+      initializeTokens();
+    }
+  }, []);
+
   return (
     <BrowserRouter>
       <Routes>
@@ -17,6 +37,7 @@ export default function App() {
             <Route path="campus" element={<Campus />} />
           </Route>
           <Route path="payment" element={<Payment />} />
+          <Route path="shop-detail/:id" element={<ShopDetail />} />
         </Route>
         <Route path="result" element={<OrderFinish />} />
       </Routes>

@@ -8,6 +8,7 @@ declare global {
     Android?: {
       [method: string]: (...args: unknown[]) => unknown;
     };
+
     onNativeCallback?: (callbackId: string, result: unknown) => void;
     onAndroidCallback?: (callbackId: string, result: unknown) => void;
 
@@ -15,6 +16,8 @@ declare global {
       call: (methodName: string, ...args: unknown[]) => Promise<unknown>;
       handleCallback: (callbackId: string, result: unknown) => void;
     };
+
+    setTokens?: (tokens: { accessToken: string; refreshToken: string }) => void;
   }
 }
 
