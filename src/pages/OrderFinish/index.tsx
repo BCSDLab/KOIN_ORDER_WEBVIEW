@@ -14,7 +14,6 @@ import BottomModal, {
   BottomModalFooter,
 } from '@/components/UI/BottomModal/BottomModal';
 import Button from '@/components/UI/Button';
-import Modal, { ModalContent } from '@/components/UI/CenterModal/Modal';
 import useBooleanState from '@/util/hooks/useBooleanState';
 
 export default function OrderFinish() {
@@ -30,7 +29,6 @@ export default function OrderFinish() {
 
   const [orderKind, setOrderKind] = useState<OrderKind>('order');
 
-  const [isCancelModalOpen, openCancelModal, closeCancelModal] = useBooleanState(false);
   const [isDeliveryBottomModalOpen, , closeDeliveryBottomModal] = useBooleanState(false);
   const [isCallBottomModalOpen, openCallBottomModal, closeCallBottomModal] = useBooleanState(false);
 
@@ -72,7 +70,7 @@ export default function OrderFinish() {
           <div className="text-xs leading-[160%] font-normal text-neutral-500">사장님이 주문을 확인하고 있어요!</div>
         </div>
         <Button
-          onClick={openCancelModal}
+          onClick={handleClickOrderCancel}
           className="h-[1.938rem] w-[4.125rem] self-end rounded-3xl px-2 text-xs leading-[160%] font-semibold"
         >
           취소하기
@@ -140,22 +138,6 @@ export default function OrderFinish() {
           </Button>
         </div>
       </div>
-      <Modal className="centerModal" isOpen={isCancelModalOpen} onClose={closeCancelModal}>
-        <ModalContent>
-          <div>정말 주문을 취소하시겠어요?</div>
-          <div className="flex h-12 gap-2 text-[15px]">
-            <Button
-              onClick={closeCancelModal}
-              className="w-[7.125rem] border border-neutral-400 bg-white leading-[160%] font-medium text-neutral-600"
-            >
-              아니오
-            </Button>
-            <Button onClick={handleClickOrderCancel} className="w-[7.125rem] font-medium">
-              예
-            </Button>
-          </div>
-        </ModalContent>
-      </Modal>
       <div>
         <BottomModal isOpen={isDeliveryBottomModalOpen} onClose={closeDeliveryBottomModal}>
           <BottomModalHeader>
