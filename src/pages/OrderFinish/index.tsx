@@ -1,4 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
+import useConfirmPayments from '../Payment/hooks/useConfirmPayments';
 import CloseIcon from '@/assets/Main/close-icon.svg';
 import CallIcon from '@/assets/OrderFinish/call-icon.svg';
 import Motorcycle from '@/assets/OrderFinish/motorcycle-icon.svg';
@@ -17,12 +19,38 @@ import useBooleanState from '@/util/hooks/useBooleanState';
 
 export default function OrderFinish() {
   type OrderKind = 'order' | 'preparation' | 'delivery';
+  const [searchParams] = useSearchParams();
+  const orderId = searchParams.get('orderId');
+  const paymentKey = searchParams.get('paymentKey');
+  const amount = searchParams.get('amount');
+
+  const { mutateAsync: confirmPayments, isPending, isError } = useConfirmPayments();
 
   const [orderKind, setOrderKind] = useState<OrderKind>('order');
 
   const [isCancelModalOpen, , closeCancelModal] = useBooleanState(false);
   const [isDeliveryBottomModalOpen, openDeliveryBottomModal, closeDeliveryBottomModal] = useBooleanState(false);
   const [isCallBottomModalOpen, openCallBottomModal, closeCallBottomModal] = useBooleanState(false);
+
+  useEffect(() => {
+    const confirmPayment = async () => {
+      try {
+        await confirmPayments({ order_id: orderId!, payment_key: paymentKey!, amount: Number(amount) });
+      } catch (error) {
+        console.error('Payment confirmation failed:', error);
+      }
+    };
+
+    confirmPayment();
+  }, [confirmPayments, orderId, paymentKey]);
+
+  if (isPending) {
+    return <div>로딩 중...</div>; // 로딩 로띠 추가 예정
+  }
+
+  if (isError) {
+    return <div>결제 확인에 실패했습니다. 다시 시도해 주세요.</div>;
+  }
 
   const handleOpenCallBottomModal = () => {
     closeDeliveryBottomModal();
