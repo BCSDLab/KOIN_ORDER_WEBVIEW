@@ -42,12 +42,8 @@ export default function Payment() {
       delivery_tip: cart!.delivery_fee,
       total_amount: cart!.total_amount,
     });
-    console.log(order.order_id);
 
     try {
-      // ------ '결제하기' 버튼 누르면 결제창 띄우기 ------
-      // 결제를 요청하기 전에 orderId, amount를 서버에 저장하세요.
-      // 결제 과정에서 악의적으로 결제 금액이 바뀌는 것을 확인하는 용도입니다.
       await widgets!.requestPayment({
         orderId: order.order_id,
         orderName: orderName,
@@ -55,7 +51,6 @@ export default function Payment() {
         failUrl: window.location.origin + '/payment',
       });
     } catch (error) {
-      // 에러 처리하기
       console.error(error);
     }
   };
