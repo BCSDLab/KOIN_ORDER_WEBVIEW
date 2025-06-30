@@ -7,17 +7,13 @@ import DeliveryAddressSection from './components/DeliveryAddressSection';
 import PaymentAmount from './components/PaymentAmount';
 import StoreRequestModal from './components/StoreRequestModal';
 import TossWidget from './components/TossWidget';
+import useCart from './hooks/useCart';
+import useTemporaryDelivery from './hooks/useTemporaryDelivery';
 import Bike from '@/assets/Main/agriculture.svg';
 import RightArrow from '@/assets/Payment/arrow-go-icon.svg';
 import Badge from '@/components/UI/Badge';
 import Button from '@/components/UI/Button';
 import useBooleanState from '@/util/hooks/useBooleanState';
-
-// 샘플 데이터. 결제 api 연동 시 삭제 예정
-const AMOUNT = {
-  currency: 'KRW',
-  value: 50_000,
-};
 
 export default function Payment() {
   const [isContactModalOpen, openContactModal, closeContactModal] = useBooleanState(false);
@@ -30,22 +26,31 @@ export default function Payment() {
   const [ready, setReady] = useState(false);
   const [widgets, setWidgets] = useState<TossPaymentsWidgets | null>(null);
 
+  const { data: cart } = useCart();
+  const { mutateAsync: temporaryDelivery } = useTemporaryDelivery();
+
+  const orderName =
+    cart!.items.length === 1 ? cart!.items[0].name : `${cart!.items[0].name} 외 ${cart!.items.length - 1}건`;
+
   const pay = async () => {
+    const order = await temporaryDelivery({
+      address: '추후 추가해야 함',
+      phone_number: contact || '01012345678',
+      to_owner: request,
+      to_rider: '추후 추가해야 함',
+      total_menu_price: cart!.items_amount,
+      delivery_tip: cart!.delivery_fee,
+      total_amount: cart!.total_amount,
+    });
+
     try {
-      // ------ '결제하기' 버튼 누르면 결제창 띄우기 ------
-      // 결제를 요청하기 전에 orderId, amount를 서버에 저장하세요.
-      // 결제 과정에서 악의적으로 결제 금액이 바뀌는 것을 확인하는 용도입니다.
       await widgets!.requestPayment({
-        orderId: 'ttA8lVEqE8lDPSKBQwBM7',
-        orderName: '토스 티셔츠 외 2건',
-        successUrl: window.location.origin + '/success',
-        failUrl: window.location.origin + '/fail',
-        customerEmail: 'customer123@gmail.com',
-        customerName: '김토스',
-        customerMobilePhone: '01012341234',
+        orderId: order.order_id,
+        orderName: orderName,
+        successUrl: window.location.origin + '/result',
+        failUrl: window.location.origin + '/payment',
       });
     } catch (error) {
-      // 에러 처리하기
       console.error(error);
     }
   };
@@ -92,21 +97,32 @@ export default function Payment() {
             </div>
           </Button>
         </div>
-        <TossWidget widgets={widgets} setWidgets={setWidgets} setReady={setReady} amount={AMOUNT} />
+        <TossWidget
+          widgets={widgets}
+          setWidgets={setWidgets}
+          setReady={setReady}
+          amount={{
+            currency: 'KRW',
+            value: cart!.total_amount,
+          }}
+        />
         <Agreement />
-        <PaymentAmount />
+        <PaymentAmount
+          totalAmount={cart!.total_amount}
+          deliveryAmount={cart!.delivery_fee}
+          menuAmount={cart!.items_amount}
+        />
         <div className="text-center align-middle text-[12px] text-neutral-600">
           위 내용을 확인하였으며 결제에 동의합니다.
         </div>
       </div>
-      {/* 결제하기 버튼 */}
       <Button
         className="mt-2 py-[10px] text-[18px]"
         fullWidth
         state={ready ? 'default' : 'disabled'}
         onClick={() => void pay()}
       >
-        {AMOUNT.value.toLocaleString()}원 결제하기
+        {cart!.total_amount.toLocaleString()}원 결제하기
       </Button>
 
       <ContactModal

@@ -19,7 +19,7 @@ export default function Agreement() {
   return (
     <div className="flex flex-col gap-3">
       {AGREEMENTGUIDES.map((guide) => (
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between" key={guide.title}>
           <div className="text-[12px] text-neutral-600">{guide.title}</div>
           <button>
             <RightArrow />
