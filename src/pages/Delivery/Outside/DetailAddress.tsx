@@ -1,5 +1,7 @@
 import { useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import useMarker from '../hooks/useMarker';
+import useNaverGeocode from '../hooks/useNaverGeocode';
 import useNaverMap from '../hooks/useNaverMap';
 import CloseIcon from '@/assets/Main/close-icon.svg';
 import ArrowDown from '@/assets/Payment/arrow-down-icon.svg';
@@ -11,9 +13,9 @@ import BottomModal, {
 } from '@/components/UI/BottomModal/BottomModal';
 import Button from '@/components/UI/Button';
 import Modal, { ModalContent } from '@/components/UI/CenterModal/Modal';
+import { useOrderStore } from '@/store/useOrderStore';
 import useBooleanState from '@/util/hooks/useBooleanState';
 
-const sample: [number, number] = [36.767, 127.284];
 const DetailRequest: string[] = [
   '문 앞에 놔주세요 (벨 눌러주세요)',
   '문 앞에 놔주세요 (노크해주세요)',
@@ -23,42 +25,77 @@ const DetailRequest: string[] = [
 ];
 
 export default function DetailAddress() {
-  const [isDeliveryBottomModalOpen, openDeliveryBottomModal, closeDeliveryBottomModal] = useBooleanState(false);
+  const { setMainAddress, setDeliveryRequest, setDetailAddress } = useOrderStore();
 
+  const location = useLocation();
+  const address = location.state?.address || '';
+
+  const navigate = useNavigate();
+
+  const [isDeliveryBottomModalOpen, openDeliveryBottomModal, closeDeliveryBottomModal] = useBooleanState(false);
   const [isModalOpen, openModal, closeModal] = useBooleanState(false);
+
+  const [selectedRequestInModal, setSelectedRequestInModal] = useState<string>('');
+  const [customInputValueInModal, setCustomInputValueInModal] = useState<string>('');
 
   const [selectedRequest, setSelectedRequest] = useState<string>('');
   const [customInputValue, setCustomInputValue] = useState<string>('');
 
-  const map = useNaverMap(...sample);
+  const [detailAddressValue, setDetailAddressValue] = useState<string>('');
+
+  const coords = useNaverGeocode(address);
+  const map = useNaverMap(...coords);
+
   useMarker(map);
 
+  const handleSelectRequestInModal = (detail: string) => setSelectedRequestInModal(detail);
+  const handleCustomInputInModal = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCustomInputValueInModal(e.target.value.trim());
+  };
+  const handleDetailAddress = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setDetailAddressValue(e.target.value.trim());
+  };
+
   const requestLabel = () => {
-    if (!selectedRequest) {
-      return '상세 요청사항을 입력해주세요.';
-    }
-    if (selectedRequest === 'customRequest') {
-      return customInputValue || '상세 요청사항을 입력해주세요.';
-    }
+    if (!selectedRequest) return '상세 요청사항을 입력해주세요.';
+
+    if (selectedRequest === 'customRequest') return customInputValue || '상세 요청사항을 입력해주세요.';
+
     return selectedRequest;
   };
 
-  const handleSelectRequest = (detail: string) => setSelectedRequest(detail);
-  const getCustomInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setCustomInputValue(e.target.value.trimStart());
+  const handleSelectRequest = () => {
+    closeDeliveryBottomModal();
+    setSelectedRequest(selectedRequestInModal);
+    setCustomInputValue(customInputValueInModal);
   };
 
-  const handleSubmitRequest = () => closeDeliveryBottomModal();
+  const DeliveryRequest = () => {
+    if (selectedRequest === 'customRequest') return setDeliveryRequest(customInputValue.trim() || '요청사항 없음');
+
+    return setDeliveryRequest(selectedRequest || '요청사항 없음');
+  };
+
+  const handleClickSaveAddress = () => {
+    if (detailAddressValue.length === 0) return openModal();
+    DeliveryRequest();
+    setMainAddress(address);
+    setDetailAddress(detailAddressValue);
+  };
+
+  const backSetAddressPage = () => {
+    navigate(-1);
+  };
 
   return (
     <div className="flex flex-col items-center">
       <div className="shadow-1 w-[21.375rem] rounded-xl">
         <div id="map" className="h-40 w-full rounded-t-xl border border-neutral-300"></div>
         <div className="flex h-[3.5rem] w-full items-center justify-between rounded-b-xl bg-white px-6 text-[0.813rem] text-neutral-600">
-          충남 천안시 동남구 병천면 가전8길 102
-          <div>
+          {address}
+          <button onClick={backSetAddressPage}>
             <ArrowGo />
-          </div>
+          </button>
         </div>
       </div>
       <div className="mt-[1.813rem]">
@@ -69,6 +106,8 @@ export default function DetailAddress() {
           type="text"
           name="DetailAddress"
           placeholder="상세주소를 입력해주세요 (건물명, 동/호수 등)"
+          value={detailAddressValue}
+          onChange={handleDetailAddress}
         />
       </div>
       <div className="mt-[1.813rem]">
@@ -84,7 +123,7 @@ export default function DetailAddress() {
           </div>
         </button>
       </div>
-      <Button className="mt-[18.188rem] h-[2.875rem] w-[21.375rem]" onClick={openModal}>
+      <Button className="mt-[18.188rem] h-[2.875rem] w-[21.375rem]" onClick={handleClickSaveAddress}>
         주소 선택
       </Button>
       <Modal isOpen={isModalOpen} onClose={closeModal}>
@@ -108,15 +147,15 @@ export default function DetailAddress() {
               <label
                 key={index}
                 htmlFor={detail}
-                className={`request-label ${selectedRequest === detail && 'request-label-checked'}`}
+                className={`request-label ${selectedRequestInModal === detail && 'request-label-checked'}`}
               >
                 <div className="relative h-5 w-5">
                   <input
                     name="request"
                     id={detail}
                     type="radio"
-                    checked={selectedRequest === detail}
-                    onChange={() => handleSelectRequest(detail)}
+                    checked={selectedRequestInModal === detail}
+                    onChange={() => handleSelectRequestInModal(detail)}
                     className="peer border-primary-500 absolute h-5 w-5 appearance-none rounded-full border-2 bg-white"
                   />
                   <div className="bg-primary-500 pointer-events-none absolute inset-1 rounded-full opacity-0 peer-checked:opacity-100" />
@@ -133,25 +172,25 @@ export default function DetailAddress() {
                   name="request"
                   id="customRequest"
                   type="radio"
-                  checked={selectedRequest === 'customRequest'}
-                  onChange={() => handleSelectRequest('customRequest')}
+                  checked={selectedRequestInModal === 'customRequest'}
+                  onChange={() => handleSelectRequestInModal('customRequest')}
                   className="peer border-primary-500 absolute h-5 w-5 appearance-none rounded-full border-2 bg-white"
                 />
                 <div className="bg-primary-500 pointer-events-none absolute inset-1 rounded-full opacity-0 peer-checked:opacity-100" />
               </div>
               <div className="text-base">직접 입력</div>
             </label>
-            {selectedRequest === 'customRequest' && (
+            {selectedRequestInModal === 'customRequest' && (
               <input
                 type="text"
-                value={customInputValue}
+                value={customInputValueInModal}
                 placeholder="상세 요청사항을 입력해주세요."
-                onChange={getCustomInput}
+                onChange={handleCustomInputInModal}
                 className="h-[3.125rem] rounded-lg border border-neutral-300 bg-white p-2 placeholder-neutral-400 placeholder:text-sm placeholder:font-normal"
               />
             )}
           </form>
-          <Button onClick={handleSubmitRequest} className="h-[2.875rem] w-full">
+          <Button onClick={handleSelectRequest} className="h-[2.875rem] w-full">
             선택하기
           </Button>
         </BottomModalContent>
