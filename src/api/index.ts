@@ -36,6 +36,10 @@ async function sendRequest<T = unknown>(
 
   // GET 요청의 경우 body 대신 params를 사용하여 URL에 쿼리 문자열 추가
   let url = `${BASE_URL}/${endPoint}`;
+  if (endPoint.includes('payments')) {
+    url = `${import.meta.env.VITE_PAYMENTS_API_PATH}/${endPoint}`;
+  }
+
   if (params && Object.keys(params).length > 0) {
     const query = new URLSearchParams(
       Object.entries(params).reduce(

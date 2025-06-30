@@ -1,0 +1,28 @@
+export interface CartItem {
+  cart_menu_item_id: number;
+  name: string;
+  quantity: number;
+  total_amount: number;
+  price: {
+    name: string | null;
+    price: number;
+  };
+  options: {
+    option_group_name: string;
+    option_name: string;
+    option_price: number;
+  }[];
+  is_modified: boolean;
+}
+
+export interface CartResponse {
+  shop_name: string | null;
+  orderable_shop_id: number | null;
+  is_delivery_available: boolean;
+  is_takeout_available: boolean;
+  shop_minimum_order_amount: number;
+  items: CartItem[];
+  items_amount: number;
+  delivery_fee: number;
+  total_amount: number;
+}
