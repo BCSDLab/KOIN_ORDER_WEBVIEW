@@ -4,6 +4,8 @@ function useNaverMap(latitude: number, longitude: number) {
   const [map, setMap] = useState<naver.maps.Map | null>(null);
 
   useEffect(() => {
+    if (!latitude || !longitude) return;
+
     if (!map) {
       const newMaps = new naver.maps.Map('map', {
         center: new naver.maps.LatLng(latitude, longitude),
@@ -19,6 +21,8 @@ function useNaverMap(latitude: number, longitude: number) {
       return () => {
         newMaps.destroy();
       };
+    } else {
+      map.setCenter(new naver.maps.LatLng(latitude, longitude));
     }
 
     return () => {};
