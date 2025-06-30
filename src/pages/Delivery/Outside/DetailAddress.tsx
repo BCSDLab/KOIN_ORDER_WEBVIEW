@@ -48,13 +48,11 @@ export default function DetailAddress() {
 
   useMarker(map);
 
-  const handleCLickCloseBottomModal = () => closeDeliveryBottomModal();
-
-  const getSelectRequestInModal = (detail: string) => setSelectedRequestInModal(detail);
-  const getCustomInputInModal = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSelectRequestInModal = (detail: string) => setSelectedRequestInModal(detail);
+  const handleCustomInputInModal = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCustomInputValueInModal(e.target.value.trim());
   };
-  const getDetailAddress = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleDetailAddress = (e: React.ChangeEvent<HTMLInputElement>) => {
     setDetailAddressValue(e.target.value.trim());
   };
 
@@ -109,7 +107,7 @@ export default function DetailAddress() {
           name="DetailAddress"
           placeholder="상세주소를 입력해주세요 (건물명, 동/호수 등)"
           value={detailAddressValue}
-          onChange={getDetailAddress}
+          onChange={handleDetailAddress}
         />
       </div>
       <div className="mt-[1.813rem]">
@@ -139,7 +137,7 @@ export default function DetailAddress() {
       <BottomModal isOpen={isDeliveryBottomModalOpen} onClose={closeDeliveryBottomModal}>
         <BottomModalHeader>
           <div className="text-primary-500 font-semibold">배달기사님에게</div>
-          <button onClick={handleCLickCloseBottomModal}>
+          <button onClick={closeDeliveryBottomModal}>
             <CloseIcon />
           </button>
         </BottomModalHeader>
@@ -157,7 +155,7 @@ export default function DetailAddress() {
                     id={detail}
                     type="radio"
                     checked={selectedRequestInModal === detail}
-                    onChange={() => getSelectRequestInModal(detail)}
+                    onChange={() => handleSelectRequestInModal(detail)}
                     className="peer border-primary-500 absolute h-5 w-5 appearance-none rounded-full border-2 bg-white"
                   />
                   <div className="bg-primary-500 pointer-events-none absolute inset-1 rounded-full opacity-0 peer-checked:opacity-100" />
@@ -175,7 +173,7 @@ export default function DetailAddress() {
                   id="customRequest"
                   type="radio"
                   checked={selectedRequestInModal === 'customRequest'}
-                  onChange={() => getSelectRequestInModal('customRequest')}
+                  onChange={() => handleSelectRequestInModal('customRequest')}
                   className="peer border-primary-500 absolute h-5 w-5 appearance-none rounded-full border-2 bg-white"
                 />
                 <div className="bg-primary-500 pointer-events-none absolute inset-1 rounded-full opacity-0 peer-checked:opacity-100" />
@@ -187,7 +185,7 @@ export default function DetailAddress() {
                 type="text"
                 value={customInputValueInModal}
                 placeholder="상세 요청사항을 입력해주세요."
-                onChange={getCustomInputInModal}
+                onChange={handleCustomInputInModal}
                 className="h-[3.125rem] rounded-lg border border-neutral-300 bg-white p-2 placeholder-neutral-400 placeholder:text-sm placeholder:font-normal"
               />
             )}
