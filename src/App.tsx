@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Cart from './pages/Cart';
 import DeliveryOutside from './pages/Delivery/Outside';
 import ShopDetail from './pages/shop';
 import { requestTokensFromNative, setTokensFromNative } from './util/ts/bridge';
@@ -31,6 +32,7 @@ export default function App() {
     <BrowserRouter>
       <Routes>
         <Route element={<AppLayout />}>
+          <Route path="cart" element={<Cart />} />
           <Route path="delivery">
             <Route path="outside/detail" element={<DetailAddress />} />
             <Route path="outside" element={<DeliveryOutside />} />
