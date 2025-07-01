@@ -1,4 +1,5 @@
 import { useState } from 'react';
+// import { useNavigate } from 'react-router-dom';
 import useMarker from '../hooks/useMarker';
 import useNaverGeocode from '../hooks/useNaverGeocode';
 import useNaverMap from '../hooks/useNaverMap';
@@ -34,6 +35,8 @@ interface Place {
 }
 
 export default function Campus() {
+  // const navigate = useNavigate();
+
   const [bottomModalIsOpen, openBottomModal, closeBottomModal] = useBooleanState(false);
   const [modalIsOpen, openModal, closeModal] = useBooleanState(false);
 
@@ -63,6 +66,15 @@ export default function Campus() {
   };
 
   const handleSubmitRequest = () => closeBottomModal();
+
+  const handleSelectAddress = () => {
+    if (!selectedPlace) {
+      openModal();
+      return;
+    }
+    // TODO: 주소 선택 후 결제 페이지로 이동
+    // navigate('/payment', { state: { address: selectedPlace.full_address } });
+  };
 
   return (
     <div className="flex flex-col items-center">
@@ -127,11 +139,11 @@ export default function Campus() {
           </div>
         </button>
       </div>
-      <Button className="mt-[18.188rem] h-[2.875rem] w-[21.375rem]" onClick={openModal}>
+      <Button className="mt-[18.188rem] h-[2.875rem] w-[21.375rem]" onClick={handleSelectAddress}>
         주소 선택
       </Button>
       <Modal isOpen={modalIsOpen} onClose={closeModal}>
-        <ModalContent>정확한 상세 주소를 입력해주세요.</ModalContent>
+        <ModalContent>정확한 주소를 입력해주세요.</ModalContent>
         <ModalFooter>
           <Button onClick={closeModal} className="h-12 w-[16rem]">
             확인
