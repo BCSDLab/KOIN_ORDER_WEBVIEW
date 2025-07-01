@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Cart from './pages/Cart';
 import DeliveryOutside from './pages/Delivery/Outside';
+import OrderCancel from './pages/OrderFinish/OrderCancel';
 import ShopDetail from './pages/shop';
 import { requestTokensFromNative, setTokensFromNative } from './util/ts/bridge';
 import AppLayout from '@/components/Layout';
@@ -40,6 +41,7 @@ export default function App() {
           </Route>
           <Route path="payment" element={<Payment />} />
           <Route path="shop-detail/:id" element={<ShopDetail />} />
+          <Route path="orderCancel" element={<OrderCancel />}></Route>
         </Route>
         <Route path="result" element={<OrderFinish />} />
       </Routes>
