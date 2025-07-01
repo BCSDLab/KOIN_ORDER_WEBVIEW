@@ -2,32 +2,64 @@ import { useState } from 'react';
 import clsx from 'clsx';
 import { Link, useNavigate } from 'react-router-dom';
 import { twMerge } from 'tailwind-merge';
+import useDeliveryInfo from '../hooks/useDeliveryInfo';
+import AddressModal from './AddressModal';
 import Home from '@/assets/Main/home-icon.svg';
 import University from '@/assets/Main/university-icon.svg';
 import RightArrow from '@/assets/Payment/arrow-go-icon.svg';
 import Badge from '@/components/UI/Badge';
 import Button from '@/components/UI/Button';
+import useBooleanState from '@/util/hooks/useBooleanState';
 
-export default function DeliveryAddressSection() {
+interface DeliveryAddressSectionProps {
+  orderableShopId: number;
+}
+
+export default function DeliveryAddressSection({ orderableShopId }: DeliveryAddressSectionProps) {
   const navigate = useNavigate();
+  const { data: deliveryInfo } = useDeliveryInfo(orderableShopId);
 
-  const [deliveryAddress, setDeliveryAddress] = useState<{
+  const [isAddressModalOpen, openAddressModal, closeAddressModal] = useBooleanState(false);
+  const [modalMessage, setModalMessage] = useState<string>('');
+  const [deliveryAddress] = useState<{
+    // 교내외 주소 상세 페이지 완료 시 전역상태로 변경
     type: 'campus' | 'outside';
     label: string;
     detail?: string;
   } | null>(null);
+
+  const handleOutsideClick = () => {
+    if (!deliveryInfo?.off_campus_delivery) {
+      setModalMessage('이 상점은 교내만 배달 가능해요');
+      openAddressModal();
+      return;
+    }
+    navigate('/delivery/outside');
+  };
+
+  const handleCampusClick = () => {
+    if (!deliveryInfo?.campus_delivery) {
+      setModalMessage('이 상점은 교외만 배달 가능해요');
+      openAddressModal();
+      return;
+    }
+    navigate('/delivery/campus');
+  };
 
   return (
     <div>
       <div className={deliveryAddress ? 'flex items-center justify-between' : ''}>
         <p className="text-primary-500 text-lg font-semibold">배달주소</p>
         {deliveryAddress ? (
-          <Link
-            to={`/delivery/${deliveryAddress.type === 'campus' ? 'outside' : 'campus'}`}
-            className="text-xs text-neutral-500 underline"
-          >
-            {deliveryAddress.type === 'campus' ? '교외 주소를 원하시나요?' : '교내 주소를 원하시나요?'}
-          </Link>
+          (deliveryAddress.type === 'campus' && deliveryInfo?.off_campus_delivery) ||
+          (deliveryAddress.type === 'outside' && deliveryInfo?.campus_delivery) ? (
+            <Link
+              to={`/delivery/${deliveryAddress.type === 'campus' ? 'outside' : 'campus'}`}
+              className="text-xs text-neutral-500 underline"
+            >
+              {deliveryAddress.type === 'campus' ? '교외 주소를 원하시나요?' : '교내 주소를 원하시나요?'}
+            </Link>
+          ) : null
         ) : (
           <p className="text-xs text-neutral-600">배달 받을 위치를 선택해주세요.</p>
         )}
@@ -77,11 +109,8 @@ export default function DeliveryAddressSection() {
                 color="primary"
                 size="md"
                 endIcon={<University />}
-                className="text-xs"
-                // onClick={() => navigate('/delivery/campus')} 기존 동작 코드
-                onClick={() =>
-                  setDeliveryAddress({ type: 'campus', label: '105동(함지)', detail: '도착하실때 전화주세요' })
-                } // UI 테스트용 코드
+                className="text-xs max-[390px]:px-5"
+                onClick={handleCampusClick}
                 fullWidth
               >
                 <div className="leading-[160%]">
@@ -94,15 +123,8 @@ export default function DeliveryAddressSection() {
                 color="neutral"
                 size="md"
                 endIcon={<Home />}
-                className="text-xs"
-                onClick={() => navigate('/delivery/outside')}
-                // onClick={() =>
-                //   setDeliveryAddress({
-                //     type: 'outside',
-                //     label: '충남 천안시 동남구 병천면 가전8길 102 라이프원룸 404동 404호',
-                //     detail: '도착하실때 전화주세요',
-                //   })
-                // } // UI 테스트용 코드
+                className="text-xs max-[390px]:px-5"
+                onClick={handleOutsideClick}
                 fullWidth
               >
                 <div className="leading-[160%]">
@@ -114,6 +136,7 @@ export default function DeliveryAddressSection() {
           </>
         )}
       </div>
+      <AddressModal isOpen={isAddressModalOpen} onClose={closeAddressModal} message={modalMessage} />
     </div>
   );
 }
