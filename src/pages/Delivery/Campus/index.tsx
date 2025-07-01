@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import useMarker from '../hooks/useMarker';
+import useNaverGeocode from '../hooks/useNaverGeocode';
 import useNaverMap from '../hooks/useNaverMap';
 import AddressTypeDropdown from './AddressTypeDropdown';
 import Building from '@/assets/Delivery/building.svg';
@@ -18,7 +19,6 @@ import Modal, { ModalContent, ModalFooter } from '@/components/UI/CenterModal/Mo
 import { AddressCategory } from '@/types/api/deliveryCampus';
 import useBooleanState from '@/util/hooks/useBooleanState';
 
-const sample: [number, number] = [36.762, 127.2835];
 const DetailRequest: string[] = [
   '문 앞에 놔주세요 (벨 눌러주세요)',
   '문 앞에 놔주세요 (노크해주세요)',
@@ -27,6 +27,12 @@ const DetailRequest: string[] = [
   '전화주시면 마중 나갈게요',
 ];
 
+interface Place {
+  id: number;
+  full_address: string;
+  short_address: string;
+}
+
 export default function Campus() {
   const [bottomModalIsOpen, openBottomModal, closeBottomModal] = useBooleanState(false);
   const [modalIsOpen, openModal, closeModal] = useBooleanState(false);
@@ -34,11 +40,12 @@ export default function Campus() {
   const [selectedRequest, setSelectedRequest] = useState<string>('');
   const [customInputValue, setCustomInputValue] = useState<string>('');
 
-  const map = useNaverMap(...sample);
-  useMarker(map);
+  const [selectedCategory, setSelectedCategory] = useState<AddressCategory | null>(null);
+  const [selectedPlace, setSelectedPlace] = useState<Place | null>(null);
 
-  const [selectedCampusCategory, setSelectedCampusCategory] = useState<AddressCategory | null>(null);
-  const [selectedCampusBuilding, setSelectedCampusBuilding] = useState<string | null>(null);
+  const coords = useNaverGeocode(selectedPlace?.full_address || '');
+  const map = useNaverMap(...coords);
+  useMarker(map);
 
   const requestLabel = () => {
     if (!selectedRequest) {
@@ -62,9 +69,9 @@ export default function Campus() {
       <div className="shadow-1 w-[21.375rem] rounded-xl">
         <div id="map" className="h-40 w-full rounded-t-xl border border-neutral-300"></div>
         <div className="flex h-[3.5rem] w-full items-center justify-between rounded-b-xl bg-white px-6 text-[0.813rem] text-neutral-600">
-          {selectedCampusBuilding && selectedCampusCategory ? (
+          {selectedPlace ? (
             <div className="flex w-full items-center justify-center gap-2">
-              <Badge label={selectedCampusBuilding.toString()} color="primary" size="sm" className="text-sm" />
+              <Badge label={selectedPlace.short_address} color="primary" size="sm" className="text-sm" />
               <span>앞으로 배달돼요!</span>
             </div>
           ) : (
@@ -83,26 +90,26 @@ export default function Campus() {
           <AddressTypeDropdown
             type="DORMITORY"
             icon={<NightShelter />}
-            selected={selectedCampusCategory}
-            selectedCampusBuilding={selectedCampusBuilding}
-            setSelectedCampusCategory={setSelectedCampusCategory}
-            setSelectedCampusBuilding={setSelectedCampusBuilding}
+            selectedCategory={selectedCategory}
+            selectedPlace={selectedPlace}
+            setSelectedCategory={setSelectedCategory}
+            setSelectedPlace={setSelectedPlace}
           />
           <AddressTypeDropdown
             type="COLLEGE_BUILDING"
             icon={<Building />}
-            selected={selectedCampusCategory}
-            selectedCampusBuilding={selectedCampusBuilding}
-            setSelectedCampusCategory={setSelectedCampusCategory}
-            setSelectedCampusBuilding={setSelectedCampusBuilding}
+            selectedCategory={selectedCategory}
+            selectedPlace={selectedPlace}
+            setSelectedCategory={setSelectedCategory}
+            setSelectedPlace={setSelectedPlace}
           />
           <AddressTypeDropdown
             type="ETC"
             icon={<Building />}
-            selected={selectedCampusCategory}
-            selectedCampusBuilding={selectedCampusBuilding}
-            setSelectedCampusCategory={setSelectedCampusCategory}
-            setSelectedCampusBuilding={setSelectedCampusBuilding}
+            selectedCategory={selectedCategory}
+            selectedPlace={selectedPlace}
+            setSelectedCategory={setSelectedCategory}
+            setSelectedPlace={setSelectedPlace}
           />
         </div>
       </div>

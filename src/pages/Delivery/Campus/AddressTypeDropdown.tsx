@@ -6,27 +6,33 @@ import ChevronDown from '@/assets/Delivery/chevron-down.svg';
 import Button from '@/components/UI/Button';
 import { AddressCategory } from '@/types/api/deliveryCampus';
 
+interface Place {
+  id: number;
+  full_address: string;
+  short_address: string;
+}
+
 interface AddressTypeDropdownProps {
   type: AddressCategory;
-  selected: AddressCategory | null;
-  selectedCampusBuilding: string | null;
-  setSelectedCampusCategory: (type: AddressCategory | null) => void;
-  setSelectedCampusBuilding: (id: string | null) => void;
+  selectedCategory: AddressCategory | null;
+  selectedPlace: Place | null;
+  setSelectedCategory: (type: AddressCategory | null) => void;
+  setSelectedPlace: (place: Place | null) => void;
   icon: React.ReactNode;
 }
 
 export default function AddressTypeDropdown({
   type,
-  selected,
-  selectedCampusBuilding,
-  setSelectedCampusCategory,
-  setSelectedCampusBuilding,
+  selectedCategory,
+  selectedPlace,
+  setSelectedCategory,
+  setSelectedPlace,
   icon,
 }: AddressTypeDropdownProps) {
   const { data } = useCampusDeliveryAddress({ filter: type });
   const { addresses } = data;
 
-  const isSelected = selected === type;
+  const isSelected = selectedCategory === type;
 
   return (
     <Suspense fallback={null}>
@@ -45,10 +51,10 @@ export default function AddressTypeDropdown({
             className="flex h-14 w-full items-center justify-between p-4 font-semibold transition-colors"
             onClick={() => {
               if (isSelected) {
-                setSelectedCampusCategory(null);
+                setSelectedCategory(null);
                 return;
               }
-              setSelectedCampusCategory(type);
+              setSelectedCategory(type);
             }}
           >
             <div className="flex items-center gap-2">
@@ -67,9 +73,9 @@ export default function AddressTypeDropdown({
               {addresses.map((address) => (
                 <Button
                   key={address.id}
-                  color={selectedCampusBuilding === address.short_address ? 'primary' : 'gray'}
+                  color={selectedPlace?.id === address.id ? 'primary' : 'gray'}
                   size="sm"
-                  onClick={() => setSelectedCampusBuilding(address.short_address)}
+                  onClick={() => setSelectedPlace(address)}
                 >
                   {address.short_address}
                 </Button>
