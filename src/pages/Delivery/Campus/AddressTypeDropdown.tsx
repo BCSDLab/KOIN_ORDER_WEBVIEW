@@ -1,0 +1,83 @@
+import { Suspense } from 'react';
+import clsx from 'clsx';
+import { twMerge } from 'tailwind-merge';
+import useCampusDeliveryAddress from '../hooks/useCampusDeliveryAddress';
+import ChevronDown from '@/assets/Delivery/chevron-down.svg';
+import Button from '@/components/UI/Button';
+import { AddressCategory } from '@/types/api/deliveryCampus';
+
+interface AddressTypeDropdownProps {
+  type: AddressCategory;
+  selected: AddressCategory | null;
+  selectedCampusBuilding: string | null;
+  setSelectedCampusCategory: (type: AddressCategory | null) => void;
+  setSelectedCampusBuilding: (id: string | null) => void;
+  icon: React.ReactNode;
+}
+
+export default function AddressTypeDropdown({
+  type,
+  selected,
+  selectedCampusBuilding,
+  setSelectedCampusCategory,
+  setSelectedCampusBuilding,
+  icon,
+}: AddressTypeDropdownProps) {
+  const { data } = useCampusDeliveryAddress({ filter: type });
+  const { addresses } = data;
+
+  const isSelected = selected === type;
+
+  return (
+    <Suspense fallback={null}>
+      <div
+        className={twMerge(
+          clsx(
+            'box-content flex flex-col items-center bg-white',
+            isSelected && 'w-full overflow-hidden rounded-lg border border-neutral-300',
+            !isSelected && 'rounded-lg border border-neutral-300',
+          ),
+        )}
+      >
+        <div className="flex w-full flex-col items-center gap-2">
+          <button
+            type="button"
+            className="flex h-14 w-full items-center justify-between p-4 font-semibold transition-colors"
+            onClick={() => {
+              if (isSelected) {
+                setSelectedCampusCategory(null);
+                return;
+              }
+              setSelectedCampusCategory(type);
+            }}
+          >
+            <div className="flex items-center gap-2">
+              <span className="text-primary-500 text-sm">{addresses[0].type}</span>
+              {icon && icon}
+            </div>
+            <span className={clsx('transition-transform', isSelected && 'rotate-180')}>
+              <ChevronDown />
+            </span>
+          </button>
+        </div>
+        {isSelected && (
+          <>
+            <div className="h-[1px] w-[310px] bg-[#eee]" />
+            <div className="mx-auto flex w-full flex-wrap justify-center gap-x-3 gap-y-2 bg-white px-[10px] py-4 break-all">
+              {addresses.map((address) => (
+                <Button
+                  key={address.id}
+                  color={selectedCampusBuilding === address.short_address ? 'primary' : 'gray'}
+                  size="sm"
+                  onClick={() => setSelectedCampusBuilding(address.short_address)}
+                >
+                  {address.short_address}
+                </Button>
+              ))}
+            </div>
+          </>
+        )}
+      </div>
+    </Suspense>
+  );
+}

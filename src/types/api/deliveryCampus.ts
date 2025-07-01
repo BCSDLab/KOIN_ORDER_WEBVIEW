@@ -1,5 +1,9 @@
+import { addressCategories } from '@/constants/deliveryCampus';
+
+export type AddressCategory = (typeof addressCategories)[number];
+
 export interface CampusDeliveryAddressRequest {
-  filter: string;
+  filter: 'ALL' | AddressCategory;
 }
 
 export interface CampusDeliveryAddressResponse {
@@ -9,5 +13,7 @@ export interface CampusDeliveryAddressResponse {
 
 export interface CampusDeliveryAddress {
   id: number;
-  type: string;
+  type: '기숙사' | '공학관' | '그 외';
+  full_address: string;
+  short_address: string;
 }

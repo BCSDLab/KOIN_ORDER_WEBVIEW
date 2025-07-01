@@ -19,5 +19,7 @@ export const getCampusDeliveryAddress = async ({ filter }: CampusDeliveryAddress
       filter,
     },
   });
-  return response;
+
+  const { count, addresses } = response;
+  return { count, addresses };
 };

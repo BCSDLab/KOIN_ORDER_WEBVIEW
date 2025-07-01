@@ -1,10 +1,8 @@
 import { useState } from 'react';
-import clsx from 'clsx';
-import { twMerge } from 'tailwind-merge';
 import useMarker from '../hooks/useMarker';
 import useNaverMap from '../hooks/useNaverMap';
+import AddressTypeDropdown from './AddressTypeDropdown';
 import Building from '@/assets/Delivery/building.svg';
-import ChevronDown from '@/assets/Delivery/chevron-down.svg';
 import NightShelter from '@/assets/Delivery/night-shelter.svg';
 import CloseIcon from '@/assets/Main/close-icon.svg';
 import ArrowDown from '@/assets/Payment/arrow-down-icon.svg';
@@ -17,36 +15,8 @@ import BottomModal, {
 } from '@/components/UI/BottomModal/BottomModal';
 import Button from '@/components/UI/Button';
 import Modal, { ModalContent, ModalFooter } from '@/components/UI/CenterModal/Modal';
+import { AddressCategory } from '@/types/api/deliveryCampus';
 import useBooleanState from '@/util/hooks/useBooleanState';
-
-const campusList = [
-  {
-    name: '기숙사',
-    icon: NightShelter,
-    building: ['101동(해울)', '103동(예솔)', '104동(다솔)'],
-  },
-  {
-    name: '공학관',
-    icon: Building,
-    building: [
-      '1공학관',
-      '2공학관',
-      '3공학관',
-      '4공학관',
-      '학생회관',
-      '미래학관',
-      '담헌실학관',
-      '다산정보관',
-      'R&D돔',
-      '복지관',
-    ],
-  },
-  {
-    name: '그 외',
-    icon: '',
-    building: ['기타'],
-  },
-] as const;
 
 const sample: [number, number] = [36.762, 127.2835];
 const DetailRequest: string[] = [
@@ -56,12 +26,6 @@ const DetailRequest: string[] = [
   '직접 받을게요',
   '전화주시면 마중 나갈게요',
 ];
-
-type CampusCategory = {
-  name: '기숙사' | '공학관' | '그 외';
-  icon: React.ReactNode | null;
-  building: string[];
-};
 
 export default function Campus() {
   const [bottomModalIsOpen, openBottomModal, closeBottomModal] = useBooleanState(false);
@@ -73,8 +37,8 @@ export default function Campus() {
   const map = useNaverMap(...sample);
   useMarker(map);
 
-  const [selectedCampusCategory, setSelectedCampusCategory] = useState<CampusCategory['name'] | null>(null);
-  const [selectedCampusBuilding, setSelectedCampusBuilding] = useState<string>('');
+  const [selectedCampusCategory, setSelectedCampusCategory] = useState<AddressCategory | null>(null);
+  const [selectedCampusBuilding, setSelectedCampusBuilding] = useState<string | null>(null);
 
   const requestLabel = () => {
     if (!selectedRequest) {
@@ -98,9 +62,9 @@ export default function Campus() {
       <div className="shadow-1 w-[21.375rem] rounded-xl">
         <div id="map" className="h-40 w-full rounded-t-xl border border-neutral-300"></div>
         <div className="flex h-[3.5rem] w-full items-center justify-between rounded-b-xl bg-white px-6 text-[0.813rem] text-neutral-600">
-          {selectedCampusBuilding ? (
+          {selectedCampusBuilding && selectedCampusCategory ? (
             <div className="flex w-full items-center justify-center gap-2">
-              <Badge label={selectedCampusBuilding} color="primary" size="sm" className="text-sm" />
+              <Badge label={selectedCampusBuilding.toString()} color="primary" size="sm" className="text-sm" />
               <span>앞으로 배달돼요!</span>
             </div>
           ) : (
@@ -116,60 +80,30 @@ export default function Campus() {
         <div className="text-primary-500 leading-[160%] font-semibold">배달주소</div>
         <div className="pb-3 text-xs leading-[160%]">배달 받을 위치를 선택해주세요!</div>
         <div className="flex w-[342px] flex-col gap-3">
-          {campusList.map((campus) => {
-            const isSelected = selectedCampusCategory === campus.name;
-            return (
-              <div
-                key={campus.name}
-                className={twMerge(
-                  clsx(
-                    'box-content flex flex-col items-center bg-white',
-                    isSelected && 'w-full overflow-hidden rounded-lg border border-neutral-300',
-                    !isSelected && 'rounded-lg border border-neutral-300',
-                  ),
-                )}
-              >
-                <div className="flex w-full flex-col items-center gap-2">
-                  <button
-                    type="button"
-                    className="flex h-14 w-full items-center justify-between p-4 font-semibold transition-colors"
-                    onClick={() => {
-                      if (isSelected) {
-                        setSelectedCampusCategory(null);
-                        return;
-                      }
-                      setSelectedCampusCategory(campus.name);
-                    }}
-                  >
-                    <div className="flex items-center gap-2">
-                      <span className="text-primary-500 text-sm">{campus.name}</span>
-                      {campus.icon && <campus.icon />}
-                    </div>
-                    <span className={clsx('transition-transform', isSelected && 'rotate-180')}>
-                      <ChevronDown />
-                    </span>
-                  </button>
-                </div>
-                {isSelected && (
-                  <>
-                    <div className="h-[1px] w-[310px] bg-[#eee]" />
-                    <div className="mx-auto flex w-full flex-wrap justify-center gap-x-3 gap-y-2 bg-white px-4 py-4 break-all">
-                      {campus.building.map((building) => (
-                        <Button
-                          key={building}
-                          color={selectedCampusBuilding === building ? 'primary' : 'gray'}
-                          size="sm"
-                          onClick={() => setSelectedCampusBuilding(building)}
-                        >
-                          {building}
-                        </Button>
-                      ))}
-                    </div>
-                  </>
-                )}
-              </div>
-            );
-          })}
+          <AddressTypeDropdown
+            type="DORMITORY"
+            icon={<NightShelter />}
+            selected={selectedCampusCategory}
+            selectedCampusBuilding={selectedCampusBuilding}
+            setSelectedCampusCategory={setSelectedCampusCategory}
+            setSelectedCampusBuilding={setSelectedCampusBuilding}
+          />
+          <AddressTypeDropdown
+            type="COLLEGE_BUILDING"
+            icon={<Building />}
+            selected={selectedCampusCategory}
+            selectedCampusBuilding={selectedCampusBuilding}
+            setSelectedCampusCategory={setSelectedCampusCategory}
+            setSelectedCampusBuilding={setSelectedCampusBuilding}
+          />
+          <AddressTypeDropdown
+            type="ETC"
+            icon={<Building />}
+            selected={selectedCampusCategory}
+            selectedCampusBuilding={selectedCampusBuilding}
+            setSelectedCampusCategory={setSelectedCampusCategory}
+            setSelectedCampusBuilding={setSelectedCampusBuilding}
+          />
         </div>
       </div>
 
