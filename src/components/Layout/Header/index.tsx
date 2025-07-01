@@ -2,10 +2,14 @@ import clsx from 'clsx';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { ROUTE_TITLES } from './routeTitles';
 import ArrowBackIcon from '@/assets/Main/arrow-back-icon.svg';
+import ResetModal from '@/pages/Cart/components/ResetModal';
+import useBooleanState from '@/util/hooks/useBooleanState';
 
 export default function Header() {
   const navigate = useNavigate();
   const { pathname } = useLocation();
+
+  const [isResetModalOpen, openResetModal, closeResetModal] = useBooleanState(false);
 
   const backToPreviousPage = () => {
     if (pathname === '/payment') {
@@ -37,6 +41,16 @@ export default function Header() {
         <ArrowBackIcon />
       </button>
       <span className="font-[Pretendard] text-lg font-medium">{title}</span>
+      {pathname === '/cart' && (
+        <button
+          type="button"
+          onClick={openResetModal}
+          className="text-primary-500 absolute top-1/2 right-6 -translate-y-1/2 text-sm font-semibold"
+        >
+          전체삭제
+        </button>
+      )}
+      <ResetModal isOpen={isResetModalOpen} onClose={closeResetModal} />
     </header>
   );
 }
