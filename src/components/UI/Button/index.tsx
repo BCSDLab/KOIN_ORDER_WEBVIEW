@@ -41,7 +41,7 @@ export default function Button({
 
   const composedClass = twMerge(
     clsx(
-      'flex items-center justify-center rounded-lg font-[Pretendard] font-[15px] font-semibold shadow-1',
+      'flex items-center justify-center rounded-lg font-[Pretendard] text-[15px] font-semibold shadow-1',
       SIZE[size],
       fullWidth && 'w-full',
       isDisabled ? DISABLED_CLASS : COLOR[color],
@@ -51,9 +51,9 @@ export default function Button({
 
   return (
     <button disabled={isDisabled} className={composedClass} {...props}>
-      {startIcon && <span className="mr-2 h-6 w-6">{startIcon}</span>}
+      {startIcon && <span className="mr-2">{startIcon}</span>}
       {children}
-      {endIcon && <span className="ml-2 h-6 w-6">{endIcon}</span>}
+      {endIcon && <span className="ml-2">{endIcon}</span>}
     </button>
   );
 }
