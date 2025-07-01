@@ -30,8 +30,8 @@ export default function OrderCancel() {
 
   const handleCustomCancelReason = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (selectedCancelReason !== '기타') return;
-    if (e.target.value.trim() === '') return setCustomCancelReason('');
-    setCustomCancelReason(e.target.value.trim());
+    if (e.target.value === '' && customCancelReason.length === 0) return setCustomCancelReason('');
+    setCustomCancelReason(e.target.value);
   };
 
   const handleClickMoveMainPage = () => {
@@ -46,58 +46,60 @@ export default function OrderCancel() {
     <div>
       <div className="mx-[6.15%] flex flex-col">
         <div className="mt-6 text-lg font-semibold">주문을 취소하시겠어요?</div>
-        <div className="mt-2 text-sm font-normal text-[#8E8E8E]">주문 취소 사유를 선택해 주세요.</div>
-        <div className="mt-6 mb-80 w-full">
-          {orderCancelReasons.map((orderCancelReason, index) => (
-            <label
-              htmlFor={orderCancelReason}
-              key={orderCancelReason}
-              className={`flex flex-col ${index === 0 ? '' : 'border-t border-neutral-300 pt-4'} ${index === 4 ? '' : 'pb-4'}`}
-            >
-              <div className="flex flex-row">
-                <div className="relative mt-1 ml-2">
+        <div className="mt-2 text-sm text-[#8E8E8E]">주문 취소 사유를 선택해 주세요.</div>
+        <div className="flex min-h-[calc(100dvh-7.75rem)] flex-col justify-between">
+          <div className="mt-6 w-full">
+            {orderCancelReasons.map((orderCancelReason, index) => (
+              <label
+                htmlFor={orderCancelReason}
+                key={orderCancelReason}
+                className={`flex flex-col ${index === 0 ? '' : 'border-t border-neutral-300 pt-4'} ${index === 4 ? '' : 'pb-4'}`}
+              >
+                <div className="flex flex-row items-center gap-4">
+                  <div className="relative ml-2">
+                    <input
+                      name="reason"
+                      type="checkbox"
+                      className={`peer sr-only`}
+                      id={orderCancelReason}
+                      checked={selectedCancelReason === orderCancelReason}
+                      onChange={() => handleReason(orderCancelReason)}
+                    />
+                    <div className="h-4 w-4 rounded-full border border-[#8E8E8E]"></div>
+                    <div className="absolute inset-0 justify-center opacity-0 peer-checked:opacity-100">
+                      <CheckIcon />
+                    </div>
+                  </div>
+                  <div className="flex flex-grow items-center justify-between font-medium">
+                    <div>{orderCancelReason}</div>
+                    <div className="mr-5 text-xs text-[#8E8E8E]">
+                      {orderCancelReason === '기타' ? `${customCancelReason.length}/150` : ''}
+                    </div>
+                  </div>
+                </div>
+                {orderCancelReason === '기타' && (
                   <input
-                    name="reason"
-                    type="checkbox"
-                    className={`peer sr-only`}
-                    id={orderCancelReason}
-                    checked={selectedCancelReason === orderCancelReason}
-                    onChange={() => handleReason(orderCancelReason)}
+                    value={customCancelReason}
+                    className="mt-2 ml-2 h-[2.875rem] w-[calc(100%-1rem)] rounded-lg border border-neutral-300 bg-white px-4 py-3 placeholder-neutral-400 placeholder:text-sm placeholder:font-normal"
+                    placeholder="취소 사유를 최소 2자 이상 입력해주세요."
+                    onChange={handleCustomCancelReason}
+                    maxLength={150}
                   />
-                  <div className="h-4 w-4 rounded-full border border-[#8E8E8E]"></div>
-                  <div className="absolute inset-0 justify-center opacity-0 peer-checked:opacity-100">
-                    <CheckIcon />
-                  </div>
-                </div>
-                <div className="ml-4 flex flex-grow items-center justify-between font-medium">
-                  <div>{orderCancelReason}</div>
-                  <div className="mr-5 text-xs text-[#8E8E8E]">
-                    {orderCancelReason === '기타' ? `${customCancelReason.length}/150` : ''}
-                  </div>
-                </div>
-              </div>
-              {orderCancelReason === '기타' && (
-                <input
-                  value={customCancelReason}
-                  className="mt-2 ml-2 h-[2.875rem] w-[calc(100%-1rem)] rounded-lg border border-neutral-300 bg-white px-4 py-3 placeholder-neutral-400 placeholder:text-sm placeholder:font-normal"
-                  placeholder="취소 사유를 최소 2자 이상 입력해주세요."
-                  onChange={handleCustomCancelReason}
-                  maxLength={150}
-                />
-              )}
-            </label>
-          ))}
+                )}
+              </label>
+            ))}
+          </div>
+          <Button
+            className={clsx(
+              `mb-8 py-[11px] text-[15px] font-medium text-white`,
+              isSubmitButtonDisabled && 'cursor-not-allowed border-neutral-300 bg-neutral-300',
+            )}
+            onClick={handleClickSubmitReason}
+            disabled={isSubmitButtonDisabled}
+          >
+            취소하기
+          </Button>
         </div>
-        <Button
-          className={clsx(
-            `py-[11px] text-[15px] font-medium text-white`,
-            isSubmitButtonDisabled && 'cursor-not-allowed border-neutral-300 bg-neutral-300',
-          )}
-          onClick={handleClickSubmitReason}
-          disabled={isSubmitButtonDisabled}
-        >
-          취소하기
-        </Button>
       </div>
       <Modal className="centerModal" isOpen={isCancelModalOpen} onClose={closeCancelModal}>
         <ModalContent>
