@@ -84,6 +84,7 @@ export default function OrderCancel() {
                     placeholder="취소 사유를 최소 2자 이상 입력해주세요."
                     onChange={handleCustomCancelReason}
                     maxLength={150}
+                    onClick={() => setSelectedCancelReason('기타')}
                   />
                 )}
               </label>
