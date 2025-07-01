@@ -13,7 +13,7 @@ export default function ResetModal({ isOpen, onClose }: ResetModalProps) {
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalContent>
-        <div>
+        <div className="text-center">
           <div>정말로 담았던 메뉴들을</div>
           <div>전체 삭제하시겠어요?</div>
         </div>
