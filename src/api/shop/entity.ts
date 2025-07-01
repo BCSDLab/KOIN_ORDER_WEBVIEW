@@ -37,3 +37,8 @@ export type ShopDetailInfoResponse = {
   owner_info: OwnerInfo;
   origins: OriginInfo[];
 };
+
+export interface shopDeliveryInfoResponse {
+  campus_delivery: boolean;
+  off_campus_delivery: boolean;
+}
