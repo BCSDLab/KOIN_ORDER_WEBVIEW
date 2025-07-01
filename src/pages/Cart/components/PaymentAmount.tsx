@@ -15,7 +15,7 @@ export default function PaymentAmount({
   return (
     <div>
       <div className="mb-3 text-lg leading-[160%] font-semibold">결제금액을 확인해주세요</div>
-      <div className="shadow-1 mb-45 rounded-lg bg-white p-6">
+      <div className="shadow-1 rounded-lg bg-white p-6">
         <div className="mb-3 border-b border-neutral-300 pb-3">
           <div className="flex justify-between text-[15px] leading-[160%] font-semibold">
             <div>총 금액</div>

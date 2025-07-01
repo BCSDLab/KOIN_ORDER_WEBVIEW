@@ -50,7 +50,7 @@ export default function Cart() {
   }
 
   return (
-    <div className="mt-4 flex flex-col gap-6 px-6">
+    <div className="mt-4 flex flex-col gap-6 px-6 pb-40">
       <div>
         <div className="shadow-1 flex w-full gap-1 rounded-[10px] bg-white p-1">
           <Button
