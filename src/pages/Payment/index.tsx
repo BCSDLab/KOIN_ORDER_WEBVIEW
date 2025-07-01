@@ -65,11 +65,11 @@ export default function Payment() {
           startIcon={<Bike />}
           label="배달"
         />
-        맛있는 족발 - 병천점
+        {cart.shop_name}
       </div>
 
       <div className="mt-6 flex flex-col gap-3">
-        <DeliveryAddressSection />
+        <DeliveryAddressSection orderableShopId={cart.orderable_shop_id} />
 
         <div>
           <p className="text-primary-500 text-lg font-semibold">연락처</p>

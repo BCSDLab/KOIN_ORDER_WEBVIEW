@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Cart from './pages/Cart';
 import DeliveryOutside from './pages/Delivery/Outside';
 import OrderCancel from './pages/OrderFinish/OrderCancel';
 import ShopDetail from './pages/shop';
@@ -32,6 +33,7 @@ export default function App() {
     <BrowserRouter>
       <Routes>
         <Route element={<AppLayout />}>
+          <Route path="cart" element={<Cart />} />
           <Route path="delivery">
             <Route path="outside/detail" element={<DetailAddress />} />
             <Route path="outside" element={<DeliveryOutside />} />
