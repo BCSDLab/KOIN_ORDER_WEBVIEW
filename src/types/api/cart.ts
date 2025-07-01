@@ -16,8 +16,8 @@ export interface CartItem {
 }
 
 export interface CartResponse {
-  shop_name: string | null;
-  orderable_shop_id: number | null;
+  shop_name: string;
+  orderable_shop_id: number;
   is_delivery_available: boolean;
   is_takeout_available: boolean;
   shop_minimum_order_amount: number;
