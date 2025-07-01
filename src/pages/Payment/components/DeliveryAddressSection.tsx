@@ -19,7 +19,6 @@ export default function DeliveryAddressSection({ orderableShopId }: DeliveryAddr
   const navigate = useNavigate();
   const { data: deliveryInfo } = useDeliveryInfo(orderableShopId);
 
-  console.log('Delivery Info:', deliveryInfo);
   const [isAddressModalOpen, openAddressModal, closeAddressModal] = useBooleanState(false);
   const [modalMessage, setModalMessage] = useState<string>('');
   const [deliveryAddress] = useState<{
