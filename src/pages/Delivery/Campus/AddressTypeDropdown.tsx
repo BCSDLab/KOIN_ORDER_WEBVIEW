@@ -15,9 +15,9 @@ interface Place {
 interface AddressTypeDropdownProps {
   type: AddressCategory;
   selectedCategory: AddressCategory | null;
-  selectedPlace: Place | null;
+  selectedPlace: Place;
   setSelectedCategory: (type: AddressCategory | null) => void;
-  setSelectedPlace: (place: Place | null) => void;
+  setSelectedPlace: (place: Place) => void;
   icon: React.ReactNode;
 }
 

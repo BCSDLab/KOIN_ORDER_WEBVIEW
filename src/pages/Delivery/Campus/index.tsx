@@ -16,7 +16,6 @@ import BottomModal, {
   BottomModalFooter,
 } from '@/components/UI/BottomModal/BottomModal';
 import Button from '@/components/UI/Button';
-import Modal, { ModalContent, ModalFooter } from '@/components/UI/CenterModal/Modal';
 import { AddressCategory } from '@/types/api/deliveryCampus';
 import useBooleanState from '@/util/hooks/useBooleanState';
 
@@ -34,17 +33,22 @@ interface Place {
   short_address: string;
 }
 
+const 함지: Place = {
+  id: 5,
+  full_address: '충남 천안시 동남구 병천면 충절로 1600 한국기술교육대학교 제1캠퍼스 생활관 105동',
+  short_address: '105동(함지)',
+};
+
 export default function Campus() {
   // const navigate = useNavigate();
 
   const [bottomModalIsOpen, openBottomModal, closeBottomModal] = useBooleanState(false);
-  const [modalIsOpen, openModal, closeModal] = useBooleanState(false);
 
   const [selectedRequest, setSelectedRequest] = useState<string>('');
   const [customInputValue, setCustomInputValue] = useState<string>('');
 
   const [selectedCategory, setSelectedCategory] = useState<AddressCategory | null>(null);
-  const [selectedPlace, setSelectedPlace] = useState<Place | null>(null);
+  const [selectedPlace, setSelectedPlace] = useState<Place>(함지);
 
   const coords = useNaverGeocode(selectedPlace?.full_address || '');
   const map = useNaverMap(...coords);
@@ -69,7 +73,6 @@ export default function Campus() {
 
   const handleSelectAddress = () => {
     if (!selectedPlace) {
-      openModal();
       return;
     }
     // TODO: 주소 선택 후 결제 페이지로 이동
@@ -142,14 +145,6 @@ export default function Campus() {
       <Button className="mt-[18.188rem] h-[2.875rem] w-[21.375rem]" onClick={handleSelectAddress}>
         주소 선택
       </Button>
-      <Modal isOpen={modalIsOpen} onClose={closeModal}>
-        <ModalContent>정확한 주소를 입력해주세요.</ModalContent>
-        <ModalFooter>
-          <Button onClick={closeModal} className="h-12 w-[16rem]">
-            확인
-          </Button>
-        </ModalFooter>
-      </Modal>
       <BottomModal isOpen={bottomModalIsOpen} onClose={closeBottomModal}>
         <BottomModalHeader>
           <div className="text-primary-500 font-semibold">배달기사님에게</div>
