@@ -9,19 +9,19 @@
     @apply border-2 border-primary-500 bg-primary-100;
   }
 
-  .isIconPurple {
+  .is-icon-purple {
     @apply bg-primary-300 rounded-full h-10 w-10 justify-center items-center flex;
   }
 
-  .isTextPurple {
+  .is-text-purple {
     @apply text-primary-500 font-semibold;
   }
 
-  .isIconGray {
+  .is-icon-gray {
     @apply bg-neutral-400 rounded-full h-10 w-10 justify-center items-center flex p-2;
   }
 
-  .isTextGray {
+  .is-text-gray {
     @apply text-neutral-400 font-semibold;
   }
 }

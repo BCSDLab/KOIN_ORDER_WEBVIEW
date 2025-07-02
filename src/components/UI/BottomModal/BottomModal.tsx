@@ -34,13 +34,13 @@ interface BottomModalSectionProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 export function BottomModalHeader({ children, className }: BottomModalSectionProps) {
-  return <div className={twMerge('bottomModalHeader', className)}>{children}</div>;
+  return <div className={twMerge('bottom-modal-header', className)}>{children}</div>;
 }
 
 export function BottomModalContent({ children, className }: BottomModalSectionProps) {
-  return <div className={twMerge('bottomModalContent', className)}>{children}</div>;
+  return <div className={twMerge('bottom-modal-content', className)}>{children}</div>;
 }
 
 export function BottomModalFooter({ children, className }: BottomModalSectionProps) {
-  return <div className={twMerge('bottomModalFooter', className)}>{children}</div>;
+  return <div className={twMerge('bottom-modal-footer', className)}>{children}</div>;
 }
