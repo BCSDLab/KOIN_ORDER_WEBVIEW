@@ -10,6 +10,7 @@ export const getRoadNameAddress = async ({ keyword, currentPage, countPerPage }:
       countPerPage,
     },
   });
+
   return response;
 };
 
@@ -20,6 +21,5 @@ export const getCampusDeliveryAddress = async ({ filter }: CampusDeliveryAddress
     },
   });
 
-  const { count, addresses } = response;
-  return { count, addresses };
+  return response;
 };

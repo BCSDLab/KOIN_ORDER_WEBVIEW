@@ -3,13 +3,15 @@ import { getCampusDeliveryAddress } from '@/api/delivery';
 import { CampusDeliveryAddressRequest } from '@/types/api/deliveryCampus';
 
 const useCampusDeliveryAddress = ({ filter }: CampusDeliveryAddressRequest) => {
-  return useSuspenseQuery({
+  const { data } = useSuspenseQuery({
     queryKey: ['campusDeliveryAddress', filter],
-    queryFn: async () => {
-      const { count, addresses } = await getCampusDeliveryAddress({ filter });
-      return { count, addresses };
-    },
+    queryFn: () => getCampusDeliveryAddress({ filter }),
   });
+
+  return {
+    addresses: data.addresses,
+    count: data.count,
+  };
 };
 
 export default useCampusDeliveryAddress;

@@ -29,8 +29,7 @@ export default function AddressTypeDropdown({
   setSelectedPlace,
   icon,
 }: AddressTypeDropdownProps) {
-  const { data } = useCampusDeliveryAddress({ filter: type });
-  const { addresses } = data;
+  const { addresses } = useCampusDeliveryAddress({ filter: type });
 
   const isSelected = selectedCategory === type;
 
