@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import useDeleteCartItem from '../hooks/useDeleteCartItem';
 import useUpdateCartItemQuantity from '../hooks/useUpdateCartItemQuantity';
-import type { CartItem } from '@/types/api/cart';
+import type { CartItem } from '@/api/cart/entity';
 import Minus from '@/assets/Cart/minus-icon.svg';
 import Plus from '@/assets/Cart/plus-icon.svg';
 import Trash from '@/assets/Cart/trash-icon.svg';
@@ -36,10 +36,13 @@ export default function CartItem({ item }: CartItemProps) {
           </div>
           <div className="text-[15px] leading-[160%] font-semibold">{item.total_amount.toLocaleString()}원</div>
         </div>
-        <img
-          src="https://placehold.co/60.jpg?text=Coming+soon..."
-          className="h-15 w-15 rounded-[5px] border-[0.5px] border-neutral-400"
-        />
+        {item.menu_thumbnail_image_url && (
+          <img
+            src={item.menu_thumbnail_image_url}
+            className="h-15 w-15 rounded-[5px] border-[0.5px] border-neutral-400"
+            alt={`${item.name} thumbnail`}
+          />
+        )}
       </div>
 
       <div className="flex justify-end gap-2">

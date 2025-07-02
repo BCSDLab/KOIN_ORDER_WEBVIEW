@@ -1,5 +1,5 @@
 import { apiClient } from '..';
-import { CartResponse } from '@/types/api/cart';
+import { CartResponse } from '@/api/cart/entity';
 
 const getToken = () => localStorage.getItem('token');
 
