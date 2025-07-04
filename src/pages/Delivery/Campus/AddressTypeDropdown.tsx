@@ -12,22 +12,23 @@ interface Place {
   short_address: string;
 }
 
+interface AddressState {
+  selectedCategory: AddressCategory | null;
+  setSelectedCategory: (type: AddressCategory | null) => void;
+  selectedPlace: Place;
+  setSelectedPlace: (place: Place) => void;
+}
+
 interface AddressTypeDropdownProps {
   type: AddressCategory;
-  selectedCategory: AddressCategory | null;
-  selectedPlace: Place;
-  setSelectedCategory: (type: AddressCategory | null) => void;
-  setSelectedPlace: (place: Place) => void;
   icon: React.ReactNode;
+  addressState: AddressState;
 }
 
 export default function AddressTypeDropdown({
   type,
-  selectedCategory,
-  selectedPlace,
-  setSelectedCategory,
-  setSelectedPlace,
   icon,
+  addressState: { selectedCategory, setSelectedCategory, selectedPlace, setSelectedPlace },
 }: AddressTypeDropdownProps) {
   const { addresses } = useCampusDeliveryAddress({ filter: type });
 

@@ -48,6 +48,12 @@ export default function Campus() {
 
   const [selectedCategory, setSelectedCategory] = useState<AddressCategory | null>(null);
   const [selectedPlace, setSelectedPlace] = useState<Place>(함지);
+  const addressState = {
+    selectedCategory,
+    setSelectedCategory,
+    selectedPlace,
+    setSelectedPlace,
+  };
 
   const coords = useNaverGeocode(selectedPlace?.full_address || '');
   const map = useNaverMap(...coords);
@@ -98,30 +104,9 @@ export default function Campus() {
         <div className="text-primary-500 leading-[160%] font-semibold">배달주소</div>
         <div className="pb-3 text-xs leading-[160%]">배달 받을 위치를 선택해주세요!</div>
         <div className="flex w-[342px] flex-col gap-3">
-          <AddressTypeDropdown
-            type="DORMITORY"
-            icon={<NightShelter />}
-            selectedCategory={selectedCategory}
-            selectedPlace={selectedPlace}
-            setSelectedCategory={setSelectedCategory}
-            setSelectedPlace={setSelectedPlace}
-          />
-          <AddressTypeDropdown
-            type="COLLEGE_BUILDING"
-            icon={<Building />}
-            selectedCategory={selectedCategory}
-            selectedPlace={selectedPlace}
-            setSelectedCategory={setSelectedCategory}
-            setSelectedPlace={setSelectedPlace}
-          />
-          <AddressTypeDropdown
-            type="ETC"
-            icon={<Building />}
-            selectedCategory={selectedCategory}
-            selectedPlace={selectedPlace}
-            setSelectedCategory={setSelectedCategory}
-            setSelectedPlace={setSelectedPlace}
-          />
+          <AddressTypeDropdown type="DORMITORY" icon={<NightShelter />} addressState={addressState} />
+          <AddressTypeDropdown type="COLLEGE_BUILDING" icon={<Building />} addressState={addressState} />
+          <AddressTypeDropdown type="ETC" icon={<Building />} addressState={addressState} />
         </div>
       </div>
 
