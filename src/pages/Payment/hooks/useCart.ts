@@ -4,6 +4,6 @@ import { getCart } from '@/api/cart';
 export default function useCart() {
   return useSuspenseQuery({
     queryKey: ['cart'],
-    queryFn: () => getCart(),
+    queryFn: getCart,
   });
 }
