@@ -85,8 +85,8 @@ export default function Campus() {
   };
 
   return (
-    <div className="flex flex-col items-center">
-      <div className="shadow-1 w-[21.375rem] rounded-xl">
+    <div className="flex h-[calc(100vh-4rem)] w-full flex-col items-center px-[1.5rem]">
+      <div className="shadow-1 w-full rounded-xl">
         <div id="map" className="h-40 w-full rounded-t-xl border border-neutral-300"></div>
         <div className="flex h-[3.5rem] w-full items-center justify-between rounded-b-xl bg-white px-6 text-[0.813rem] text-neutral-600">
           {selectedPlace ? (
@@ -100,22 +100,22 @@ export default function Campus() {
         </div>
       </div>
 
-      <div className="mt-[1.813rem]">
+      <div className="mt-[1.813rem] w-full">
         <div className="text-primary-500 leading-[160%] font-semibold">배달주소</div>
         <div className="pb-3 text-xs leading-[160%]">배달 받을 위치를 선택해주세요!</div>
-        <div className="flex w-[342px] flex-col gap-3">
+        <div className="flex flex-col gap-3">
           <AddressTypeDropdown type="DORMITORY" icon={<NightShelter />} addressState={addressState} />
           <AddressTypeDropdown type="COLLEGE_BUILDING" icon={<Building />} addressState={addressState} />
           <AddressTypeDropdown type="ETC" icon={<Building />} addressState={addressState} />
         </div>
       </div>
 
-      <div className="mt-[1.813rem]">
+      <div className="my-[1.813rem] w-full">
         <div className="text-primary-500 pb-2 font-semibold">배달기사님에게</div>
         <button
           type="button"
           onClick={openBottomModal}
-          className="flex w-[21.375rem] items-center justify-between rounded-sm border border-neutral-300 bg-white px-4 py-3 text-sm text-neutral-400"
+          className="flex w-full items-center justify-between rounded-sm border border-neutral-300 bg-white px-4 py-3 text-sm text-neutral-400"
         >
           {requestLabel()}
           <div className="pointer-events-none">
@@ -123,7 +123,7 @@ export default function Campus() {
           </div>
         </button>
       </div>
-      <Button className="mt-[18.188rem] h-[2.875rem] w-[21.375rem]" onClick={handleSelectAddress}>
+      <Button className="mt-auto h-[2.875rem] w-full" onClick={handleSelectAddress}>
         주소 선택
       </Button>
       <BottomModal isOpen={bottomModalIsOpen} onClose={closeBottomModal}>
@@ -134,7 +134,7 @@ export default function Campus() {
           </button>
         </BottomModalHeader>
         <BottomModalContent className="px-6">
-          <form className="flex w-[20.375rem] flex-col gap-2">
+          <form className="flex w-full flex-col gap-2">
             {DetailRequest.map((detail, index) => (
               <label
                 key={index}
@@ -182,7 +182,7 @@ export default function Campus() {
               />
             )}
           </form>
-          <Button onClick={handleSubmitRequest} className="h-[2.875rem] w-[20.375rem]">
+          <Button onClick={handleSubmitRequest} className="h-[2.875rem] w-full">
             선택하기
           </Button>
         </BottomModalContent>
