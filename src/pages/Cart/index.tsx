@@ -88,7 +88,7 @@ export default function Cart() {
       </div>
 
       <button className="flex items-center gap-1.5" onClick={() => navigate('가게 상세 페이지로 이동')}>
-        <img src="https://placehold.co/60.jpg?text=Coming+soon..." className="h-7.5 w-7.5 rounded-[5px]" />
+        <img src={cartInfo.shop_thumbnail_image_url} className="h-7.5 w-7.5 rounded-[5px]" />
         <div className="text-lg leading-[160%] font-semibold">{cartInfo.shop_name}</div>
         <RightArrow />
       </button>
@@ -125,10 +125,11 @@ export default function Cart() {
         total_amount={cartInfo.total_amount}
         item_total_amount={cartInfo.items_amount}
         delivery_fee={cartInfo.delivery_fee}
+        final_payment_amount={cartInfo.final_payment_amount}
       />
       <BottomSheet
         orderType={orderType}
-        itemCount={cartInfo.items.length}
+        itemCount={cartInfo.items.reduce((total, item) => total + item.quantity, 0)}
         totalAmount={cartInfo.total_amount}
         minimumOrderAmount={cartInfo.shop_minimum_order_amount}
       />
