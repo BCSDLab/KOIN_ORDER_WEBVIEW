@@ -4,6 +4,7 @@ import CheckIcon from '@/assets/OrderFinish/check-icon.svg';
 import Button from '@/components/UI/Button';
 import Modal, { ModalContent } from '@/components/UI/CenterModal/Modal';
 import useBooleanState from '@/util/hooks/useBooleanState';
+import { closeWebviewPage } from '@/util/ts/bridge';
 
 const orderCancelReasons: string[] = [
   '단순 변심이에요',
@@ -32,10 +33,6 @@ export default function OrderCancel() {
     if (selectedCancelReason !== '기타') return;
     if (e.target.value === '' && customCancelReason.length === 0) return setCustomCancelReason('');
     setCustomCancelReason(e.target.value);
-  };
-
-  const handleClickMoveMainPage = () => {
-    console.log('메인 페이지 이동');
   };
 
   const handleClickSubmitReason = () => {
@@ -112,7 +109,7 @@ export default function OrderCancel() {
             >
               아니오
             </Button>
-            <Button onClick={handleClickMoveMainPage} className="w-[7.125rem] font-medium">
+            <Button onClick={closeWebviewPage} className="w-[7.125rem] font-medium">
               예
             </Button>
           </div>
