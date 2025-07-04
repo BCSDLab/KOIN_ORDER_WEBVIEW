@@ -43,13 +43,13 @@ interface ModalSectionProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 export function ModalHeader({ children, className }: ModalSectionProps) {
-  return <div className={twMerge('modalHeader', className)}>{children}</div>;
+  return <div className={twMerge('modal-header', className)}>{children}</div>;
 }
 
 export function ModalContent({ children, className }: ModalSectionProps) {
-  return <div className={twMerge('modalContent', className)}>{children}</div>;
+  return <div className={twMerge('modal-content', className)}>{children}</div>;
 }
 
 export function ModalFooter({ children, className }: ModalSectionProps) {
-  return <div className={twMerge('modalFooter', className)}>{children}</div>;
+  return <div className={twMerge('modal-footer', className)}>{children}</div>;
 }

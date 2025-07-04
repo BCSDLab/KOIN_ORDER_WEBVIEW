@@ -1,5 +1,5 @@
 import { apiClient } from '..';
-import { AddressSearchRequest, AddressSearchResponse } from '@/types/api/roadAddress';
+import { AddressSearchRequest, AddressSearchResponse } from '@/api/delivery/entity';
 
 export const getRoadNameAddress = async ({ keyword, currentPage, countPerPage }: AddressSearchRequest) => {
   const response = await apiClient.get<AddressSearchResponse>('address/search', {

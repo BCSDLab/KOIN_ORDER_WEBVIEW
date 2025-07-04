@@ -1,6 +1,7 @@
 export interface CartItem {
   cart_menu_item_id: number;
   name: string;
+  menu_thumbnail_image_url: string | null;
   quantity: number;
   total_amount: number;
   price: {
@@ -17,6 +18,7 @@ export interface CartItem {
 
 export interface CartResponse {
   shop_name: string;
+  shop_thumbnail_image_url: string;
   orderable_shop_id: number;
   is_delivery_available: boolean;
   is_takeout_available: boolean;
@@ -25,4 +27,5 @@ export interface CartResponse {
   items_amount: number;
   delivery_fee: number;
   total_amount: number;
+  final_payment_amount: number;
 }

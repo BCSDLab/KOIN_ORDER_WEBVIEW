@@ -3,7 +3,7 @@ interface PaymentAmountProps {
   total_amount: number;
   item_total_amount: number;
   delivery_fee: number;
-  // final_payment_amount: number; 추후 추가 예정
+  final_payment_amount: number;
 }
 
 export default function PaymentAmount({
@@ -11,6 +11,7 @@ export default function PaymentAmount({
   total_amount,
   item_total_amount,
   delivery_fee,
+  final_payment_amount,
 }: PaymentAmountProps) {
   return (
     <div>
@@ -36,7 +37,7 @@ export default function PaymentAmount({
         </div>
         <div className="flex justify-between leading-[160%] font-semibold">
           <div>결제예정금액</div>
-          <div>{total_amount.toLocaleString()}원</div>
+          <div>{final_payment_amount.toLocaleString()}원</div>
         </div>
       </div>
     </div>

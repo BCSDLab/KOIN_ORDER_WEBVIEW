@@ -78,19 +78,19 @@ export default function OrderFinish() {
       </div>
       <div>
         <div className="flex flex-row justify-between px-6 pt-4 pb-1.5">
-          <div className="isTextPurple">주문확인</div>
-          <div className={orderKind === 'order' ? 'isTextGray' : 'isTextPurple'}>준비중</div>
-          <div className={orderKind !== 'delivery' ? 'isTextGray' : 'isTextPurple'}>배달완료</div>
+          <div className="is-text-purple">주문확인</div>
+          <div className={orderKind === 'order' ? 'is-text-gray' : 'is-text-purple'}>준비중</div>
+          <div className={orderKind !== 'delivery' ? 'is-text-gray' : 'is-text-purple'}>배달완료</div>
         </div>
         <div className="flex flex-row justify-center">
-          <div className="isIconPurple">
+          <div className="is-icon-purple">
             <ShoppingCart />
           </div>
           <div className="bg-primary-300 h-[5px] w-[calc((100vw-184px)/8)] self-center"></div>
           <div
             className={`h-[5px] w-[calc((100vw-184px)/8*3)] self-center ${orderKind === 'order' ? 'bg-neutral-400' : 'bg-primary-300'}`}
           ></div>
-          <div className={orderKind === 'order' ? 'isIconGray' : 'isIconPurple'}>
+          <div className={orderKind === 'order' ? 'is-icon-gray' : 'is-icon-purple'}>
             <Skillet />
           </div>
           <div
@@ -99,7 +99,7 @@ export default function OrderFinish() {
           <div
             className={`h-[5px] w-[calc((100vw-184px)/8*3)] self-center ${orderKind !== 'delivery' ? 'bg-neutral-400' : 'bg-primary-300'}`}
           ></div>
-          <div className={orderKind !== 'delivery' ? 'isIconGray' : 'isIconPurple'}>
+          <div className={orderKind !== 'delivery' ? 'is-icon-gray' : 'is-icon-purple'}>
             <Motorcycle />
           </div>
         </div>

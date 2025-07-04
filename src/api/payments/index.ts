@@ -4,7 +4,7 @@ import {
   ConfirmPaymentsResponse,
   DeliveryTemporaryRequest,
   DeliveryTemporaryResponse,
-} from '@/types/api/payments';
+} from '@/api/payments/entity';
 
 const getToken = () => localStorage.getItem('token');
 
