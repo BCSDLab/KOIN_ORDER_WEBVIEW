@@ -12,7 +12,7 @@ class Bridge {
   }
 
   private isIOS() {
-    return !!window.webkit?.messageHandlers?.tokenBridge;
+    return !!window.webkit?.messageHandlers;
   }
 
   private isAndroid() {
@@ -33,8 +33,8 @@ class Bridge {
       try {
         if (this.isIOS()) {
           window.webkit?.messageHandlers.tokenBridge.postMessage(JSON.stringify(payload));
-        } else if (this.isAndroid() && window.Android) {
-          const result = window.Android[method](...args);
+        } else if (this.isAndroid()) {
+          const result = window.Android?.[method](...args);
           resolve(result);
           delete this.callbackMap[callbackId];
         }
@@ -60,30 +60,47 @@ window.onNativeCallback = (callbackId: string, result: unknown) => {
   window.NativeBridge?.handleCallback(callbackId, result);
 };
 
-window.onAndroidCallback = window.onNativeCallback; // 추후 안드로이드와 함수 이름 협의 후 제거 가능
+function isAndroid() {
+  return !!window.Android;
+}
 
-export function setTokensFromNative(tokens: { accessToken: string; refreshToken: string }) {
+function isIOS() {
+  return !!window.webkit?.messageHandlers;
+}
+
+export function isNative() {
+  return isAndroid() || isIOS();
+}
+
+interface TokenPair {
+  accessToken: string;
+  refreshToken: string;
+}
+
+function applyAccessToken(token: string) {
+  useTokenStore.getState().setToken(token);
+  setCookie('AUTH_TOKEN_KEY', token);
+}
+
+export function setTokensFromNative(tokens: TokenPair) {
   const { accessToken, refreshToken } = tokens;
-  if (accessToken) {
-    useTokenStore.getState().setToken(accessToken);
-    setCookie('AUTH_TOKEN_KEY', accessToken);
-  }
+  if (accessToken) applyAccessToken(accessToken);
   if (refreshToken) useTokenStore.getState().setRefreshToken(refreshToken);
 }
 
-export async function requestTokensFromNative(): Promise<{ accessToken: string; refreshToken: string }> {
+export async function requestTokensFromNative(): Promise<TokenPair> {
   const existingAccessToken = useTokenStore.getState().token;
   const existingRefreshToken = useTokenStore.getState().refreshToken;
 
   if (existingAccessToken && existingRefreshToken) {
-    return { accessToken: existingAccessToken, refreshToken: existingRefreshToken };
+    return {
+      accessToken: existingAccessToken,
+      refreshToken: existingRefreshToken,
+    };
   }
 
   try {
-    const tokens = (await window.NativeBridge?.call('getUserTokens')) as {
-      accessToken?: string;
-      refreshToken?: string;
-    };
+    const tokens = JSON.parse((await window.NativeBridge?.call('getUserTokens')) as string);
     return {
       accessToken: tokens?.accessToken || '',
       refreshToken: tokens?.refreshToken || '',
@@ -96,7 +113,7 @@ export async function requestTokensFromNative(): Promise<{ accessToken: string; 
   }
 }
 
-export async function saveTokensToNative(tokens: { accessToken: string; refreshToken: string }): Promise<boolean> {
+export async function saveTokensToNative(tokens: TokenPair): Promise<boolean> {
   try {
     await window.NativeBridge?.call('saveUserTokens', tokens);
     return true;
@@ -112,4 +129,12 @@ export async function deleteTokensFromNative(): Promise<boolean> {
   } catch {
     return false;
   }
+}
+
+export async function backButtonTapped(): Promise<void> {
+  await window.NativeBridge?.call('navigateBack');
+}
+
+export async function closeWebviewPage(): Promise<void> {
+  await window.NativeBridge?.call('finish');
 }
