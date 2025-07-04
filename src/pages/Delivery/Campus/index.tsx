@@ -8,7 +8,6 @@ import Building from '@/assets/Delivery/building.svg';
 import NightShelter from '@/assets/Delivery/night-shelter.svg';
 import CloseIcon from '@/assets/Main/close-icon.svg';
 import ArrowDown from '@/assets/Payment/arrow-down-icon.svg';
-import ArrowGo from '@/assets/Payment/arrow-go-icon.svg';
 import Badge from '@/components/UI/Badge';
 import BottomModal, {
   BottomModalHeader,
@@ -92,9 +91,6 @@ export default function Campus() {
           ) : (
             <span>배달 받을 위치를 선택해주세요!</span>
           )}
-          <div>
-            <ArrowGo />
-          </div>
         </div>
       </div>
 
