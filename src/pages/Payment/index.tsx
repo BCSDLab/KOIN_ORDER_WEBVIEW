@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { TossPaymentsWidgets } from '@tosspayments/tosspayments-sdk';
 import clsx from 'clsx';
+import { useSearchParams } from 'react-router-dom';
 import Agreement from './components/Agreement';
 import ContactModal from './components/ContactModal';
 import DeliveryAddressSection from './components/DeliveryAddressSection';
@@ -9,6 +10,7 @@ import StoreRequestModal from './components/StoreRequestModal';
 import TossWidget from './components/TossWidget';
 import useCart from './hooks/useCart';
 import useTemporaryDelivery from './hooks/useTemporaryDelivery';
+import PickupIcon from '@/assets/Delivery/bucket.svg';
 import Bike from '@/assets/Main/agriculture.svg';
 import RightArrow from '@/assets/Payment/arrow-go-icon.svg';
 import Badge from '@/components/UI/Badge';
@@ -16,6 +18,7 @@ import Button from '@/components/UI/Button';
 import useBooleanState from '@/util/hooks/useBooleanState';
 
 export default function Payment() {
+  const [searchParams] = useSearchParams();
   const [isContactModalOpen, openContactModal, closeContactModal] = useBooleanState(false);
   const [isStoreRequestModalOpen, openStoreRequestModal, closeStoreRequestModal] = useBooleanState(false);
 
@@ -28,6 +31,8 @@ export default function Payment() {
 
   const { data: cart } = useCart();
   const { mutateAsync: temporaryDelivery } = useTemporaryDelivery();
+  const orderType = searchParams.get('orderType');
+  const isDelivery = orderType === 'delivery';
 
   const orderName =
     cart!.items.length === 1 ? cart!.items[0].name : `${cart!.items[0].name} 외 ${cart!.items.length - 1}건`;
@@ -62,8 +67,8 @@ export default function Payment() {
           variant="outlined"
           color="primaryLight"
           className="px-3 py-2 leading-[16px]"
-          startIcon={<Bike />}
-          label="배달"
+          startIcon={isDelivery ? <Bike /> : <PickupIcon />}
+          label={isDelivery ? '배달' : '포장'}
         />
         {cart.shop_name}
       </div>

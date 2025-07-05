@@ -29,14 +29,14 @@ const icons = [
 ];
 
 interface BottomSheetProps {
-  orderType?: 'delivery' | 'takeout';
+  orderType: 'delivery' | 'takeout';
   itemCount: number;
   totalAmount: number;
   minimumOrderAmount: number;
 }
 
 export default function BottomSheet({ orderType, itemCount, totalAmount, minimumOrderAmount }: BottomSheetProps) {
-  const { mutate: validateCart, errorCode } = useValidateCart();
+  const { mutate: validateCart, errorCode } = useValidateCart({ orderType });
   const [isValidateModalOpen, openValidateModal, closeValidateModal] = useBooleanState(false);
 
   useEffect(() => {
