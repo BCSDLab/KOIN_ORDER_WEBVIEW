@@ -3,9 +3,9 @@ import { CartResponse } from '@/api/cart/entity';
 
 const getToken = () => localStorage.getItem('token');
 
-export const getCart = async () => {
+export const getCart = async (orderType: 'DELIVERY' | 'TAKE_OUT') => {
   const token = getToken();
-  return await apiClient.get<CartResponse>('cart', {
+  return await apiClient.get<CartResponse>(`cart?type=${orderType}`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
