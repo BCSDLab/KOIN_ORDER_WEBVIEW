@@ -25,7 +25,7 @@ export default function OrderFinish() {
 
   const navigate = useNavigate();
 
-  const { mutateAsync: confirmPayments, isPending, isError } = useConfirmPayments();
+  const { mutateAsync: confirmPayments, isPending } = useConfirmPayments();
 
   const [orderKind, setOrderKind] = useState<OrderKind>('order');
 
@@ -34,22 +34,21 @@ export default function OrderFinish() {
 
   useEffect(() => {
     const confirmPayment = async () => {
-      try {
-        await confirmPayments({ order_id: orderId!, payment_key: paymentKey!, amount: Number(amount) });
-      } catch (error) {
-        console.error('Payment confirmation failed:', error);
-      }
+      await confirmPayments({ order_id: orderId!, payment_key: paymentKey!, amount: Number(amount) });
     };
 
     confirmPayment();
   }, [confirmPayments, orderId, paymentKey]);
 
+  // 로딩 로띠 추가 예정
   if (isPending) {
-    return <div>로딩 중...</div>; // 로딩 로띠 추가 예정
-  }
-
-  if (isError) {
-    return <div>결제 확인에 실패했습니다. 다시 시도해 주세요.</div>;
+    return (
+      <div className="flex h-screen flex-col items-center justify-center">
+        <div className="text-[32px] leading-[160%] font-bold">결제 중</div>
+        <div className="leading-[160%] font-medium">잠시만 기다려주세요!</div>
+        <p className="my-24 text-[32px] leading-[160%] font-bold">대충 로딩 로띠...</p>
+      </div>
+    );
   }
 
   const handleOpenCallBottomModal = () => {

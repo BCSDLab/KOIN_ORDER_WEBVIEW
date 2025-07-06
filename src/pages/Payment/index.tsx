@@ -1,15 +1,18 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { TossPaymentsWidgets } from '@tosspayments/tosspayments-sdk';
 import clsx from 'clsx';
-import { useSearchParams } from 'react-router-dom';
+import { useLocation, useSearchParams } from 'react-router-dom';
 import Agreement from './components/Agreement';
 import ContactModal from './components/ContactModal';
 import DeliveryAddressSection from './components/DeliveryAddressSection';
 import PaymentAmount from './components/PaymentAmount';
+import PaymentFailModal from './components/PaymentFaliModal';
+import ShopLocationMap from './components/ShopLocationMap';
 import StoreRequestModal from './components/StoreRequestModal';
 import TossWidget from './components/TossWidget';
 import useCart from './hooks/useCart';
 import useTemporaryDelivery from './hooks/useTemporaryDelivery';
+import useTemporaryTakeout from './hooks/useTemporaryTakeout';
 import PickupIcon from '@/assets/Delivery/bucket.svg';
 import Bike from '@/assets/Main/agriculture.svg';
 import RightArrow from '@/assets/Payment/arrow-go-icon.svg';
@@ -18,9 +21,11 @@ import Button from '@/components/UI/Button';
 import useBooleanState from '@/util/hooks/useBooleanState';
 
 export default function Payment() {
+  const location = useLocation();
   const [searchParams] = useSearchParams();
   const [isContactModalOpen, openContactModal, closeContactModal] = useBooleanState(false);
   const [isStoreRequestModalOpen, openStoreRequestModal, closeStoreRequestModal] = useBooleanState(false);
+  const [isPaymentFailModalOpen, openPaymentFailModal, closePaymentFailModal] = useBooleanState(false);
 
   const [contact, setContact] = useState('');
   const [request, setRequest] = useState('');
@@ -29,24 +34,36 @@ export default function Payment() {
   const [ready, setReady] = useState(false);
   const [widgets, setWidgets] = useState<TossPaymentsWidgets | null>(null);
 
-  const { data: cart } = useCart();
-  const { mutateAsync: temporaryDelivery } = useTemporaryDelivery();
   const orderType = searchParams.get('orderType');
   const isDelivery = orderType === 'delivery';
+
+  const { data: cart } = useCart(isDelivery ? 'DELIVERY' : 'TAKE_OUT');
+  const { mutateAsync: temporaryDelivery } = useTemporaryDelivery();
+  const { mutateAsync: temporaryTakeout } = useTemporaryTakeout();
 
   const orderName =
     cart!.items.length === 1 ? cart!.items[0].name : `${cart!.items[0].name} 외 ${cart!.items.length - 1}건`;
 
   const pay = async () => {
-    const order = await temporaryDelivery({
-      address: '추후 추가해야 함',
-      phone_number: contact || '01012345678',
-      to_owner: request,
-      to_rider: '추후 추가해야 함',
-      total_menu_price: cart!.items_amount,
-      delivery_tip: cart!.delivery_fee,
-      total_amount: cart!.total_amount,
-    });
+    let order;
+    if (isDelivery) {
+      order = await temporaryDelivery({
+        address: '추후 추가해야 함',
+        phone_number: contact || '01012345678',
+        to_owner: request,
+        to_rider: '추후 추가해야 함',
+        total_menu_price: cart!.items_amount,
+        delivery_tip: cart!.delivery_fee,
+        total_amount: cart!.total_amount,
+      });
+    } else {
+      order = await temporaryTakeout({
+        phoneNumber: contact || '01012345678',
+        toOwner: request,
+        totalMenuPrice: cart!.items_amount,
+        totalAmount: cart!.total_amount,
+      });
+    }
 
     try {
       await widgets!.requestPayment({
@@ -59,6 +76,12 @@ export default function Payment() {
       console.error(error);
     }
   };
+
+  useEffect(() => {
+    if (location.state?.error) {
+      openPaymentFailModal();
+    }
+  }, [location.state?.error]);
 
   return (
     <div className="mx-6 mt-4">
@@ -74,7 +97,11 @@ export default function Payment() {
       </div>
 
       <div className="mt-6 flex flex-col gap-3">
-        <DeliveryAddressSection orderableShopId={cart.orderable_shop_id} />
+        {isDelivery ? (
+          <DeliveryAddressSection orderableShopId={cart.orderable_shop_id} />
+        ) : (
+          <ShopLocationMap orderableShopId={cart.orderable_shop_id} />
+        )}
 
         <div>
           <p className="text-primary-500 text-lg font-semibold">연락처</p>
@@ -146,6 +173,12 @@ export default function Payment() {
           setRequest(newRequest);
           setNoCutlery(newNoCutlery);
         }}
+      />
+
+      <PaymentFailModal
+        isOpen={isPaymentFailModalOpen}
+        onClose={closePaymentFailModal}
+        errorMessage={location.state?.error}
       />
     </div>
   );
