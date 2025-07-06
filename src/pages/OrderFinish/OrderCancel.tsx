@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import clsx from 'clsx';
+import { useSearchParams } from 'react-router-dom';
+import useCancelPayment from './hooks/useCancelPayment';
 import CheckIcon from '@/assets/OrderFinish/check-icon.svg';
 import Button from '@/components/UI/Button';
 import Modal, { ModalContent } from '@/components/UI/CenterModal/Modal';
@@ -14,7 +16,11 @@ const orderCancelReasons: string[] = [
 ];
 
 export default function OrderCancel() {
+  const [searchParams] = useSearchParams();
+  const paymentKey = searchParams.get('paymentKey');
+
   const [isCancelModalOpen, openCancelModal, closeCancelModal] = useBooleanState(false);
+  const { mutate: cancelPayment } = useCancelPayment(paymentKey!);
 
   const [selectedCancelReason, setSelectedCancelReason] = useState<string>('');
   const [customCancelReason, setCustomCancelReason] = useState<string>('');
@@ -35,7 +41,7 @@ export default function OrderCancel() {
   };
 
   const handleClickMoveMainPage = () => {
-    console.log('메인 페이지 이동');
+    cancelPayment({ cancel_reason: selectedCancelReason === '기타' ? customCancelReason : selectedCancelReason });
   };
 
   const handleClickSubmitReason = () => {

@@ -62,7 +62,7 @@ export default function OrderFinish() {
   };
 
   const handleClickOrderCancel = () => {
-    navigate('/orderCancel');
+    navigate(`/orderCancel?paymentKey=${paymentKey}`);
   };
 
   return (

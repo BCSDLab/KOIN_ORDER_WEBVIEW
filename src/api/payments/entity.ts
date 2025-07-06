@@ -32,3 +32,16 @@ export interface ConfirmPaymentsResponse {
   approved_at: string;
   payment_method: string;
 }
+
+export interface CancelPaymentRequest {
+  cancel_reason: string;
+}
+
+export interface CancelPaymentResponse {
+  payment_cancels: {
+    id: number;
+    cancel_reason: string;
+    cancel_amount: number;
+    canceled_at: string;
+  }[];
+}
