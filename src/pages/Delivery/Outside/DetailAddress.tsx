@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import useMarker from '../hooks/useMarker';
 import useNaverGeocode from '../hooks/useNaverGeocode';
 import useNaverMap from '../hooks/useNaverMap';
+import useUserDeliveryAddress from '../hooks/useUserDeliveryAddress';
 import CloseIcon from '@/assets/Main/close-icon.svg';
 import ArrowDown from '@/assets/Payment/arrow-down-icon.svg';
 import ArrowGo from '@/assets/Payment/arrow-go-icon.svg';
@@ -25,10 +26,12 @@ const DetailRequest: string[] = [
 ];
 
 export default function DetailAddress() {
-  const { setMainAddress, setDeliveryRequest, setDetailAddress } = useOrderStore();
+  const { postAddress, setDeliveryRequest, setPostAddress } = useOrderStore();
+
+  const { mutate } = useUserDeliveryAddress();
 
   const location = useLocation();
-  const address = location.state?.address || '';
+  const address = location.state?.roadAddress || '';
 
   const navigate = useNavigate();
 
@@ -78,9 +81,18 @@ export default function DetailAddress() {
 
   const handleClickSaveAddress = () => {
     if (detailAddressValue.length === 0) return openModal();
+
     DeliveryRequest();
-    setMainAddress(address);
-    setDetailAddress(detailAddressValue);
+
+    const updatedPostAddress = {
+      ...postAddress,
+      detail_address: detailAddressValue,
+      full_address: `${address} ${detailAddressValue}`,
+    };
+
+    setPostAddress(updatedPostAddress);
+    //navigate('/payment');
+    mutate(updatedPostAddress);
   };
 
   const backSetAddressPage = () => {
