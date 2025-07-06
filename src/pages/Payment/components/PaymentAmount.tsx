@@ -1,6 +1,6 @@
 interface PaymentAmountProps {
   totalAmount: number;
-  deliveryAmount: number;
+  deliveryAmount: number | null;
   menuAmount: number;
 }
 
@@ -20,10 +20,12 @@ export default function PaymentAmount({ totalAmount, deliveryAmount, menuAmount 
           <div>메뉴 금액</div>
           <div>{menuAmount.toLocaleString()}원</div>
         </div>
-        <div className="flex justify-between text-[13px] text-neutral-500">
-          <div>배달 금액</div>
-          <div>{deliveryAmount.toLocaleString()}원</div>
-        </div>
+        {deliveryAmount && (
+          <div className="flex justify-between text-[13px] text-neutral-500">
+            <div>배달 금액</div>
+            <div>{deliveryAmount.toLocaleString()}원</div>
+          </div>
+        )}
       </div>
     </div>
   );

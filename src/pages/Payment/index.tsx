@@ -141,7 +141,7 @@ export default function Payment() {
         <Agreement />
         <PaymentAmount
           totalAmount={cart!.total_amount}
-          deliveryAmount={cart!.delivery_fee}
+          deliveryAmount={isDelivery ? cart!.delivery_fee : null}
           menuAmount={cart!.items_amount}
         />
         <div className="text-center align-middle text-[12px] text-neutral-600">
