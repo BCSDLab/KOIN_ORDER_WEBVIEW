@@ -31,6 +31,21 @@ export interface ConfirmPaymentsResponse {
   requested_at: string;
   approved_at: string;
   payment_method: string;
+  delivery_address: string;
+  shop_address: string;
+  to_owner: string;
+  to_rider: string;
+  shop_name: string;
+  menus: {
+    name: string;
+    quantity: number;
+    options: {
+      option_group_name: string;
+      option_name: string;
+      option_price: number;
+    }[];
+  }[];
+  order_type: 'DELIVERY' | 'TAKE_OUT';
 }
 
 export interface CancelPaymentRequest {

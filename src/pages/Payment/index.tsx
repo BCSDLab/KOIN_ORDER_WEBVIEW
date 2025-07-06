@@ -6,7 +6,7 @@ import Agreement from './components/Agreement';
 import ContactModal from './components/ContactModal';
 import DeliveryAddressSection from './components/DeliveryAddressSection';
 import PaymentAmount from './components/PaymentAmount';
-import PaymentFailModal from './components/PaymentFaliModal';
+import PaymentFailModal from './components/PaymentFailModal';
 import ShopLocationMap from './components/ShopLocationMap';
 import StoreRequestModal from './components/StoreRequestModal';
 import TossWidget from './components/TossWidget';
@@ -27,7 +27,7 @@ export default function Payment() {
   const [isPaymentFailModalOpen, openPaymentFailModal, closePaymentFailModal] = useBooleanState(false);
 
   const [contact, setContact] = useState('');
-  const [request, setRequest] = useState('');
+  const [request, setRequest] = useState('요청사항 없음');
   const [noCutlery, setNoCutlery] = useState(true);
 
   const [ready, setReady] = useState(false);
@@ -120,7 +120,7 @@ export default function Payment() {
           <Button onClick={openStoreRequestModal} color="gray" fullWidth className="mt-2 border-0 py-4 pr-3 pl-6">
             <div className="flex w-full flex-col gap-1">
               <div className="flex w-full items-center justify-between">
-                <p className="text-sm font-normal text-neutral-600">{request || '요청사항 없음'}</p>
+                <p className="text-sm font-normal text-neutral-600">{request}</p>
                 <RightArrow />
               </div>
               <p className="text-start text-sm font-medium text-[#3a903e]">

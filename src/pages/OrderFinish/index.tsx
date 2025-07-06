@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import useConfirmPayments from '../Payment/hooks/useConfirmPayments';
+import { ConfirmPaymentsResponse } from '@/api/payments/entity';
 import CloseIcon from '@/assets/Main/close-icon.svg';
 import CallIcon from '@/assets/OrderFinish/call-icon.svg';
 import Motorcycle from '@/assets/OrderFinish/motorcycle-icon.svg';
@@ -30,13 +31,15 @@ export default function OrderFinish() {
   const { mutateAsync: confirmPayments, isPending } = useConfirmPayments(orderType!);
 
   const [orderKind, setOrderKind] = useState<OrderKind>('order');
+  const [paymentResponse, setPaymentResponse] = useState<ConfirmPaymentsResponse>();
 
   const [isDeliveryBottomModalOpen, , closeDeliveryBottomModal] = useBooleanState(false);
   const [isCallBottomModalOpen, openCallBottomModal, closeCallBottomModal] = useBooleanState(false);
 
   useEffect(() => {
     const confirmPayment = async () => {
-      await confirmPayments({ order_id: orderId!, payment_key: paymentKey!, amount: Number(amount) });
+      const response = await confirmPayments({ order_id: orderId!, payment_key: paymentKey!, amount: Number(amount) });
+      setPaymentResponse(response);
     };
 
     if (entryPoint === 'payment') {
@@ -113,27 +116,35 @@ export default function OrderFinish() {
           <div>
             배달주소
             <div className="border-b border-neutral-200 pb-3 font-normal text-neutral-500">
-              충청남도 천안시 동남구 병천면 충절로 1600 은솔관 422호
+              {paymentResponse?.delivery_address}
             </div>
           </div>
           <div>
             사장님에게
-            <div className="border-b border-neutral-200 pb-3 font-normal text-neutral-500">리뷰 이벤트 감사합니다</div>
+            <div className="border-b border-neutral-200 pb-3 font-normal text-neutral-500">
+              {paymentResponse?.to_owner}
+            </div>
           </div>
           <div>
-            배달기사님에게<div className="font-normal text-neutral-500">문앞에 놔주세요</div>
+            배달기사님에게<div className="font-normal text-neutral-500">{paymentResponse?.to_rider}</div>
           </div>
         </div>
         <div className="text-primary-500 my-5 text-lg font-semibold">주문정보</div>
         <div className="shadow-1 mb-16 flex flex-col gap-3 rounded-2xl border border-white bg-white px-6 py-4 text-sm leading-[160%] font-semibold">
-          <div className="flex flex-row border-b border-neutral-200 pt-1 pb-4 pl-1">
-            맛있는 족발 - 병천점 <ArrowGo />
+          <div className="align-center flex gap-1 border-b border-neutral-200 pt-1 pb-4 pl-1">
+            <div>{paymentResponse?.shop_name}</div>
+            <ArrowGo />
           </div>
           <div className="border-b border-neutral-200 pb-3 text-[13px] font-normal text-neutral-500">
-            메뉴 족발 막국수 저녁 set
+            {paymentResponse?.menus.map((menu) => (
+              <div className="flex gap-2">
+                <div>{menu.name}</div>
+                <div>{menu.quantity}개</div>
+              </div>
+            ))}
           </div>
           <div className="flex flex-row justify-between pb-2">
-            총 결제 금액 <div>32,500원</div>
+            총 결제 금액 <div>{paymentResponse?.amount.toLocaleString()}원</div>
           </div>
           <Button className="h-[2.75rem] w-[14.75rem] gap-3 self-center">
             <Receipt />
