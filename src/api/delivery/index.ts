@@ -1,7 +1,7 @@
 import { apiClient } from '..';
 import { AddressSearchRequest, AddressSearchResponse } from './entity';
-import { CampusDeliveryAddressRequest, CampusDeliveryAddressResponse } from '@/types/api/deliveryCampus';
 import { PostAddressObjType } from '@/stores/useOrderStore';
+import { CampusDeliveryAddressRequest, CampusDeliveryAddressResponse } from '@/types/api/deliveryCampus';
 
 const getToken = () => localStorage.getItem('token');
 
