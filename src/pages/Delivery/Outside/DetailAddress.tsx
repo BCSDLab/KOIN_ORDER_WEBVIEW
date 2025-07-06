@@ -88,8 +88,8 @@ export default function DetailAddress() {
   };
 
   return (
-    <div className="flex flex-col items-center">
-      <div className="shadow-1 w-[21.375rem] rounded-xl">
+    <div className="flex h-[calc(100vh-4rem)] flex-col items-center px-[1.5rem]">
+      <div className="shadow-1 w-full rounded-xl">
         <div id="map" className="h-40 w-full rounded-t-xl border border-neutral-300"></div>
         <div className="flex h-[3.5rem] w-full items-center justify-between rounded-b-xl bg-white px-6 text-[0.813rem] text-neutral-600">
           {address}
@@ -98,11 +98,11 @@ export default function DetailAddress() {
           </button>
         </div>
       </div>
-      <div className="mt-[1.813rem]">
+      <div className="mt-[1.813rem] w-full">
         <div className="text-primary-500 leading-[160%] font-semibold">상세주소</div>
         <div className="pb-3 text-xs leading-[160%]">상세 주소를 입력해주세요</div>
         <input
-          className="w-[21.375rem] rounded-sm border border-neutral-300 bg-white px-4 py-3 placeholder-neutral-400 placeholder:text-sm"
+          className="w-full rounded-sm border border-neutral-300 bg-white px-4 py-3 placeholder-neutral-400 placeholder:text-sm"
           type="text"
           name="DetailAddress"
           placeholder="상세주소를 입력해주세요 (건물명, 동/호수 등)"
@@ -110,12 +110,12 @@ export default function DetailAddress() {
           onChange={handleDetailAddress}
         />
       </div>
-      <div className="mt-[1.813rem]">
+      <div className="my-[1.813rem] w-full">
         <div className="text-primary-500 pb-2 font-semibold">배달기사님에게</div>
         <button
           type="button"
           onClick={openDeliveryBottomModal}
-          className="flex w-[21.375rem] items-center justify-between rounded-sm border border-neutral-300 bg-white px-4 py-3 text-sm text-neutral-400"
+          className="flex w-full items-center justify-between rounded-sm border border-neutral-300 bg-white px-4 py-3 text-sm text-neutral-400"
         >
           {requestLabel()}
           <div className="pointer-events-none">
@@ -123,7 +123,7 @@ export default function DetailAddress() {
           </div>
         </button>
       </div>
-      <Button className="mt-[18.188rem] h-[2.875rem] w-[21.375rem]" onClick={handleClickSaveAddress}>
+      <Button className="mt-auto h-[2.875rem]" fullWidth onClick={handleClickSaveAddress}>
         주소 선택
       </Button>
       <Modal isOpen={isModalOpen} onClose={closeModal}>
