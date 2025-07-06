@@ -1,26 +1,26 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { deleteCookie } from '@/util/ts/cookie';
+import { deleteCookie, getCookie } from '@/util/ts/cookie';
 
 export type UserType = 'STUDENT' | 'GENERAL' | null;
 
-type State = {
+interface State {
   token: string;
   refreshToken: string;
   userType: UserType;
-};
+}
 
-type Actions = {
+interface Actions {
   setToken: (token: string) => void;
   setRefreshToken: (refreshToken: string) => void;
   setUserType: (userType: UserType) => void;
   clearToken: () => void;
-};
+}
 
 export const useTokenStore = create(
   persist<State & Actions>(
     (set) => ({
-      token: '',
+      token: getCookie('AUTH_TOKEN_KEY') || '',
       refreshToken: '',
       userType: null,
       setToken: (token) => set({ token }),

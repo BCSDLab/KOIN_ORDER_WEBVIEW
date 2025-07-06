@@ -10,7 +10,6 @@ declare global {
     };
 
     onNativeCallback?: (callbackId: string, result: unknown) => void;
-    onAndroidCallback?: (callbackId: string, result: unknown) => void;
 
     NativeBridge?: {
       call: (methodName: string, ...args: unknown[]) => Promise<unknown>;

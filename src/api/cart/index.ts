@@ -1,10 +1,11 @@
 import { apiClient } from '..';
 import { CartResponse } from '@/api/cart/entity';
+// import { useTokenStore } from '@/stores/auth';
 
-const getToken = () => localStorage.getItem('token');
+// const token = useTokenStore.getState().token; // 배포 시 또는 브릿지 테스트 시 사용
+const token = localStorage.getItem('token'); // 개발용
 
 export const getCart = async (orderType: 'DELIVERY' | 'TAKE_OUT') => {
-  const token = getToken();
   return await apiClient.get<CartResponse>(`cart?type=${orderType}`, {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -13,7 +14,6 @@ export const getCart = async (orderType: 'DELIVERY' | 'TAKE_OUT') => {
 };
 
 export const validateCart = async () => {
-  const token = getToken();
   return await apiClient.get<CartResponse>('cart/validate', {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -22,7 +22,6 @@ export const validateCart = async () => {
 };
 
 export const resetCart = async () => {
-  const token = getToken();
   return await apiClient.delete('cart/reset', {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -31,7 +30,6 @@ export const resetCart = async () => {
 };
 
 export const deleteCartItem = async (cartMenuItemId: number) => {
-  const token = getToken();
   return await apiClient.delete(`cart/delete/${cartMenuItemId}`, {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -46,7 +44,6 @@ export const updateCartItemQuantity = async ({
   cartMenuItemId: number;
   quantity: number;
 }) => {
-  const token = getToken();
   return await apiClient.post(`cart/quantity/${cartMenuItemId}/${quantity}`, {
     headers: {
       Authorization: `Bearer ${token}`,

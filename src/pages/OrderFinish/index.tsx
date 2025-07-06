@@ -26,7 +26,6 @@ export default function OrderFinish() {
   const orderId = searchParams.get('orderId');
   const paymentKey = searchParams.get('paymentKey');
   const amount = searchParams.get('amount');
-
   const navigate = useNavigate();
 
   const { mutateAsync: confirmPayments, isPending } = useConfirmPayments(orderType!);

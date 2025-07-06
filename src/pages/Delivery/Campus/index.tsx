@@ -1,14 +1,13 @@
 import { useState } from 'react';
-import clsx from 'clsx';
-import { twMerge } from 'tailwind-merge';
+// import { useNavigate } from 'react-router-dom';
 import useMarker from '../hooks/useMarker';
+import useNaverGeocode from '../hooks/useNaverGeocode';
 import useNaverMap from '../hooks/useNaverMap';
+import AddressTypeDropdown from './AddressTypeDropdown';
 import Building from '@/assets/Delivery/building.svg';
-import ChevronDown from '@/assets/Delivery/chevron-down.svg';
 import NightShelter from '@/assets/Delivery/night-shelter.svg';
 import CloseIcon from '@/assets/Main/close-icon.svg';
 import ArrowDown from '@/assets/Payment/arrow-down-icon.svg';
-import ArrowGo from '@/assets/Payment/arrow-go-icon.svg';
 import Badge from '@/components/UI/Badge';
 import BottomModal, {
   BottomModalHeader,
@@ -16,39 +15,9 @@ import BottomModal, {
   BottomModalFooter,
 } from '@/components/UI/BottomModal/BottomModal';
 import Button from '@/components/UI/Button';
-import Modal, { ModalContent, ModalFooter } from '@/components/UI/CenterModal/Modal';
+import { AddressCategory } from '@/types/api/deliveryCampus';
 import useBooleanState from '@/util/hooks/useBooleanState';
 
-const campusList = [
-  {
-    name: '기숙사',
-    icon: NightShelter,
-    building: ['101동(해울)', '103동(예솔)', '104동(다솔)'],
-  },
-  {
-    name: '공학관',
-    icon: Building,
-    building: [
-      '1공학관',
-      '2공학관',
-      '3공학관',
-      '4공학관',
-      '학생회관',
-      '미래학관',
-      '담헌실학관',
-      '다산정보관',
-      'R&D돔',
-      '복지관',
-    ],
-  },
-  {
-    name: '그 외',
-    icon: '',
-    building: ['기타'],
-  },
-] as const;
-
-const sample: [number, number] = [36.762, 127.2835];
 const DetailRequest: string[] = [
   '문 앞에 놔주세요 (벨 눌러주세요)',
   '문 앞에 놔주세요 (노크해주세요)',
@@ -57,24 +26,38 @@ const DetailRequest: string[] = [
   '전화주시면 마중 나갈게요',
 ];
 
-type CampusCategory = {
-  name: '기숙사' | '공학관' | '그 외';
-  icon: React.ReactNode | null;
-  building: string[];
+interface Place {
+  id: number;
+  full_address: string;
+  short_address: string;
+}
+
+const 함지: Place = {
+  id: 5,
+  full_address: '충남 천안시 동남구 병천면 충절로 1600 한국기술교육대학교 제1캠퍼스 생활관 105동',
+  short_address: '105동(함지)',
 };
 
 export default function Campus() {
+  // const navigate = useNavigate();
+
   const [bottomModalIsOpen, openBottomModal, closeBottomModal] = useBooleanState(false);
-  const [modalIsOpen, openModal, closeModal] = useBooleanState(false);
 
   const [selectedRequest, setSelectedRequest] = useState<string>('');
   const [customInputValue, setCustomInputValue] = useState<string>('');
 
-  const map = useNaverMap(...sample);
-  useMarker(map);
+  const [selectedCategory, setSelectedCategory] = useState<AddressCategory | null>(null);
+  const [selectedPlace, setSelectedPlace] = useState<Place>(함지);
+  const addressState = {
+    selectedCategory,
+    setSelectedCategory,
+    selectedPlace,
+    setSelectedPlace,
+  };
 
-  const [selectedCampusCategory, setSelectedCampusCategory] = useState<CampusCategory['name'] | null>(null);
-  const [selectedCampusBuilding, setSelectedCampusBuilding] = useState<string>('');
+  const coords = useNaverGeocode(selectedPlace?.full_address || '');
+  const map = useNaverMap(...coords);
+  useMarker(map);
 
   const requestLabel = () => {
     if (!selectedRequest) {
@@ -93,92 +76,46 @@ export default function Campus() {
 
   const handleSubmitRequest = () => closeBottomModal();
 
+  const handleSelectAddress = () => {
+    if (!selectedPlace) {
+      return;
+    }
+    // TODO: 주소 선택 후 결제 페이지로 이동
+    // navigate('/payment', { state: { address: selectedPlace.full_address } });
+  };
+
   return (
-    <div className="flex flex-col items-center">
-      <div className="shadow-1 w-[21.375rem] rounded-xl">
+    <div className="flex h-[calc(100vh-4rem)] w-full flex-col items-center px-[1.5rem]">
+      <div className="shadow-1 w-full rounded-xl">
         <div id="map" className="h-40 w-full rounded-t-xl border border-neutral-300"></div>
         <div className="flex h-[3.5rem] w-full items-center justify-between rounded-b-xl bg-white px-6 text-[0.813rem] text-neutral-600">
-          {selectedCampusBuilding ? (
+          {selectedPlace ? (
             <div className="flex w-full items-center justify-center gap-2">
-              <Badge label={selectedCampusBuilding} color="primary" size="sm" className="text-sm" />
+              <Badge label={selectedPlace.short_address} color="primary" size="sm" className="text-sm" />
               <span>앞으로 배달돼요!</span>
             </div>
           ) : (
             <span>배달 받을 위치를 선택해주세요!</span>
           )}
-          <div>
-            <ArrowGo />
-          </div>
         </div>
       </div>
 
-      <div className="mt-[1.813rem]">
+      <div className="mt-[1.813rem] w-full">
         <div className="text-primary-500 leading-[160%] font-semibold">배달주소</div>
         <div className="pb-3 text-xs leading-[160%]">배달 받을 위치를 선택해주세요!</div>
-        <div className="flex w-[342px] flex-col gap-3">
-          {campusList.map((campus) => {
-            const isSelected = selectedCampusCategory === campus.name;
-            return (
-              <div
-                key={campus.name}
-                className={twMerge(
-                  clsx(
-                    'box-content flex flex-col items-center bg-white',
-                    isSelected && 'w-full overflow-hidden rounded-lg border border-neutral-300',
-                    !isSelected && 'rounded-lg border border-neutral-300',
-                  ),
-                )}
-              >
-                <div className="flex w-full flex-col items-center gap-2">
-                  <button
-                    type="button"
-                    className="flex h-14 w-full items-center justify-between p-4 font-semibold transition-colors"
-                    onClick={() => {
-                      if (isSelected) {
-                        setSelectedCampusCategory(null);
-                        return;
-                      }
-                      setSelectedCampusCategory(campus.name);
-                    }}
-                  >
-                    <div className="flex items-center gap-2">
-                      <span className="text-primary-500 text-sm">{campus.name}</span>
-                      {campus.icon && <campus.icon />}
-                    </div>
-                    <span className={clsx('transition-transform', isSelected && 'rotate-180')}>
-                      <ChevronDown />
-                    </span>
-                  </button>
-                </div>
-                {isSelected && (
-                  <>
-                    <div className="h-[1px] w-[310px] bg-[#eee]" />
-                    <div className="mx-auto flex w-full flex-wrap justify-center gap-x-3 gap-y-2 bg-white px-4 py-4 break-all">
-                      {campus.building.map((building) => (
-                        <Button
-                          key={building}
-                          color={selectedCampusBuilding === building ? 'primary' : 'gray'}
-                          size="sm"
-                          onClick={() => setSelectedCampusBuilding(building)}
-                        >
-                          {building}
-                        </Button>
-                      ))}
-                    </div>
-                  </>
-                )}
-              </div>
-            );
-          })}
+        <div className="flex flex-col gap-3">
+          <AddressTypeDropdown type="DORMITORY" icon={<NightShelter />} addressState={addressState} />
+          <AddressTypeDropdown type="COLLEGE_BUILDING" icon={<Building />} addressState={addressState} />
+          <AddressTypeDropdown type="ETC" icon={<Building />} addressState={addressState} />
         </div>
       </div>
 
-      <div className="mt-[1.813rem]">
+      <div className="my-[1.813rem] w-full">
         <div className="text-primary-500 pb-2 font-semibold">배달기사님에게</div>
         <button
           type="button"
           onClick={openBottomModal}
-          className="flex w-[21.375rem] items-center justify-between rounded-sm border border-neutral-300 bg-white px-4 py-3 text-sm text-neutral-400"
+          className="flex w-full items-center justify-between rounded-sm border border-neutral-300 bg-white px-4 py-3 text-sm text-neutral-400"
         >
           {requestLabel()}
           <div className="pointer-events-none">
@@ -186,17 +123,9 @@ export default function Campus() {
           </div>
         </button>
       </div>
-      <Button className="mt-[18.188rem] h-[2.875rem] w-[21.375rem]" onClick={openModal}>
+      <Button className="mt-auto h-[2.875rem] w-full" onClick={handleSelectAddress}>
         주소 선택
       </Button>
-      <Modal isOpen={modalIsOpen} onClose={closeModal}>
-        <ModalContent>정확한 상세 주소를 입력해주세요.</ModalContent>
-        <ModalFooter>
-          <Button onClick={closeModal} className="h-12 w-[16rem]">
-            확인
-          </Button>
-        </ModalFooter>
-      </Modal>
       <BottomModal isOpen={bottomModalIsOpen} onClose={closeBottomModal}>
         <BottomModalHeader>
           <div className="text-primary-500 font-semibold">배달기사님에게</div>
@@ -205,7 +134,7 @@ export default function Campus() {
           </button>
         </BottomModalHeader>
         <BottomModalContent className="px-6">
-          <form className="flex w-[20.375rem] flex-col gap-2">
+          <form className="flex w-full flex-col gap-2">
             {DetailRequest.map((detail, index) => (
               <label
                 key={index}
@@ -253,7 +182,7 @@ export default function Campus() {
               />
             )}
           </form>
-          <Button onClick={handleSubmitRequest} className="h-[2.875rem] w-[20.375rem]">
+          <Button onClick={handleSubmitRequest} className="h-[2.875rem] w-full">
             선택하기
           </Button>
         </BottomModalContent>

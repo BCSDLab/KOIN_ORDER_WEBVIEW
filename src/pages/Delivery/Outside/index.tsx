@@ -6,6 +6,7 @@ import useRoadNameAddress from '../hooks/useRoadNameAddress';
 import InfoIcon from '@/assets/Common/info-icon.svg';
 import SearchIcon from '@/assets/Common/search-icon.svg';
 import BCSDLogoWithMagnifyIcon from '@/assets/Payment/bcsd-logo-with-magnify.svg';
+import Button from '@/components/UI/Button';
 
 export default function DeliveryOutside() {
   const navigate = useNavigate();
@@ -23,7 +24,7 @@ export default function DeliveryOutside() {
   };
   return (
     <div className="mx-6 mt-4 flex min-h-[calc(100dvh-4.75rem)] flex-col items-center justify-between">
-      <div className="w-full">
+      <div className="mb-[1.813rem] w-full">
         <span className="text-primary-500 text-[16px] font-semibold">배달주소</span>
         <div className="shadow-1 my-2 flex h-10 items-center gap-2 rounded-xl border-[1px] border-neutral-400 px-3 py-2">
           <SearchIcon />
@@ -102,12 +103,13 @@ export default function DeliveryOutside() {
           </div>
         )}
       </div>
-      <button
-        className="bg-primary-500 my-9 h-12 w-full rounded-lg text-[15px] leading-[1.6] font-semibold text-white"
+      <Button
+        fullWidth
+        className="mt-auto h-[2.875rem]"
         onClick={() => navigate('/delivery/outside/detail', { state: { address } })}
       >
         주소 선택
-      </button>
+      </Button>
     </div>
   );
 }
