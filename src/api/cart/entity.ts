@@ -29,3 +29,10 @@ export interface CartResponse {
   total_amount: number;
   final_payment_amount: number;
 }
+
+export interface CartSummaryResponse {
+  orderable_shop_id: number;
+  shop_mininum_order_amount: number;
+  cart_items_amount: number;
+  is_available: boolean;
+}
