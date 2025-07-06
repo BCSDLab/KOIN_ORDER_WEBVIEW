@@ -10,7 +10,7 @@ export default function PaymentFailModal({ isOpen, onClose, errorMessage }: Paym
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalContent>
-        <div>{errorMessage}</div>
+        <div className="text-center">{errorMessage}</div>
         <Button onClick={onClose} size="lg" fullWidth>
           확인
         </Button>

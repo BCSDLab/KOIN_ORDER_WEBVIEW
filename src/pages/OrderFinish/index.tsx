@@ -19,13 +19,15 @@ import useBooleanState from '@/util/hooks/useBooleanState';
 export default function OrderFinish() {
   type OrderKind = 'order' | 'preparation' | 'delivery';
   const [searchParams] = useSearchParams();
+  const orderType = searchParams.get('orderType');
+  const entryPoint = searchParams.get('entryPoint');
   const orderId = searchParams.get('orderId');
   const paymentKey = searchParams.get('paymentKey');
   const amount = searchParams.get('amount');
 
   const navigate = useNavigate();
 
-  const { mutateAsync: confirmPayments, isPending } = useConfirmPayments();
+  const { mutateAsync: confirmPayments, isPending } = useConfirmPayments(orderType!);
 
   const [orderKind, setOrderKind] = useState<OrderKind>('order');
 
@@ -37,7 +39,9 @@ export default function OrderFinish() {
       await confirmPayments({ order_id: orderId!, payment_key: paymentKey!, amount: Number(amount) });
     };
 
-    confirmPayment();
+    if (entryPoint === 'payment') {
+      confirmPayment();
+    }
   }, [confirmPayments, orderId, paymentKey]);
 
   // 로딩 로띠 추가 예정

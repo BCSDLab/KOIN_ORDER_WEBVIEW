@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { TossPaymentsWidgets } from '@tosspayments/tosspayments-sdk';
 import clsx from 'clsx';
-import { useLocation, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import Agreement from './components/Agreement';
 import ContactModal from './components/ContactModal';
 import DeliveryAddressSection from './components/DeliveryAddressSection';
@@ -21,7 +21,6 @@ import Button from '@/components/UI/Button';
 import useBooleanState from '@/util/hooks/useBooleanState';
 
 export default function Payment() {
-  const location = useLocation();
   const [searchParams] = useSearchParams();
   const [isContactModalOpen, openContactModal, closeContactModal] = useBooleanState(false);
   const [isStoreRequestModalOpen, openStoreRequestModal, closeStoreRequestModal] = useBooleanState(false);
@@ -35,6 +34,7 @@ export default function Payment() {
   const [widgets, setWidgets] = useState<TossPaymentsWidgets | null>(null);
 
   const orderType = searchParams.get('orderType');
+  const message = searchParams.get('message');
   const isDelivery = orderType === 'delivery';
 
   const { data: cart } = useCart(isDelivery ? 'DELIVERY' : 'TAKE_OUT');
@@ -69,8 +69,8 @@ export default function Payment() {
       await widgets!.requestPayment({
         orderId: order.order_id,
         orderName: orderName,
-        successUrl: window.location.origin + '/result',
-        failUrl: window.location.origin + '/payment',
+        successUrl: window.location.origin + `/result?orderType=${orderType}&entryPoint=payment`,
+        failUrl: window.location.origin + `/payment?orderType=${orderType}`,
       });
     } catch (error) {
       console.error(error);
@@ -78,10 +78,10 @@ export default function Payment() {
   };
 
   useEffect(() => {
-    if (location.state?.error) {
+    if (message) {
       openPaymentFailModal();
     }
-  }, [location.state?.error]);
+  }, [message]);
 
   return (
     <div className="mx-6 mt-4">
@@ -178,7 +178,7 @@ export default function Payment() {
       <PaymentFailModal
         isOpen={isPaymentFailModalOpen}
         onClose={closePaymentFailModal}
-        errorMessage={location.state?.error}
+        errorMessage={message || '알 수 없는 오류가 발생했습니다.'}
       />
     </div>
   );
