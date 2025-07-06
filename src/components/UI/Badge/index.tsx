@@ -4,7 +4,7 @@ import { twMerge } from 'tailwind-merge';
 
 interface BadgeProps extends HTMLAttributes<HTMLDivElement> {
   variant?: keyof typeof COLOR;
-  color?: 'primary' | 'primaryLight' | 'neutral';
+  color?: 'primary' | 'primaryLight' | 'neutral' | 'white';
   size?: 'sm' | 'md' | 'lg';
   label?: string;
   startIcon?: ReactElement<SVGProps<SVGSVGElement>>;
@@ -22,6 +22,11 @@ const COLOR: Record<string, Record<string, string>> = {
   },
   neutral: {
     default: 'bg-white text-neutral-500 border border-neutral-300',
+    outlined: 'bg-white text-neutral-400',
+  },
+  white: {
+    default: 'bg-white text-primary-300 border border-white',
+    outlined: 'bg-white text-primary-500 border border-primary-500',
   },
 };
 
