@@ -49,7 +49,7 @@ export default function Payment() {
     if (isDelivery) {
       order = await temporaryDelivery({
         address: '추후 추가해야 함',
-        phone_number: contact || '01012345678',
+        phone_number: contact,
         to_owner: request,
         to_rider: '추후 추가해야 함',
         total_menu_price: cart!.items_amount,
@@ -58,7 +58,7 @@ export default function Payment() {
       });
     } else {
       order = await temporaryTakeout({
-        phoneNumber: contact || '01012345678',
+        phoneNumber: contact,
         toOwner: request,
         totalMenuPrice: cart!.items_amount,
         totalAmount: cart!.total_amount,

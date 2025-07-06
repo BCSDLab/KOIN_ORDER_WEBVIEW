@@ -8,7 +8,7 @@ export default function useCancelPayment(paymentKey: string) {
   return useMutation({
     mutationFn: (body: CancelPaymentRequest) => cancelPayment(paymentKey, body),
     onSuccess: () => {
-      navigate('/메인 페이지로 이동'); // 명세 바뀔 수도 있음
+      navigate('/메인 페이지로 이동');
       // 추기로 '주문이 취소되었습니다' 토스트 띄워야 됨
     },
   });
