@@ -8,7 +8,14 @@ export interface DeliveryTemporaryRequest {
   total_amount: number;
 }
 
-export interface DeliveryTemporaryResponse {
+export interface TakeoutTemporaryRequest {
+  phoneNumber: string;
+  toOwner: string;
+  totalMenuPrice: number;
+  totalAmount: number;
+}
+
+export interface TemporaryResponse {
   order_id: string;
 }
 
