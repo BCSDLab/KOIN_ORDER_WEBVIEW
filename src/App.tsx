@@ -4,7 +4,7 @@ import Cart from './pages/Cart';
 import DeliveryOutside from './pages/Delivery/Outside';
 import OrderCancel from './pages/OrderFinish/OrderCancel';
 import ShopDetail from './pages/shop';
-import { requestTokensFromNative, setTokensFromNative } from './util/ts/bridge';
+import { isNative, requestTokensFromNative, setTokensFromNative } from './util/ts/bridge';
 import AppLayout from '@/components/Layout';
 import Campus from '@/pages/Delivery/Campus';
 import DetailAddress from '@/pages/Delivery/Outside/DetailAddress';
@@ -14,19 +14,13 @@ import Payment from '@/pages/Payment';
 export default function App() {
   useEffect(() => {
     const initializeTokens = async () => {
-      const { accessToken, refreshToken } = await requestTokensFromNative();
-      if (accessToken || refreshToken) {
-        setTokensFromNative({ accessToken, refreshToken });
+      if (isNative()) {
+        const tokens = await requestTokensFromNative();
+        setTokensFromNative(tokens);
       }
     };
 
-    const isIOS = !!window.webkit?.messageHandlers;
-    const isAndroid = !!window.Android;
-
-    if (typeof window !== 'undefined' && (isIOS || isAndroid)) {
-      window.setTokens = setTokensFromNative;
-      initializeTokens();
-    }
+    initializeTokens();
   }, []);
 
   return (
@@ -41,9 +35,9 @@ export default function App() {
           </Route>
           <Route path="payment" element={<Payment />} />
           <Route path="shop-detail/:id" element={<ShopDetail />} />
-          <Route path="orderCancel" element={<OrderCancel />}></Route>
+          <Route path="orderCancel" element={<OrderCancel />} />
+          <Route path="result" element={<OrderFinish />} />
         </Route>
-        <Route path="result" element={<OrderFinish />} />
       </Routes>
     </BrowserRouter>
   );

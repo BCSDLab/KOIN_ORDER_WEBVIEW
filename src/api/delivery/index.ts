@@ -1,5 +1,6 @@
 import { apiClient } from '..';
-import { AddressSearchRequest, AddressSearchResponse } from '@/api/delivery/entity';
+import { AddressSearchRequest, AddressSearchResponse } from './entity';
+import { CampusDeliveryAddressRequest, CampusDeliveryAddressResponse } from '@/types/api/deliveryCampus';
 import { PostAddressObjType } from '@/stores/useOrderStore';
 
 const getToken = () => localStorage.getItem('token');
@@ -12,6 +13,17 @@ export const getRoadNameAddress = async ({ keyword, currentPage, countPerPage }:
       countPerPage,
     },
   });
+
+  return response;
+};
+
+export const getCampusDeliveryAddress = async ({ filter }: CampusDeliveryAddressRequest) => {
+  const response = await apiClient.get<CampusDeliveryAddressResponse>('address/delivery/campus', {
+    params: {
+      filter,
+    },
+  });
+
   return response;
 };
 

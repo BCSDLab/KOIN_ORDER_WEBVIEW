@@ -16,6 +16,8 @@
   --color-neutral-800: #000000;
 
   --shadow-1: 0px 1px 1px 0px rgba(0, 0, 0, 0.02), 0px 2px 4px 0px rgba(0, 0, 0, 0.04);
+  --shadow-2: 0px 4px 10px 0px rgba(0, 0, 0, 0.08), 0px 1px 4px 0px rgba(0, 0, 0, 0.04);
+  --shadow-4: 0px 24px 60px 0px rgba(0, 0, 0, 0.12), 0px 8px 20px 0px rgba(0, 0, 0, 0.06);
 }
 
 :root {
