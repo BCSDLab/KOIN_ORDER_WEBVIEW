@@ -5,6 +5,7 @@ import { ConfirmPaymentsResponse } from '@/api/payments/entity';
 import CloseIcon from '@/assets/Main/close-icon.svg';
 import CallIcon from '@/assets/OrderFinish/call-icon.svg';
 import Motorcycle from '@/assets/OrderFinish/motorcycle-icon.svg';
+import PackageIcon from '@/assets/OrderFinish/package.svg';
 import Receipt from '@/assets/OrderFinish/receipt-icon.svg';
 import ShoppingCart from '@/assets/OrderFinish/shopping-cart-icon.svg';
 import Skillet from '@/assets/OrderFinish/skillet-icon.svg';
@@ -35,6 +36,8 @@ export default function OrderFinish() {
 
   const [isDeliveryBottomModalOpen, , closeDeliveryBottomModal] = useBooleanState(false);
   const [isCallBottomModalOpen, openCallBottomModal, closeCallBottomModal] = useBooleanState(false);
+
+  const isDelivery = orderType === 'delivery';
 
   useEffect(() => {
     const confirmPayment = async () => {
@@ -86,7 +89,9 @@ export default function OrderFinish() {
         <div className="flex flex-row justify-between px-6 pt-4 pb-1.5">
           <div className="is-text-purple">주문확인</div>
           <div className={orderKind === 'order' ? 'is-text-gray' : 'is-text-purple'}>준비중</div>
-          <div className={orderKind !== 'delivery' ? 'is-text-gray' : 'is-text-purple'}>배달완료</div>
+          <div className={orderKind !== 'delivery' ? 'is-text-gray' : 'is-text-purple'}>
+            {isDelivery ? '배달' : '수령'}완료
+          </div>
         </div>
         <div className="flex flex-row justify-center">
           <div className="is-icon-purple">
@@ -106,28 +111,30 @@ export default function OrderFinish() {
             className={`h-[5px] w-[calc((100vw-184px)/8*3)] self-center ${orderKind !== 'delivery' ? 'bg-neutral-400' : 'bg-primary-300'}`}
           ></div>
           <div className={orderKind !== 'delivery' ? 'is-icon-gray' : 'is-icon-purple'}>
-            <Motorcycle />
+            {isDelivery ? <Motorcycle /> : <PackageIcon />}
           </div>
         </div>
       </div>
       <div className="mt-10 px-6">
-        <div className="text-primary-500 mb-5 text-lg font-semibold">배달정보</div>
+        <div className="text-primary-500 mb-5 text-lg font-semibold">{isDelivery ? '배달' : '방문'}정보</div>
         <div className="shadow-1 flex flex-col gap-3 rounded-2xl border border-white bg-white px-6 py-4 text-sm leading-[160%] font-semibold">
           <div>
-            배달주소
+            {isDelivery ? '배달' : '가게'}주소
             <div className="border-b border-neutral-200 pb-3 font-normal text-neutral-500">
-              {paymentResponse?.delivery_address}
+              {isDelivery ? paymentResponse?.delivery_address : paymentResponse?.shop_address}
             </div>
           </div>
           <div>
             사장님에게
-            <div className="border-b border-neutral-200 pb-3 font-normal text-neutral-500">
+            <div className={`${isDelivery && 'border-b border-neutral-200 pb-3'} font-normal text-neutral-500`}>
               {paymentResponse?.to_owner}
             </div>
           </div>
-          <div>
-            배달기사님에게<div className="font-normal text-neutral-500">{paymentResponse?.to_rider}</div>
-          </div>
+          {isDelivery && (
+            <div>
+              배달기사님에게<div className="font-normal text-neutral-500">{paymentResponse?.to_rider}</div>
+            </div>
+          )}
         </div>
         <div className="text-primary-500 my-5 text-lg font-semibold">주문정보</div>
         <div className="shadow-1 mb-16 flex flex-col gap-3 rounded-2xl border border-white bg-white px-6 py-4 text-sm leading-[160%] font-semibold">
