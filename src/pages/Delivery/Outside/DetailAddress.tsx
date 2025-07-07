@@ -1,8 +1,6 @@
 import { useState } from 'react';
+import clsx from 'clsx';
 import { useLocation, useNavigate } from 'react-router-dom';
-import useMarker from '../hooks/useMarker';
-import useNaverGeocode from '../hooks/useNaverGeocode';
-import useNaverMap from '../hooks/useNaverMap';
 import CloseIcon from '@/assets/Main/close-icon.svg';
 import ArrowDown from '@/assets/Payment/arrow-down-icon.svg';
 import ArrowGo from '@/assets/Payment/arrow-go-icon.svg';
@@ -13,6 +11,10 @@ import BottomModal, {
 } from '@/components/UI/BottomModal/BottomModal';
 import Button from '@/components/UI/Button';
 import Modal, { ModalContent } from '@/components/UI/CenterModal/Modal';
+import useMarker from '@/pages/Delivery/hooks/useMarker';
+import useNaverGeocode from '@/pages/Delivery/hooks/useNaverGeocode';
+import useNaverMap from '@/pages/Delivery/hooks/useNaverMap';
+import useUserDeliveryAddress from '@/pages/Delivery/hooks/useUserDeliveryAddress';
 import { useOrderStore } from '@/stores/useOrderStore';
 import useBooleanState from '@/util/hooks/useBooleanState';
 
@@ -25,10 +27,12 @@ const DetailRequest: string[] = [
 ];
 
 export default function DetailAddress() {
-  const { setMainAddress, setDeliveryRequest, setDetailAddress } = useOrderStore();
+  const { postAddress, setDeliveryRequest, setPostAddress } = useOrderStore();
+
+  const { mutate } = useUserDeliveryAddress();
 
   const location = useLocation();
-  const address = location.state?.address || '';
+  const address = location.state?.roadAddress || '';
 
   const navigate = useNavigate();
 
@@ -78,9 +82,18 @@ export default function DetailAddress() {
 
   const handleClickSaveAddress = () => {
     if (detailAddressValue.length === 0) return openModal();
+
     DeliveryRequest();
-    setMainAddress(address);
-    setDetailAddress(detailAddressValue);
+
+    const updatedPostAddress = {
+      ...postAddress,
+      detail_address: detailAddressValue,
+      full_address: `${address} ${detailAddressValue}`,
+    };
+
+    setPostAddress(updatedPostAddress);
+    //navigate('/payment');
+    mutate(updatedPostAddress);
   };
 
   const backSetAddressPage = () => {
@@ -115,7 +128,10 @@ export default function DetailAddress() {
         <button
           type="button"
           onClick={openDeliveryBottomModal}
-          className="flex w-full items-center justify-between rounded-sm border border-neutral-300 bg-white px-4 py-3 text-sm text-neutral-400"
+          className={clsx(
+            'flex w-full items-center justify-between rounded-sm border border-neutral-300 bg-white px-4 py-3 text-sm',
+            requestLabel() === '상세 요청사항을 입력해주세요.' ? 'text-neutral-400' : 'text-black',
+          )}
         >
           {requestLabel()}
           <div className="pointer-events-none">

@@ -2,18 +2,24 @@ import { useState } from 'react';
 import clsx from 'clsx';
 import { useNavigate } from 'react-router-dom';
 import { twMerge } from 'tailwind-merge';
-import useRoadNameAddress from '../hooks/useRoadNameAddress';
+import { Juso } from '@/api/delivery/entity';
 import InfoIcon from '@/assets/Common/info-icon.svg';
 import SearchIcon from '@/assets/Common/search-icon.svg';
 import BCSDLogoWithMagnifyIcon from '@/assets/Payment/bcsd-logo-with-magnify.svg';
 import Button from '@/components/UI/Button';
+import useRoadNameAddress from '@/pages/Delivery/hooks/useRoadNameAddress';
+import { useOrderStore } from '@/stores/useOrderStore';
 
 export default function DeliveryOutside() {
+  const { setPostAddress } = useOrderStore();
+
   const navigate = useNavigate();
   const [searchKeyword, setSearchKeyword] = useState<string>('');
-  const [address, setAddress] = useState<string>('');
+  const [address, setAddress] = useState<Juso | null>(null);
 
   const { data, refetch, isSuccess, isFetched } = useRoadNameAddress(searchKeyword);
+
+  const roadAddress = address?.road_address;
 
   const handleAddressSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
@@ -22,6 +28,7 @@ export default function DeliveryOutside() {
       refetch();
     }
   };
+
   return (
     <div className="mx-6 mt-4 flex min-h-[calc(100dvh-4.75rem)] flex-col items-center justify-between">
       <div className="mb-[1.813rem] w-full">
@@ -77,11 +84,7 @@ export default function DeliveryOutside() {
                 }),
               );
               return (
-                <button
-                  key={address.eng_address}
-                  className={className}
-                  onClick={() => setAddress(address.road_address)}
-                >
+                <button key={address.eng_address} className={className} onClick={() => setAddress(address)}>
                   <div className="text-sm leading-[1.6] font-medium text-neutral-800">
                     {address.bd_nm === '' ? address.road_address : address.bd_nm}
                   </div>
@@ -106,7 +109,21 @@ export default function DeliveryOutside() {
       <Button
         fullWidth
         className="mt-auto h-[2.875rem]"
-        onClick={() => navigate('/delivery/outside/detail', { state: { address } })}
+        onClick={() => {
+          if (address) {
+            setPostAddress({
+              zip_number: address.zip_no,
+              si_do: address.si_nm,
+              si_gun_gu: address.sgg_nm,
+              eup_myeon_dong: address.emd_nm,
+              road: address.rn,
+              building: address.bd_nm,
+              detail_address: '',
+              full_address: '',
+            });
+            navigate('/delivery/outside/detail', { state: { roadAddress } });
+          }
+        }}
       >
         주소 선택
       </Button>

@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import clsx from 'clsx';
+import { useSearchParams } from 'react-router-dom';
+import useCancelPayment from './hooks/useCancelPayment';
 import CheckIcon from '@/assets/OrderFinish/check-icon.svg';
 import Button from '@/components/UI/Button';
 import Modal, { ModalContent } from '@/components/UI/CenterModal/Modal';
 import useBooleanState from '@/util/hooks/useBooleanState';
-import { closeWebviewPage } from '@/util/ts/bridge';
 
 const orderCancelReasons: string[] = [
   '단순 변심이에요',
@@ -15,7 +16,11 @@ const orderCancelReasons: string[] = [
 ];
 
 export default function OrderCancel() {
+  const [searchParams] = useSearchParams();
+  const paymentKey = searchParams.get('paymentKey');
+
   const [isCancelModalOpen, openCancelModal, closeCancelModal] = useBooleanState(false);
+  const { mutate: cancelPayment } = useCancelPayment(paymentKey!);
 
   const [selectedCancelReason, setSelectedCancelReason] = useState<string>('');
   const [customCancelReason, setCustomCancelReason] = useState<string>('');
@@ -33,6 +38,10 @@ export default function OrderCancel() {
     if (selectedCancelReason !== '기타') return;
     if (e.target.value === '' && customCancelReason.length === 0) return setCustomCancelReason('');
     setCustomCancelReason(e.target.value);
+  };
+
+  const handleClickMoveMainPage = () => {
+    cancelPayment({ cancel_reason: selectedCancelReason === '기타' ? customCancelReason : selectedCancelReason });
   };
 
   const handleClickSubmitReason = () => {
@@ -109,7 +118,7 @@ export default function OrderCancel() {
             >
               아니오
             </Button>
-            <Button onClick={closeWebviewPage} className="w-[7.125rem] font-medium">
+            <Button onClick={handleClickMoveMainPage} className="w-[7.125rem] font-medium">
               예
             </Button>
           </div>
