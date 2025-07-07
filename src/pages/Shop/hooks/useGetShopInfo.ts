@@ -24,7 +24,7 @@ export const useGetShopMenuGroups = (orderableShopId: number) => {
 
 export const useGetShopMenuDetail = (orderableShopId: number, orderableShopMenuId: number) => {
   return useSuspenseQuery({
-    queryKey: ['shopMenuGroups', orderableShopId],
+    queryKey: ['shopMenuDetail', orderableShopId],
     queryFn: () => getShopMenuDetail({ orderableShopId, orderableShopMenuId }),
   });
 };
