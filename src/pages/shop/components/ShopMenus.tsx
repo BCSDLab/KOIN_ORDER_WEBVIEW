@@ -9,7 +9,7 @@ interface ShopMenusProps {
 }
 
 export default function ShopMenus({ id, menuGroupRefs, handleChangeMenu, isAutoScrolling }: ShopMenusProps) {
-  const { data: shopInfoes } = useGetShopInfo(Number(id));
+  const { data: shopInfo } = useGetShopInfo(Number(id));
 
   const visibleMap = useRef<Record<string, boolean>>({});
 
@@ -55,18 +55,18 @@ export default function ShopMenus({ id, menuGroupRefs, handleChangeMenu, isAutoS
 
   return (
     <div id="shop-menus-container" className="flex flex-col items-center gap-3 px-6">
-      {shopInfoes.map((shopInfo) => (
+      {shopInfo.map((shop) => (
         <div
-          key={shopInfo.menu_group_id}
+          key={shop.menu_group_id}
           className="flex w-full scroll-mt-[124px] flex-col gap-3"
           ref={(el) => {
-            menuGroupRefs.current[shopInfo.menu_group_name] = el;
+            menuGroupRefs.current[shop.menu_group_name] = el;
           }}
-          id={shopInfo.menu_group_name}
+          id={shop.menu_group_name}
         >
-          <span className="ml-1 text-xl leading-[1.6] font-bold">{shopInfo.menu_group_name}</span>
+          <span className="ml-1 text-xl leading-[1.6] font-bold">{shop.menu_group_name}</span>
           <div className="shadow-1 rounded-3xl bg-white">
-            {shopInfo.menus.map((menu, idx) => (
+            {shop.menus.map((menu, idx) => (
               <div
                 className={`flex w-full items-center justify-between py-3 pr-3 pl-4 ${idx !== 0 ? 'border-t border-neutral-300' : ''}`}
                 key={menu.id}
