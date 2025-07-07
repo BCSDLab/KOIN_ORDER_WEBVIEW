@@ -7,6 +7,7 @@ import {
   ShopInfoParams,
   ShopInfoSummaryResponse,
   ShopMenuGroupsResponse,
+  ShopMenuDetailResponse,
 } from './entity';
 
 export const getShopDetailInfo = async ({ orderableShopId }: ShopDetailInfoParams) => {
@@ -31,5 +32,12 @@ export const getShopInfoSummary = async ({ orderableShopId }: ShopInfoParams) =>
 
 export const getShopMenuGroups = async ({ orderableShopId }: ShopInfoParams) => {
   const response = await apiClient.get<ShopMenuGroupsResponse>(`order/shop/${orderableShopId}/menus/groups`);
+  return response;
+};
+
+export const getShopMenuDetail = async ({ orderableShopId, orderableShopMenuId }: ShopInfoParams) => {
+  const response = await apiClient.get<ShopMenuDetailResponse>(
+    `order/shop/${orderableShopId}/menus/${orderableShopMenuId}`,
+  );
   return response;
 };
