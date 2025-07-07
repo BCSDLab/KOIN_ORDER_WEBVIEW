@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { useGetShopInfo } from '../hooks/useGetShopInfo';
+import SoldOutIcon from '@/assets/Shop/sold-out-icon.svg';
 
 interface ShopMenusProps {
   id: string;
@@ -90,7 +91,19 @@ export default function ShopMenus({ id, menuGroupRefs, handleChangeMenu, isAutoS
                     );
                   })}
                 </div>
-                <img src={menu.thumbnail_image} alt={menu.name} className="h-20 w-20 self-baseline-last object-cover" />
+                <div className="relative h-20 w-20 flex-shrink-0">
+                  {menu.is_sold_out && (
+                    <div className="absolute inset-0 flex flex-col items-center justify-center rounded-md bg-neutral-800 opacity-70">
+                      <SoldOutIcon />
+                      <span className="text-sm leading-[1.6] font-semibold text-white">품절</span>
+                    </div>
+                  )}
+                  <img
+                    src={menu.thumbnail_image}
+                    alt={menu.name}
+                    className="h-20 w-20 self-baseline-last rounded-md object-cover"
+                  />
+                </div>
               </div>
             ))}
           </div>

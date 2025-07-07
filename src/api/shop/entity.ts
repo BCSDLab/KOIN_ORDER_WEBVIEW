@@ -58,6 +58,7 @@ interface Menu {
   name: string;
   description: string;
   thumbnail_image: string;
+  is_sold_out: boolean;
   prices: Price[];
 }
 
