@@ -81,7 +81,7 @@ export default function Cart() {
         )}
       </div>
 
-      <button className="flex items-center gap-1.5" onClick={() => navigate('가게 상세 페이지로 이동')}>
+      <button className="flex items-center gap-1.5" onClick={() => navigate(`/shop/${cartInfo.orderable_shop_id}`)}>
         <img src={cartInfo.shop_thumbnail_image_url} className="h-7.5 w-7.5 rounded-[5px]" />
         <div className="text-lg leading-[160%] font-semibold">{cartInfo.shop_name}</div>
         <RightArrow />
@@ -108,7 +108,7 @@ export default function Cart() {
           color="neutral"
           startIcon={<PrimaryPlus />}
           className="mt-3 gap-2.5 border-0 py-[11px] leading-[160%]"
-          onClick={() => navigate('가게 상세 페이지로 이동')}
+          onClick={() => navigate('메뉴 담기 페이지로 이동')}
         >
           더 담으러 가기
         </Button>
