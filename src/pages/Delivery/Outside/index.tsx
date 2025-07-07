@@ -2,13 +2,16 @@ import { useState } from 'react';
 import clsx from 'clsx';
 import { useNavigate } from 'react-router-dom';
 import { twMerge } from 'tailwind-merge';
+import { useOffCampusDeliveryValidate } from '../hooks/useOffCampusDeliveryValidate';
 import { Juso } from '@/api/delivery/entity';
 import InfoIcon from '@/assets/Common/info-icon.svg';
 import SearchIcon from '@/assets/Common/search-icon.svg';
 import BCSDLogoWithMagnifyIcon from '@/assets/Payment/bcsd-logo-with-magnify.svg';
 import Button from '@/components/UI/Button';
+import Modal from '@/components/UI/CenterModal/Modal';
 import useRoadNameAddress from '@/pages/Delivery/hooks/useRoadNameAddress';
 import { useOrderStore } from '@/stores/useOrderStore';
+import useBooleanState from '@/util/hooks/useBooleanState';
 
 export default function DeliveryOutside() {
   const { setPostAddress } = useOrderStore();
@@ -16,8 +19,10 @@ export default function DeliveryOutside() {
   const navigate = useNavigate();
   const [searchKeyword, setSearchKeyword] = useState<string>('');
   const [address, setAddress] = useState<Juso | null>(null);
+  const [isModalOpen, openModal, closeModal] = useBooleanState(false);
 
   const { data, refetch, isSuccess, isFetched } = useRoadNameAddress(searchKeyword);
+  const { mutate } = useOffCampusDeliveryValidate();
 
   const roadAddress = address?.road_address;
 
@@ -26,6 +31,36 @@ export default function DeliveryOutside() {
       e.preventDefault();
       setSearchKeyword(e.currentTarget.value);
       refetch();
+    }
+  };
+
+  const handleAddressSelect = (address: Juso) => {
+    if (address) {
+      mutate(
+        {
+          si_do: address.si_nm,
+          si_gun_gu: address.sgg_nm,
+          eup_myeon_dong: address.emd_nm,
+        },
+        {
+          onSuccess: () => {
+            setPostAddress({
+              zip_number: address.zip_no,
+              si_do: address.si_nm,
+              si_gun_gu: address.sgg_nm,
+              eup_myeon_dong: address.emd_nm,
+              road: address.rn,
+              building: address.bd_nm,
+              detail_address: '',
+              full_address: '',
+            });
+            navigate('/delivery/outside/detail', { state: { roadAddress } });
+          },
+          onError: () => {
+            openModal();
+          },
+        },
+      );
     }
   };
 
@@ -108,25 +143,22 @@ export default function DeliveryOutside() {
       </div>
       <Button
         fullWidth
-        className="mt-auto h-[2.875rem]"
-        onClick={() => {
-          if (address) {
-            setPostAddress({
-              zip_number: address.zip_no,
-              si_do: address.si_nm,
-              si_gun_gu: address.sgg_nm,
-              eup_myeon_dong: address.emd_nm,
-              road: address.rn,
-              building: address.bd_nm,
-              detail_address: '',
-              full_address: '',
-            });
-            navigate('/delivery/outside/detail', { state: { roadAddress } });
-          }
-        }}
+        className="mt-auto mb-5 h-[2.875rem]"
+        onClick={() => handleAddressSelect(address!)}
+        disabled={!address}
       >
         주소 선택
       </Button>
+      {isModalOpen && (
+        <Modal isOpen={isModalOpen} onClose={closeModal}>
+          <div className="flex h-36 w-full flex-col items-center gap-6 px-8 py-6">
+            <p className="text-[15px] leading-[1.6] font-normal text-neutral-600">배달이 불가능한 지역이에요.</p>
+            <Button className="h-12 w-[230px]" color="primary" onClick={closeModal}>
+              확인
+            </Button>
+          </div>
+        </Modal>
+      )}
     </div>
   );
 }
