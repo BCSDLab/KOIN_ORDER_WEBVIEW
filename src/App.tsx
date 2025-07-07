@@ -39,7 +39,6 @@ export default function App() {
           <Route path="orderCancel" element={<OrderCancel />} />
           <Route path="result" element={<OrderFinish />} />
         </Route>
-        <Route path="result" element={<OrderFinish />} />
         <Route path="shop/:id" element={<Shop />} />
       </Routes>
     </BrowserRouter>
