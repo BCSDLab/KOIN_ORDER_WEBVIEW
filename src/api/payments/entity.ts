@@ -8,7 +8,14 @@ export interface DeliveryTemporaryRequest {
   total_amount: number;
 }
 
-export interface DeliveryTemporaryResponse {
+export interface TakeoutTemporaryRequest {
+  phoneNumber: string;
+  toOwner: string;
+  totalMenuPrice: number;
+  totalAmount: number;
+}
+
+export interface TemporaryResponse {
   order_id: string;
 }
 
@@ -24,4 +31,32 @@ export interface ConfirmPaymentsResponse {
   requested_at: string;
   approved_at: string;
   payment_method: string;
+  delivery_address: string;
+  shop_address: string;
+  to_owner: string;
+  to_rider: string;
+  shop_name: string;
+  menus: {
+    name: string;
+    quantity: number;
+    options: {
+      option_group_name: string;
+      option_name: string;
+      option_price: number;
+    }[];
+  }[];
+  order_type: 'DELIVERY' | 'TAKE_OUT';
+}
+
+export interface CancelPaymentRequest {
+  cancel_reason: string;
+}
+
+export interface CancelPaymentResponse {
+  payment_cancels: {
+    id: number;
+    cancel_reason: string;
+    cancel_amount: number;
+    canceled_at: string;
+  }[];
 }
