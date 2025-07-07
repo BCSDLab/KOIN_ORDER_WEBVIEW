@@ -52,6 +52,7 @@ interface Price {
   name: string | null;
   price: number;
 }
+
 interface Menu {
   id: number;
   name: string;
