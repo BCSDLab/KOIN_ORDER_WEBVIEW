@@ -66,6 +66,11 @@ export interface ShopInfoResponse {
   menus: Menu[];
 }
 
+interface Image {
+  image_url: string;
+  is_thumbnail: boolean;
+}
+
 export interface ShopInfoSummaryResponse {
   shop_id: number;
   orderable_shop_id: number;
@@ -80,6 +85,7 @@ export interface ShopInfoSummaryResponse {
   review_count: number;
   minimum_delivery_tip: number;
   maximum_delivery_tip: number;
+  images: Image[];
 }
 
 interface MenuGroup {

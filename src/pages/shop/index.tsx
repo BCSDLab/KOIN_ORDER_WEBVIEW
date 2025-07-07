@@ -43,16 +43,7 @@ export default function Shop() {
   return (
     <div>
       <Header name={shopInfoSummary.name} targetRef={targetRef} cartItemCount={cartInfo.items.length} />
-      {/* TODO: image_urls 속성 추가 후 변경 예정*/}
-      <ImageCarousel
-        images={[
-          'https://static.koreatech.in/upload/SHOPS/2024/10/16/685ad565-4d58-4d65-944a-a51dc18993f0/BHC.jpeg',
-          'a',
-          'c',
-          'd',
-        ]}
-        targetRef={targetRef}
-      />
+      <ImageCarousel images={shopInfoSummary.images} targetRef={targetRef} />
       <ShopSummary id={id} shopInfoSummary={shopInfoSummary} />
       <ShopMenuGroups id={id} selectedMenu={selectedMenu} onSelect={handleScrollTo} />
       <ShopMenus

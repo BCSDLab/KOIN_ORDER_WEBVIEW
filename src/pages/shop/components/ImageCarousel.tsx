@@ -1,8 +1,9 @@
 import { useRef, useState, useEffect } from 'react';
 import clsx from 'clsx';
+import { ShopInfoSummaryResponse } from '@/api/shop/entity';
 
 interface ImageCarouselProps {
-  images: string[];
+  images: ShopInfoSummaryResponse['images'];
   targetRef: React.RefObject<HTMLDivElement | null>;
 }
 
@@ -67,9 +68,9 @@ export default function ImageCarousel({ images, targetRef }: ImageCarouselProps)
         ref={containerRef}
         className="scrollbar-hide flex h-full w-full snap-x snap-mandatory overflow-x-scroll scroll-smooth"
       >
-        {images.map((src, index) => (
+        {images.map((image, index) => (
           <div key={index} className="h-full w-full flex-shrink-0 snap-start">
-            <img src={src} alt={`slide ${index}`} className="h-full w-full object-cover" />
+            <img src={image.image_url} alt={`slide ${index}`} className="h-full w-full object-cover" />
           </div>
         ))}
       </div>
