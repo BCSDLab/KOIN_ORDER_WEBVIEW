@@ -25,7 +25,7 @@ export default function ShopSummary({ shopInfoSummary, id }: ShopSummaryProps) {
             <span className="text-sm leading-[1.6] font-semibold">{shopInfoSummary.rating_average}</span>
             <span className="text-sm leading-[1.6] font-semibold">·</span>
             <span className="text-sm leading-[1.6] font-semibold">리뷰 {shopInfoSummary.review_count}</span>
-            <div className="items-centerh-5 flex w-5 justify-center">
+            <div className="flex h-5 w-5 items-center justify-center">
               <ChevronRightIcon fill="black" />
             </div>
           </div>
@@ -47,12 +47,13 @@ export default function ShopSummary({ shopInfoSummary, id }: ShopSummaryProps) {
             </div>
           </div>
         </div>
-        {shopInfoSummary.is_delivery_available && shopInfoSummary.is_takeout_available && (
-          <div className="mt-4 self-start">
-            {shopInfoSummary.is_delivery_available && <Badge label="배달 가능" color="white" size="sm" />}
-            {shopInfoSummary.is_takeout_available && <Badge label="포장 가능" color="white" size="sm" />}
-          </div>
-        )}
+        {shopInfoSummary.is_delivery_available ||
+          (shopInfoSummary.is_takeout_available && (
+            <div className="mt-4 self-start">
+              {shopInfoSummary.is_delivery_available && <Badge label="배달 가능" color="white" size="sm" />}
+              {shopInfoSummary.is_takeout_available && <Badge label="포장 가능" color="white" size="sm" />}
+            </div>
+          ))}
         <div className="mt-4 flex w-full justify-between gap-3 self-start">
           <a
             href="#배달금액"
