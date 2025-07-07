@@ -5,6 +5,7 @@ import Cart from './pages/Cart';
 import DeliveryOutside from './pages/Delivery/Outside';
 import OrderCancel from './pages/OrderFinish/OrderCancel';
 import Shop from './pages/Shop';
+import MenuDetail from './pages/Shop/MenuDetail';
 import ShopDetail from './pages/Shop/ShopDetail';
 import { isNative, requestTokensFromNative, setTokensFromNative } from './util/ts/bridge';
 import AppLayout from '@/components/Layout';
@@ -31,7 +32,10 @@ export default function App() {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="shop/:shopId" element={<Shop />} />
+        <Route path="shop/:shopId/menu/:menuId" element={<MenuDetail />} />
         <Route element={<AppLayout />}>
+          <Route path="shop-detail/:id" element={<ShopDetail />} />
           <Route path="cart" element={<Cart />} />
           <Route path="delivery">
             <Route path="outside/detail" element={<DetailAddress />} />
@@ -39,11 +43,9 @@ export default function App() {
             <Route path="campus" element={<Campus />} />
           </Route>
           <Route path="payment" element={<Payment />} />
-          <Route path="shop-detail/:id" element={<ShopDetail />} />
           <Route path="orderCancel" element={<OrderCancel />} />
           <Route path="result" element={<OrderFinish />} />
         </Route>
-        <Route path="shop/:id" element={<Shop />} />
       </Routes>
     </BrowserRouter>
   );
