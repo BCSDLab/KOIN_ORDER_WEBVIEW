@@ -5,5 +5,4 @@ export default function useCart(orderType: 'DELIVERY' | 'TAKE_OUT') {
   return useSuspenseQuery({
     queryKey: ['cart'],
     queryFn: () => getCart(orderType),
-  });
 }

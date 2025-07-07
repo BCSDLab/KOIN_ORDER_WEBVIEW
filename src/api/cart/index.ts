@@ -1,14 +1,16 @@
 import { apiClient } from '..';
-import { CartResponse } from '@/api/cart/entity';
-// import { useTokenStore } from '@/stores/auth';
+import { CartResponse, CartSummaryResponse } from '@/api/cart/entity';
 
 // const token = useTokenStore.getState().token; // 배포 시 또는 브릿지 테스트 시 사용
 const token = localStorage.getItem('token'); // 개발용
 
-export const getCart = async (orderType: 'DELIVERY' | 'TAKE_OUT') => {
-  return await apiClient.get<CartResponse>(`cart?type=${orderType}`, {
+export const getCart = async (type: 'DELIVERY' | 'TAKE_OUT') => {
+  return await apiClient.get<CartResponse>('cart', {
     headers: {
       Authorization: `Bearer ${token}`,
+    },
+    params: {
+      type: type,
     },
   });
 };
@@ -45,6 +47,14 @@ export const updateCartItemQuantity = async ({
   quantity: number;
 }) => {
   return await apiClient.post(`cart/quantity/${cartMenuItemId}/${quantity}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+
+export const getCartSummary = async ({ orderableShopId }: { orderableShopId: number }) => {
+  return await apiClient.get<CartSummaryResponse>(`cart/summary/${orderableShopId}`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
