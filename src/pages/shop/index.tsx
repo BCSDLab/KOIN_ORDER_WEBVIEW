@@ -1,99 +1,60 @@
+import { useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { DAYS } from './constants/day';
-import { useGetShopDetail } from './hooks/useGetShopDetail';
+import useCart from '../Payment/hooks/useCart';
+import BottomCartModal from './components/BottomCartModal';
+import Header from './components/Header';
+import ImageCarousel from './components/ImageCarousel';
+import ShopMenuGroups from './components/ShopMenuGroups';
+import ShopMenus from './components/ShopMenus';
+import ShopSummary from './components/ShopSummary';
+import { useGetShopInfoSummary } from './hooks/useGetShopInfo';
 
-export default function ShopDetail() {
+export default function Shop() {
   const { id } = useParams();
   if (!id) {
-    return <div className="p-6">가게 정보를 불러올 수 없습니다.</div>;
+    throw new Error('Shop ID is required');
   }
-  const { data } = useGetShopDetail(Number(id));
+
+  const [selectedMenu, setSelectedMenu] = useState<string>('');
+  const menuGroupRefs = useRef<Record<string, HTMLDivElement | null>>({});
+  const targetRef = useRef<HTMLDivElement | null>(null);
+  const isAutoScrolling = useRef<boolean>(false);
+
+  const { data: shopInfoSummary } = useGetShopInfoSummary(Number(id));
+  const { data: cartInfo } = useCart('TAKE_OUT');
+
+  const handleScrollTo = (name: string) => {
+    const element = menuGroupRefs.current[name];
+    if (element) {
+      isAutoScrolling.current = true;
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      setSelectedMenu(name);
+
+      setTimeout(() => {
+        isAutoScrolling.current = false;
+      }, 500);
+    }
+  };
+
+  const handleChangeMenu = (name: string) => {
+    setSelectedMenu(name);
+  };
 
   return (
-    <div className="flex h-full flex-col gap-1.5 peer-first:bg-white">
-      <div className="bg-white px-6 py-3">
-        <p className="py-3 text-[15px] leading-[1.6] font-semibold">{data?.name}</p>
-        <div className="flex flex-col gap-2">
-          <div className="flex gap-4 text-sm leading-[1.6] font-medium">
-            <p className="w-14 shrink-0">상호명</p>
-            <p>{data.name}</p>
-          </div>
-          <div className="flex gap-4 text-sm leading-[1.6] font-medium">
-            <p className="w-14 shrink-0">주소</p>
-            <p>{data.address}</p>
-          </div>
-          <div className="flex gap-4 text-sm leading-[1.6] font-medium">
-            <p className="w-14 shrink-0">운영시간</p>
-            <p>
-              {data.open_time?.slice(0, 5)} ~ {data.close_time?.slice(0, 5)}
-            </p>
-          </div>
-          <div className="flex gap-4 text-sm leading-[1.6] font-medium">
-            <p className="w-14 shrink-0">휴무일</p>
-            <p>
-              {data.closed_days.length === 0
-                ? '연중무휴'
-                : `매주 ${data.closed_days.map((day) => DAYS[day]).join(', ')}`}
-            </p>
-          </div>
-          <div className="flex gap-4 text-sm leading-[1.6] font-medium">
-            <p className="w-14 shrink-0">전화번호</p>
-            <p>{data.phone}</p>
-          </div>
-        </div>
-      </div>
-      <div className="bg-white px-6 py-3">
-        <p className="py-3 text-[15px] leading-[1.6] font-semibold">가게 소개</p>
-        <p className="text-sm leading-[1.6] font-medium">{data.introduction}</p>
-      </div>
-      <div className="bg-white px-6 py-3">
-        <p className="py-3 text-[15px] leading-[1.6] font-semibold">가게 알림</p>
-        <p className="text-sm leading-[1.6] font-medium">{data.notice}</p>
-      </div>
-      <div className="bg-white px-6 py-3">
-        <p className="py-3 text-[15px] leading-[1.6] font-semibold">주문금액별 총 배달팁</p>
-        <table className="w-full border border-gray-200 text-left text-sm">
-          <tbody>
-            {data.delivery_tips.map((tips) => (
-              <tr key={`${tips.from_amount}-${tips.to_amount}-${tips.fee}`} className="border-b border-gray-200">
-                <td className="border-r border-gray-200 px-4 py-2">
-                  {tips.to_amount
-                    ? `${tips.from_amount.toLocaleString()} ~ ${tips.to_amount.toLocaleString()}원 미만`
-                    : `${tips.from_amount.toLocaleString()} 이상`}
-                </td>
-                <td className="px-4 py-2">{tips.fee.toLocaleString()}원</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-      <div className="bg-white px-6 py-3">
-        <p className="py-3 text-[15px] leading-[1.6] font-semibold">사업자 정보</p>
-        <div className="flex flex-col gap-2">
-          <div className="flex gap-4 text-sm leading-[1.6] font-medium">
-            <p className="w-24 shrink-0">대표자명</p>
-            <p>{data.owner_info.name}</p>
-          </div>
-          <div className="flex gap-4 text-sm leading-[1.6] font-medium">
-            <p className="w-24 shrink-0">상호명</p>
-            <p>{data.owner_info.shop_name}</p>
-          </div>
-          <div className="flex gap-4 text-sm leading-[1.6] font-medium">
-            <p className="w-24 shrink-0">사업자 주소</p>
-            <p>{data.owner_info.address}</p>
-          </div>
-          <div className="flex gap-4 text-sm leading-[1.6] font-medium">
-            <p className="w-24 shrink-0">사업자 등록 번호</p>
-            <p>{data.owner_info.company_registration_number}</p>
-          </div>
-        </div>
-      </div>
-      <div className="mb-10 bg-white px-6 py-3">
-        <p className="py-3 text-[15px] leading-[1.6] font-semibold">원산지 표기</p>
-        <p className="text-sm leading-[1.6] font-medium">
-          {data.origins.map((value) => `${value.ingredient}(${value.origin})`).join(', ')}
-        </p>
-      </div>
+    <div>
+      <Header name={shopInfoSummary.name} targetRef={targetRef} cartItemCount={cartInfo.items.length} />
+      <ImageCarousel images={shopInfoSummary.images} targetRef={targetRef} />
+      <ShopSummary id={id} shopInfoSummary={shopInfoSummary} />
+      <ShopMenuGroups id={id} selectedMenu={selectedMenu} onSelect={handleScrollTo} />
+      <ShopMenus
+        id={id}
+        menuGroupRefs={menuGroupRefs}
+        handleChangeMenu={handleChangeMenu}
+        isAutoScrolling={isAutoScrolling}
+      />
+      {cartInfo.items.length > 0 && cartInfo.orderable_shop_id === Number(id) && (
+        <BottomCartModal id={id} cartItemCount={cartInfo.items.length} />
+      )}
     </div>
   );
 }

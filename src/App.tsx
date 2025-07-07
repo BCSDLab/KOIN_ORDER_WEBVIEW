@@ -3,7 +3,8 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Cart from './pages/Cart';
 import DeliveryOutside from './pages/Delivery/Outside';
 import OrderCancel from './pages/OrderFinish/OrderCancel';
-import ShopDetail from './pages/shop';
+import Shop from './pages/Shop';
+import ShopDetail from './pages/Shop/ShopDetail';
 import { isNative, requestTokensFromNative, setTokensFromNative } from './util/ts/bridge';
 import AppLayout from '@/components/Layout';
 import Campus from '@/pages/Delivery/Campus';
@@ -38,6 +39,7 @@ export default function App() {
           <Route path="orderCancel" element={<OrderCancel />} />
           <Route path="result" element={<OrderFinish />} />
         </Route>
+        <Route path="shop/:id" element={<Shop />} />
       </Routes>
     </BrowserRouter>
   );
