@@ -152,7 +152,7 @@ export default function DeliveryOutside() {
       {isModalOpen && (
         <Modal isOpen={isModalOpen} onClose={closeModal}>
           <div className="flex h-36 w-full flex-col items-center gap-6 px-8 py-6">
-            <p className="text-[15px] leading-[1.6] font-normal text-neutral-600">배달이 불가능한 지역이에요.</p>
+            <p className="text-[15px] leading-[1.6] text-neutral-600">배달이 불가능한 지역이에요.</p>
             <Button className="h-12 w-[230px]" color="primary" onClick={closeModal}>
               확인
             </Button>
