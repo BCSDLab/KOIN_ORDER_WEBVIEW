@@ -1,5 +1,5 @@
 import { apiClient } from '..';
-import { AddressSearchRequest, AddressSearchResponse } from './entity';
+import { AddressSearchRequest, AddressSearchResponse, CampusDeliveryValidateRequest } from './entity';
 import { PostAddressObjType } from '@/stores/useOrderStore';
 import { CampusDeliveryAddressRequest, CampusDeliveryAddressResponse } from '@/types/api/deliveryCampus';
 // import { useTokenStore } from '@/stores/auth';
@@ -38,4 +38,10 @@ export const postUserDeliveryAddress = async (addressData: PostAddressObjType) =
   });
 
   return response;
+};
+
+export const postOffCampusDeliveryValidate = async (addressData: CampusDeliveryValidateRequest) => {
+  return await apiClient.post('delivery/address/off-campus/validate', {
+    body: addressData,
+  });
 };

@@ -32,3 +32,9 @@ export interface Juso {
   si_nm: string;
   zip_no: string;
 }
+
+export interface CampusDeliveryValidateRequest {
+  si_do: string;
+  si_gun_gu: string;
+  eup_myeon_dong: string;
+}
