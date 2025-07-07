@@ -4,7 +4,7 @@ import { CartResponse, CartSummaryResponse } from '@/api/cart/entity';
 // const token = useTokenStore.getState().token; // 배포 시 또는 브릿지 테스트 시 사용
 const token = localStorage.getItem('token'); // 개발용
 
-export const getCart = async (type: string) => {
+export const getCart = async (type: 'DELIVERY' | 'TAKE_OUT') => {
   return await apiClient.get<CartResponse>('cart', {
     headers: {
       Authorization: `Bearer ${token}`,
