@@ -45,6 +45,7 @@ export interface ShopDeliveryInfoResponse {
 
 export interface ShopInfoParams {
   orderableShopId: number;
+  orderableShopMenuId?: number;
 }
 
 interface Price {
@@ -98,4 +99,29 @@ interface MenuGroup {
 export interface ShopMenuGroupsResponse {
   count: number;
   menu_groups: MenuGroup[];
+}
+
+interface Price {
+  id: number;
+  name: string | null;
+  price: number;
+}
+
+interface OptionGroup {
+  id: number;
+  name: string;
+  description?: string | null;
+  isRequired: boolean;
+  min_select: number;
+  max_select: number;
+  options: Price[];
+}
+
+export interface ShopMenuDetailResponse {
+  id: number;
+  name: string;
+  description?: string | null;
+  images: string[];
+  prices: Price[];
+  option_groups: OptionGroup[];
 }
