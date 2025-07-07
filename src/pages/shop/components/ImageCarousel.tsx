@@ -76,15 +76,16 @@ export default function ImageCarousel({ images, targetRef }: ImageCarouselProps)
       </div>
 
       <div className="absolute bottom-4 left-1/2 z-10 flex -translate-x-1/2 gap-1">
-        {images.map((_, index) => (
-          <div
-            key={index}
-            className={clsx(
-              'h-1.5 w-1.5 rounded-full transition-colors duration-300',
-              scrollIndex === index ? 'bg-white' : 'bg-neutral-400',
-            )}
-          />
-        ))}
+        {images.length > 1 &&
+          images.map((_, index) => (
+            <div
+              key={index}
+              className={clsx(
+                'h-1.5 w-1.5 rounded-full transition-colors duration-300',
+                scrollIndex === index ? 'bg-white' : 'bg-neutral-400',
+              )}
+            />
+          ))}
       </div>
     </div>
   );
