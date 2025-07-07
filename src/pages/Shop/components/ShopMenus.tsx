@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useGetShopInfo } from '../hooks/useGetShopInfo';
 import SoldOutIcon from '@/assets/Shop/sold-out-icon.svg';
 
@@ -10,9 +11,10 @@ interface ShopMenusProps {
 }
 
 export default function ShopMenus({ id, menuGroupRefs, handleChangeMenu, isAutoScrolling }: ShopMenusProps) {
-  const { data: shopInfo } = useGetShopInfo(Number(id));
-
+  const navigate = useNavigate();
   const visibleMap = useRef<Record<string, boolean>>({});
+
+  const { data: shopInfo } = useGetShopInfo(Number(id));
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -71,6 +73,8 @@ export default function ShopMenus({ id, menuGroupRefs, handleChangeMenu, isAutoS
               <button
                 className={`flex w-full items-center justify-between py-3 pr-3 pl-4 ${idx !== 0 ? 'border-t border-neutral-300' : ''}`}
                 key={menu.id}
+                name={menu.name}
+                onClick={() => navigate(`menu/${menu.id}`)}
               >
                 <div className="flex flex-col">
                   <span className="flex h-[1.8125rem] text-lg leading-[1.6] font-semibold">{menu.name}</span>
