@@ -33,7 +33,7 @@ export default function App() {
     <BrowserRouter>
       <Routes>
         <Route path="shop/:shopId" element={<Shop />} />
-        <Route path="shop/:shopId/menu/:menuId" element={<MenuDetail />} />
+        <Route path="shop/:shopId/menus/:menuId" element={<MenuDetail />} />
         <Route element={<AppLayout />}>
           <Route path="shop-detail/:id" element={<ShopDetail />} />
           <Route path="cart" element={<Cart />} />

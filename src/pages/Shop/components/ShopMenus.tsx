@@ -74,7 +74,7 @@ export default function ShopMenus({ id, menuGroupRefs, handleChangeMenu, isAutoS
                 className={`flex w-full items-center justify-between py-3 pr-3 pl-4 ${idx !== 0 ? 'border-t border-neutral-300' : ''}`}
                 key={menu.id}
                 name={menu.name}
-                onClick={() => navigate(`menu/${menu.id}`)}
+                onClick={() => navigate(`menus/${menu.id}`)}
               >
                 <div className="flex flex-col">
                   <span className="flex h-[1.8125rem] text-lg leading-[1.6] font-semibold">{menu.name}</span>
