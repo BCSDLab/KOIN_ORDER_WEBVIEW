@@ -47,7 +47,7 @@ export default function Header() {
           onClick={backToPreviousPage}
           className="absolute top-1/2 left-6 -translate-y-1/2"
         >
-          <ArrowBackIcon />
+          <ArrowBackIcon fill="black" />
         </button>
       )}
       <span className="text-lg font-medium">{title}</span>

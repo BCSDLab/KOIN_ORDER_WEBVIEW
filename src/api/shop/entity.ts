@@ -38,7 +38,64 @@ export interface ShopDetailInfoResponse {
   origins: OriginInfo[];
 }
 
-export interface shopDeliveryInfoResponse {
+export interface ShopDeliveryInfoResponse {
   campus_delivery: boolean;
   off_campus_delivery: boolean;
+}
+
+export interface ShopInfoParams {
+  orderableShopId: number;
+}
+
+interface Price {
+  id: number;
+  name: string | null;
+  price: number;
+}
+
+interface Menu {
+  id: number;
+  name: string;
+  description: string;
+  thumbnail_image: string;
+  is_sold_out: boolean;
+  prices: Price[];
+}
+
+export interface ShopInfoResponse {
+  menu_group_id: number;
+  menu_group_name: string;
+  menus: Menu[];
+}
+
+interface Image {
+  image_url: string;
+  is_thumbnail: boolean;
+}
+
+export interface ShopInfoSummaryResponse {
+  shop_id: number;
+  orderable_shop_id: number;
+  name: string;
+  introduction: string | null;
+  pay_card: boolean;
+  pqy_bank: boolean;
+  is_delivery_available: boolean;
+  is_takeout_available: boolean;
+  minimum_order_amount: number;
+  rating_average: number;
+  review_count: number;
+  minimum_delivery_tip: number;
+  maximum_delivery_tip: number;
+  images: Image[];
+}
+
+interface MenuGroup {
+  id: number;
+  name: string;
+}
+
+export interface ShopMenuGroupsResponse {
+  count: number;
+  menu_groups: MenuGroup[];
 }
