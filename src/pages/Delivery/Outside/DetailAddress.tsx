@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import clsx from 'clsx';
 import { useLocation, useNavigate } from 'react-router-dom';
 import CloseIcon from '@/assets/Main/close-icon.svg';
 import ArrowDown from '@/assets/Payment/arrow-down-icon.svg';
@@ -127,7 +128,10 @@ export default function DetailAddress() {
         <button
           type="button"
           onClick={openDeliveryBottomModal}
-          className="flex w-full items-center justify-between rounded-sm border border-neutral-300 bg-white px-4 py-3 text-sm text-neutral-400"
+          className={clsx(
+            'flex w-full items-center justify-between rounded-sm border border-neutral-300 bg-white px-4 py-3 text-sm',
+            requestLabel() === '상세 요청사항을 입력해주세요.' ? 'text-neutral-400' : 'text-black',
+          )}
         >
           {requestLabel()}
           <div className="pointer-events-none">
