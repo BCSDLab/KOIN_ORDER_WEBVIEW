@@ -38,7 +38,7 @@ export interface ShopDetailInfoResponse {
   origins: OriginInfo[];
 }
 
-export interface shopDeliveryInfoResponse {
+export interface ShopDeliveryInfoResponse {
   campus_delivery: boolean;
   off_campus_delivery: boolean;
 }

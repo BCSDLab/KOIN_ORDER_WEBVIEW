@@ -1,6 +1,6 @@
 import { apiClient } from '..';
 import {
-  shopDeliveryInfoResponse,
+  ShopDeliveryInfoResponse,
   ShopDetailInfoParams,
   ShopDetailInfoResponse,
   ShopInfoResponse,
@@ -15,7 +15,7 @@ export const getShopDetailInfo = async ({ orderableShopId }: ShopDetailInfoParam
 };
 
 export const getShopDeliveryInfo = async ({ orderableShopId }: ShopDetailInfoParams) => {
-  const response = await apiClient.get<shopDeliveryInfoResponse>(`order/shop/${orderableShopId}/delivery`);
+  const response = await apiClient.get<ShopDeliveryInfoResponse>(`order/shop/${orderableShopId}/delivery`);
   return response;
 };
 
