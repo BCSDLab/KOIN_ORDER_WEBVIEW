@@ -16,7 +16,7 @@ interface CartValidationErrorResponse {
   errorTraceId?: string;
 }
 
-export default function useValidateCart({ orderType }: { orderType: 'delivery' | 'takeout' }) {
+export default function useValidateCart({ orderType }: { orderType: 'DELIVERY' | 'TAKE_OUT' }) {
   const navigate = useNavigate();
   const [errorCode, setErrorCode] = useState<string | null>(null);
 

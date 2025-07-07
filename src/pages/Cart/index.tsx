@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import clsx from 'clsx';
 import { useNavigate } from 'react-router-dom';
 import useCart from '../Payment/hooks/useCart';
@@ -11,18 +10,13 @@ import Info from '@/assets/Cart/primary-info-icon.svg';
 import PrimaryPlus from '@/assets/Cart/primary-plus-icon.svg';
 import RightArrow from '@/assets/Payment/arrow-go-icon.svg';
 import Button from '@/components/UI/Button';
+import { useOrderStore } from '@/stores/useOrderStore';
 
 export default function Cart() {
   const navigate = useNavigate();
-  const { data: cartInfo } = useCart();
+  const { orderType, setOrderType } = useOrderStore();
 
-  const getDefaultOrderType = () => {
-    if (cartInfo.is_delivery_available) return 'delivery';
-    if (cartInfo.is_takeout_available) return 'takeout';
-    return 'delivery';
-  };
-
-  const [orderType, setOrderType] = useState<'delivery' | 'takeout'>(getDefaultOrderType());
+  const { data: cartInfo } = useCart(orderType);
 
   let infoMessage = '';
 
@@ -59,9 +53,9 @@ export default function Cart() {
               !cartInfo.is_delivery_available && 'bg-transparent text-neutral-300',
             )}
             fullWidth
-            color={orderType === 'delivery' ? 'primary' : 'gray'}
+            color={orderType === 'DELIVERY' ? 'primary' : 'gray'}
             state={cartInfo.is_delivery_available ? 'default' : 'disabled'}
-            onClick={() => setOrderType('delivery')}
+            onClick={() => setOrderType('DELIVERY')}
           >
             배달
           </Button>
@@ -71,9 +65,9 @@ export default function Cart() {
               !cartInfo.is_takeout_available && 'bg-transparent text-neutral-300',
             )}
             fullWidth
-            color={orderType === 'takeout' ? 'primary' : 'gray'}
+            color={orderType === 'TAKE_OUT' ? 'primary' : 'gray'}
             state={cartInfo.is_takeout_available ? 'default' : 'disabled'}
-            onClick={() => setOrderType('takeout')}
+            onClick={() => setOrderType('TAKE_OUT')}
           >
             포장
           </Button>
