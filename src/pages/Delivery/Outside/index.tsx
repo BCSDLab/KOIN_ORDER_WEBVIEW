@@ -2,12 +2,12 @@ import { useState } from 'react';
 import clsx from 'clsx';
 import { useNavigate } from 'react-router-dom';
 import { twMerge } from 'tailwind-merge';
-import useRoadNameAddress from '../hooks/useRoadNameAddress';
 import { Juso } from '@/api/delivery/entity';
 import InfoIcon from '@/assets/Common/info-icon.svg';
 import SearchIcon from '@/assets/Common/search-icon.svg';
 import BCSDLogoWithMagnifyIcon from '@/assets/Payment/bcsd-logo-with-magnify.svg';
 import Button from '@/components/UI/Button';
+import useRoadNameAddress from '@/pages/Delivery/hooks/useRoadNameAddress';
 import { useOrderStore } from '@/stores/useOrderStore';
 
 export default function DeliveryOutside() {

@@ -1,9 +1,5 @@
 import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import useMarker from '../hooks/useMarker';
-import useNaverGeocode from '../hooks/useNaverGeocode';
-import useNaverMap from '../hooks/useNaverMap';
-import useUserDeliveryAddress from '../hooks/useUserDeliveryAddress';
 import CloseIcon from '@/assets/Main/close-icon.svg';
 import ArrowDown from '@/assets/Payment/arrow-down-icon.svg';
 import ArrowGo from '@/assets/Payment/arrow-go-icon.svg';
@@ -14,6 +10,10 @@ import BottomModal, {
 } from '@/components/UI/BottomModal/BottomModal';
 import Button from '@/components/UI/Button';
 import Modal, { ModalContent } from '@/components/UI/CenterModal/Modal';
+import useMarker from '@/pages/Delivery/hooks/useMarker';
+import useNaverGeocode from '@/pages/Delivery/hooks/useNaverGeocode';
+import useNaverMap from '@/pages/Delivery/hooks/useNaverMap';
+import useUserDeliveryAddress from '@/pages/Delivery/hooks/useUserDeliveryAddress';
 import { useOrderStore } from '@/stores/useOrderStore';
 import useBooleanState from '@/util/hooks/useBooleanState';
 

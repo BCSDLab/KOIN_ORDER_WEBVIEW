@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import useConfirmPayments from '../Payment/hooks/useConfirmPayments';
 import CloseIcon from '@/assets/Main/close-icon.svg';
 import CallIcon from '@/assets/OrderFinish/call-icon.svg';
 import Motorcycle from '@/assets/OrderFinish/motorcycle-icon.svg';
@@ -14,6 +13,7 @@ import BottomModal, {
   BottomModalFooter,
 } from '@/components/UI/BottomModal/BottomModal';
 import Button from '@/components/UI/Button';
+import useConfirmPayments from '@/pages/Payment/hooks/useConfirmPayments';
 import useBooleanState from '@/util/hooks/useBooleanState';
 
 export default function OrderFinish() {

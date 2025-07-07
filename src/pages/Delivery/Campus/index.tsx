@@ -1,8 +1,5 @@
 import { useState } from 'react';
 // import { useNavigate } from 'react-router-dom';
-import useMarker from '../hooks/useMarker';
-import useNaverGeocode from '../hooks/useNaverGeocode';
-import useNaverMap from '../hooks/useNaverMap';
 import AddressTypeDropdown from './AddressTypeDropdown';
 import Building from '@/assets/Delivery/building.svg';
 import NightShelter from '@/assets/Delivery/night-shelter.svg';
@@ -15,6 +12,9 @@ import BottomModal, {
   BottomModalFooter,
 } from '@/components/UI/BottomModal/BottomModal';
 import Button from '@/components/UI/Button';
+import useMarker from '@/pages/Delivery/hooks/useMarker';
+import useNaverGeocode from '@/pages/Delivery/hooks/useNaverGeocode';
+import useNaverMap from '@/pages/Delivery/hooks/useNaverMap';
 import { AddressCategory } from '@/types/api/deliveryCampus';
 import useBooleanState from '@/util/hooks/useBooleanState';
 
