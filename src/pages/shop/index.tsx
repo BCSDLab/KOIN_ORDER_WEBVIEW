@@ -8,6 +8,7 @@ import ShopMenuGroups from './components/ShopMenuGroups';
 import ShopMenus from './components/ShopMenus';
 import ShopSummary from './components/ShopSummary';
 import { useGetShopInfoSummary } from './hooks/useGetShopInfo';
+import { useOrderStore } from '@/stores/useOrderStore';
 
 export default function Shop() {
   const { id } = useParams();
@@ -16,12 +17,13 @@ export default function Shop() {
   }
 
   const [selectedMenu, setSelectedMenu] = useState<string>('');
+  const { orderType } = useOrderStore();
   const menuGroupRefs = useRef<Record<string, HTMLDivElement | null>>({});
   const targetRef = useRef<HTMLDivElement | null>(null);
   const isAutoScrolling = useRef<boolean>(false);
 
   const { data: shopInfoSummary } = useGetShopInfoSummary(Number(id));
-  const { data: cartInfo } = useCart('TAKE_OUT');
+  const { data: cartInfo } = useCart(orderType);
 
   const handleScrollTo = (name: string) => {
     const element = menuGroupRefs.current[name];

@@ -35,9 +35,9 @@ export default function Payment() {
 
   const orderType = searchParams.get('orderType');
   const message = searchParams.get('message');
-  const isDelivery = orderType === 'delivery';
+  const isDelivery = orderType === 'DELIVERY';
 
-  const { data: cart } = useCart(isDelivery ? 'DELIVERY' : 'TAKE_OUT');
+  const { data: cart } = useCart(orderType as 'DELIVERY' | 'TAKE_OUT');
   const { mutateAsync: temporaryDelivery } = useTemporaryDelivery();
   const { mutateAsync: temporaryTakeout } = useTemporaryTakeout();
 

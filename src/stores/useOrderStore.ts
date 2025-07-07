@@ -3,6 +3,7 @@ import { create } from 'zustand';
 interface State {
   postAddress: PostAddressObjType;
   deliveryRequest: string;
+  orderType: 'DELIVERY' | 'TAKE_OUT';
 }
 
 export interface PostAddressObjType {
@@ -19,6 +20,7 @@ export interface PostAddressObjType {
 interface Action {
   setDeliveryRequest: (request: string) => void;
   setPostAddress: (addressData: PostAddressObjType) => void;
+  setOrderType: (type: 'DELIVERY' | 'TAKE_OUT') => void;
 }
 
 export const useOrderStore = create<State & Action>((set) => ({
@@ -33,6 +35,8 @@ export const useOrderStore = create<State & Action>((set) => ({
     full_address: '',
   },
   deliveryRequest: '',
+  orderType: 'DELIVERY',
   setDeliveryRequest: (request) => set({ deliveryRequest: request }),
   setPostAddress: (addressData) => set({ postAddress: addressData }),
+  setOrderType: (type) => set({ orderType: type }),
 }));

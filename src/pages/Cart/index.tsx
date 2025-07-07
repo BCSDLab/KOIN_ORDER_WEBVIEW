@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import clsx from 'clsx';
 import { useNavigate } from 'react-router-dom';
 import useCart from '../Payment/hooks/useCart';
@@ -11,18 +10,13 @@ import Info from '@/assets/Cart/primary-info-icon.svg';
 import PrimaryPlus from '@/assets/Cart/primary-plus-icon.svg';
 import RightArrow from '@/assets/Payment/arrow-go-icon.svg';
 import Button from '@/components/UI/Button';
+import { useOrderStore } from '@/stores/useOrderStore';
 
 export default function Cart() {
   const navigate = useNavigate();
-  const { data: cartInfo } = useCart();
+  const { orderType, setOrderType } = useOrderStore();
 
-  const getDefaultOrderType = () => {
-    if (cartInfo.is_delivery_available) return 'delivery';
-    if (cartInfo.is_takeout_available) return 'takeout';
-    return 'delivery';
-  };
-
-  const [orderType, setOrderType] = useState<'delivery' | 'takeout'>(getDefaultOrderType());
+  const { data: cartInfo } = useCart(orderType);
 
   let infoMessage = '';
 
@@ -59,9 +53,9 @@ export default function Cart() {
               !cartInfo.is_delivery_available && 'bg-transparent text-neutral-300',
             )}
             fullWidth
-            color={orderType === 'delivery' ? 'primary' : 'gray'}
+            color={orderType === 'DELIVERY' ? 'primary' : 'gray'}
             state={cartInfo.is_delivery_available ? 'default' : 'disabled'}
-            onClick={() => setOrderType('delivery')}
+            onClick={() => setOrderType('DELIVERY')}
           >
             배달
           </Button>
@@ -71,9 +65,9 @@ export default function Cart() {
               !cartInfo.is_takeout_available && 'bg-transparent text-neutral-300',
             )}
             fullWidth
-            color={orderType === 'takeout' ? 'primary' : 'gray'}
+            color={orderType === 'TAKE_OUT' ? 'primary' : 'gray'}
             state={cartInfo.is_takeout_available ? 'default' : 'disabled'}
-            onClick={() => setOrderType('takeout')}
+            onClick={() => setOrderType('TAKE_OUT')}
           >
             포장
           </Button>
@@ -87,7 +81,7 @@ export default function Cart() {
         )}
       </div>
 
-      <button className="flex items-center gap-1.5" onClick={() => navigate('가게 상세 페이지로 이동')}>
+      <button className="flex items-center gap-1.5" onClick={() => navigate(`/shop/${cartInfo.orderable_shop_id}`)}>
         <img src={cartInfo.shop_thumbnail_image_url} className="h-7.5 w-7.5 rounded-[5px]" />
         <div className="text-lg leading-[160%] font-semibold">{cartInfo.shop_name}</div>
         <RightArrow />
@@ -114,7 +108,7 @@ export default function Cart() {
           color="neutral"
           startIcon={<PrimaryPlus />}
           className="mt-3 gap-2.5 border-0 py-[11px] leading-[160%]"
-          onClick={() => navigate('가게 상세 페이지로 이동')}
+          onClick={() => navigate('메뉴 담기 페이지로 이동')}
         >
           더 담으러 가기
         </Button>
