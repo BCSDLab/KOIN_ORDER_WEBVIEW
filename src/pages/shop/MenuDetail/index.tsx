@@ -6,6 +6,7 @@ import MenuDescription from '../components/MenuDescription';
 import MenuOptions from '../components/MenuOptions';
 import { useGetShopMenuDetail } from '../hooks/useGetShopInfo';
 import useCart from '@/pages/Payment/hooks/useCart';
+import { useOrderStore } from '@/stores/useOrderStore';
 
 export default function MenuDetail() {
   const { shopId, menuId } = useParams();
@@ -15,7 +16,8 @@ export default function MenuDetail() {
 
   const targetRef = useRef<HTMLDivElement | null>(null);
 
-  const { data: cartInfo } = useCart('TAKE_OUT');
+  const { orderType } = useOrderStore();
+  const { data: cartInfo } = useCart(orderType);
   const { data: menuInfo } = useGetShopMenuDetail(Number(shopId), Number(menuId));
 
   const imagesForCarousel = menuInfo.images.map((image) => ({
