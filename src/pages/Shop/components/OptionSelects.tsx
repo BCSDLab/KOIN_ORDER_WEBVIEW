@@ -10,9 +10,10 @@ interface OptionsBlockProps {
   options: Price[];
   minSelect: number;
   maxSelect: number;
+  isSelectable: boolean;
 }
 
-export default function OptionSelects({ options, minSelect, maxSelect }: OptionsBlockProps) {
+export default function OptionSelects({ options, minSelect, maxSelect, isSelectable }: OptionsBlockProps) {
   const { showToast } = useToast();
   const [optionSelecStates, setOptionSelecState] = useState(
     options.map((option) => ({
@@ -71,7 +72,10 @@ export default function OptionSelects({ options, minSelect, maxSelect }: Options
             )}
             <span className="h-[1.625rem] text-base">{option.name}</span>
           </div>
-          <span className="text-base font-semibold">{option.price.toLocaleString()}원</span>
+          <span className="text-base font-semibold">
+            {isSelectable && '+'}
+            {option.price.toLocaleString()}원
+          </span>
         </button>
       ))}
     </div>

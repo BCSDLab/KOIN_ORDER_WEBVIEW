@@ -25,14 +25,19 @@ export default function MenuOptions({ optionGroups }: MenuOptionsProps) {
             </div>
             {group.isRequired && (
               <Badge
-                label="필수"
+                label={group.minSelect === 1 ? '필수' : `${group.minSelect}가지 선택`}
                 color="primaryLight"
                 variant="outlined"
-                className="h-[1.4375rem] w-[2.3125rem] justify-center p-0 text-xs"
+                className="justify-center p-0 px-2 py-[0.125rem] text-xs"
               />
             )}
           </div>
-          <OptionSelects options={group.options} minSelect={group.minSelect} maxSelect={group.maxSelect} />
+          <OptionSelects
+            options={group.options}
+            minSelect={group.minSelect}
+            maxSelect={group.maxSelect}
+            isSelectable={!(group.isRequired && group.minSelect === 1)}
+          />
         </div>
       ))}
     </div>
