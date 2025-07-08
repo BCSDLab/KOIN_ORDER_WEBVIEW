@@ -105,7 +105,7 @@ export interface OptionGroup {
   id: number;
   name: string;
   description?: string | null;
-  isRequired: boolean;
+  is_required: boolean;
   min_select: number;
   max_select: number;
   options: Price[];
