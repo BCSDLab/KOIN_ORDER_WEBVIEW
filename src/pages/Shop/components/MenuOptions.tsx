@@ -32,7 +32,7 @@ export default function MenuOptions({ optionGroups }: MenuOptionsProps) {
               />
             )}
           </div>
-          <OptionSelects options={group.options} />
+          <OptionSelects options={group.options} isRadio={group.min_select === 1 && group.max_select === 1} />
         </div>
       ))}
     </div>
