@@ -13,7 +13,6 @@ import BottomModal, {
 } from '@/components/UI/BottomModal/BottomModal';
 import Button from '@/components/UI/Button';
 import useMarker from '@/pages/Delivery/hooks/useMarker';
-import useNaverGeocode from '@/pages/Delivery/hooks/useNaverGeocode';
 import useNaverMap from '@/pages/Delivery/hooks/useNaverMap';
 import { AddressCategory } from '@/types/api/deliveryCampus';
 import useBooleanState from '@/util/hooks/useBooleanState';
@@ -30,12 +29,16 @@ interface Place {
   id: number;
   full_address: string;
   short_address: string;
+  latitude: number;
+  longitude: number;
 }
 
 const 함지: Place = {
   id: 5,
   full_address: '충남 천안시 동남구 병천면 충절로 1600 한국기술교육대학교 제1캠퍼스 생활관 105동',
   short_address: '105동(함지)',
+  latitude: 36.76202833,
+  longitude: 127.28281109,
 };
 
 export default function Campus() {
@@ -55,8 +58,7 @@ export default function Campus() {
     setSelectedPlace,
   };
 
-  const coords = useNaverGeocode(selectedPlace?.full_address || '');
-  const map = useNaverMap(...coords);
+  const map = useNaverMap(selectedPlace.latitude, selectedPlace.longitude);
   useMarker(map);
 
   const requestLabel = () => {
