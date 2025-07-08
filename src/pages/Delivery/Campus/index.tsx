@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import RiderRequestModal from '../components/RiderRequestModal';
 import AddressTypeDropdown from './AddressTypeDropdown';
+import { AddressCategory } from '@/api/delivery/entity';
 import Building from '@/assets/Delivery/building.svg';
 import NightShelter from '@/assets/Delivery/night-shelter.svg';
 import ArrowDown from '@/assets/Payment/arrow-down-icon.svg';
@@ -11,7 +12,6 @@ import useMarker from '@/pages/Delivery/hooks/useMarker';
 import useNaverGeocode from '@/pages/Delivery/hooks/useNaverGeocode';
 import useNaverMap from '@/pages/Delivery/hooks/useNaverMap';
 import { useOrderStore } from '@/stores/useOrderStore';
-import { AddressCategory } from '@/types/api/deliveryCampus';
 import useBooleanState from '@/util/hooks/useBooleanState';
 
 interface Place {

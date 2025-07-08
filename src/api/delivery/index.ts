@@ -2,10 +2,11 @@ import { apiClient } from '..';
 import {
   AddressSearchRequest,
   AddressSearchResponse,
+  CampusDeliveryAddressRequest,
+  CampusDeliveryAddressResponse,
   OffCampusDeliveryAddressRequest,
   RiderRequestResponse,
 } from './entity';
-import { CampusDeliveryAddressRequest, CampusDeliveryAddressResponse } from '@/types/api/deliveryCampus';
 // import { useTokenStore } from '@/stores/auth';
 
 // const token = useTokenStore.getState().token; // 배포 시 또는 브릿지 테스트 시 사용

@@ -1,3 +1,5 @@
+import { addressCategories } from '@/constants/deliveryCampus';
+
 /** 요청/응답 참고: https://business.juso.go.kr/addrlink/openApi/searchApi.do */
 export interface AddressSearchRequest {
   currentPage: string;
@@ -32,6 +34,24 @@ export interface Juso {
   si_nm: string;
   zip_no: string;
 }
+
+export type AddressCategory = (typeof addressCategories)[number];
+
+export interface CampusDeliveryAddressRequest {
+  filter: 'ALL' | AddressCategory;
+}
+
+export interface CampusDeliveryAddress {
+  id: number;
+  type: '기숙사' | '공학관' | '그 외';
+  full_address: string;
+  short_address: string;
+}
+export interface CampusDeliveryAddressResponse {
+  count: number;
+  addresses: CampusDeliveryAddress[];
+}
+
 export interface OffCampusDeliveryAddressRequest {
   zip_number: string;
   si_do: string;
