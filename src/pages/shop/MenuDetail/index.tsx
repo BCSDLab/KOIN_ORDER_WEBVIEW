@@ -24,8 +24,17 @@ export default function MenuDetail() {
   const { data: cartInfo } = useCart(orderType);
   const { data: menuInfo } = useGetShopMenuDetail(Number(shopId), Number(menuId));
 
-  const { priceId, count, selectedOptions, selectPrice, selectOption, increaseCount, decreaseCount, totalPrice } =
-    useMenuSelection(menuInfo);
+  const {
+    priceId,
+    count,
+    selectedOptions,
+    selectPrice,
+    selectOption,
+    increaseCount,
+    decreaseCount,
+    totalPrice,
+    isAllRequiredOptionsSelected,
+  } = useMenuSelection(menuInfo);
 
   const imagesForCarousel = menuInfo.images.map((image) => ({
     image_url: image,
@@ -46,7 +55,7 @@ export default function MenuDetail() {
         />
         <MenuCounter count={count} increaseCount={increaseCount} decreaseCount={decreaseCount} />
       </div>
-      <AddToCartBottomModal price={totalPrice} isActive={true} onAddToCart={() => {}} />
+      <AddToCartBottomModal price={totalPrice} isActive={isAllRequiredOptionsSelected} onAddToCart={() => {}} />
     </div>
   );
 }

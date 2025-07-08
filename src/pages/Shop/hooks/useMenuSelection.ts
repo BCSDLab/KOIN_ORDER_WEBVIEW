@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { ShopMenuDetailResponse } from '@/api/shop/entity';
+import { useToast } from '@/util/hooks/useToast';
 
 export interface SelectedOption {
   optionGroupId: number;
@@ -18,26 +19,32 @@ export function useMenuSelection(menuInfo: ShopMenuDetailResponse) {
     count: 1,
     selectedOptions: [],
   });
+  const { showToast } = useToast();
 
   const selectPrice = (priceId: number) => {
     setState((prev) => ({ ...prev, priceId }));
   };
 
-  const selectOption = (optionGroupId: number, optionId: number, isSingle: boolean) => {
+  const selectOption = (optionGroupId: number, optionId: number, isSingle: boolean, maxSelect: number) => {
     setState((prev) => {
-      let newOptions = prev.selectedOptions.filter((opt) => opt.optionGroupId !== optionGroupId);
-      if (!isSingle) {
+      const groupSelected = prev.selectedOptions.filter((opt) => opt.optionGroupId === optionGroupId);
+      const already = groupSelected.some((opt) => opt.optionId === optionId);
+
+      if (!isSingle && !already && groupSelected.length >= maxSelect) {
+        showToast(`최대 ${maxSelect}개까지 선택할 수 있습니다.`);
+        return prev;
+      }
+
+      let newOptions;
+      if (isSingle) {
+        newOptions = [{ optionGroupId, optionId }];
+      } else {
         newOptions = prev.selectedOptions.filter(
           (opt) => opt.optionGroupId !== optionGroupId || opt.optionId !== optionId,
-        );
-        const already = prev.selectedOptions.some(
-          (opt) => opt.optionGroupId === optionGroupId && opt.optionId === optionId,
         );
         if (!already) {
           newOptions = [...prev.selectedOptions, { optionGroupId, optionId }];
         }
-      } else {
-        newOptions = [{ optionGroupId, optionId }];
       }
       return { ...prev, selectedOptions: newOptions };
     });
@@ -57,6 +64,13 @@ export function useMenuSelection(menuInfo: ShopMenuDetailResponse) {
     .reduce((sum, price) => sum + price, 0);
   const totalPrice = (selectedPrice + optionTotal) * state.count;
 
+  const isAllRequiredOptionsSelected = menuInfo.option_groups
+    .filter((group) => group.min_select > 0)
+    .every((group) => {
+      const selectedCount = state.selectedOptions.filter((opt) => opt.optionGroupId === group.id).length;
+      return selectedCount >= group.min_select;
+    });
+
   return {
     ...state,
     selectPrice,
@@ -65,5 +79,6 @@ export function useMenuSelection(menuInfo: ShopMenuDetailResponse) {
     decreaseCount,
     totalPrice,
     selectedPriceObj,
+    isAllRequiredOptionsSelected,
   };
 }

@@ -9,7 +9,7 @@ interface SelectedOption {
 interface MenuOptionsProps {
   optionGroups: OptionGroup[];
   selectedOptions: SelectedOption[];
-  selectOption: (optionGroupId: number, optionId: number, isSingle: boolean) => void;
+  selectOption: (optionGroupId: number, optionId: number, isSingle: boolean, maxSelect: number) => void;
 }
 
 export default function MenuOptions({ optionGroups, selectedOptions, selectOption }: MenuOptionsProps) {
@@ -34,7 +34,7 @@ export default function MenuOptions({ optionGroups, selectedOptions, selectOptio
                     key={option.id}
                     type="button"
                     className="flex items-center gap-2 py-2"
-                    onClick={() => selectOption(group.id, option.id, isSingle)}
+                    onClick={() => selectOption(group.id, option.id, isSingle, group.max_select)}
                     role={isSingle ? 'radio' : 'checkbox'}
                     aria-checked={checked}
                   >
