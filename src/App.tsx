@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import dayjs from 'dayjs';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Cart from './pages/Cart';
 import DeliveryOutside from './pages/Delivery/Outside';
@@ -11,6 +12,9 @@ import Campus from '@/pages/Delivery/Campus';
 import DetailAddress from '@/pages/Delivery/Outside/DetailAddress';
 import OrderFinish from '@/pages/OrderFinish';
 import Payment from '@/pages/Payment';
+import 'dayjs/locale/ko';
+
+dayjs.locale('ko');
 
 export default function App() {
   useEffect(() => {
