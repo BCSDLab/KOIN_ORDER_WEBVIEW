@@ -11,6 +11,7 @@ export interface OutsideAddress {
   full_address: string;
 }
 export interface CampusAddress {
+  id: number;
   full_address: string;
   short_address: string;
 }

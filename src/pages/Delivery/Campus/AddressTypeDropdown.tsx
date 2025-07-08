@@ -2,9 +2,9 @@ import { Suspense } from 'react';
 import clsx from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import useCampusDeliveryAddress from '../hooks/useCampusDeliveryAddress';
+import { AddressCategory } from '@/api/delivery/entity';
 import ChevronDown from '@/assets/Delivery/chevron-down.svg';
 import Button from '@/components/UI/Button';
-import { AddressCategory } from '@/types/api/deliveryCampus';
 
 interface Place {
   id: number;
@@ -70,16 +70,26 @@ export default function AddressTypeDropdown({
           <>
             <div className="h-[1px] w-[310px] bg-[#eee]" />
             <div className="mx-auto flex w-full flex-wrap justify-center gap-x-3 gap-y-2 bg-white px-[10px] py-4 break-all">
-              {addresses.map((address) => (
-                <Button
-                  key={address.id}
-                  color={selectedPlace?.id === address.id ? 'primary' : 'gray'}
-                  size="sm"
-                  onClick={() => setSelectedPlace(address)}
-                >
-                  {address.short_address}
-                </Button>
-              ))}
+              {addresses.map((address) => {
+                const isActive = selectedPlace?.id === address.id;
+
+                return (
+                  <Button
+                    key={address.id}
+                    color={isActive ? 'primary' : 'gray'}
+                    size="sm"
+                    onClick={() =>
+                      setSelectedPlace({
+                        id: address.id,
+                        full_address: address.full_address,
+                        short_address: address.short_address,
+                      })
+                    }
+                  >
+                    {address.short_address}
+                  </Button>
+                );
+              })}
             </div>
           </>
         )}

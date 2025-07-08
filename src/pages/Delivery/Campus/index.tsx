@@ -20,7 +20,7 @@ interface Place {
   short_address: string;
 }
 
-const 함지: Place = {
+const DEFAULT_PLACE: Place = {
   id: 5,
   full_address: '충남 천안시 동남구 병천면 충절로 1600 한국기술교육대학교 제1캠퍼스 생활관 105동',
   short_address: '105동(함지)',
@@ -38,7 +38,18 @@ export default function Campus() {
   const [selectedRequest, setSelectedRequest] = useState('');
   const [customInputValue, setCustomInputValue] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<AddressCategory | null>(null);
-  const [selectedPlace, setSelectedPlace] = useState<Place>(함지);
+
+  const { campusAddress, setDeliveryRequest, setCampusAddress, setDeliveryType } = useOrderStore();
+
+  const initialPlace: Place = campusAddress
+    ? {
+        id: campusAddress.id,
+        full_address: campusAddress.full_address,
+        short_address: campusAddress.short_address,
+      }
+    : DEFAULT_PLACE;
+
+  const [selectedPlace, setSelectedPlace] = useState<Place>(initialPlace);
 
   const addressState = {
     selectedCategory,
@@ -46,8 +57,6 @@ export default function Campus() {
     selectedPlace,
     setSelectedPlace,
   };
-
-  const { setDeliveryRequest, setCampusAddress, setDeliveryType } = useOrderStore();
 
   const coords = useNaverGeocode(selectedPlace?.full_address || '');
   const map = useNaverMap(...coords);
@@ -66,6 +75,7 @@ export default function Campus() {
     setDeliveryRequest(requestMessage);
     setDeliveryType('CAMPUS');
     setCampusAddress({
+      id: selectedPlace.id,
       full_address: selectedPlace.full_address,
       short_address: selectedPlace.short_address,
     });
