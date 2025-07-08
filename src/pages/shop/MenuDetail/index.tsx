@@ -6,6 +6,7 @@ import ImageCarousel from '../components/ImageCarousel';
 import MenuCounter from '../components/MenuCounter';
 import MenuDescription from '../components/MenuDescription';
 import MenuOptions from '../components/MenuOptions';
+import MenuPriceSelects from '../components/MenuPriceSelects';
 import { useGetShopMenuDetail } from '../hooks/useGetShopInfo';
 import { useMenuSelection } from '../hooks/useMenuSelection';
 import useCart from '@/pages/Payment/hooks/useCart';
@@ -23,7 +24,8 @@ export default function MenuDetail() {
   const { data: cartInfo } = useCart(orderType);
   const { data: menuInfo } = useGetShopMenuDetail(Number(shopId), Number(menuId));
 
-  const { count, increaseCount, decreaseCount } = useMenuSelection(menuInfo);
+  const { priceId, count, selectedOptions, selectPrice, selectOption, increaseCount, decreaseCount, totalPrice } =
+    useMenuSelection(menuInfo);
 
   const imagesForCarousel = menuInfo.images.map((image) => ({
     image_url: image,
@@ -36,10 +38,15 @@ export default function MenuDetail() {
       <ImageCarousel images={imagesForCarousel} targetRef={targetRef} />
       <MenuDescription name={menuInfo.name} description={menuInfo.description} price={menuInfo.prices[0].price} />
       <div className="mb-40 px-6">
-        <MenuOptions optionGroups={menuInfo.option_groups} />
+        <MenuPriceSelects prices={menuInfo.prices} selectedPriceId={priceId} selectPrice={selectPrice} />
+        <MenuOptions
+          optionGroups={menuInfo.option_groups}
+          selectedOptions={selectedOptions}
+          selectOption={selectOption}
+        />
         <MenuCounter count={count} increaseCount={increaseCount} decreaseCount={decreaseCount} />
       </div>
-      <AddToCartBottomModal price={10000} isActive={true} onAddToCart={() => {}} />
+      <AddToCartBottomModal price={totalPrice} isActive={true} onAddToCart={() => {}} />
     </div>
   );
 }
