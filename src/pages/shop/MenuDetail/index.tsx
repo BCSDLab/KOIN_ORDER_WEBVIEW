@@ -5,6 +5,7 @@ import ImageCarousel from '../components/ImageCarousel';
 import MenuDescription from '../components/MenuDescription';
 import MenuOptions from '../components/MenuOptions';
 import { useGetShopMenuDetail } from '../hooks/useGetShopInfo';
+import { useMenuSelection } from '../hooks/useMenuSelection';
 import useCart from '@/pages/Payment/hooks/useCart';
 import { useOrderStore } from '@/stores/useOrderStore';
 
@@ -19,6 +20,8 @@ export default function MenuDetail() {
   const { orderType } = useOrderStore();
   const { data: cartInfo } = useCart(orderType);
   const { data: menuInfo } = useGetShopMenuDetail(Number(shopId), Number(menuId));
+
+  const { count, increaseCount, decreaseCount } = useMenuSelection(menuInfo);
 
   const imagesForCarousel = menuInfo.images.map((image) => ({
     image_url: image,
