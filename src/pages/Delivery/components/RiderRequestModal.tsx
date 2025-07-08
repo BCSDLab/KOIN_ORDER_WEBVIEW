@@ -8,7 +8,7 @@ import BottomModal, {
 import Button from '@/components/UI/Button';
 import useGetRiderRequest from '@/pages/Delivery/hooks/useGetRiderRequest';
 
-interface Props {
+interface RiderRequestModalProps {
   isOpen: boolean;
   onClose: () => void;
   selectedRequest: string;
@@ -26,7 +26,7 @@ export default function RiderRequestModal({
   customInputValue,
   setCustomInputValue,
   onSubmit,
-}: Props) {
+}: RiderRequestModalProps) {
   const { data } = useGetRiderRequest();
   const requestList = data.contents.map((item) => item.content);
 
