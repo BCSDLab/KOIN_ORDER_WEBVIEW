@@ -1,5 +1,5 @@
 import { apiClient } from '..';
-import { CartResponse, CartSummaryResponse } from '@/api/cart/entity';
+import { AddCartRequest, CartResponse, CartSummaryResponse } from '@/api/cart/entity';
 
 // const token = useTokenStore.getState().token; // 배포 시 또는 브릿지 테스트 시 사용
 const token = localStorage.getItem('token'); // 개발용
@@ -47,6 +47,15 @@ export const updateCartItemQuantity = async ({
   quantity: number;
 }) => {
   return await apiClient.post(`cart/quantity/${cartMenuItemId}/${quantity}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+
+export const addCart = async ({ menuInfo }: AddCartRequest) => {
+  return await apiClient.post('cart/add', {
+    body: menuInfo,
     headers: {
       Authorization: `Bearer ${token}`,
     },

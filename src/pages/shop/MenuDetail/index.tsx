@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import AddToCartBottomModal from '../components/AddToCartBottomModal';
 import Header from '../components/Header';
 import ImageCarousel from '../components/ImageCarousel';
@@ -7,10 +7,14 @@ import MenuCounter from '../components/MenuCounter';
 import MenuDescription from '../components/MenuDescription';
 import MenuOptions from '../components/MenuOptions';
 import MenuPriceSelects from '../components/MenuPriceSelects';
+import ResetModal from '../components/ResetModal';
+import useAddCart from '../hooks/useAddCart';
 import { useGetShopMenuDetail } from '../hooks/useGetShopInfo';
 import { useMenuSelection } from '../hooks/useMenuSelection';
 import useCart from '@/pages/Payment/hooks/useCart';
 import { useOrderStore } from '@/stores/useOrderStore';
+import useBooleanState from '@/util/hooks/useBooleanState';
+import { useToast } from '@/util/hooks/useToast';
 
 export default function MenuDetail() {
   const { shopId, menuId } = useParams();
@@ -20,9 +24,15 @@ export default function MenuDetail() {
 
   const targetRef = useRef<HTMLDivElement | null>(null);
 
+  const navigate = useNavigate();
+  const { showToast } = useToast();
+
   const { orderType } = useOrderStore();
   const { data: cartInfo } = useCart(orderType);
   const { data: menuInfo } = useGetShopMenuDetail(Number(shopId), Number(menuId));
+  const { mutate: addToCart } = useAddCart();
+
+  const [isResetModalOpen, openResetModal, closeResetModal] = useBooleanState(false);
 
   const {
     priceId,
@@ -34,12 +44,30 @@ export default function MenuDetail() {
     decreaseCount,
     totalPrice,
     isAllRequiredOptionsSelected,
-  } = useMenuSelection(menuInfo);
+    addToCartRequest,
+  } = useMenuSelection(shopId, menuInfo);
 
   const imagesForCarousel = menuInfo.images.map((image) => ({
     image_url: image,
     is_thumbnail: false,
   }));
+
+  const handleAddToCart = () => {
+    addToCart(addToCartRequest, {
+      onSuccess: () => {
+        showToast('장바구니에 담았습니다');
+        navigate(-1);
+      },
+      onError: (error) => {
+        const parsed = JSON.parse(error.message);
+        if (parsed.code === 'DIFFERENT_SHOP_ITEM_IN_CART') {
+          openResetModal();
+        } else {
+          showToast(parsed.message);
+        }
+      },
+    });
+  };
 
   return (
     <div>
@@ -55,7 +83,12 @@ export default function MenuDetail() {
         />
         <MenuCounter count={count} increaseCount={increaseCount} decreaseCount={decreaseCount} />
       </div>
-      <AddToCartBottomModal price={totalPrice} isActive={isAllRequiredOptionsSelected} onAddToCart={() => {}} />
+      <AddToCartBottomModal
+        price={totalPrice}
+        isActive={isAllRequiredOptionsSelected}
+        onAddToCart={() => handleAddToCart()}
+      />
+      <ResetModal isOpen={isResetModalOpen} onClose={closeResetModal} />
     </div>
   );
 }

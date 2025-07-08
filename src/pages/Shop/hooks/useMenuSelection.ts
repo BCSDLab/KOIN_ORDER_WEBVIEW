@@ -13,7 +13,7 @@ export interface MenuSelectionState {
   selectedOptions: SelectedOption[];
 }
 
-export function useMenuSelection(menuInfo: ShopMenuDetailResponse) {
+export function useMenuSelection(shopId: string, menuInfo: ShopMenuDetailResponse) {
   const [state, setState] = useState<MenuSelectionState>({
     priceId: menuInfo.prices[0]?.id ?? 0,
     count: 1,
@@ -71,6 +71,21 @@ export function useMenuSelection(menuInfo: ShopMenuDetailResponse) {
       return selectedCount >= group.min_select;
     });
 
+  const orderable_shop_menu_option_ids = state.selectedOptions.map((sel) => ({
+    option_group_id: sel.optionGroupId,
+    option_id: sel.optionId,
+  }));
+
+  const addToCartRequest = {
+    menuInfo: {
+      orderable_shop_id: Number(shopId),
+      orderable_shop_menu_id: menuInfo.id,
+      orderable_shop_menu_price_id: state.priceId,
+      orderable_shop_menu_option_ids,
+      quantity: state.count,
+    },
+  };
+
   return {
     ...state,
     selectPrice,
@@ -80,5 +95,6 @@ export function useMenuSelection(menuInfo: ShopMenuDetailResponse) {
     totalPrice,
     selectedPriceObj,
     isAllRequiredOptionsSelected,
+    addToCartRequest,
   };
 }
