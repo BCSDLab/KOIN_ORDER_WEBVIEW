@@ -1,0 +1,36 @@
+import { createContext, useContext, useState, ReactNode, useCallback } from 'react';
+import Portal from '@/components/Portal';
+
+interface ToastContextType {
+  showToast: (message: string, duration?: number) => void;
+}
+
+const ToastContext = createContext<ToastContextType | undefined>(undefined);
+
+export function useToast() {
+  const ctx = useContext(ToastContext);
+  if (!ctx) throw new Error('useToast must be used within a ToastProvider');
+  return ctx;
+}
+
+export function ToastProvider({ children }: { children: ReactNode }) {
+  const [message, setMessage] = useState<string | null>(null);
+
+  const showToast = useCallback((msg: string, duration = 1500) => {
+    setMessage(msg);
+    setTimeout(() => setMessage(null), duration);
+  }, []);
+
+  return (
+    <ToastContext.Provider value={{ showToast }}>
+      {children}
+      <Portal>
+        {message && (
+          <div className="pointer-events-none fixed top-1/2 left-1/2 z-50 -translate-x-1/2 -translate-y-1/2 rounded-lg bg-black/90 px-4 py-2 text-sm text-white transition-opacity">
+            {message}
+          </div>
+        )}
+      </Portal>
+    </ToastContext.Provider>
+  );
+}

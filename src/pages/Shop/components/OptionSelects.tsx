@@ -4,6 +4,7 @@ import CheckboxFalse from '@/assets/Shop/checkbox-false.svg';
 import CheckboxTrue from '@/assets/Shop/checkbox-true.svg';
 import RadioFalse from '@/assets/Shop/radio-false.svg';
 import RadioTrue from '@/assets/Shop/radio-true.svg';
+import { useToast } from '@/util/hooks/useToast';
 
 interface OptionsBlockProps {
   options: Price[];
@@ -12,6 +13,7 @@ interface OptionsBlockProps {
 }
 
 export default function OptionSelects({ options, minSelect, maxSelect }: OptionsBlockProps) {
+  const { showToast } = useToast();
   const [optionSelecStates, setOptionSelecState] = useState(
     options.map((option) => ({
       ...option,
@@ -41,6 +43,7 @@ export default function OptionSelects({ options, minSelect, maxSelect }: Options
       if (selectedCount < maxSelect || optionSelecStates.find((option) => option.id === id)?.selected) {
         toggleOptionSelection(id);
       } else {
+        showToast(`최대 ${maxSelect}개까지 선택할 수 있습니다.`);
       }
     }
   };
