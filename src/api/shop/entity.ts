@@ -114,7 +114,7 @@ export interface OptionGroup {
 export interface ShopMenuDetailResponse {
   id: number;
   name: string;
-  description?: string | null;
+  description: string | null;
   images: string[];
   prices: Price[];
   option_groups: OptionGroup[];
