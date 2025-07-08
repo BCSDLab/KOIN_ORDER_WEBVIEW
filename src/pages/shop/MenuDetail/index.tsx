@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import Header from '../components/Header';
 import ImageCarousel from '../components/ImageCarousel';
 import MenuDescription from '../components/MenuDescription';
+import MenuOptions from '../components/MenuOptions';
 import { useGetShopMenuDetail } from '../hooks/useGetShopInfo';
 import useCart from '@/pages/Payment/hooks/useCart';
 
@@ -27,6 +28,7 @@ export default function MenuDetail() {
       <Header name={menuInfo.name} targetRef={targetRef} cartItemCount={cartInfo.items.length} />
       <ImageCarousel images={imagesForCarousel} targetRef={targetRef} />
       <MenuDescription name={menuInfo.name} description={menuInfo.description || ''} price={menuInfo.prices[0].price} />
+      <MenuOptions optionGroups={menuInfo.option_groups} />
     </div>
   );
 }

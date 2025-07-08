@@ -48,7 +48,7 @@ export interface ShopInfoParams {
   orderableShopMenuId?: number;
 }
 
-interface Price {
+export interface Price {
   id: number;
   name: string | null;
   price: number;
@@ -101,13 +101,7 @@ export interface ShopMenuGroupsResponse {
   menu_groups: MenuGroup[];
 }
 
-interface Price {
-  id: number;
-  name: string | null;
-  price: number;
-}
-
-interface OptionGroup {
+export interface OptionGroup {
   id: number;
   name: string;
   description?: string | null;
