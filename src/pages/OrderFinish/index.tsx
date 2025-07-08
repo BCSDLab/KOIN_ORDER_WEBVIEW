@@ -44,7 +44,7 @@ export default function OrderFinish() {
 
   const { mutateAsync: confirmPayments, isPending } = useConfirmPayments(orderType!);
 
-  const [orderKind, setOrderKind] = useState<OrderKind>('delivery');
+  const [orderKind, setOrderKind] = useState<OrderKind>('order');
   const [paymentResponse, setPaymentResponse] = useState<ConfirmPaymentsResponse>();
 
   const [isDeliveryBottomModalOpen, , closeDeliveryBottomModal] = useBooleanState(false);
