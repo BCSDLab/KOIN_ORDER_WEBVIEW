@@ -1,30 +1,18 @@
 import { useState } from 'react';
-// import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import RiderRequestModal from '../components/RiderRequestModal';
 import AddressTypeDropdown from './AddressTypeDropdown';
 import Building from '@/assets/Delivery/building.svg';
 import NightShelter from '@/assets/Delivery/night-shelter.svg';
-import CloseIcon from '@/assets/Main/close-icon.svg';
 import ArrowDown from '@/assets/Payment/arrow-down-icon.svg';
 import Badge from '@/components/UI/Badge';
-import BottomModal, {
-  BottomModalHeader,
-  BottomModalContent,
-  BottomModalFooter,
-} from '@/components/UI/BottomModal/BottomModal';
 import Button from '@/components/UI/Button';
 import useMarker from '@/pages/Delivery/hooks/useMarker';
 import useNaverGeocode from '@/pages/Delivery/hooks/useNaverGeocode';
 import useNaverMap from '@/pages/Delivery/hooks/useNaverMap';
+import { useOrderStore } from '@/stores/useOrderStore';
 import { AddressCategory } from '@/types/api/deliveryCampus';
 import useBooleanState from '@/util/hooks/useBooleanState';
-
-const DetailRequest: string[] = [
-  '문 앞에 놔주세요 (벨 눌러주세요)',
-  '문 앞에 놔주세요 (노크해주세요)',
-  '문 앞에 놔주세요 (벨X, 노크 X)',
-  '직접 받을게요',
-  '전화주시면 마중 나갈게요',
-];
 
 interface Place {
   id: number;
@@ -38,16 +26,20 @@ const 함지: Place = {
   short_address: '105동(함지)',
 };
 
+const getTrimmedRequestMessage = (selectedRequest: string, customInputValue: string): string => {
+  const isCustom = selectedRequest === 'customRequest';
+  const trimmed = customInputValue.trim();
+  return isCustom && trimmed !== '' ? trimmed : !isCustom && selectedRequest !== '' ? selectedRequest : '요청사항 없음';
+};
+
 export default function Campus() {
-  // const navigate = useNavigate();
-
+  const navigate = useNavigate();
   const [bottomModalIsOpen, openBottomModal, closeBottomModal] = useBooleanState(false);
-
-  const [selectedRequest, setSelectedRequest] = useState<string>('');
-  const [customInputValue, setCustomInputValue] = useState<string>('');
-
+  const [selectedRequest, setSelectedRequest] = useState('');
+  const [customInputValue, setCustomInputValue] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<AddressCategory | null>(null);
   const [selectedPlace, setSelectedPlace] = useState<Place>(함지);
+
   const addressState = {
     selectedCategory,
     setSelectedCategory,
@@ -55,33 +47,30 @@ export default function Campus() {
     setSelectedPlace,
   };
 
+  const { setDeliveryRequest, setCampusAddress, setDeliveryType } = useOrderStore();
+
   const coords = useNaverGeocode(selectedPlace?.full_address || '');
   const map = useNaverMap(...coords);
   useMarker(map);
 
-  const requestLabel = () => {
-    if (!selectedRequest) {
-      return '상세 요청사항을 입력해주세요.';
-    }
-    if (selectedRequest === 'customRequest') {
-      return customInputValue || '상세 요청사항을 입력해주세요.';
-    }
-    return selectedRequest;
-  };
+  const requestMessage = getTrimmedRequestMessage(selectedRequest, customInputValue);
 
-  const handleSelectRequest = (detail: string) => setSelectedRequest(detail);
-  const getCustomInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setCustomInputValue(e.target.value.trimStart());
+  const handleSubmitRequest = () => {
+    setDeliveryRequest(requestMessage);
+    closeBottomModal();
   };
-
-  const handleSubmitRequest = () => closeBottomModal();
 
   const handleSelectAddress = () => {
-    if (!selectedPlace) {
-      return;
-    }
-    // TODO: 주소 선택 후 결제 페이지로 이동
-    // navigate('/payment', { state: { address: selectedPlace.full_address } });
+    if (!selectedPlace) return;
+
+    setDeliveryRequest(requestMessage);
+    setDeliveryType('CAMPUS');
+    setCampusAddress({
+      full_address: selectedPlace.full_address,
+      short_address: selectedPlace.short_address,
+    });
+
+    navigate('/payment?orderType=DELIVERY');
   };
 
   return (
@@ -115,79 +104,30 @@ export default function Campus() {
         <button
           type="button"
           onClick={openBottomModal}
-          className="flex w-full items-center justify-between rounded-sm border border-neutral-300 bg-white px-4 py-3 text-sm text-neutral-400"
+          className={`flex w-full items-center justify-between rounded-sm border border-neutral-300 bg-white px-4 py-3 text-sm ${
+            requestMessage === '요청사항 없음' ? 'text-neutral-400' : 'text-black'
+          }`}
         >
-          {requestLabel()}
+          {requestMessage === '요청사항 없음' ? '상세 요청사항을 입력해주세요.' : requestMessage}
           <div className="pointer-events-none">
             <ArrowDown />
           </div>
         </button>
       </div>
+
       <Button className="mt-auto h-[2.875rem] w-full" onClick={handleSelectAddress}>
         주소 선택
       </Button>
-      <BottomModal isOpen={bottomModalIsOpen} onClose={closeBottomModal}>
-        <BottomModalHeader>
-          <div className="text-primary-500 font-semibold">배달기사님에게</div>
-          <button onClick={closeBottomModal}>
-            <CloseIcon />
-          </button>
-        </BottomModalHeader>
-        <BottomModalContent className="px-6">
-          <form className="flex w-full flex-col gap-2">
-            {DetailRequest.map((detail, index) => (
-              <label
-                key={index}
-                htmlFor={detail}
-                className={`request-label ${selectedRequest === detail && 'request-label-checked'}`}
-              >
-                <div className="relative h-5 w-5">
-                  <input
-                    name="request"
-                    id={detail}
-                    type="radio"
-                    checked={selectedRequest === detail}
-                    onChange={() => handleSelectRequest(detail)}
-                    className="peer border-primary-500 absolute h-5 w-5 appearance-none rounded-full border-2 bg-white"
-                  />
-                  <div className="bg-primary-500 pointer-events-none absolute inset-1 rounded-full opacity-0 peer-checked:opacity-100" />
-                </div>
-                <div className="text-base">{detail}</div>
-              </label>
-            ))}
-            <label
-              htmlFor="customRequest"
-              className="has-[input[type=radio]:checked]:border-primary-500 has-[input[type=radio]:checked]:bg-primary-100 shadow-1 flex h-[3.125rem] items-center gap-2 rounded-lg border border-neutral-300 p-2 has-[input[type=radio]:checked]:border-2"
-            >
-              <div className="relative h-5 w-5">
-                <input
-                  name="request"
-                  id="customRequest"
-                  type="radio"
-                  checked={selectedRequest === 'customRequest'}
-                  onChange={() => handleSelectRequest('customRequest')}
-                  className="peer border-primary-500 absolute h-5 w-5 appearance-none rounded-full border-2 bg-white"
-                />
-                <div className="bg-primary-500 pointer-events-none absolute inset-1 rounded-full opacity-0 peer-checked:opacity-100" />
-              </div>
-              <div className="text-base">직접 입력</div>
-            </label>
-            {selectedRequest === 'customRequest' && (
-              <input
-                type="text"
-                value={customInputValue}
-                placeholder="상세 요청사항을 입력해주세요."
-                onChange={getCustomInput}
-                className="h-[3.125rem] rounded-lg border border-neutral-300 bg-white p-2 placeholder-neutral-400 placeholder:text-sm placeholder:font-normal"
-              />
-            )}
-          </form>
-          <Button onClick={handleSubmitRequest} className="h-[2.875rem] w-full">
-            선택하기
-          </Button>
-        </BottomModalContent>
-        <BottomModalFooter></BottomModalFooter>
-      </BottomModal>
+
+      <RiderRequestModal
+        isOpen={bottomModalIsOpen}
+        onClose={closeBottomModal}
+        selectedRequest={selectedRequest}
+        setSelectedRequest={setSelectedRequest}
+        customInputValue={customInputValue}
+        setCustomInputValue={setCustomInputValue}
+        onSubmit={handleSubmitRequest}
+      />
     </div>
   );
 }
