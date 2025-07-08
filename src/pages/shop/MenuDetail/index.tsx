@@ -34,8 +34,10 @@ export default function MenuDetail() {
       <Header name={menuInfo.name} targetRef={targetRef} cartItemCount={cartInfo.items.length} />
       <ImageCarousel images={imagesForCarousel} targetRef={targetRef} />
       <MenuDescription name={menuInfo.name} description={menuInfo.description || ''} price={menuInfo.prices[0].price} />
-      <MenuOptions optionGroups={menuInfo.option_groups} />
-      <MenuCounter count={count} increaseCount={increaseCount} decreaseCount={decreaseCount} />
+      <div className="mb-40 px-6">
+        <MenuOptions optionGroups={menuInfo.option_groups} />
+        <MenuCounter count={count} increaseCount={increaseCount} decreaseCount={decreaseCount} />
+      </div>
     </div>
   );
 }

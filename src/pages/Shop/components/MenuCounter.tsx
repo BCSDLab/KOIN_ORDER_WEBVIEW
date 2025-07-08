@@ -28,14 +28,16 @@ export default function MenuCounter({ count, increaseCount, decreaseCount }: Men
   };
 
   return (
-    <div className="border-primary-500 flex h-9 w-26.5 items-center justify-between rounded-3xl border bg-white px-6">
-      <button className="ml-4 rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600" onClick={handleDecreaseCount}>
-        <Minus />
-      </button>
-      <span className="text-primary-500 text-xl font-bold">{count}</span>
-      <button className="ml-4 rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600" onClick={handleIncreaseCount}>
-        <Plus />
-      </button>
+    <div className="flex h-17 items-center justify-end">
+      <div className="border-primary-500 flex h-9 w-26.5 items-center justify-between rounded-3xl border bg-white px-4">
+        <button className="" onClick={handleDecreaseCount}>
+          <Minus />
+        </button>
+        <span className="text-primary-500 text-xl font-bold">{count}</span>
+        <button className="" onClick={handleIncreaseCount}>
+          <Plus />
+        </button>
+      </div>
     </div>
   );
 }

@@ -8,11 +8,11 @@ interface MenuOptionsProps {
 
 export default function MenuOptions({ optionGroups }: MenuOptionsProps) {
   return (
-    <div className="mb-40 flex flex-col items-center gap-3 px-6">
+    <div className="flex flex-col items-center">
       {optionGroups.map((group) => (
         <div
           key={group.id}
-          className="flex w-full scroll-mt-[124px] flex-col rounded-xl border border-neutral-300 bg-white px-6 py-4"
+          className="mb-3 flex w-full scroll-mt-[124px] flex-col rounded-xl border border-neutral-300 bg-white px-6 py-4"
         >
           <div className="flex items-center justify-between">
             <div>
