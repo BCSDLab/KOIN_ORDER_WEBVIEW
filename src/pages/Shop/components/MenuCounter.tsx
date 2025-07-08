@@ -1,6 +1,5 @@
 import Minus from '@/assets/Shop/minus.svg';
 import Plus from '@/assets/Shop/plus.svg';
-import { useToast } from '@/util/hooks/useToast';
 
 interface MenuCounterProps {
   count: number;
@@ -9,8 +8,6 @@ interface MenuCounterProps {
 }
 
 export default function MenuCounter({ count, increaseCount, decreaseCount }: MenuCounterProps) {
-  const { showToast } = useToast();
-
   const MAX_COUNT = 10;
 
   const handleDecreaseCount = () => {
@@ -22,8 +19,6 @@ export default function MenuCounter({ count, increaseCount, decreaseCount }: Men
   const handleIncreaseCount = () => {
     if (count < MAX_COUNT) {
       increaseCount();
-    } else {
-      showToast(`최대 주문 수량은 ${MAX_COUNT}개입니다.`);
     }
   };
 

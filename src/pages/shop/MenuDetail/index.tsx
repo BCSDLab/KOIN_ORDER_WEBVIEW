@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import AddToCartBottomModal from '../components/AddToCartBottomModal';
 import Header from '../components/Header';
@@ -7,6 +7,7 @@ import MenuCounter from '../components/MenuCounter';
 import MenuDescription from '../components/MenuDescription';
 import MenuOptions from '../components/MenuOptions';
 import MenuPriceSelects from '../components/MenuPriceSelects';
+import NoticeModal from '../components/NoticeModal';
 import ResetModal from '../components/ResetModal';
 import useAddCart from '../hooks/useAddCart';
 import { useGetShopMenuDetail } from '../hooks/useGetShopInfo';
@@ -33,6 +34,8 @@ export default function MenuDetail() {
   const { mutate: addToCart } = useAddCart();
 
   const [isResetModalOpen, openResetModal, closeResetModal] = useBooleanState(false);
+  const [isNoticeModalOpen, openNoticeModal, closeNoticeModal] = useBooleanState(false);
+  const [noticeMessage, setNoticeMessage] = useState('');
 
   const {
     priceId,
@@ -60,10 +63,18 @@ export default function MenuDetail() {
       },
       onError: (error) => {
         const parsed = JSON.parse(error.message);
-        if (parsed.code === 'DIFFERENT_SHOP_ITEM_IN_CART') {
-          openResetModal();
-        } else {
-          showToast(parsed.message);
+        switch (parsed.code) {
+          case 'DIFFERENT_SHOP_ITEM_IN_CART':
+            openResetModal();
+            break;
+          case 'MENU_SOLD_OUT':
+            setNoticeMessage('영업시간이 아니라서\n장바구니에 담을 수 없어요.');
+            openNoticeModal();
+            break;
+          default:
+            setNoticeMessage(parsed.message);
+            openNoticeModal();
+            break;
         }
       },
     });
@@ -89,6 +100,7 @@ export default function MenuDetail() {
         onAddToCart={() => handleAddToCart()}
       />
       <ResetModal isOpen={isResetModalOpen} onClose={closeResetModal} />
+      <NoticeModal isOpen={isNoticeModalOpen} onClose={closeNoticeModal} message={noticeMessage} />
     </div>
   );
 }

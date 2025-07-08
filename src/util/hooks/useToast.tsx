@@ -8,9 +8,9 @@ interface ToastContextType {
 const ToastContext = createContext<ToastContextType | undefined>(undefined);
 
 export function useToast() {
-  const ctx = useContext(ToastContext);
-  if (!ctx) throw new Error('useToast must be used within a ToastProvider');
-  return ctx;
+  const context = useContext(ToastContext);
+  if (!context) throw new Error('useToast는 ToastProvider 내부에서만 사용할 수 있습니다.');
+  return context;
 }
 
 export function ToastProvider({ children }: { children: ReactNode }) {

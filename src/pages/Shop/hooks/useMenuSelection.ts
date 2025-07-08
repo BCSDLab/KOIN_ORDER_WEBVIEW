@@ -15,7 +15,7 @@ export interface MenuSelectionState {
 
 export function useMenuSelection(shopId: string, menuInfo: ShopMenuDetailResponse) {
   const [state, setState] = useState<MenuSelectionState>({
-    priceId: menuInfo.prices[0]?.id ?? 0,
+    priceId: menuInfo.prices[0].id,
     count: 1,
     selectedOptions: [],
   });
