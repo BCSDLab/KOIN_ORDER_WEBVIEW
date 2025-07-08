@@ -12,6 +12,7 @@
   "dependencies": {
     "@tanstack/react-query": "^5.74.4",
     "@tosspayments/tosspayments-sdk": "^2.3.4",
+    "dayjs": "^1.11.13",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-router-dom": "^7.5.2",
