@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import dayjs from 'dayjs';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { ConfirmPaymentsResponse } from '@/api/payments/entity';
 import CloseIcon from '@/assets/Main/close-icon.svg';
@@ -20,6 +21,19 @@ import useBooleanState from '@/util/hooks/useBooleanState';
 
 export default function OrderFinish() {
   type OrderKind = 'order' | 'preparation' | 'delivery';
+
+  const stateTitle = {
+    order: '주문 확인중',
+    preparation: '준비중',
+    delivery: '배달 완료',
+  } as const;
+
+  const stateMessage = {
+    order: '사장님이 주문을 확인하고 있어요!',
+    preparation: '가게에서 열심히 음식을 조리하고있어요!',
+    delivery: '배달이 완료되었어요 감사합니다!',
+  } as const;
+
   const [searchParams] = useSearchParams();
   const orderType = searchParams.get('orderType');
   const entryPoint = searchParams.get('entryPoint');
@@ -37,6 +51,9 @@ export default function OrderFinish() {
   const [isCallBottomModalOpen, openCallBottomModal, closeCallBottomModal] = useBooleanState(false);
 
   const isDelivery = orderType === 'delivery';
+
+  const approvedTime = dayjs(paymentResponse?.approved_at);
+  const deliveryFinishTime = approvedTime.add(1, 'hour').format('A h시 mm분');
 
   useEffect(() => {
     const confirmPayment = async () => {
@@ -72,17 +89,22 @@ export default function OrderFinish() {
 
   return (
     <div className="flex flex-col">
-      <div className="flex flex-row justify-between px-6 py-4">
-        <div className="text-primary-500 flex h-[3.188rem] flex-col justify-center text-xl leading-[160%] font-bold">
-          주문 확인중
-          <div className="text-xs leading-[160%] font-normal text-neutral-500">사장님이 주문을 확인하고 있어요!</div>
+      <div className="flex flex-row justify-between px-6 py-6">
+        <div className="text-primary-500 flex h-auto flex-col justify-center text-xl leading-[160%] font-bold">
+          {stateTitle[orderKind]}
+          <div className={orderKind === 'preparation' ? 'font-bold text-[#7D08A4]' : 'hidden'}>
+            {`${deliveryFinishTime} 도착 예정`}
+          </div>
+          <div className="text-xs leading-[160%] font-normal text-neutral-500">{stateMessage[orderKind]}</div>
         </div>
-        <Button
-          onClick={handleClickOrderCancel}
-          className="h-[1.938rem] w-[4.125rem] self-end rounded-3xl px-2 text-xs leading-[160%] font-semibold"
-        >
-          취소하기
-        </Button>
+        {orderKind === 'order' && (
+          <Button
+            onClick={handleClickOrderCancel}
+            className="h-[1.938rem] w-[4.125rem] self-end rounded-3xl px-2 text-xs leading-[160%] font-semibold"
+          >
+            취소하기
+          </Button>
+        )}
       </div>
       <div>
         <div className="flex flex-row justify-between px-6 pt-4 pb-1.5">
