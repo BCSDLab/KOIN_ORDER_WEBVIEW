@@ -6,26 +6,24 @@ function useNaverMap(latitude: number, longitude: number) {
   useEffect(() => {
     if (!latitude || !longitude) return;
 
-    if (!map) {
-      const newMaps = new naver.maps.Map('map', {
-        center: new naver.maps.LatLng(latitude, longitude),
-        zoom: 17,
-        maxZoom: 20,
-        minZoom: 15,
-        logoControl: false,
-        scrollWheel: false,
-        draggable: true,
-      });
-      setMap(newMaps);
-
-      return () => {
-        newMaps.destroy();
-      };
-    } else {
-      map.setCenter(new naver.maps.LatLng(latitude, longitude));
+    if (map) {
+      map.destroy();
     }
 
-    return () => {};
+    const newMap = new naver.maps.Map('map', {
+      center: new naver.maps.LatLng(latitude, longitude),
+      zoom: 17,
+      maxZoom: 20,
+      minZoom: 15,
+      logoControl: false,
+      scrollWheel: false,
+      draggable: true,
+    });
+    setMap(newMap);
+
+    return () => {
+      newMap.destroy();
+    };
   }, [latitude, longitude]);
 
   return map;
