@@ -1,5 +1,6 @@
 import { useRef } from 'react';
 import { useParams } from 'react-router-dom';
+import AddToCartBottomModal from '../components/AddToCartBottomModal';
 import Header from '../components/Header';
 import ImageCarousel from '../components/ImageCarousel';
 import MenuCounter from '../components/MenuCounter';
@@ -38,6 +39,7 @@ export default function MenuDetail() {
         <MenuOptions optionGroups={menuInfo.option_groups} />
         <MenuCounter count={count} increaseCount={increaseCount} decreaseCount={decreaseCount} />
       </div>
+      <AddToCartBottomModal price={10000} isActive={true} onAddToCart={() => {}} />
     </div>
   );
 }
