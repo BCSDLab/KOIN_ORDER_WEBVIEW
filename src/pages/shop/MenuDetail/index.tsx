@@ -2,6 +2,7 @@ import { useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import Header from '../components/Header';
 import ImageCarousel from '../components/ImageCarousel';
+import MenuCounter from '../components/MenuCounter';
 import MenuDescription from '../components/MenuDescription';
 import MenuOptions from '../components/MenuOptions';
 import { useGetShopMenuDetail } from '../hooks/useGetShopInfo';
@@ -34,6 +35,7 @@ export default function MenuDetail() {
       <ImageCarousel images={imagesForCarousel} targetRef={targetRef} />
       <MenuDescription name={menuInfo.name} description={menuInfo.description || ''} price={menuInfo.prices[0].price} />
       <MenuOptions optionGroups={menuInfo.option_groups} />
+      <MenuCounter count={count} increaseCount={increaseCount} decreaseCount={decreaseCount} />
     </div>
   );
 }
