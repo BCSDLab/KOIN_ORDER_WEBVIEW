@@ -32,3 +32,22 @@ export interface Juso {
   si_nm: string;
   zip_no: string;
 }
+export interface OffCampusDeliveryAddressRequest {
+  zip_number: string;
+  si_do: string;
+  si_gun_gu: string;
+  eup_myeon_dong: string;
+  road: string;
+  building: string;
+  detail_address: string;
+  full_address: string;
+}
+
+interface RiderRequestMessage {
+  content: string;
+}
+
+export interface RiderRequestResponse {
+  count: number;
+  contents: RiderRequestMessage[];
+}
