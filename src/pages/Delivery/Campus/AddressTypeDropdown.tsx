@@ -85,6 +85,8 @@ export default function AddressTypeDropdown({
                         id: address.id,
                         full_address: address.full_address,
                         short_address: address.short_address,
+                        latitude: address.latitude,
+                        longitude: address.longitude,
                       })
                     }
                   >

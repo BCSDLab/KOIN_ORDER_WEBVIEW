@@ -1,6 +1,6 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { getCampusDeliveryAddress } from '@/api/delivery';
-import { CampusDeliveryAddressRequest } from '@/types/api/deliveryCampus';
+import { CampusDeliveryAddressRequest } from '@/api/delivery/entity';
 
 const useCampusDeliveryAddress = ({ filter }: CampusDeliveryAddressRequest) => {
   const { data } = useSuspenseQuery({

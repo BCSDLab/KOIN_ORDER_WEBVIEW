@@ -2,7 +2,7 @@ import CopyIcon from '@/assets/Payment/copy.svg';
 import useMarker from '@/pages/Delivery/hooks/useMarker';
 import useNaverGeocode from '@/pages/Delivery/hooks/useNaverGeocode';
 import useNaverMap from '@/pages/Delivery/hooks/useNaverMap';
-import { useGetShopDetail } from '@/pages/shop/hooks/useGetShopDetail';
+import { useGetShopDetail } from '@/pages/Shop/hooks/useGetShopDetail';
 
 interface ShopLocationMapProps {
   orderableShopId: number;

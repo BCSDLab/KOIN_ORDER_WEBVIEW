@@ -46,6 +46,8 @@ export interface CampusDeliveryAddress {
   type: '기숙사' | '공학관' | '그 외';
   full_address: string;
   short_address: string;
+  latitude: number;
+  longitude: number;
 }
 export interface CampusDeliveryAddressResponse {
   count: number;
