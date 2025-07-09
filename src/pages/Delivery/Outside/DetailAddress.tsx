@@ -1,14 +1,8 @@
 import { useState } from 'react';
-import clsx from 'clsx';
 import { useLocation, useNavigate } from 'react-router-dom';
-import CloseIcon from '@/assets/Main/close-icon.svg';
+import RiderRequestModal from '../components/RiderRequestModal';
 import ArrowDown from '@/assets/Payment/arrow-down-icon.svg';
 import ArrowGo from '@/assets/Payment/arrow-go-icon.svg';
-import BottomModal, {
-  BottomModalContent,
-  BottomModalFooter,
-  BottomModalHeader,
-} from '@/components/UI/BottomModal/BottomModal';
 import Button from '@/components/UI/Button';
 import Modal, { ModalContent } from '@/components/UI/CenterModal/Modal';
 import useMarker from '@/pages/Delivery/hooks/useMarker';
@@ -18,60 +12,40 @@ import useUserDeliveryAddress from '@/pages/Delivery/hooks/useUserDeliveryAddres
 import { useOrderStore } from '@/stores/useOrderStore';
 import useBooleanState from '@/util/hooks/useBooleanState';
 
-const DetailRequest: string[] = [
-  '문 앞에 놔주세요 (벨 눌러주세요)',
-  '문 앞에 놔주세요 (노크해주세요)',
-  '문 앞에 놔주세요 (벨X, 노크 X)',
-  '직접 받을게요',
-  '전화주시면 마중 나갈게요',
-];
+const getTrimmedRequestMessage = (selectedRequest: string, customInputValue: string): string => {
+  const isCustom = selectedRequest === 'customRequest';
+  const trimmed = customInputValue.trim();
+  return isCustom && trimmed !== '' ? trimmed : !isCustom && selectedRequest !== '' ? selectedRequest : '요청사항 없음';
+};
 
 export default function DetailAddress() {
-  const { postAddress, setDeliveryRequest, setPostAddress } = useOrderStore();
-
-  const { mutate } = useUserDeliveryAddress();
-
+  const navigate = useNavigate();
   const location = useLocation();
   const address = location.state?.roadAddress || '';
 
-  const navigate = useNavigate();
-
-  const [isDeliveryBottomModalOpen, openDeliveryBottomModal, closeDeliveryBottomModal] = useBooleanState(false);
+  const [isRequestModalOpen, openRequestModal, closeRequestModal] = useBooleanState(false);
   const [isModalOpen, openModal, closeModal] = useBooleanState(false);
-
-  const [selectedRequestInModal, setSelectedRequestInModal] = useState<string>('');
-  const [customInputValueInModal, setCustomInputValueInModal] = useState<string>('');
 
   const [selectedRequest, setSelectedRequest] = useState<string>('');
   const [customInputValue, setCustomInputValue] = useState<string>('');
-
   const [detailAddressValue, setDetailAddressValue] = useState<string>('');
+
+  const { mutate } = useUserDeliveryAddress();
+  const { outsideAddress, setDeliveryRequest, setOutsideAddress, setDeliveryType } = useOrderStore();
 
   const coords = useNaverGeocode(address);
   const map = useNaverMap(...coords);
-
   useMarker(map);
 
-  const handleSelectRequestInModal = (detail: string) => setSelectedRequestInModal(detail);
-  const handleCustomInputInModal = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setCustomInputValueInModal(e.target.value.trim());
-  };
+  const requestMessage = getTrimmedRequestMessage(selectedRequest, customInputValue);
+
   const handleDetailAddress = (e: React.ChangeEvent<HTMLInputElement>) => {
     setDetailAddressValue(e.target.value.trim());
   };
 
-  const requestLabel = () => {
-    if (!selectedRequest) return '상세 요청사항을 입력해주세요.';
-
-    if (selectedRequest === 'customRequest') return customInputValue || '상세 요청사항을 입력해주세요.';
-
-    return selectedRequest;
-  };
-
-  const handleSelectRequest = () => {
-    closeDeliveryBottomModal();
-    setSelectedRequest(selectedRequestInModal);
-    setCustomInputValue(customInputValueInModal);
+  const handleSubmitRequest = () => {
+    setDeliveryRequest(requestMessage);
+    closeRequestModal();
   };
 
   const DeliveryRequest = () => {
@@ -85,15 +59,16 @@ export default function DetailAddress() {
 
     DeliveryRequest();
 
-    const updatedPostAddress = {
-      ...postAddress,
+    const updatedOutsideAddress = {
+      ...outsideAddress,
       detail_address: detailAddressValue,
       full_address: `${address} ${detailAddressValue}`,
     };
 
-    setPostAddress(updatedPostAddress);
-    //navigate('/payment');
-    mutate(updatedPostAddress);
+    setOutsideAddress(updatedOutsideAddress);
+    setDeliveryType('OUTSIDE');
+    navigate('/payment?orderType=DELIVERY');
+    mutate(updatedOutsideAddress);
   };
 
   const backSetAddressPage = () => {
@@ -127,13 +102,12 @@ export default function DetailAddress() {
         <div className="text-primary-500 pb-2 font-semibold">배달기사님에게</div>
         <button
           type="button"
-          onClick={openDeliveryBottomModal}
-          className={clsx(
-            'flex w-full items-center justify-between rounded-sm border border-neutral-300 bg-white px-4 py-3 text-sm',
-            requestLabel() === '상세 요청사항을 입력해주세요.' ? 'text-neutral-400' : 'text-black',
-          )}
+          onClick={openRequestModal}
+          className={`flex w-full items-center justify-between rounded-sm border border-neutral-300 bg-white px-4 py-3 text-sm ${
+            requestMessage === '요청사항 없음' ? 'text-neutral-400' : 'text-black'
+          }`}
         >
-          {requestLabel()}
+          {requestMessage === '요청사항 없음' ? '상세 요청사항을 입력해주세요.' : requestMessage}
           <div className="pointer-events-none">
             <ArrowDown />
           </div>
@@ -142,6 +116,17 @@ export default function DetailAddress() {
       <Button className="mt-auto h-[2.875rem]" fullWidth onClick={handleClickSaveAddress}>
         주소 선택
       </Button>
+
+      <RiderRequestModal
+        isOpen={isRequestModalOpen}
+        onClose={closeRequestModal}
+        selectedRequest={selectedRequest}
+        setSelectedRequest={setSelectedRequest}
+        customInputValue={customInputValue}
+        setCustomInputValue={setCustomInputValue}
+        onSubmit={handleSubmitRequest}
+      />
+
       <Modal isOpen={isModalOpen} onClose={closeModal}>
         <ModalContent>
           정확한 상세 주소를 입력해주세요.
@@ -150,68 +135,6 @@ export default function DetailAddress() {
           </Button>
         </ModalContent>
       </Modal>
-      <BottomModal isOpen={isDeliveryBottomModalOpen} onClose={closeDeliveryBottomModal}>
-        <BottomModalHeader>
-          <div className="text-primary-500 font-semibold">배달기사님에게</div>
-          <button onClick={closeDeliveryBottomModal}>
-            <CloseIcon />
-          </button>
-        </BottomModalHeader>
-        <BottomModalContent className="px-6">
-          <form className="flex w-full flex-col gap-2">
-            {DetailRequest.map((detail, index) => (
-              <label
-                key={index}
-                htmlFor={detail}
-                className={`request-label ${selectedRequestInModal === detail && 'request-label-checked'}`}
-              >
-                <div className="relative h-5 w-5">
-                  <input
-                    name="request"
-                    id={detail}
-                    type="radio"
-                    checked={selectedRequestInModal === detail}
-                    onChange={() => handleSelectRequestInModal(detail)}
-                    className="peer border-primary-500 absolute h-5 w-5 appearance-none rounded-full border-2 bg-white"
-                  />
-                  <div className="bg-primary-500 pointer-events-none absolute inset-1 rounded-full opacity-0 peer-checked:opacity-100" />
-                </div>
-                <div className="text-base">{detail}</div>
-              </label>
-            ))}
-            <label
-              htmlFor="customRequest"
-              className="has-[input[type=radio]:checked]:border-primary-500 has-[input[type=radio]:checked]:bg-primary-100 shadow-1 flex h-[3.125rem] items-center gap-2 rounded-lg border border-neutral-300 p-2 has-[input[type=radio]:checked]:border-2"
-            >
-              <div className="relative h-5 w-5">
-                <input
-                  name="request"
-                  id="customRequest"
-                  type="radio"
-                  checked={selectedRequestInModal === 'customRequest'}
-                  onChange={() => handleSelectRequestInModal('customRequest')}
-                  className="peer border-primary-500 absolute h-5 w-5 appearance-none rounded-full border-2 bg-white"
-                />
-                <div className="bg-primary-500 pointer-events-none absolute inset-1 rounded-full opacity-0 peer-checked:opacity-100" />
-              </div>
-              <div className="text-base">직접 입력</div>
-            </label>
-            {selectedRequestInModal === 'customRequest' && (
-              <input
-                type="text"
-                value={customInputValueInModal}
-                placeholder="상세 요청사항을 입력해주세요."
-                onChange={handleCustomInputInModal}
-                className="h-[3.125rem] rounded-lg border border-neutral-300 bg-white p-2 placeholder-neutral-400 placeholder:text-sm placeholder:font-normal"
-              />
-            )}
-          </form>
-          <Button onClick={handleSelectRequest} className="h-[2.875rem] w-full">
-            선택하기
-          </Button>
-        </BottomModalContent>
-        <BottomModalFooter></BottomModalFooter>
-      </BottomModal>
     </div>
   );
 }

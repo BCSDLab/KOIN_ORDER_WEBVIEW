@@ -18,7 +18,7 @@ function formatPhoneNumber(phone: string) {
   } else if (digits.length <= 11) {
     return `${digits.slice(0, 3)}-${digits.slice(3, 7)}-${digits.slice(7, 11)}`;
   } else {
-    return `${digits.slice(0, 3)}-${digits.slice(3, 7)}-${digits.slice(7, 11)}`; // 최대 11자리까지만
+    return `${digits.slice(0, 3)}-${digits.slice(3, 7)}-${digits.slice(7, 11)}`;
   }
 }
 

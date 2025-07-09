@@ -9,6 +9,7 @@ import University from '@/assets/Main/university-icon.svg';
 import RightArrow from '@/assets/Payment/arrow-go-icon.svg';
 import Badge from '@/components/UI/Badge';
 import Button from '@/components/UI/Button';
+import { useOrderStore } from '@/stores/useOrderStore';
 import useBooleanState from '@/util/hooks/useBooleanState';
 
 interface DeliveryAddressSectionProps {
@@ -21,12 +22,10 @@ export default function DeliveryAddressSection({ orderableShopId }: DeliveryAddr
 
   const [isAddressModalOpen, openAddressModal, closeAddressModal] = useBooleanState(false);
   const [modalMessage, setModalMessage] = useState<string>('');
-  const [deliveryAddress] = useState<{
-    // 교내외 주소 상세 페이지 완료 시 전역상태로 변경
-    type: 'campus' | 'outside';
-    label: string;
-    detail?: string;
-  } | null>(null);
+  const { deliveryType, outsideAddress, campusAddress, deliveryRequest } = useOrderStore();
+
+  const existingAddress =
+    deliveryType === 'CAMPUS' ? !!campusAddress?.full_address : outsideAddress.full_address !== '';
 
   const handleOutsideClick = () => {
     if (!deliveryInfo?.off_campus_delivery) {
@@ -48,16 +47,16 @@ export default function DeliveryAddressSection({ orderableShopId }: DeliveryAddr
 
   return (
     <div>
-      <div className={deliveryAddress ? 'flex items-center justify-between' : ''}>
+      <div className={existingAddress ? 'flex items-center justify-between' : ''}>
         <p className="text-primary-500 text-lg font-semibold">배달주소</p>
-        {deliveryAddress ? (
-          (deliveryAddress.type === 'campus' && deliveryInfo?.off_campus_delivery) ||
-          (deliveryAddress.type === 'outside' && deliveryInfo?.campus_delivery) ? (
+        {existingAddress ? (
+          (deliveryType === 'CAMPUS' && deliveryInfo?.off_campus_delivery) ||
+          (deliveryType === 'OUTSIDE' && deliveryInfo?.campus_delivery) ? (
             <Link
-              to={`/delivery/${deliveryAddress.type === 'campus' ? 'outside' : 'campus'}`}
+              to={`/delivery/${deliveryType === 'CAMPUS' ? 'OUTSIDE' : 'CAMPUS'}`}
               className="text-xs text-neutral-500 underline"
             >
-              {deliveryAddress.type === 'campus' ? '교외 주소를 원하시나요?' : '교내 주소를 원하시나요?'}
+              {deliveryType === 'CAMPUS' ? '교외 주소를 원하시나요?' : '교내 주소를 원하시나요?'}
             </Link>
           ) : null
         ) : (
@@ -65,20 +64,20 @@ export default function DeliveryAddressSection({ orderableShopId }: DeliveryAddr
         )}
       </div>
 
-      <div className={twMerge(clsx('shadow-1 mt-2 rounded-xl bg-white px-6 py-3', deliveryAddress && 'py-4 pr-3'))}>
-        {deliveryAddress ? (
+      <div className={twMerge(clsx('shadow-1 mt-2 rounded-xl bg-white px-6 py-3', existingAddress && 'py-4 pr-3'))}>
+        {existingAddress ? (
           <div>
             <Button
               color="gray"
               fullWidth
               className="border-0 p-0 shadow-none"
-              onClick={() => navigate(`/delivery/${deliveryAddress.type === 'campus' ? 'campus' : 'outside'}`)}
+              onClick={() => navigate(`/delivery/${deliveryType === 'CAMPUS' ? 'CAMPUS' : 'OUTSIDE'}`)}
             >
               <div className="flex w-full items-center justify-between text-left">
-                {deliveryAddress.type === 'campus' ? (
-                  <Badge color="primary" size="lg" label={deliveryAddress.label} />
+                {deliveryType === 'CAMPUS' ? (
+                  <Badge color="primary" size="lg" label={campusAddress?.short_address} />
                 ) : (
-                  <span className="max-w-3xs text-xs font-normal text-neutral-600">{deliveryAddress.label}</span>
+                  <span className="max-w-3xs text-xs font-normal text-neutral-600">{outsideAddress?.full_address}</span>
                 )}
                 <RightArrow />
               </div>
@@ -90,12 +89,12 @@ export default function DeliveryAddressSection({ orderableShopId }: DeliveryAddr
               color="gray"
               fullWidth
               className="border-0 p-0 shadow-none"
-              onClick={() => navigate(`/delivery/${deliveryAddress.type === 'campus' ? 'campus' : 'outside'}`)}
+              onClick={() => navigate(`/delivery/${deliveryType === 'CAMPUS' ? 'CAMPUS' : 'OUTSIDE'}`)}
             >
               <div className="flex w-full items-center justify-between text-left">
                 <div className="">
                   <p className="text-primary-500 text-sm font-semibold">배달기사님에게</p>
-                  <p className="text-xs font-normal text-neutral-600">{deliveryAddress.detail}</p>
+                  <p className="text-xs font-normal text-neutral-600">{deliveryRequest}</p>
                 </div>
                 <RightArrow />
               </div>
