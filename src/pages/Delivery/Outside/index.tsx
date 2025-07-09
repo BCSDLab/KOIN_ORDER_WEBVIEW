@@ -11,7 +11,7 @@ import useRoadNameAddress from '@/pages/Delivery/hooks/useRoadNameAddress';
 import { useOrderStore } from '@/stores/useOrderStore';
 
 export default function DeliveryOutside() {
-  const { setPostAddress } = useOrderStore();
+  const { setOutsideAddress } = useOrderStore();
 
   const navigate = useNavigate();
   const [searchKeyword, setSearchKeyword] = useState<string>('');
@@ -111,7 +111,7 @@ export default function DeliveryOutside() {
         className="mt-auto h-[2.875rem]"
         onClick={() => {
           if (address) {
-            setPostAddress({
+            setOutsideAddress({
               zip_number: address.zip_no,
               si_do: address.si_nm,
               si_gun_gu: address.sgg_nm,

@@ -18,6 +18,7 @@ import Bike from '@/assets/Main/agriculture.svg';
 import RightArrow from '@/assets/Payment/arrow-go-icon.svg';
 import Badge from '@/components/UI/Badge';
 import Button from '@/components/UI/Button';
+import { useOrderStore } from '@/stores/useOrderStore';
 import useBooleanState from '@/util/hooks/useBooleanState';
 
 export default function Payment() {
@@ -32,6 +33,7 @@ export default function Payment() {
 
   const [ready, setReady] = useState(false);
   const [widgets, setWidgets] = useState<TossPaymentsWidgets | null>(null);
+  const { deliveryType, outsideAddress, campusAddress, deliveryRequest } = useOrderStore();
 
   const orderType = searchParams.get('orderType');
   const message = searchParams.get('message');
@@ -44,14 +46,16 @@ export default function Payment() {
   const orderName =
     cart!.items.length === 1 ? cart!.items[0].name : `${cart!.items[0].name} 외 ${cart!.items.length - 1}건`;
 
+  const address = deliveryType === 'CAMPUS' ? campusAddress?.full_address : outsideAddress?.full_address;
+
   const pay = async () => {
     let order;
     if (isDelivery) {
       order = await temporaryDelivery({
-        address: '추후 추가해야 함',
+        address: address!,
         phone_number: contact,
         to_owner: request,
-        to_rider: '추후 추가해야 함',
+        to_rider: deliveryRequest,
         total_menu_price: cart!.items_amount,
         delivery_tip: cart!.delivery_fee,
         total_amount: cart!.total_amount,
