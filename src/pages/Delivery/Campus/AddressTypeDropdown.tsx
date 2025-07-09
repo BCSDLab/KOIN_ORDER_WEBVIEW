@@ -10,6 +10,8 @@ interface Place {
   id: number;
   full_address: string;
   short_address: string;
+  latitude: number;
+  longitude: number;
 }
 
 interface AddressState {

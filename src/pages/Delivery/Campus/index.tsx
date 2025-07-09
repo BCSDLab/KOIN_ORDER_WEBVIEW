@@ -9,7 +9,6 @@ import ArrowDown from '@/assets/Payment/arrow-down-icon.svg';
 import Badge from '@/components/UI/Badge';
 import Button from '@/components/UI/Button';
 import useMarker from '@/pages/Delivery/hooks/useMarker';
-import useNaverGeocode from '@/pages/Delivery/hooks/useNaverGeocode';
 import useNaverMap from '@/pages/Delivery/hooks/useNaverMap';
 import { useOrderStore } from '@/stores/useOrderStore';
 import useBooleanState from '@/util/hooks/useBooleanState';
@@ -18,12 +17,16 @@ interface Place {
   id: number;
   full_address: string;
   short_address: string;
+  latitude: number;
+  longitude: number;
 }
 
 const DEFAULT_PLACE: Place = {
   id: 5,
   full_address: '충남 천안시 동남구 병천면 충절로 1600 한국기술교육대학교 제1캠퍼스 생활관 105동',
   short_address: '105동(함지)',
+  latitude: 36.76202833,
+  longitude: 127.28281109,
 };
 
 const getTrimmedRequestMessage = (selectedRequest: string, customInputValue: string): string => {
@@ -46,6 +49,8 @@ export default function Campus() {
         id: campusAddress.id,
         full_address: campusAddress.full_address,
         short_address: campusAddress.short_address,
+        latitude: campusAddress.latitude,
+        longitude: campusAddress.longitude,
       }
     : DEFAULT_PLACE;
 
@@ -58,8 +63,7 @@ export default function Campus() {
     setSelectedPlace,
   };
 
-  const coords = useNaverGeocode(selectedPlace?.full_address || '');
-  const map = useNaverMap(...coords);
+  const map = useNaverMap(selectedPlace.latitude, selectedPlace.longitude);
   useMarker(map);
 
   const requestMessage = getTrimmedRequestMessage(selectedRequest, customInputValue);
@@ -78,6 +82,8 @@ export default function Campus() {
       id: selectedPlace.id,
       full_address: selectedPlace.full_address,
       short_address: selectedPlace.short_address,
+      latitude: selectedPlace.latitude,
+      longitude: selectedPlace.longitude,
     });
 
     navigate('/payment?orderType=DELIVERY');
