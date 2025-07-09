@@ -10,10 +10,13 @@ export interface OutsideAddress {
   detail_address: string;
   full_address: string;
 }
+
 export interface CampusAddress {
   id: number;
   full_address: string;
   short_address: string;
+  latitude: number;
+  longitude: number;
 }
 
 interface State {

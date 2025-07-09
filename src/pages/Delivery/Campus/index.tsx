@@ -49,6 +49,8 @@ export default function Campus() {
         id: campusAddress.id,
         full_address: campusAddress.full_address,
         short_address: campusAddress.short_address,
+        latitude: campusAddress.latitude,
+        longitude: campusAddress.longitude,
       }
     : DEFAULT_PLACE;
 
@@ -80,6 +82,8 @@ export default function Campus() {
       id: selectedPlace.id,
       full_address: selectedPlace.full_address,
       short_address: selectedPlace.short_address,
+      latitude: selectedPlace.latitude,
+      longitude: selectedPlace.longitude,
     });
 
     navigate('/payment?orderType=DELIVERY');
