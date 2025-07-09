@@ -27,12 +27,12 @@ export default function MenuOptions({ optionGroups, selectedOptions, selectOptio
             key={group.id}
             className="mb-3 flex w-full scroll-mt-[124px] flex-col rounded-xl border border-neutral-300 bg-white px-6 py-4"
           >
-            <div className="flex flex-col gap-5">
-              <div className="flex items-center justify-between">
-                <div>
+            <div className="flex flex-col">
+              <div className="mb-3 flex items-center justify-between">
+                <div className="flex flex-col">
                   <span className="flex h-[1.8125rem] text-lg leading-[1.6] font-semibold">{group.name}</span>
                   {group.description && (
-                    <span className="mb-3 flex h-[1.1875rem] text-[12px] leading-[1.6] font-normal text-neutral-500">
+                    <span className="flex h-[1.1875rem] text-[12px] leading-[1.6] font-normal text-neutral-500">
                       {group.description}
                     </span>
                   )}
@@ -46,23 +46,25 @@ export default function MenuOptions({ optionGroups, selectedOptions, selectOptio
                   />
                 )}
               </div>
-              {group.options.map((option) => {
-                const checked = groupSelected.includes(option.id);
-                return (
-                  <button
-                    key={option.id}
-                    type="button"
-                    className="flex items-center gap-2 py-2"
-                    onClick={() => selectOption(group.id, option.id, isSingle, group.max_select)}
-                    role={isSingle ? 'radio' : 'checkbox'}
-                    aria-checked={checked}
-                  >
-                    <TypeIcon isSingle={isSingle} checked={checked} />
-                    <span className="text-base">{option.name}</span>
-                    <span className="ml-auto text-base font-semibold">+{option.price.toLocaleString()}원</span>
-                  </button>
-                );
-              })}
+              <div className="flex flex-col gap-5">
+                {group.options.map((option) => {
+                  const checked = groupSelected.includes(option.id);
+                  return (
+                    <button
+                      key={option.id}
+                      type="button"
+                      className="flex items-center gap-2"
+                      onClick={() => selectOption(group.id, option.id, isSingle, group.max_select)}
+                      role={isSingle ? 'radio' : 'checkbox'}
+                      aria-checked={checked}
+                    >
+                      <TypeIcon isSingle={isSingle} checked={checked} />
+                      <span className="text-base">{option.name}</span>
+                      <span className="ml-auto text-base font-semibold">+{option.price.toLocaleString()}원</span>
+                    </button>
+                  );
+                })}
+              </div>
             </div>
           </div>
         );

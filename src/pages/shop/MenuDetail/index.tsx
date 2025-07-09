@@ -86,7 +86,9 @@ export default function MenuDetail() {
       <ImageCarousel images={imagesForCarousel} targetRef={targetRef} />
       <MenuDescription name={menuInfo.name} description={menuInfo.description} price={menuInfo.prices[0].price} />
       <div className="mb-40 px-6">
-        <MenuPriceSelects prices={menuInfo.prices} selectedPriceId={priceId} selectPrice={selectPrice} />
+        {menuInfo.prices.length > 1 && (
+          <MenuPriceSelects prices={menuInfo.prices} selectedPriceId={priceId} selectPrice={selectPrice} />
+        )}
         <MenuOptions
           optionGroups={menuInfo.option_groups}
           selectedOptions={selectedOptions}

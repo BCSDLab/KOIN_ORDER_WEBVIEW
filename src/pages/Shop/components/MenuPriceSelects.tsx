@@ -15,7 +15,7 @@ export default function MenuPriceSelects({
   selectedPriceId,
   selectPrice,
   label = '가격',
-  description = '옵션 설명 등등등(선택사항)',
+  description,
   required = true,
 }: MenuPriceSelectsProps) {
   if (prices.length <= 1) return null;
@@ -25,12 +25,14 @@ export default function MenuPriceSelects({
       <div className="mb-2 flex items-center justify-between">
         <div>
           <span className="block h-[1.8125rem] text-lg leading-[1.6] font-semibold">{label}</span>
-          <span className="block h-[1.1875rem] text-[12px] leading-[1.6] font-normal text-neutral-500">
-            {description}
-          </span>
+          {description && (
+            <span className="block h-[1.1875rem] text-[12px] leading-[1.6] font-normal text-neutral-500">
+              {description}
+            </span>
+          )}
         </div>
         {required && (
-          <span className="border-primary-300 bg-primary-50 text-primary-500 rounded border px-2 py-[0.125rem] text-xs">
+          <span className="border-primary-300 bg-primary-50 text-primary-500 rounded-full border px-2 py-[0.125rem] text-xs">
             필수
           </span>
         )}
