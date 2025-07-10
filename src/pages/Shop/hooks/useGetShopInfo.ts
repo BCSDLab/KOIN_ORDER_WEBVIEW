@@ -1,5 +1,5 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { getShopInfo, getShopInfoSummary, getShopMenuGroups } from '@/api/shop';
+import { getShopInfo, getShopInfoSummary, getShopMenuDetail, getShopMenuGroups } from '@/api/shop';
 
 export const useGetShopInfo = (orderableShopId: number) => {
   return useSuspenseQuery({
@@ -19,5 +19,12 @@ export const useGetShopMenuGroups = (orderableShopId: number) => {
   return useSuspenseQuery({
     queryKey: ['shopMenuGroups', orderableShopId],
     queryFn: () => getShopMenuGroups({ orderableShopId }),
+  });
+};
+
+export const useGetShopMenuDetail = (orderableShopId: number, orderableShopMenuId: number) => {
+  return useSuspenseQuery({
+    queryKey: ['shopMenuDetail', orderableShopId],
+    queryFn: () => getShopMenuDetail({ orderableShopId, orderableShopMenuId }),
   });
 };
