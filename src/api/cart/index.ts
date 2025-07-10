@@ -1,9 +1,10 @@
 import { apiClient } from '..';
 import { ShopMenuDetailResponse } from '../shop/entity';
 import { AddCartRequest, CartResponse, CartSummaryResponse, UpdateCartItemRequest } from '@/api/cart/entity';
+import { useTokenStore } from '@/stores/auth';
 
-// const token = useTokenStore.getState().token; // 배포 시 또는 브릿지 테스트 시 사용
-const token = localStorage.getItem('token'); // 개발용
+const token = useTokenStore.getState().token; // 배포 시 또는 브릿지 테스트 시 사용
+// const token = localStorage.getItem('token'); // 개발용
 
 export const getCart = async (type: 'DELIVERY' | 'TAKE_OUT') => {
   return await apiClient.get<CartResponse>('cart', {

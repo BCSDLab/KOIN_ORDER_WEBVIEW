@@ -8,10 +8,10 @@ import {
   RiderRequestResponse,
   CampusDeliveryValidateRequest,
 } from './entity';
-// import { useTokenStore } from '@/stores/auth';
+import { useTokenStore } from '@/stores/auth';
 
-// const token = useTokenStore.getState().token; // 배포 시 또는 브릿지 테스트 시 사용
-const token = localStorage.getItem('token'); // 개발용
+const token = useTokenStore.getState().token; // 배포 시 또는 브릿지 테스트 시 사용
+// const token = localStorage.getItem('token'); // 개발용
 
 export const getRoadNameAddress = async ({ keyword, currentPage, countPerPage }: AddressSearchRequest) => {
   return await apiClient.get<AddressSearchResponse>('address/search', {
