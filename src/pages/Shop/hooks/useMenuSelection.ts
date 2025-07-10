@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ShopMenuDetailResponse } from '@/api/shop/entity';
 import { useToast } from '@/util/hooks/useToast';
 
@@ -14,12 +14,20 @@ export interface MenuSelectionState {
 }
 
 export function useMenuSelection(shopId: string, menuInfo: ShopMenuDetailResponse) {
+  const { showToast } = useToast();
   const [state, setState] = useState<MenuSelectionState>({
     priceId: menuInfo.prices[0].id,
     count: 1,
     selectedOptions: [],
   });
-  const { showToast } = useToast();
+
+  useEffect(() => {
+    setState({
+      priceId: menuInfo.prices[0].id,
+      count: 1,
+      selectedOptions: [],
+    });
+  }, [shopId, menuInfo.id]);
 
   const selectPrice = (priceId: number) => {
     setState((prev) => ({ ...prev, priceId }));
