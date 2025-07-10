@@ -52,7 +52,7 @@ export interface Price {
   id: number;
   name: string | null;
   price: number;
-  is_selected?: boolean;
+  is_selected: boolean;
 }
 
 interface Menu {
