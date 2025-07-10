@@ -8,20 +8,22 @@ import ShopMenuGroups from './components/ShopMenuGroups';
 import ShopMenus from './components/ShopMenus';
 import ShopSummary from './components/ShopSummary';
 import { useGetShopInfoSummary } from './hooks/useGetShopInfo';
+import { useOrderStore } from '@/stores/useOrderStore';
 
 export default function Shop() {
-  const { id } = useParams();
-  if (!id) {
+  const { shopId } = useParams();
+  if (!shopId) {
     throw new Error('Shop ID is required');
   }
 
   const [selectedMenu, setSelectedMenu] = useState<string>('');
+  const { orderType } = useOrderStore();
   const menuGroupRefs = useRef<Record<string, HTMLDivElement | null>>({});
   const targetRef = useRef<HTMLDivElement | null>(null);
   const isAutoScrolling = useRef<boolean>(false);
 
-  const { data: shopInfoSummary } = useGetShopInfoSummary(Number(id));
-  const { data: cartInfo } = useCart('TAKE_OUT');
+  const { data: shopInfoSummary } = useGetShopInfoSummary(Number(shopId));
+  const { data: cartInfo } = useCart(orderType);
 
   const handleScrollTo = (name: string) => {
     const element = menuGroupRefs.current[name];
@@ -44,16 +46,16 @@ export default function Shop() {
     <div>
       <Header name={shopInfoSummary.name} targetRef={targetRef} cartItemCount={cartInfo.items.length} />
       <ImageCarousel images={shopInfoSummary.images} targetRef={targetRef} />
-      <ShopSummary id={id} shopInfoSummary={shopInfoSummary} />
-      <ShopMenuGroups id={id} selectedMenu={selectedMenu} onSelect={handleScrollTo} />
+      <ShopSummary id={shopId} shopInfoSummary={shopInfoSummary} />
+      <ShopMenuGroups id={shopId} selectedMenu={selectedMenu} onSelect={handleScrollTo} />
       <ShopMenus
-        id={id}
+        id={shopId}
         menuGroupRefs={menuGroupRefs}
         handleChangeMenu={handleChangeMenu}
         isAutoScrolling={isAutoScrolling}
       />
-      {cartInfo.items.length > 0 && cartInfo.orderable_shop_id === Number(id) && (
-        <BottomCartModal id={id} cartItemCount={cartInfo.items.length} />
+      {cartInfo.items.length > 0 && cartInfo.orderable_shop_id === Number(shopId) && (
+        <BottomCartModal id={shopId} cartItemCount={cartInfo.items.length} />
       )}
     </div>
   );

@@ -1,59 +1,91 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { TossPaymentsWidgets } from '@tosspayments/tosspayments-sdk';
 import clsx from 'clsx';
+import { useSearchParams } from 'react-router-dom';
 import Agreement from './components/Agreement';
 import ContactModal from './components/ContactModal';
 import DeliveryAddressSection from './components/DeliveryAddressSection';
 import PaymentAmount from './components/PaymentAmount';
+import PaymentFailModal from './components/PaymentFailModal';
+import ShopLocationMap from './components/ShopLocationMap';
 import StoreRequestModal from './components/StoreRequestModal';
 import TossWidget from './components/TossWidget';
 import useCart from './hooks/useCart';
 import useTemporaryDelivery from './hooks/useTemporaryDelivery';
+import useTemporaryTakeout from './hooks/useTemporaryTakeout';
+import PickupIcon from '@/assets/Delivery/bucket.svg';
 import Bike from '@/assets/Main/agriculture.svg';
 import RightArrow from '@/assets/Payment/arrow-go-icon.svg';
 import Badge from '@/components/UI/Badge';
 import Button from '@/components/UI/Button';
+import { useOrderStore } from '@/stores/useOrderStore';
 import useBooleanState from '@/util/hooks/useBooleanState';
 
 export default function Payment() {
+  const [searchParams] = useSearchParams();
   const [isContactModalOpen, openContactModal, closeContactModal] = useBooleanState(false);
   const [isStoreRequestModalOpen, openStoreRequestModal, closeStoreRequestModal] = useBooleanState(false);
+  const [isPaymentFailModalOpen, openPaymentFailModal, closePaymentFailModal] = useBooleanState(false);
 
   const [contact, setContact] = useState('');
-  const [request, setRequest] = useState('');
+  const [request, setRequest] = useState('요청사항 없음');
   const [noCutlery, setNoCutlery] = useState(true);
 
   const [ready, setReady] = useState(false);
   const [widgets, setWidgets] = useState<TossPaymentsWidgets | null>(null);
+  const { deliveryType, outsideAddress, campusAddress, deliveryRequest } = useOrderStore();
 
-  const { data: cart } = useCart();
+  const orderType = searchParams.get('orderType');
+  const message = searchParams.get('message');
+  const isDelivery = orderType === 'DELIVERY';
+
+  const { data: cart } = useCart(orderType as 'DELIVERY' | 'TAKE_OUT');
   const { mutateAsync: temporaryDelivery } = useTemporaryDelivery();
+  const { mutateAsync: temporaryTakeout } = useTemporaryTakeout();
 
   const orderName =
     cart!.items.length === 1 ? cart!.items[0].name : `${cart!.items[0].name} 외 ${cart!.items.length - 1}건`;
 
+  const address = deliveryType === 'CAMPUS' ? campusAddress?.full_address : outsideAddress?.full_address;
+
   const pay = async () => {
-    const order = await temporaryDelivery({
-      address: '추후 추가해야 함',
-      phone_number: contact || '01012345678',
-      to_owner: request,
-      to_rider: '추후 추가해야 함',
-      total_menu_price: cart!.items_amount,
-      delivery_tip: cart!.delivery_fee,
-      total_amount: cart!.total_amount,
-    });
+    let order;
+    if (isDelivery) {
+      order = await temporaryDelivery({
+        address: address!,
+        phone_number: contact,
+        to_owner: request,
+        to_rider: deliveryRequest,
+        total_menu_price: cart!.items_amount,
+        delivery_tip: cart!.delivery_fee,
+        total_amount: cart!.total_amount,
+      });
+    } else {
+      order = await temporaryTakeout({
+        phoneNumber: contact,
+        toOwner: request,
+        totalMenuPrice: cart!.items_amount,
+        totalAmount: cart!.total_amount,
+      });
+    }
 
     try {
       await widgets!.requestPayment({
         orderId: order.order_id,
         orderName: orderName,
-        successUrl: window.location.origin + '/result',
-        failUrl: window.location.origin + '/payment',
+        successUrl: window.location.origin + `/result?orderType=${orderType}&entryPoint=payment`,
+        failUrl: window.location.origin + `/payment?orderType=${orderType}`,
       });
     } catch (error) {
       console.error(error);
     }
   };
+
+  useEffect(() => {
+    if (message) {
+      openPaymentFailModal();
+    }
+  }, [message]);
 
   return (
     <div className="mx-6 mt-4">
@@ -62,14 +94,18 @@ export default function Payment() {
           variant="outlined"
           color="primaryLight"
           className="px-3 py-2 leading-[16px]"
-          startIcon={<Bike />}
-          label="배달"
+          startIcon={isDelivery ? <Bike /> : <PickupIcon />}
+          label={isDelivery ? '배달' : '포장'}
         />
         {cart.shop_name}
       </div>
 
       <div className="mt-6 flex flex-col gap-3">
-        <DeliveryAddressSection orderableShopId={cart.orderable_shop_id} />
+        {isDelivery ? (
+          <DeliveryAddressSection orderableShopId={cart.orderable_shop_id} />
+        ) : (
+          <ShopLocationMap orderableShopId={cart.orderable_shop_id} />
+        )}
 
         <div>
           <p className="text-primary-500 text-lg font-semibold">연락처</p>
@@ -88,7 +124,7 @@ export default function Payment() {
           <Button onClick={openStoreRequestModal} color="gray" fullWidth className="mt-2 border-0 py-4 pr-3 pl-6">
             <div className="flex w-full flex-col gap-1">
               <div className="flex w-full items-center justify-between">
-                <p className="text-sm font-normal text-neutral-600">{request || '요청사항 없음'}</p>
+                <p className="text-sm font-normal text-neutral-600">{request}</p>
                 <RightArrow />
               </div>
               <p className="text-start text-sm font-medium text-[#3a903e]">
@@ -109,7 +145,7 @@ export default function Payment() {
         <Agreement />
         <PaymentAmount
           totalAmount={cart!.total_amount}
-          deliveryAmount={cart!.delivery_fee}
+          deliveryAmount={isDelivery ? cart!.delivery_fee : null}
           menuAmount={cart!.items_amount}
         />
         <div className="text-center align-middle text-[12px] text-neutral-600">
@@ -141,6 +177,12 @@ export default function Payment() {
           setRequest(newRequest);
           setNoCutlery(newNoCutlery);
         }}
+      />
+
+      <PaymentFailModal
+        isOpen={isPaymentFailModalOpen}
+        onClose={closePaymentFailModal}
+        errorMessage={message || '알 수 없는 오류가 발생했습니다.'}
       />
     </div>
   );

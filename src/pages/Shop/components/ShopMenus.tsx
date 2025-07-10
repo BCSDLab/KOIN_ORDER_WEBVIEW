@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useGetShopInfo } from '../hooks/useGetShopInfo';
 import SoldOutIcon from '@/assets/Shop/sold-out-icon.svg';
 
@@ -10,9 +11,10 @@ interface ShopMenusProps {
 }
 
 export default function ShopMenus({ id, menuGroupRefs, handleChangeMenu, isAutoScrolling }: ShopMenusProps) {
-  const { data: shopInfo } = useGetShopInfo(Number(id));
-
+  const navigate = useNavigate();
   const visibleMap = useRef<Record<string, boolean>>({});
+
+  const { data: shopInfo } = useGetShopInfo(Number(id));
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -55,7 +57,7 @@ export default function ShopMenus({ id, menuGroupRefs, handleChangeMenu, isAutoS
   }, [menuGroupRefs, handleChangeMenu]);
 
   return (
-    <div id="shop-menus-container" className="flex flex-col items-center gap-3 px-6">
+    <div id="shop-menus-container" className="mb-40 flex flex-col items-center gap-3 px-6">
       {shopInfo.map((shop) => (
         <div
           key={shop.menu_group_id}
@@ -68,23 +70,29 @@ export default function ShopMenus({ id, menuGroupRefs, handleChangeMenu, isAutoS
           <span className="ml-1 text-xl leading-[1.6] font-bold">{shop.menu_group_name}</span>
           <div className="shadow-1 rounded-3xl bg-white">
             {shop.menus.map((menu, idx) => (
-              <div
+              <button
                 className={`flex w-full items-center justify-between py-3 pr-3 pl-4 ${idx !== 0 ? 'border-t border-neutral-300' : ''}`}
                 key={menu.id}
+                name={menu.name}
+                onClick={() => navigate(`menus/${menu.id}`)}
               >
                 <div className="flex flex-col">
-                  <span className="text-lg leading-[1.6] font-semibold">{menu.name}</span>
-                  <span className="text-[12px] leading-[1.6] font-normal text-neutral-500">{menu.description}</span>
+                  <span className="flex h-[1.8125rem] text-lg leading-[1.6] font-semibold">{menu.name}</span>
+                  {menu.description && (
+                    <span className="flex h-[1.1875rem] text-[12px] leading-[1.6] font-normal text-neutral-500">
+                      {menu.description}
+                    </span>
+                  )}
                   {menu.prices.map((price) => {
                     if (!price.name) {
                       return (
-                        <span key={price.id} className="text-sm leading-[1.6] font-semibold">
+                        <span key={price.id} className="flex text-sm leading-[1.6] font-semibold">
                           {price.price.toLocaleString()}원
                         </span>
                       );
                     }
                     return (
-                      <div key={price.id} className="flex gap-1">
+                      <div key={price.id} className="flex h-[1.1375rem] gap-1">
                         <span className="text-sm leading-[1.6] font-normal">{price.name} : </span>
                         <span className="text-sm leading-[1.6] font-semibold">{price.price.toLocaleString()}원</span>
                       </div>
@@ -104,7 +112,7 @@ export default function ShopMenus({ id, menuGroupRefs, handleChangeMenu, isAutoS
                     className="h-20 w-20 self-baseline-last rounded-md object-cover"
                   />
                 </div>
-              </div>
+              </button>
             ))}
           </div>
         </div>

@@ -36,3 +36,16 @@ export interface CartSummaryResponse {
   cart_items_amount: number;
   is_available: boolean;
 }
+
+export interface AddCartRequest {
+  menuInfo: {
+    orderable_shop_id: number;
+    orderable_shop_menu_id: number;
+    orderable_shop_menu_price_id: number;
+    orderable_shop_menu_option_ids: {
+      option_group_id: number;
+      option_id: number;
+    }[];
+    quantity: number;
+  };
+}

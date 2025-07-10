@@ -16,7 +16,7 @@ interface CartValidationErrorResponse {
   errorTraceId?: string;
 }
 
-export default function useValidateCart() {
+export default function useValidateCart({ orderType }: { orderType: 'DELIVERY' | 'TAKE_OUT' }) {
   const navigate = useNavigate();
   const [errorCode, setErrorCode] = useState<string | null>(null);
 
@@ -24,7 +24,7 @@ export default function useValidateCart() {
     mutationFn: validateCart,
     onSuccess: () => {
       setErrorCode(null);
-      navigate('/payment');
+      navigate(`/payment?orderType=${orderType}`);
     },
 
     onError: async (error: unknown) => {

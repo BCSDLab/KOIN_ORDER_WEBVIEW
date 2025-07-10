@@ -1,5 +1,5 @@
 interface PaymentAmountProps {
-  orderType?: 'delivery' | 'takeout';
+  orderType?: 'DELIVERY' | 'TAKE_OUT';
   total_amount: number;
   item_total_amount: number;
   delivery_fee: number;
@@ -27,7 +27,7 @@ export default function PaymentAmount({
               <div>메뉴 금액</div>
               <div>{item_total_amount.toLocaleString()}원</div>
             </div>
-            {orderType === 'delivery' && (
+            {orderType === 'DELIVERY' && (
               <div className="flex justify-between">
                 <div>배달 금액</div>
                 <div>{delivery_fee.toLocaleString()}원</div>

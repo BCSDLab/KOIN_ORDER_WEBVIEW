@@ -29,14 +29,14 @@ const icons = [
 ];
 
 interface BottomSheetProps {
-  orderType?: 'delivery' | 'takeout';
+  orderType: 'DELIVERY' | 'TAKE_OUT';
   itemCount: number;
   totalAmount: number;
   minimumOrderAmount: number;
 }
 
 export default function BottomSheet({ orderType, itemCount, totalAmount, minimumOrderAmount }: BottomSheetProps) {
-  const { mutate: validateCart, errorCode } = useValidateCart();
+  const { mutate: validateCart, errorCode } = useValidateCart({ orderType });
   const [isValidateModalOpen, openValidateModal, closeValidateModal] = useBooleanState(false);
 
   useEffect(() => {
@@ -51,9 +51,9 @@ export default function BottomSheet({ orderType, itemCount, totalAmount, minimum
   const isOrderAvailable = remainAmount <= 0;
 
   let statusMessage = '';
-  if (orderType === 'delivery') {
+  if (orderType === 'DELIVERY') {
     statusMessage = isOrderAvailable ? '배달 가능' : `${remainAmount.toLocaleString()}원 더 담으면 배달 가능`;
-  } else if (orderType === 'takeout') {
+  } else if (orderType === 'TAKE_OUT') {
     statusMessage = '주문 가능';
   }
 

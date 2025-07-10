@@ -14,7 +14,7 @@ import { useOrderStore } from '@/stores/useOrderStore';
 import useBooleanState from '@/util/hooks/useBooleanState';
 
 export default function DeliveryOutside() {
-  const { setPostAddress } = useOrderStore();
+  const { setOutsideAddress } = useOrderStore();
 
   const navigate = useNavigate();
   const [searchKeyword, setSearchKeyword] = useState<string>('');
@@ -44,7 +44,7 @@ export default function DeliveryOutside() {
         },
         {
           onSuccess: () => {
-            setPostAddress({
+            setOutsideAddress({
               zip_number: address.zip_no,
               si_do: address.si_nm,
               si_gun_gu: address.sgg_nm,

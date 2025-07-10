@@ -56,7 +56,7 @@ export default function Badge({
 
   return (
     <div className={composedClass}>
-      {startIcon && <span className="h-4 w-4">{startIcon}</span>}
+      {startIcon && <span className="w-4">{startIcon}</span>}
       {label && <span>{label}</span>}
       {endIcon && <span className="h-4 w-4">{endIcon}</span>}
     </div>
