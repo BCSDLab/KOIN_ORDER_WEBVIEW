@@ -1,5 +1,6 @@
 export interface CartItem {
   cart_menu_item_id: number;
+  orderable_shop_menu_id: number;
   name: string;
   menu_thumbnail_image_url: string | null;
   quantity: number;
@@ -48,4 +49,12 @@ export interface AddCartRequest {
     }[];
     quantity: number;
   };
+}
+
+export interface UpdateCartItemRequest {
+  orderable_shop_menu_price_id: number;
+  options: {
+    option_group_id: number;
+    option_id: number;
+  }[];
 }
