@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import ArrowBackIcon from '@/assets/Main/arrow-back-icon.svg';
 import CartIcon from '@/assets/Shop/cart-icon.svg';
+import { backButtonTapped } from '@/util/ts/bridge';
 
 interface HeaderProps {
   name: string;
@@ -11,18 +12,13 @@ interface HeaderProps {
 
 export default function Header({ name, targetRef, cartItemCount }: HeaderProps) {
   const navigate = useNavigate();
-  const { pathname } = useLocation();
   const [opacity, setOpacity] = useState(0);
 
   const backToPreviousPage = () => {
-    if (pathname === '/payment') {
-      if (window.Android?.navigateBack) {
-        window.Android.navigateBack();
-      } else {
-        window.NativeBridge?.call?.('navigateBack');
-      }
-    } else {
+    if (window.history.length > 1) {
       navigate(-1);
+    } else {
+      backButtonTapped();
     }
   };
 
