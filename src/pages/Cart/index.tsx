@@ -99,7 +99,7 @@ export default function Cart() {
                 index !== cartInfo.items.length - 1 && 'border-b border-neutral-300',
               )}
             >
-              <CartItem item={item} />
+              <CartItem shopId={cartInfo.orderable_shop_id} item={item} />
             </div>
           ))}
         </div>
@@ -108,7 +108,7 @@ export default function Cart() {
           color="neutral"
           startIcon={<PrimaryPlus />}
           className="mt-3 gap-2.5 border-0 py-[11px] leading-[160%]"
-          onClick={() => navigate('메뉴 담기 페이지로 이동')}
+          onClick={() => navigate(`/shop/${cartInfo.orderable_shop_id}`)}
         >
           더 담으러 가기
         </Button>
