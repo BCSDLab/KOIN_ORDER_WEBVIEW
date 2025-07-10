@@ -73,3 +73,9 @@ export interface RiderRequestResponse {
   count: number;
   contents: RiderRequestMessage[];
 }
+
+export interface CampusDeliveryValidateRequest {
+  si_do: string;
+  si_gun_gu: string;
+  eup_myeon_dong: string;
+}

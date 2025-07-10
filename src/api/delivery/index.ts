@@ -6,6 +6,7 @@ import {
   CampusDeliveryAddressResponse,
   OffCampusDeliveryAddressRequest,
   RiderRequestResponse,
+  CampusDeliveryValidateRequest,
 } from './entity';
 // import { useTokenStore } from '@/stores/auth';
 
@@ -44,5 +45,11 @@ export const getRiderRequestMessages = async () => {
     headers: {
       Authorization: `Bearer ${token}`,
     },
+  });
+};
+
+export const postOffCampusDeliveryValidate = async (addressData: CampusDeliveryValidateRequest) => {
+  return await apiClient.post('delivery/address/off-campus/validate', {
+    body: addressData,
   });
 };
