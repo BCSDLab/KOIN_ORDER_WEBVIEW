@@ -8,8 +8,10 @@ import {
   TakeoutTemporaryRequest,
   TemporaryResponse,
 } from '@/api/payments/entity';
+import { useTokenStore } from '@/stores/auth';
 
-const token = localStorage.getItem('token');
+const token = useTokenStore.getState().token; // 배포 시 또는 브릿지 테스트 시 사용
+// const token = localStorage.getItem('token');
 
 export const getTemporaryDelivery = async (body: DeliveryTemporaryRequest) => {
   const response = await apiClient.post<TemporaryResponse>('payments/delivery/temporary', {
