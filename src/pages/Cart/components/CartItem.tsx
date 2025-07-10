@@ -8,10 +8,11 @@ import Trash from '@/assets/Cart/trash-icon.svg';
 import Button from '@/components/UI/Button';
 
 interface CartItemProps {
+  shopId: number;
   item: CartItem;
 }
 
-export default function CartItem({ item }: CartItemProps) {
+export default function CartItem({ shopId, item }: CartItemProps) {
   const navigate = useNavigate();
   const { mutate: deleteCartItem } = useDeleteCartItem();
   const { mutate: updateCartItemQuantity } = useUpdateCartItemQuantity();
@@ -50,7 +51,9 @@ export default function CartItem({ item }: CartItemProps) {
           size="sm"
           color="gray"
           className="text-xs leading-[160%] font-normal text-neutral-600 shadow-none"
-          onClick={() => navigate('메뉴담기 페이지로 이동')}
+          onClick={() =>
+            navigate(`/shop/${shopId}/menus/${item.orderable_shop_menu_id}?editCartItemId=${item.cart_menu_item_id}`)
+          }
         >
           옵션 변경
         </Button>

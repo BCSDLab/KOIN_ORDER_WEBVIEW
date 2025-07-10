@@ -1,5 +1,6 @@
 import { apiClient } from '..';
-import { AddCartRequest, CartResponse, CartSummaryResponse } from '@/api/cart/entity';
+import { ShopMenuDetailResponse } from '../shop/entity';
+import { AddCartRequest, CartResponse, CartSummaryResponse, UpdateCartItemRequest } from '@/api/cart/entity';
 
 // const token = useTokenStore.getState().token; // 배포 시 또는 브릿지 테스트 시 사용
 const token = localStorage.getItem('token'); // 개발용
@@ -64,6 +65,23 @@ export const addCart = async ({ menuInfo }: AddCartRequest) => {
 
 export const getCartSummary = async ({ orderableShopId }: { orderableShopId: number }) => {
   return await apiClient.get<CartSummaryResponse>(`cart/summary/${orderableShopId}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+
+export const getCartItemOptions = async (cartMenuItemId: number) => {
+  return await apiClient.get<ShopMenuDetailResponse>(`cart/item/${cartMenuItemId}/edit`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+
+export const updateCartItemOptions = async (cartMenuItemId: number, body: UpdateCartItemRequest) => {
+  return await apiClient.put(`cart/item/${cartMenuItemId}`, {
+    body,
     headers: {
       Authorization: `Bearer ${token}`,
     },
