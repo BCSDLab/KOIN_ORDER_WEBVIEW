@@ -1,5 +1,5 @@
 import { useTokenStore } from '@/stores/auth';
-// import { setCookie } from '@/util/ts/cookie';
+import { setCookie } from '@/util/ts/cookie';
 
 class Bridge {
   private callbackMap: { [key: string]: (result: unknown) => void } = {};
@@ -72,13 +72,13 @@ export function isNative() {
   return isAndroid() || isIOS();
 }
 
-// function applyAccessToken(token: string) {
-//   useTokenStore.getState().setToken(token);
-//   setCookie('AUTH_TOKEN_KEY', token);
-// }
+function applyAccessToken(token: string) {
+  useTokenStore.getState().setToken(token);
+  setCookie('AUTH_TOKEN_KEY', token);
+}
 
 export function setTokensFromNative(access: string, refresh: string) {
-  if (access) useTokenStore.getState().setToken(access);
+  if (access) applyAccessToken(access);
   if (refresh) useTokenStore.getState().setRefreshToken(refresh);
 }
 
