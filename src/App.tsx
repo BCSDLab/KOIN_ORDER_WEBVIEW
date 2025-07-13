@@ -23,7 +23,7 @@ export default function App() {
     const initializeTokens = async () => {
       if (isNative()) {
         const tokens = await requestTokensFromNative();
-        setTokensFromNative(tokens);
+        setTokensFromNative(tokens.access, tokens.refresh);
       }
     };
 

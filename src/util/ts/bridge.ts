@@ -1,5 +1,5 @@
 import { useTokenStore } from '@/stores/auth';
-import { setCookie } from '@/util/ts/cookie';
+// import { setCookie } from '@/util/ts/cookie';
 
 class Bridge {
   private callbackMap: { [key: string]: (result: unknown) => void } = {};
@@ -8,24 +8,24 @@ class Bridge {
 
   private generateCallbackId(): string {
     this.callbackIdCounter++;
-    return `callback_${Date.now()}_${this.callbackIdCounter}`;
+    return `cb_${Date.now()}_${this.callbackIdCounter}`;
   }
 
   private isIOS() {
-    return !!window.webkit?.messageHandlers;
+    return !!window.webkit?.messageHandlers.tokenBridge;
   }
 
   private isAndroid() {
     return !!window.Android;
   }
 
-  call(method: string, ...args: unknown[]): Promise<unknown> {
+  call(methodName: string, ...args: unknown[]): Promise<unknown> {
     return new Promise((resolve, reject) => {
       const callbackId = this.generateCallbackId();
       this.callbackMap[callbackId] = resolve;
 
       const payload = {
-        method,
+        method: methodName,
         args,
         callbackId,
       };
@@ -34,7 +34,7 @@ class Bridge {
         if (this.isIOS()) {
           window.webkit?.messageHandlers.tokenBridge.postMessage(JSON.stringify(payload));
         } else if (this.isAndroid()) {
-          const result = window.Android?.[method](...args);
+          const result = window.Android?.[methodName](...args);
           resolve(result);
           delete this.callbackMap[callbackId];
         }
@@ -72,50 +72,41 @@ export function isNative() {
   return isAndroid() || isIOS();
 }
 
-interface TokenPair {
-  accessToken: string;
-  refreshToken: string;
+// function applyAccessToken(token: string) {
+//   useTokenStore.getState().setToken(token);
+//   setCookie('AUTH_TOKEN_KEY', token);
+// }
+
+export function setTokensFromNative(access: string, refresh: string) {
+  if (access) useTokenStore.getState().setToken(access);
+  if (refresh) useTokenStore.getState().setRefreshToken(refresh);
 }
 
-function applyAccessToken(token: string) {
-  useTokenStore.getState().setToken(token);
-  setCookie('AUTH_TOKEN_KEY', token);
-}
+export async function requestTokensFromNative(): Promise<{ access: string; refresh: string }> {
+  const existingToken = useTokenStore.getState().token;
+  const existingRefresh = useTokenStore.getState().refreshToken;
 
-export function setTokensFromNative(tokens: TokenPair) {
-  const { accessToken, refreshToken } = tokens;
-  if (accessToken) applyAccessToken(accessToken);
-  if (refreshToken) useTokenStore.getState().setRefreshToken(refreshToken);
-}
-
-export async function requestTokensFromNative(): Promise<TokenPair> {
-  const existingAccessToken = useTokenStore.getState().token;
-  const existingRefreshToken = useTokenStore.getState().refreshToken;
-
-  if (existingAccessToken && existingRefreshToken) {
-    return {
-      accessToken: existingAccessToken,
-      refreshToken: existingRefreshToken,
-    };
+  if (existingToken && existingRefresh) {
+    return { access: existingToken, refresh: existingRefresh };
   }
 
   try {
     const tokens = JSON.parse((await window.NativeBridge?.call('getUserTokens')) as string);
     return {
-      accessToken: tokens?.accessToken || '',
-      refreshToken: tokens?.refreshToken || '',
+      access: tokens?.access || '',
+      refresh: tokens?.refresh || '',
     };
   } catch {
     return {
-      accessToken: '',
-      refreshToken: '',
+      access: '',
+      refresh: '',
     };
   }
 }
 
-export async function saveTokensToNative(tokens: TokenPair): Promise<boolean> {
+export async function saveTokensToNative(access: string, refresh: string): Promise<boolean> {
   try {
-    await window.NativeBridge?.call('saveUserTokens', tokens);
+    await window.NativeBridge?.call('putUserTokens', { access, refresh });
     return true;
   } catch {
     return false;

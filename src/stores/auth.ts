@@ -22,7 +22,7 @@ export const useTokenStore = create(
     (set) => ({
       token: getCookie('AUTH_TOKEN_KEY') || '',
       refreshToken: '',
-      userType: null,
+      userType: (getCookie('AUTH_USER_TYPE') || null) as UserType,
       setToken: (token) => set({ token }),
       setRefreshToken: (refreshToken) => set({ refreshToken }),
       setUserType: (userType) => set({ userType }),

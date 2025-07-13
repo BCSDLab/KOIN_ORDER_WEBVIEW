@@ -2,7 +2,7 @@ declare global {
   interface Window {
     webkit?: {
       messageHandlers: {
-        [name: string]: { postMessage: (body: unknown) => void };
+        [name: string]: { postMessage(body: unknown): void };
       };
     };
     Android?: {
@@ -10,13 +10,11 @@ declare global {
     };
 
     onNativeCallback?: (callbackId: string, result: unknown) => void;
-
     NativeBridge?: {
       call: (methodName: string, ...args: unknown[]) => Promise<unknown>;
       handleCallback: (callbackId: string, result: unknown) => void;
     };
-
-    setTokens?: (tokens: { accessToken: string; refreshToken: string }) => void;
+    setTokens?: (access: string, refresh: string) => void;
   }
 }
 
