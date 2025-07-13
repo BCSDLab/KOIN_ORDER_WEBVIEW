@@ -27,6 +27,15 @@ export default function App() {
       }
     };
 
+    if (typeof window !== 'undefined' && window.webkit?.messageHandlers) {
+      window.setTokens = setTokensFromNative;
+
+      const currentPath = window.location.pathname;
+      if (!currentPath.startsWith('/auth')) {
+        initializeTokens();
+      }
+    }
+
     initializeTokens();
   }, []);
 
