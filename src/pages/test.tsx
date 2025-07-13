@@ -18,7 +18,7 @@ export default function TestPage() {
         console.log('[TestPage] 브릿지를 통한 초기 토큰 요청 시작');
         const tokens = await requestTokensFromNative();
         console.log('[TestPage] 응답 받은 토큰:', tokens);
-        setTokensFromNative(tokens.access, tokens.refresh);
+        setTokensFromNative(tokens.access, tokens.refresh, tokens.userType);
       } else {
         console.log('[TestPage] Native 환경 아님 (웹)');
       }

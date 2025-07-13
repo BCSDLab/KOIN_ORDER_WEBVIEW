@@ -1,4 +1,4 @@
-import { useTokenStore } from '@/stores/auth';
+import { UserType, useTokenStore } from '@/stores/auth';
 import { setCookie } from '@/util/ts/cookie';
 
 class Bridge {
@@ -77,17 +77,24 @@ function applyAccessToken(token: string) {
   setCookie('AUTH_TOKEN_KEY', token);
 }
 
-export function setTokensFromNative(access: string, refresh: string) {
-  if (access) applyAccessToken(access);
-  if (refresh) useTokenStore.getState().setRefreshToken(refresh);
+function applyUserType(userType: UserType) {
+  useTokenStore.getState().setUserType(userType);
+  setCookie('AUTH_USER_TYPE', userType);
 }
 
-export async function requestTokensFromNative(): Promise<{ access: string; refresh: string }> {
+export function setTokensFromNative(access: string, refresh: string, userType: UserType) {
+  if (access) applyAccessToken(access);
+  if (refresh) useTokenStore.getState().setRefreshToken(refresh);
+  if (userType) applyUserType(userType);
+}
+
+export async function requestTokensFromNative(): Promise<{ access: string; refresh: string; userType: UserType }> {
   const existingToken = useTokenStore.getState().token;
   const existingRefresh = useTokenStore.getState().refreshToken;
+  const existingUserType = useTokenStore.getState().userType;
 
   if (existingToken && existingRefresh) {
-    return { access: existingToken, refresh: existingRefresh };
+    return { access: existingToken, refresh: existingRefresh, userType: existingUserType };
   }
 
   try {
@@ -95,18 +102,20 @@ export async function requestTokensFromNative(): Promise<{ access: string; refre
     return {
       access: tokens?.access || '',
       refresh: tokens?.refresh || '',
+      userType: tokens?.userType || (null as UserType),
     };
   } catch {
     return {
       access: '',
       refresh: '',
+      userType: null,
     };
   }
 }
 
-export async function saveTokensToNative(access: string, refresh: string): Promise<boolean> {
+export async function saveTokensToNative(access: string, refresh: string, userType: UserType): Promise<boolean> {
   try {
-    await window.NativeBridge?.call('putUserTokens', { access, refresh });
+    await window.NativeBridge?.call('putUserTokens', { access, refresh, userType });
     return true;
   } catch {
     return false;

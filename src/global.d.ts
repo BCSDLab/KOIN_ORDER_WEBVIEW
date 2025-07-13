@@ -1,3 +1,5 @@
+import { UserType } from './stores/auth';
+
 declare global {
   interface Window {
     webkit?: {
@@ -14,7 +16,7 @@ declare global {
       call: (methodName: string, ...args: unknown[]) => Promise<unknown>;
       handleCallback: (callbackId: string, result: unknown) => void;
     };
-    setTokens?: (access: string, refresh: string) => void;
+    setTokens?: (access: string, refresh: string, userType: UserType) => void;
   }
 }
 
