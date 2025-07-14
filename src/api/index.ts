@@ -1,3 +1,6 @@
+import useTokenState from '@/util/hooks/useTokenState';
+import { isNative, requestTokensFromNative, setTokensFromNative } from '@/util/ts/bridge';
+
 const BASE_URL = import.meta.env.VITE_API_PATH;
 
 if (!BASE_URL) {
@@ -27,11 +30,23 @@ async function sendRequest<T = unknown>(
   endPoint: string,
   options: FetchOptions = {},
   timeout: number = 10000,
+  retryCount: number = 1,
 ): Promise<T> {
   const { headers, body, method, params, ...restOptions } = options;
 
   if (!method) {
     throw new Error('HTTP method가 설정되지 않았습니다.');
+  }
+
+  const token = useTokenState();
+  if (!token && isNative()) {
+    if (retryCount <= 0) {
+      throw new Error('토큰 요청 재시도 횟수를 초과했습니다.');
+    }
+    const tokens = await requestTokensFromNative();
+    setTokensFromNative(tokens.access, tokens.refresh, tokens.userType);
+    // 토큰을 새로 설정한 후 다시 요청
+    return sendRequest<T>(endPoint, options, timeout, retryCount - 1);
   }
 
   // GET 요청의 경우 body 대신 params를 사용하여 URL에 쿼리 문자열 추가
@@ -64,6 +79,7 @@ async function sendRequest<T = unknown>(
     const fetchOptions: RequestInit = {
       headers: {
         ...(isJsonBody ? { 'Content-Type': 'application/json' } : {}),
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
         ...headers,
       },
       method,
