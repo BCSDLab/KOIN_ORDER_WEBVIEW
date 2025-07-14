@@ -79,9 +79,15 @@ export default function CartItem({ shopId, item }: CartItemProps) {
           <div className="text-xs text-neutral-600">{item.quantity}</div>
 
           <button
-            onClick={() =>
-              updateCartItemQuantity({ cartMenuItemId: item.cart_menu_item_id, quantity: item.quantity + 1 })
-            }
+            onClick={() => {
+              if (item.quantity < 10) {
+                updateCartItemQuantity({
+                  cartMenuItemId: item.cart_menu_item_id,
+                  quantity: item.quantity + 1,
+                });
+              }
+            }}
+            disabled={item.quantity >= 10}
           >
             <Plus />
           </button>
