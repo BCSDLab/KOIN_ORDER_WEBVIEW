@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import useCart from '../Payment/hooks/useCart';
 import BottomCartModal from './components/BottomCartModal';
@@ -23,7 +23,15 @@ export default function Shop() {
   const isAutoScrolling = useRef<boolean>(false);
 
   const { data: shopInfoSummary } = useGetShopInfoSummary(Number(shopId));
-  const { data: cartInfo } = useCart(orderType);
+  const { data: cartInfo, error: cartError } = useCart(orderType);
+
+  const [hasShownError, setHasShownError] = useState(false);
+  useEffect(() => {
+    if (cartError && !hasShownError) {
+      alert(cartError.message ?? String(cartError));
+      setHasShownError(true);
+    }
+  }, [cartError, hasShownError]);
 
   const handleScrollTo = (name: string) => {
     const element = menuGroupRefs.current[name];
