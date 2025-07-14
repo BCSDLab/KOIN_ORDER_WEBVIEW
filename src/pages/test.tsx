@@ -1,114 +1,16 @@
-import { useState } from 'react';
-import { useSuspenseQuery } from '@tanstack/react-query';
-import { getCart } from '@/api/cart'; // 실제 경로에 맞게 수정!
-import { CartResponse } from '@/api/cart/entity';
 import { useTokenStore } from '@/stores/auth';
 import { getCookie } from '@/util/ts/cookie';
 
-// 👇 useCart 훅 (실제로는 별도 파일에서 import하는게 best)
-function useCart(orderType: 'DELIVERY' | 'TAKE_OUT') {
-  const token = useTokenStore.getState().token;
-
-  const { data } = useSuspenseQuery<CartResponse>({
-    queryKey: ['cart', orderType, token], // 토큰 변경시 재요청 보장
-    queryFn: async () => {
-      try {
-        return await getCart(orderType);
-      } catch (error: unknown) {
-        // 에러 객체에 토큰값을 커스텀 프로퍼티로 추가!
-        if (error && typeof error === 'object') {
-          (error as unknown as { usedToken?: string }).usedToken = token;
-        }
-        throw error;
-      }
-    },
-  });
-  return { data };
-}
-
 export default function TestPage() {
-  // 타입 확정: string ("" 초기값이라면 string), UserType
   const { token, refreshToken, userType } = useTokenStore();
-
-  // CartResponse | undefined
-  const [cartResult, setCartResult] = useState<CartResponse | undefined>(undefined);
-  const [cartError, setCartError] = useState<string | null>(null);
-
-  // 쿼리 방식 테스트: orderType 스위칭 가능하게 state로 관리
-  const [queryOrderType, setQueryOrderType] = useState<'DELIVERY' | 'TAKE_OUT'>('TAKE_OUT');
-  let queryCartResult: CartResponse | undefined = undefined;
-  let queryCartError: string | null = null;
-
-  // suspenseQuery로 오류 캐치
-  try {
-    ({ data: queryCartResult } = useCart(queryOrderType));
-  } catch (e: unknown) {
-    queryCartError = e instanceof Error ? e.message : String(e);
-  }
-
-  // ✅ 브릿지에서 토큰 받아오기 (초기)
-
-  // ✅ getCart API 직접 호출
-  const handleGetCart = async (): Promise<void> => {
-    setCartError(null);
-    setCartResult(undefined);
-    try {
-      const res = await getCart('TAKE_OUT'); // 'TAKE_OUT'으로 바꿔도 됨
-      setCartResult(res);
-      alert('장바구니 API 호출 성공! 콘솔도 확인');
-      console.log('장바구니 API 결과', res);
-    } catch (err: unknown) {
-      setCartError((err as Error)?.message || String(err));
-      alert('장바구니 API 호출 실패: ' + ((err as Error)?.message || String(err)));
-      console.error('장바구니 API 에러', err);
-    }
-  };
 
   return (
     <div style={{ padding: '2rem', textAlign: 'center' }}>
       <h1>🧪 WebView 브릿지 테스트 페이지</h1>
 
-      <button onClick={handleGetCart} style={{ margin: '1rem', padding: '0.5rem 1rem' }}>
-        🚚 getCart('TAKE_OUT') API (버튼 클릭)
-      </button>
-
-      {cartError && <div style={{ color: 'red', marginTop: '1rem' }}>❌ 직접 호출 에러: {cartError}</div>}
-
-      {cartResult && (
-        <div style={{ marginTop: '1rem', textAlign: 'left', maxWidth: 600, marginInline: 'auto' }}>
-          <strong>🛒 getCart('TAKE_OUT') 직접 호출 결과:</strong>
-          <pre>{JSON.stringify(cartResult, null, 2)}</pre>
-        </div>
-      )}
-
       <hr style={{ margin: '2rem 0' }} />
 
-      <div>
-        <h3>
-          🧩 <code>useCart</code> 훅 (react-query) 테스트
-        </h3>
-        <div>
-          <button
-            onClick={() => setQueryOrderType('DELIVERY')}
-            style={{ margin: 4, background: queryOrderType === 'DELIVERY' ? '#cce' : undefined }}
-          >
-            DELIVERY
-          </button>
-          <button
-            onClick={() => setQueryOrderType('TAKE_OUT')}
-            style={{ margin: 4, background: queryOrderType === 'TAKE_OUT' ? '#cce' : undefined }}
-          >
-            TAKE_OUT
-          </button>
-        </div>
-        {queryCartError && <div style={{ color: 'red', marginTop: '1rem' }}>❌ 쿼리 에러: {queryCartError}</div>}
-        {queryCartResult && (
-          <div style={{ marginTop: '1rem', textAlign: 'left', maxWidth: 600, marginInline: 'auto' }}>
-            <strong>🛒 useCart("{queryOrderType}") 결과:</strong>
-            <pre>{JSON.stringify(queryCartResult, null, 2)}</pre>
-          </div>
-        )}
-      </div>
+      <div></div>
 
       <div style={{ marginTop: '2rem' }}>
         <strong>쿠키 토큰:</strong>
