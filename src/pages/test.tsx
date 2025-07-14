@@ -1,9 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { getCart } from '@/api/cart'; // 실제 경로에 맞게 수정!
 import { CartResponse } from '@/api/cart/entity';
-import { UserType, useTokenStore } from '@/stores/auth';
-import { isNative, requestTokensFromNative, setTokensFromNative } from '@/util/ts/bridge';
+import { useTokenStore } from '@/stores/auth';
 import { getCookie } from '@/util/ts/cookie';
 
 // 👇 useCart 훅 (실제로는 별도 파일에서 import하는게 best)
@@ -27,16 +26,9 @@ function useCart(orderType: 'DELIVERY' | 'TAKE_OUT') {
   return { data };
 }
 
-interface TokenPair {
-  accessToken: string;
-  refreshToken: string;
-  userType: UserType;
-}
-
 export default function TestPage() {
   // 타입 확정: string ("" 초기값이라면 string), UserType
   const { token, refreshToken, userType } = useTokenStore();
-  const [fetchedTokens, setFetchedTokens] = useState<TokenPair | null>(null);
 
   // CartResponse | undefined
   const [cartResult, setCartResult] = useState<CartResponse | undefined>(undefined);
@@ -55,33 +47,6 @@ export default function TestPage() {
   }
 
   // ✅ 브릿지에서 토큰 받아오기 (초기)
-  useEffect(() => {
-    const initializeTokens = async (): Promise<void> => {
-      if (isNative()) {
-        console.log('[TestPage] 브릿지를 통한 초기 토큰 요청 시작');
-        const tokens = await requestTokensFromNative();
-        console.log('[TestPage] 응답 받은 토큰:', tokens);
-        setTokensFromNative(tokens.access, tokens.refresh, tokens.userType);
-      } else {
-        console.log('[TestPage] Native 환경 아님 (웹)');
-      }
-    };
-    initializeTokens();
-  }, []);
-
-  // ✅ 브릿지에서 토큰 직접 요청
-  const handleRequestFromNative = async (): Promise<void> => {
-    const tokens = await requestTokensFromNative();
-    setFetchedTokens({
-      accessToken: tokens.access,
-      refreshToken: tokens.refresh,
-      userType: tokens.userType,
-    });
-
-    alert(
-      `✅ 브릿지로부터 토큰 직접 요청 결과\n\nAccess Token:\n${tokens.access}\n\nRefresh Token:\n${tokens.refresh}`,
-    );
-  };
 
   // ✅ getCart API 직접 호출
   const handleGetCart = async (): Promise<void> => {
@@ -102,10 +67,6 @@ export default function TestPage() {
   return (
     <div style={{ padding: '2rem', textAlign: 'center' }}>
       <h1>🧪 WebView 브릿지 테스트 페이지</h1>
-
-      <button onClick={handleRequestFromNative} style={{ margin: '1rem', padding: '0.5rem 1rem' }}>
-        브릿지로 토큰 직접 요청
-      </button>
 
       <button onClick={handleGetCart} style={{ margin: '1rem', padding: '0.5rem 1rem' }}>
         🚚 getCart('TAKE_OUT') API (버튼 클릭)
@@ -148,15 +109,6 @@ export default function TestPage() {
           </div>
         )}
       </div>
-
-      {fetchedTokens && (
-        <div style={{ marginTop: '2rem' }}>
-          <strong>📦 직접 받아온 토큰:</strong>
-          <div>Access Token: {fetchedTokens.accessToken}</div>
-          <div>Refresh Token: {fetchedTokens.refreshToken}</div>
-          <div>User Type: {fetchedTokens.userType}</div>
-        </div>
-      )}
 
       <div style={{ marginTop: '2rem' }}>
         <strong>쿠키 토큰:</strong>
