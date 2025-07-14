@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
-import { useTokenStore } from '@/stores/auth';
+import { UserType, useTokenStore } from '@/stores/auth';
 import { isNative, requestTokensFromNative, setTokensFromNative } from '@/util/ts/bridge';
 
 interface TokenPair {
   accessToken: string;
   refreshToken: string;
-  userType: string; // 선택적 속성, 필요시 추가
+  userType: UserType;
 }
 
 export default function TestPage() {

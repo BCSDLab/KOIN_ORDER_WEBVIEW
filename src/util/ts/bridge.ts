@@ -102,13 +102,13 @@ export async function requestTokensFromNative(): Promise<{ access: string; refre
     return {
       access: tokens?.access || '',
       refresh: tokens?.refresh || '',
-      userType: tokens?.userType || (null as UserType),
+      userType: tokens?.userType,
     };
   } catch {
     return {
       access: '',
       refresh: '',
-      userType: null,
+      userType: 'STUDENT',
     };
   }
 }
