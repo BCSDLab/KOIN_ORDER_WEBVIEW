@@ -1,14 +1,14 @@
 import { useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import useCart from '../Payment/hooks/useCart';
-import BottomCartModal from './components/BottomCartModal';
-import Header from './components/Header';
+// import useCart from '../Payment/hooks/useCart';
+// import BottomCartModal from './components/BottomCartModal';
+// import Header from './components/Header';
 import ImageCarousel from './components/ImageCarousel';
 import ShopMenuGroups from './components/ShopMenuGroups';
 import ShopMenus from './components/ShopMenus';
 import ShopSummary from './components/ShopSummary';
 import { useGetShopInfoSummary } from './hooks/useGetShopInfo';
-import { useOrderStore } from '@/stores/useOrderStore';
+// import { useOrderStore } from '@/stores/useOrderStore';
 
 export default function Shop() {
   const { shopId } = useParams();
@@ -17,13 +17,13 @@ export default function Shop() {
   }
 
   const [selectedMenu, setSelectedMenu] = useState<string>('');
-  const { orderType } = useOrderStore();
+  // const { orderType } = useOrderStore();
   const menuGroupRefs = useRef<Record<string, HTMLDivElement | null>>({});
   const targetRef = useRef<HTMLDivElement | null>(null);
   const isAutoScrolling = useRef<boolean>(false);
 
   const { data: shopInfoSummary } = useGetShopInfoSummary(Number(shopId));
-  const { data: cartInfo } = useCart(orderType);
+  // const { data: cartInfo } = useCart(orderType);
 
   const handleScrollTo = (name: string) => {
     const element = menuGroupRefs.current[name];
@@ -44,7 +44,7 @@ export default function Shop() {
 
   return (
     <div>
-      <Header name={shopInfoSummary.name} targetRef={targetRef} cartItemCount={cartInfo.items.length} />
+      {/* <Header name={shopInfoSummary.name} targetRef={targetRef} cartItemCount={cartInfo.items.length} /> */}
       <ImageCarousel images={shopInfoSummary.images} targetRef={targetRef} />
       <ShopSummary id={shopId} shopInfoSummary={shopInfoSummary} />
       <ShopMenuGroups id={shopId} selectedMenu={selectedMenu} onSelect={handleScrollTo} />
@@ -54,9 +54,9 @@ export default function Shop() {
         handleChangeMenu={handleChangeMenu}
         isAutoScrolling={isAutoScrolling}
       />
-      {cartInfo.items.length > 0 && cartInfo.orderable_shop_id === Number(shopId) && (
+      {/* {cartInfo.items.length > 0 && cartInfo.orderable_shop_id === Number(shopId) && (
         <BottomCartModal id={shopId} cartItemCount={cartInfo.items.length} />
-      )}
+      )} */}
     </div>
   );
 }
