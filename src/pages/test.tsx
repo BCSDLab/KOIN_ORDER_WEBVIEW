@@ -8,16 +8,20 @@ import { getCookie } from '@/util/ts/cookie';
 
 // 👇 useCart 훅 (실제로는 별도 파일에서 import하는게 best)
 function useCart(orderType: 'DELIVERY' | 'TAKE_OUT') {
-  // orderType이 바뀌었을 때 바꿔주는 코드 샘플용 포함
-  // 실제로 orderType 관리는 필요에 따라 커스텀
-  // const { setOrderType } = useOrderStore();
-  // (테스트 코드에선 setOrderType 부분은 빼도 무방)
+  const token = useTokenStore.getState().token;
 
   const { data } = useSuspenseQuery<CartResponse>({
-    queryKey: ['cart', orderType],
+    queryKey: ['cart', orderType, token], // 토큰 변경시 재요청 보장
     queryFn: async () => {
-      // try-catch 및 setOrderType은 실사용에 맞게 필요시 추가
-      return await getCart(orderType);
+      try {
+        return await getCart(orderType);
+      } catch (error: unknown) {
+        // 에러 객체에 토큰값을 커스텀 프로퍼티로 추가!
+        if (error && typeof error === 'object') {
+          (error as unknown as { usedToken?: string }).usedToken = token;
+        }
+        throw error;
+      }
     },
   });
   return { data };
