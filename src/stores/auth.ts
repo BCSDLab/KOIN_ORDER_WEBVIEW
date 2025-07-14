@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { deleteCookie, getCookie } from '@/util/ts/cookie';
 
-export type UserType = 'STUDENT' | 'GENERAL' | null;
+export type UserType = 'STUDENT' | 'GENERAL';
 
 interface State {
   token: string;
@@ -29,7 +29,7 @@ export const useTokenStore = create(
 
       clearToken: () => {
         //테스트용 추후 삭제 예정
-        set({ token: '', refreshToken: '', userType: null });
+        set({ token: '', refreshToken: '', userType: undefined });
         deleteCookie('AUTH_TOKEN_KEY');
         deleteCookie('AUTH_USER_TYPE');
       },

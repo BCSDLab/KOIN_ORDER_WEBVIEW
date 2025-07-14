@@ -5,6 +5,7 @@ import { isNative, requestTokensFromNative, setTokensFromNative } from '@/util/t
 interface TokenPair {
   accessToken: string;
   refreshToken: string;
+  userType: string; // 선택적 속성, 필요시 추가
 }
 
 export default function TestPage() {
@@ -33,6 +34,7 @@ export default function TestPage() {
     setFetchedTokens({
       accessToken: tokens.access,
       refreshToken: tokens.refresh,
+      userType: tokens.userType,
     });
 
     alert(
@@ -53,6 +55,7 @@ export default function TestPage() {
           <strong>📦 직접 받아온 토큰:</strong>
           <div>Access Token: {fetchedTokens.accessToken}</div>
           <div>Refresh Token: {fetchedTokens.refreshToken}</div>
+          <div>User Type: {fetchedTokens.userType}</div>
         </div>
       )}
 
@@ -60,6 +63,7 @@ export default function TestPage() {
         <strong>🗂 Zustand 기준 현재 토큰 상태:</strong>
         <div>Access Token: {token || '(없음)'}</div>
         <div>Refresh Token: {refreshToken || '(없음)'}</div>
+        <div>User Type: {useTokenStore.getState().userType || '(없음)'}</div>
       </div>
     </div>
   );
