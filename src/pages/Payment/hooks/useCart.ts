@@ -5,7 +5,7 @@ import { useOrderStore } from '@/stores/useOrderStore';
 export default function useCart(orderType: 'DELIVERY' | 'TAKE_OUT') {
   const { setOrderType } = useOrderStore();
 
-  const { data, error } = useSuspenseQuery({
+  const { data } = useSuspenseQuery({
     queryKey: ['cart', orderType],
     queryFn: async () => {
       try {
@@ -16,5 +16,5 @@ export default function useCart(orderType: 'DELIVERY' | 'TAKE_OUT') {
       }
     },
   });
-  return { data, error };
+  return { data };
 }
