@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { UserType, useTokenStore } from '@/stores/auth';
 import { isNative, requestTokensFromNative, setTokensFromNative } from '@/util/ts/bridge';
+import { getCookie } from '@/util/ts/cookie';
 
 interface TokenPair {
   accessToken: string;
@@ -58,6 +59,11 @@ export default function TestPage() {
           <div>User Type: {fetchedTokens.userType}</div>
         </div>
       )}
+
+      <div style={{ marginTop: '2rem' }}>
+        <strong>쿠키 토큰:</strong>
+        <div>Access Token: {getCookie('AUTH_TOKEN_KEY')}</div>
+      </div>
 
       <div style={{ marginTop: '2rem' }}>
         <strong>🗂 Zustand 기준 현재 토큰 상태:</strong>
