@@ -52,18 +52,37 @@ export default function Shop() {
 
   return (
     <div>
-      <Header name={shopInfoSummary.name} targetRef={targetRef} cartItemCount={cartInfo.items.length} />
-      <ImageCarousel images={shopInfoSummary.images} targetRef={targetRef} />
-      <ShopSummary id={shopId} shopInfoSummary={shopInfoSummary} />
-      <ShopMenuGroups id={shopId} selectedMenu={selectedMenu} onSelect={handleScrollTo} />
-      <ShopMenus
-        id={shopId}
-        menuGroupRefs={menuGroupRefs}
-        handleChangeMenu={handleChangeMenu}
-        isAutoScrolling={isAutoScrolling}
-      />
-      {cartInfo.items.length > 0 && cartInfo.orderable_shop_id === Number(shopId) && (
-        <BottomCartModal id={shopId} cartItemCount={cartInfo.items.length} />
+      {cartError ? (
+        <div
+          style={{
+            color: 'red',
+            background: '#fee',
+            padding: '12px 16px',
+            marginBottom: 20,
+            borderRadius: 6,
+            fontWeight: 600,
+          }}
+        >
+          ⚠️ 장바구니 정보를 불러오는 중 에러가 발생했습니다:
+          <br />
+          {cartError.message ?? String(cartError)}
+        </div>
+      ) : (
+        <>
+          <Header name={shopInfoSummary.name} targetRef={targetRef} cartItemCount={cartInfo.items.length} />
+          <ImageCarousel images={shopInfoSummary.images} targetRef={targetRef} />
+          <ShopSummary id={shopId} shopInfoSummary={shopInfoSummary} />
+          <ShopMenuGroups id={shopId} selectedMenu={selectedMenu} onSelect={handleScrollTo} />
+          <ShopMenus
+            id={shopId}
+            menuGroupRefs={menuGroupRefs}
+            handleChangeMenu={handleChangeMenu}
+            isAutoScrolling={isAutoScrolling}
+          />
+          {cartInfo.items.length > 0 && cartInfo.orderable_shop_id === Number(shopId) && (
+            <BottomCartModal id={shopId} cartItemCount={cartInfo.items.length} />
+          )}
+        </>
       )}
     </div>
   );
