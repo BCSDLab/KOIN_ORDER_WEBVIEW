@@ -1,13 +1,13 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import dayjs from 'dayjs';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Cart from './pages/Cart';
+import TestPage from './pages/Cart/test';
 import DeliveryOutside from './pages/Delivery/Outside';
 import OrderCancel from './pages/OrderFinish/OrderCancel';
 import Shop from './pages/Shop';
 import MenuDetail from './pages/Shop/MenuDetail';
 import ShopDetail from './pages/Shop/ShopDetail';
-import TestPage from './pages/test';
 import { isNative, requestTokensFromNative, setTokensFromNative } from './util/ts/bridge';
 import AppLayout from '@/components/Layout';
 import Campus from '@/pages/Delivery/Campus';
@@ -19,14 +19,12 @@ import 'dayjs/locale/ko';
 dayjs.locale('ko');
 
 export default function App() {
-  const [isTokenInitialized, setTokenInitialized] = useState(false);
   useEffect(() => {
     const initializeTokens = async () => {
       if (isNative()) {
         const tokens = await requestTokensFromNative();
         setTokensFromNative(tokens.access, tokens.refresh, tokens.userType);
       }
-      setTokenInitialized(true);
     };
 
     if (typeof window !== 'undefined' && window.webkit?.messageHandlers) {
@@ -40,10 +38,6 @@ export default function App() {
 
     initializeTokens();
   }, []);
-
-  if (!isTokenInitialized) {
-    return <div>Loading...</div>;
-  }
 
   return (
     <BrowserRouter>
