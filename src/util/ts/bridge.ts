@@ -1,4 +1,5 @@
 import { UserType, useTokenStore } from '@/stores/auth';
+import { setTokenFromBridge } from '@/stores/tokenStore';
 import { setCookie } from '@/util/ts/cookie';
 
 class Bridge {
@@ -75,6 +76,7 @@ export function isNative() {
 function applyAccessToken(token: string) {
   useTokenStore.getState().setToken(token);
   setCookie('AUTH_TOKEN_KEY', token);
+  setTokenFromBridge(token);
 }
 
 function applyUserType(userType: UserType) {

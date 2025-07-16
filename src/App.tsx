@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import dayjs from 'dayjs';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Cart from './pages/Cart';
@@ -19,12 +19,14 @@ import 'dayjs/locale/ko';
 dayjs.locale('ko');
 
 export default function App() {
+  const [isTokenInitialized, setTokenInitialized] = useState(false);
   useEffect(() => {
     const initializeTokens = async () => {
       if (isNative()) {
         const tokens = await requestTokensFromNative();
         setTokensFromNative(tokens.access, tokens.refresh, tokens.userType);
       }
+      setTokenInitialized(true);
     };
 
     if (typeof window !== 'undefined' && window.webkit?.messageHandlers) {
@@ -38,6 +40,10 @@ export default function App() {
 
     initializeTokens();
   }, []);
+
+  if (!isTokenInitialized) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <BrowserRouter>
