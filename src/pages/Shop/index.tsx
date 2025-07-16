@@ -13,7 +13,7 @@ import { useOrderStore } from '@/stores/useOrderStore';
 export default function Shop() {
   const { shopId } = useParams();
   if (!shopId) {
-    return <div>없는 상점</div>;
+    throw new Error('Shop ID is required');
   }
 
   const [selectedMenu, setSelectedMenu] = useState<string>('');
