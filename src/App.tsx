@@ -7,7 +7,7 @@ import OrderCancel from './pages/OrderFinish/OrderCancel';
 import Shop from './pages/Shop';
 import MenuDetail from './pages/Shop/MenuDetail';
 import ShopDetail from './pages/Shop/ShopDetail';
-import TestPage from './pages/test';
+import TestPage from './pages/Shop/test';
 import { isNative, requestTokensFromNative, setTokensFromNative } from './util/ts/bridge';
 import AppLayout from '@/components/Layout';
 import Campus from '@/pages/Delivery/Campus';
