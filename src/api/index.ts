@@ -1,4 +1,4 @@
-import useTokenState from '@/util/hooks/useTokenState';
+import { useTokenStore } from '@/stores/auth';
 import { isNative, requestTokensFromNative, setTokensFromNative } from '@/util/ts/bridge';
 
 const BASE_URL = import.meta.env.VITE_API_PATH;
@@ -38,7 +38,8 @@ async function sendRequest<T = unknown>(
     throw new Error('HTTP method가 설정되지 않았습니다.');
   }
 
-  const token = useTokenState();
+  const token = useTokenStore.getState().token;
+
   if (!token && isNative()) {
     if (retryCount <= 0) {
       throw new Error('토큰 요청 재시도 횟수를 초과했습니다.');
