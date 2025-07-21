@@ -1,9 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import LoginRequiredModal from './LoginRequiredModal';
 import ArrowBackIcon from '@/assets/Main/arrow-back-icon.svg';
 import CartIcon from '@/assets/Shop/cart-icon.svg';
-import useBooleanState from '@/util/hooks/useBooleanState';
 import { backButtonTapped } from '@/util/ts/bridge';
 
 interface HeaderProps {
@@ -15,15 +13,6 @@ interface HeaderProps {
 export default function Header({ name, targetRef, cartItemCount }: HeaderProps) {
   const navigate = useNavigate();
   const [opacity, setOpacity] = useState(0);
-  const [isLoginRequiredModalOpen, openLoginRequiredModal, closeLoginRequiredModal] = useBooleanState(false);
-
-  const handleCheckLogin = () => {
-    if (document.cookie.includes('AUTH_TOKEN_KEY')) {
-      navigate('/cart');
-    } else {
-      openLoginRequiredModal();
-    }
-  };
 
   const backToPreviousPage = () => {
     if (window.history.length > 1) {
@@ -85,7 +74,7 @@ export default function Header({ name, targetRef, cartItemCount }: HeaderProps) 
         <button
           type="button"
           aria-label="장바구니 이동"
-          onClick={handleCheckLogin}
+          onClick={() => navigate('/cart')}
           className="relative flex items-center justify-center"
         >
           <CartIcon fill={getTransitionColor(opacity)} />
@@ -96,7 +85,6 @@ export default function Header({ name, targetRef, cartItemCount }: HeaderProps) 
           )}
         </button>
       </div>
-      <LoginRequiredModal isOpen={isLoginRequiredModalOpen} onClose={closeLoginRequiredModal}></LoginRequiredModal>
     </header>
   );
 }
