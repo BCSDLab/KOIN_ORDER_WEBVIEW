@@ -31,11 +31,18 @@ const icons = [
 interface BottomSheetProps {
   orderType: 'DELIVERY' | 'TAKE_OUT';
   itemCount: number;
-  totalAmount: number;
+  itemTotalAmount: number;
   minimumOrderAmount: number;
+  deliveryFee: number;
 }
 
-export default function BottomSheet({ orderType, itemCount, totalAmount, minimumOrderAmount }: BottomSheetProps) {
+export default function BottomSheet({
+  orderType,
+  itemCount,
+  itemTotalAmount,
+  minimumOrderAmount,
+  deliveryFee,
+}: BottomSheetProps) {
   const { mutate: validateCart, errorCode } = useValidateCart({ orderType });
   const [isValidateModalOpen, openValidateModal, closeValidateModal] = useBooleanState(false);
 
@@ -47,7 +54,7 @@ export default function BottomSheet({ orderType, itemCount, totalAmount, minimum
 
   const startIcon = itemCount > 9 ? <NinePlusIcon /> : icons[itemCount];
 
-  const remainAmount = minimumOrderAmount - totalAmount;
+  const remainAmount = minimumOrderAmount - itemTotalAmount;
   const isOrderAvailable = remainAmount <= 0;
 
   let statusMessage = '';
@@ -61,7 +68,9 @@ export default function BottomSheet({ orderType, itemCount, totalAmount, minimum
     <div className="pointer-events-none fixed inset-0 z-90 flex flex-col justify-end">
       <div className="shadow-4 pointer-events-auto flex justify-between rounded-t-4xl border-b-[0.5px] border-neutral-300 bg-white px-6 py-3">
         <div>
-          <div className="text-lg leading-[160%] font-semibold">{totalAmount.toLocaleString()}원</div>
+          <div className="text-lg leading-[160%] font-semibold">
+            {isOrderAvailable ? (itemTotalAmount + deliveryFee).toLocaleString() : itemTotalAmount.toLocaleString()}원
+          </div>
           <div className="text-xs leading-[160%] font-medium text-neutral-500">{statusMessage}</div>
         </div>
         <Button
