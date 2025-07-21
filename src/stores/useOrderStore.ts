@@ -25,6 +25,7 @@ interface State {
   outsideAddress: OutsideAddress;
   campusAddress?: CampusAddress;
   deliveryRequest: string;
+  userPhoneNumber: string;
 }
 interface Action {
   setOrderType: (type: 'DELIVERY' | 'TAKE_OUT') => void;
@@ -32,6 +33,7 @@ interface Action {
   setOutsideAddress: (addressData: OutsideAddress) => void;
   setCampusAddress: (address: CampusAddress) => void;
   setDeliveryRequest: (request: string) => void;
+  setUserPhoneNumber: (phoneNumber: string) => void;
 }
 
 export const useOrderStore = create<State & Action>((set) => ({
@@ -49,9 +51,11 @@ export const useOrderStore = create<State & Action>((set) => ({
   },
   campusAddress: undefined,
   deliveryRequest: '',
+  userPhoneNumber: '',
   setOrderType: (type) => set({ orderType: type }),
   setDeliveryType: (type) => set({ deliveryType: type }),
   setOutsideAddress: (addressData) => set({ outsideAddress: addressData }),
   setCampusAddress: (address) => set({ campusAddress: address }),
   setDeliveryRequest: (request) => set({ deliveryRequest: request }),
+  setUserPhoneNumber: (phoneNumber) => set({ userPhoneNumber: phoneNumber }),
 }));

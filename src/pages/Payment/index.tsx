@@ -27,13 +27,13 @@ export default function Payment() {
   const [isStoreRequestModalOpen, openStoreRequestModal, closeStoreRequestModal] = useBooleanState(false);
   const [isPaymentFailModalOpen, openPaymentFailModal, closePaymentFailModal] = useBooleanState(false);
 
-  const [contact, setContact] = useState('');
   const [request, setRequest] = useState('요청사항 없음');
   const [noCutlery, setNoCutlery] = useState(true);
 
   const [ready, setReady] = useState(false);
   const [widgets, setWidgets] = useState<TossPaymentsWidgets | null>(null);
-  const { deliveryType, outsideAddress, campusAddress, deliveryRequest } = useOrderStore();
+  const { userPhoneNumber, deliveryType, outsideAddress, campusAddress, deliveryRequest, setUserPhoneNumber } =
+    useOrderStore();
 
   const orderType = searchParams.get('orderType');
   const message = searchParams.get('message');
@@ -53,7 +53,7 @@ export default function Payment() {
     if (isDelivery) {
       order = await temporaryDelivery({
         address: address!,
-        phone_number: contact,
+        phone_number: userPhoneNumber,
         to_owner: request,
         to_rider: deliveryRequest,
         total_menu_price: cart!.items_amount,
@@ -62,7 +62,7 @@ export default function Payment() {
       });
     } else {
       order = await temporaryTakeout({
-        phoneNumber: contact,
+        phoneNumber: userPhoneNumber,
         toOwner: request,
         totalMenuPrice: cart!.items_amount,
         totalAmount: cart!.total_amount,
@@ -111,8 +111,8 @@ export default function Payment() {
           <p className="text-primary-500 text-lg font-semibold">연락처</p>
           <Button onClick={openContactModal} color="gray" fullWidth className="mt-2 border-0 py-4 pr-3 pl-6">
             <div className="flex w-full items-center justify-between">
-              <p className={clsx('text-sm font-normal', contact ? 'text-neutral-600' : 'text-neutral-300')}>
-                {contact || '연락처를 입력하세요'}
+              <p className={clsx('text-sm font-normal', userPhoneNumber ? 'text-neutral-600' : 'text-neutral-300')}>
+                {userPhoneNumber || '연락처를 입력하세요'}
               </p>
               <RightArrow />
             </div>
@@ -164,8 +164,8 @@ export default function Payment() {
       <ContactModal
         isOpen={isContactModalOpen}
         onClose={closeContactModal}
-        currentContact={contact}
-        onSubmit={(newContact) => setContact(newContact)}
+        currentContact={userPhoneNumber}
+        onSubmit={(newContact) => setUserPhoneNumber(newContact)}
       />
 
       <StoreRequestModal
