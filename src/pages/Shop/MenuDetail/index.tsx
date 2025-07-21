@@ -50,6 +50,8 @@ export default function MenuDetail() {
 
   const info = isEdit && editInfo ? editInfo : menuInfo;
 
+  const AUTH_FAIL = ''; //이 케이스는 올바르지 않은 인증정보일 떄 발생합니다. 백엔드 작업이 끝난 후에 다시 작업해야함.
+
   const {
     priceId,
     count,
@@ -93,7 +95,7 @@ export default function MenuDetail() {
               setNoticeMessage('영업시간이 아니라서\n장바구니에 담을 수 없어요.');
               openNoticeModal();
               break;
-            case '':
+            case AUTH_FAIL: //이 케이스는 올바르지 않은 인증정보일 떄 발생합니다.
               openLoginRequiredModal();
               break;
             default:
