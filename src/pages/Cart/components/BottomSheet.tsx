@@ -32,16 +32,16 @@ interface BottomSheetProps {
   orderType: 'DELIVERY' | 'TAKE_OUT';
   itemCount: number;
   itemTotalAmount: number;
+  totalAmount: number;
   minimumOrderAmount: number;
-  deliveryFee: number;
 }
 
 export default function BottomSheet({
   orderType,
   itemCount,
   itemTotalAmount,
+  totalAmount,
   minimumOrderAmount,
-  deliveryFee,
 }: BottomSheetProps) {
   const { mutate: validateCart, errorCode } = useValidateCart({ orderType });
   const [isValidateModalOpen, openValidateModal, closeValidateModal] = useBooleanState(false);
@@ -69,7 +69,7 @@ export default function BottomSheet({
       <div className="shadow-4 pointer-events-auto flex justify-between rounded-t-4xl border-b-[0.5px] border-neutral-300 bg-white px-6 py-3">
         <div>
           <div className="text-lg leading-[160%] font-semibold">
-            {isOrderAvailable ? (itemTotalAmount + deliveryFee).toLocaleString() : itemTotalAmount.toLocaleString()}원
+            {isOrderAvailable ? totalAmount.toLocaleString() : itemTotalAmount.toLocaleString()}원
           </div>
           <div className="text-xs leading-[160%] font-medium text-neutral-500">{statusMessage}</div>
         </div>

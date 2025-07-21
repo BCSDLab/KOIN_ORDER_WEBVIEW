@@ -126,8 +126,8 @@ export default function Cart() {
         orderType={orderType}
         itemCount={cartInfo.items.reduce((total, item) => total + item.quantity, 0)}
         itemTotalAmount={cartInfo.items_amount}
+        totalAmount={cartInfo.total_amount}
         minimumOrderAmount={cartInfo.shop_minimum_order_amount}
-        deliveryFee={cartInfo.delivery_fee}
       />
     </div>
   );
