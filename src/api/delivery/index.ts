@@ -8,10 +8,7 @@ import {
   RiderRequestResponse,
   CampusDeliveryValidateRequest,
 } from './entity';
-import { useTokenStore } from '@/stores/auth';
-
-const token = useTokenStore.getState().token; // 배포 시 또는 브릿지 테스트 시 사용
-// const token = localStorage.getItem('token'); // 개발용
+import { getAuthHeader } from '@/util/ts/auth';
 
 export const getRoadNameAddress = async ({ keyword, currentPage, countPerPage }: AddressSearchRequest) => {
   return await apiClient.get<AddressSearchResponse>('address/search', {
@@ -34,17 +31,13 @@ export const getCampusDeliveryAddress = async ({ filter }: CampusDeliveryAddress
 export const postUserDeliveryAddress = async (addressData: OffCampusDeliveryAddressRequest) => {
   return await apiClient.post('delivery/address/off-campus', {
     body: addressData,
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
+    headers: getAuthHeader(),
   });
 };
 
 export const getRiderRequestMessages = async () => {
   return await apiClient.get<RiderRequestResponse>('delivery/rider-message', {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
+    headers: getAuthHeader(),
   });
 };
 

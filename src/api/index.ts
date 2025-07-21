@@ -1,5 +1,5 @@
-import { useTokenStore } from '@/stores/auth';
 import { isNative, requestTokensFromNative, setTokensFromNative } from '@/util/ts/bridge';
+import { getCookie } from '@/util/ts/cookie';
 
 const BASE_URL = import.meta.env.VITE_API_PATH;
 
@@ -38,7 +38,7 @@ async function sendRequest<T = unknown>(
     throw new Error('HTTP method가 설정되지 않았습니다.');
   }
 
-  const token = useTokenStore.getState().token;
+  const token = getCookie('AUTH_TOKEN_KEY');
 
   if (!token && isNative()) {
     if (retryCount <= 0) {
