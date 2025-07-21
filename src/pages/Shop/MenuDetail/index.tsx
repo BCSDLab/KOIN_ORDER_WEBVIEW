@@ -3,6 +3,7 @@ import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import AddToCartBottomModal from '../components/AddToCartBottomModal';
 import Header from '../components/Header';
 import ImageCarousel from '../components/ImageCarousel';
+import LoginRequiredModal from '../components/LoginRequiredModal';
 import MenuCounter from '../components/MenuCounter';
 import MenuDescription from '../components/MenuDescription';
 import MenuOptions from '../components/MenuOptions';
@@ -45,8 +46,11 @@ export default function MenuDetail() {
   const [isResetModalOpen, openResetModal, closeResetModal] = useBooleanState(false);
   const [isNoticeModalOpen, openNoticeModal, closeNoticeModal] = useBooleanState(false);
   const [noticeMessage, setNoticeMessage] = useState('');
+  const [isLoginRequiredModalOpen, openLoginRequiredModal, closeLoginRequiredModal] = useBooleanState(false);
 
   const info = isEdit && editInfo ? editInfo : menuInfo;
+
+  const AUTH_FAIL = ''; //이 케이스는 올바르지 않은 인증정보일 떄 발생합니다. 백엔드 작업이 끝난 후에 다시 작업해야함.
 
   const {
     priceId,
@@ -91,6 +95,9 @@ export default function MenuDetail() {
               setNoticeMessage('영업시간이 아니라서\n장바구니에 담을 수 없어요.');
               openNoticeModal();
               break;
+            case AUTH_FAIL: //이 케이스는 올바르지 않은 인증정보일 떄 발생합니다.
+              openLoginRequiredModal();
+              break;
             default:
               setNoticeMessage(parsed.message);
               openNoticeModal();
@@ -121,6 +128,7 @@ export default function MenuDetail() {
       />
       <ResetModal isOpen={isResetModalOpen} onClose={closeResetModal} />
       <NoticeModal isOpen={isNoticeModalOpen} onClose={closeNoticeModal} message={noticeMessage} />
+      <LoginRequiredModal isOpen={isLoginRequiredModalOpen} onClose={closeLoginRequiredModal} />
     </div>
   );
 }
