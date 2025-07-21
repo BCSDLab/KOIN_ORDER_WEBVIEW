@@ -125,8 +125,9 @@ export default function Cart() {
       <BottomSheet
         orderType={orderType}
         itemCount={cartInfo.items.reduce((total, item) => total + item.quantity, 0)}
-        totalAmount={cartInfo.total_amount}
+        itemTotalAmount={cartInfo.items_amount}
         minimumOrderAmount={cartInfo.shop_minimum_order_amount}
+        deliveryFee={cartInfo.delivery_fee}
       />
     </div>
   );
