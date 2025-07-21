@@ -1,6 +1,6 @@
-import { UserType, useTokenStore } from '@/stores/auth';
-import { setTokenFromBridge } from '@/stores/tokenStore';
-import { setCookie } from '@/util/ts/cookie';
+import { getCookie, setCookie } from '@/util/ts/cookie';
+
+type UserType = 'STUDENT' | 'GENERAL';
 
 class Bridge {
   private callbackMap: { [key: string]: (result: unknown) => void } = {};
@@ -74,29 +74,30 @@ export function isNative() {
 }
 
 function applyAccessToken(token: string) {
-  useTokenStore.getState().setToken(token);
   setCookie('AUTH_TOKEN_KEY', token);
-  setTokenFromBridge(token);
+}
+
+export function applyRefreshToken(token: string) {
+  localStorage.setItem('refresh-token-storage', token);
 }
 
 function applyUserType(userType: UserType) {
-  useTokenStore.getState().setUserType(userType);
   setCookie('AUTH_USER_TYPE', userType);
 }
 
 export function setTokensFromNative(access: string, refresh: string, userType: UserType) {
   if (access) applyAccessToken(access);
-  if (refresh) useTokenStore.getState().setRefreshToken(refresh);
+  if (refresh) applyRefreshToken(refresh);
   if (userType) applyUserType(userType);
 }
 
 export async function requestTokensFromNative(): Promise<{ access: string; refresh: string; userType: UserType }> {
-  const existingToken = useTokenStore.getState().token;
-  const existingRefresh = useTokenStore.getState().refreshToken;
-  const existingUserType = useTokenStore.getState().userType;
+  const access = getCookie('AUTH_TOKEN_KEY') ?? '';
+  const refresh = localStorage.getItem('refresh-token-storage') ?? '';
+  const userType = (getCookie('AUTH_USER_TYPE') ?? 'STUDENT') as UserType;
 
-  if (existingToken && existingRefresh) {
-    return { access: existingToken, refresh: existingRefresh, userType: existingUserType };
+  if (access && refresh) {
+    return { access, refresh, userType };
   }
 
   try {
