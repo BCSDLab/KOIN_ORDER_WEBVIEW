@@ -9,10 +9,10 @@ export interface DeliveryTemporaryRequest {
 }
 
 export interface TakeoutTemporaryRequest {
-  phoneNumber: string;
-  toOwner: string;
-  totalMenuPrice: number;
-  totalAmount: number;
+  phone_number: string;
+  to_owner: string;
+  total_menu_price: number;
+  total_amount: number;
 }
 
 export interface TemporaryResponse {

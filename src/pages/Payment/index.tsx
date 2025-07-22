@@ -62,10 +62,10 @@ export default function Payment() {
       });
     } else {
       order = await temporaryTakeout({
-        phoneNumber: userPhoneNumber,
-        toOwner: request,
-        totalMenuPrice: cart!.items_amount,
-        totalAmount: cart!.total_amount,
+        phone_number: userPhoneNumber,
+        to_owner: request,
+        total_menu_price: cart!.items_amount,
+        total_amount: cart!.total_amount,
       });
     }
 
