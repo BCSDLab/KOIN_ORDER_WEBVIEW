@@ -8,7 +8,7 @@ export default function useAddCart() {
   return useMutation({
     mutationFn: (menuInfo: AddCartRequest) => addCart(menuInfo),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['cartAdd'] });
+      queryClient.invalidateQueries({ queryKey: ['cart'] });
     },
   });
 }
