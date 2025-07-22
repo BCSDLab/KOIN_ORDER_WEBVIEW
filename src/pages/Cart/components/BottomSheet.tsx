@@ -68,9 +68,7 @@ export default function BottomSheet({
     <div className="pointer-events-none fixed inset-0 z-90 flex flex-col justify-end">
       <div className="shadow-4 pointer-events-auto flex justify-between rounded-t-4xl border-b-[0.5px] border-neutral-300 bg-white px-6 py-3">
         <div>
-          <div className="text-lg leading-[160%] font-semibold">
-            {isOrderAvailable ? totalAmount.toLocaleString() : itemTotalAmount.toLocaleString()}원
-          </div>
+          <div className="text-lg leading-[160%] font-semibold">{totalAmount.toLocaleString()}원</div>
           <div className="text-xs leading-[160%] font-medium text-neutral-500">{statusMessage}</div>
         </div>
         <Button
