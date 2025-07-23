@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import dayjs from 'dayjs';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Cart from './pages/Cart';
@@ -8,7 +7,6 @@ import OrderCancel from './pages/OrderFinish/OrderCancel';
 import Shop from './pages/Shop';
 import MenuDetail from './pages/Shop/MenuDetail';
 import ShopDetail from './pages/Shop/ShopDetail';
-import { isNative, requestTokensFromNative, setTokensFromNative } from './util/ts/bridge';
 import AppLayout from '@/components/Layout';
 import Campus from '@/pages/Delivery/Campus';
 import DetailAddress from '@/pages/Delivery/Outside/DetailAddress';
@@ -19,26 +17,6 @@ import 'dayjs/locale/ko';
 dayjs.locale('ko');
 
 export default function App() {
-  useEffect(() => {
-    const initializeTokens = async () => {
-      if (isNative()) {
-        const tokens = await requestTokensFromNative();
-        setTokensFromNative(tokens.access, tokens.refresh, tokens.userType);
-      }
-    };
-
-    if (typeof window !== 'undefined' && window.webkit?.messageHandlers) {
-      window.setTokens = setTokensFromNative;
-
-      const currentPath = window.location.pathname;
-      if (!currentPath.startsWith('/auth')) {
-        initializeTokens();
-      }
-    }
-
-    initializeTokens();
-  }, []);
-
   return (
     <BrowserRouter>
       <Routes>
