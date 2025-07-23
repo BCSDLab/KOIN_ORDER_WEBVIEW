@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import dayjs from 'dayjs';
+import Lottie from 'lottie-react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { ConfirmPaymentsResponse } from '@/api/payments/entity';
 import CloseIcon from '@/assets/Main/close-icon.svg';
@@ -10,6 +11,7 @@ import Receipt from '@/assets/OrderFinish/receipt-icon.svg';
 import ShoppingCart from '@/assets/OrderFinish/shopping-cart-icon.svg';
 import Skillet from '@/assets/OrderFinish/skillet-icon.svg';
 import ArrowGo from '@/assets/Payment/arrow-go-icon.svg';
+import Paying from '@/assets/Payment/paying.json';
 import BottomModal, {
   BottomModalHeader,
   BottomModalContent,
@@ -72,7 +74,7 @@ export default function OrderFinish() {
       <div className="flex h-screen flex-col items-center justify-center">
         <div className="text-[32px] leading-[160%] font-bold">결제 중</div>
         <div className="leading-[160%] font-medium">잠시만 기다려주세요!</div>
-        <p className="my-24 text-[32px] leading-[160%] font-bold">대충 로딩 로띠...</p>
+        <Lottie animationData={Paying} style={{ width: 390, height: 400 }} />
       </div>
     );
   }
