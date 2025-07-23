@@ -32,14 +32,11 @@ export default function Cart() {
   }
 
   useEffect(() => {
-    const raw = localStorage.getItem('menuOptions');
-    if (raw) {
-      try {
-        const request: AddCartRequest = JSON.parse(raw);
-        addToCart(request);
-      } finally {
-        localStorage.removeItem('menuOptions');
-      }
+    const storedMenuOptions = localStorage.getItem('menuOptions');
+    if (storedMenuOptions) {
+      const request: AddCartRequest = JSON.parse(storedMenuOptions);
+      addToCart(request);
+      localStorage.removeItem('menuOptions');
     }
   }, []);
 
