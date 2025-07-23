@@ -68,7 +68,6 @@ export default function OrderFinish() {
     }
   }, [confirmPayments, orderId, paymentKey]);
 
-  // 로딩 로띠 추가 예정
   if (isPending) {
     return (
       <div className="flex h-screen flex-col items-center justify-center">
