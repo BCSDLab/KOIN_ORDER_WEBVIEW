@@ -1,9 +1,12 @@
+import { useEffect } from 'react';
 import clsx from 'clsx';
 import { useNavigate } from 'react-router-dom';
 import useCart from '../Payment/hooks/useCart';
+import useAddCart from '../Shop/hooks/useAddCart';
 import BottomSheet from './components/BottomSheet';
 import CartItem from './components/CartItem';
 import PaymentAmount from './components/PaymentAmount';
+import { AddCartRequest } from '@/api/cart/entity';
 import EmptyCart from '@/assets/Cart/cart-icon.svg';
 import Plus from '@/assets/Cart/plus-icon.svg';
 import Info from '@/assets/Cart/primary-info-icon.svg';
@@ -18,6 +21,7 @@ export default function Cart() {
   const { orderType, setOrderType } = useOrderStore();
 
   const { data: cartInfo } = useCart(orderType);
+  const { mutateAsync: addToCart } = useAddCart();
 
   let infoMessage = '';
 
@@ -26,6 +30,15 @@ export default function Cart() {
   } else if (cartInfo.is_delivery_available && !cartInfo.is_takeout_available) {
     infoMessage = '이 가게는 배달주문만 가능해요';
   }
+
+  useEffect(() => {
+    const storedMenuOptions = localStorage.getItem('menuOptions');
+    if (storedMenuOptions) {
+      const request: AddCartRequest = JSON.parse(storedMenuOptions);
+      addToCart(request);
+      localStorage.removeItem('menuOptions');
+    }
+  }, []);
 
   if (cartInfo.items.length === 0) {
     return (

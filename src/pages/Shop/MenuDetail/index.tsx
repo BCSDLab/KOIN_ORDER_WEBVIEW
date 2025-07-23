@@ -128,7 +128,11 @@ export default function MenuDetail() {
       />
       <ResetModal isOpen={isResetModalOpen} onClose={closeResetModal} />
       <NoticeModal isOpen={isNoticeModalOpen} onClose={closeNoticeModal} message={noticeMessage} />
-      <LoginRequiredModal isOpen={isLoginRequiredModalOpen} onClose={closeLoginRequiredModal} />
+      <LoginRequiredModal
+        isOpen={isLoginRequiredModalOpen}
+        onClose={closeLoginRequiredModal}
+        menuOptions={'menuInfo' in addToCartRequest ? addToCartRequest : undefined}
+      />
     </div>
   );
 }

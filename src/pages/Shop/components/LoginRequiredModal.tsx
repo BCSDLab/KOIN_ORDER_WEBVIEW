@@ -1,14 +1,19 @@
+import { AddCartRequest } from '@/api/cart/entity';
 import Button from '@/components/UI/Button';
 import Modal, { ModalContent } from '@/components/UI/CenterModal/Modal';
 
 interface LoginRequiredModalProps {
   isOpen: boolean;
   onClose: () => void;
+  menuOptions?: AddCartRequest;
 }
 
-export default function LoginRequiredModal({ isOpen, onClose }: LoginRequiredModalProps) {
+export default function LoginRequiredModal({ isOpen, onClose, menuOptions }: LoginRequiredModalProps) {
   const redirectToLogin = () => {
-    // 로그인 페이지로..
+    if (menuOptions) {
+      localStorage.setItem('menuOptions', JSON.stringify(menuOptions));
+    }
+    // 브릿지 추가 예정
     onClose();
   };
 
