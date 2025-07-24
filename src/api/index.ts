@@ -95,6 +95,16 @@ async function sendRequest<T = unknown>(
     const response = await fetch(url, fetchOptions);
 
     if (!response.ok) {
+      if (response.status === 401) {
+        if (isNative() && retryCount > 0) {
+          const tokens = await requestTokensFromNative();
+          setTokensFromNative(tokens.access, tokens.refresh, tokens.userType);
+          return sendRequest<T>(endPoint, options, timeout, retryCount - 1);
+        } else {
+          throw new Error('세션이 만료되었거나 인증에 실패했습니다. 다시 로그인해주세요.');
+        }
+      }
+
       const errorMessage = await parseResponseText(response);
       const error = new Error(errorMessage || 'API 요청 실패');
       Object.assign(error, {
