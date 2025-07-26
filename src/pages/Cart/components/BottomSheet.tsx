@@ -28,8 +28,10 @@ const icons = [
   <NineIcon />,
 ];
 
+type orderKind = 'DELIVERY' | 'TAKE_OUT';
+
 interface BottomSheetProps {
-  orderType: 'DELIVERY' | 'TAKE_OUT';
+  orderType: orderKind;
   itemCount: number;
   itemTotalAmount: number;
   totalAmount: number;
@@ -58,11 +60,17 @@ export default function BottomSheet({
   const isOrderAvailable = remainAmount <= 0;
 
   let statusMessage = '';
+
   if (orderType === 'DELIVERY') {
     statusMessage = isOrderAvailable ? '배달 가능' : `${remainAmount.toLocaleString()}원 더 담으면 배달 가능`;
   } else if (orderType === 'TAKE_OUT') {
     statusMessage = '주문 가능';
   }
+
+  const isDisabled = (orderType: orderKind) => {
+    if (orderType === 'DELIVERY') return isOrderAvailable ? 'default' : 'disabled';
+    return 'default';
+  };
 
   return (
     <div className="pointer-events-none fixed inset-0 z-90 flex flex-col justify-end">
@@ -72,7 +80,7 @@ export default function BottomSheet({
           <div className="text-xs leading-[160%] font-medium text-neutral-500">{statusMessage}</div>
         </div>
         <Button
-          state={isOrderAvailable ? 'default' : 'disabled'}
+          state={isDisabled(orderType)}
           startIcon={startIcon}
           className="gap-2.5 px-12.5 py-2.5"
           onClick={() => {
