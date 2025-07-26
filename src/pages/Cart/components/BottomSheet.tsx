@@ -55,9 +55,10 @@ export default function BottomSheet({
   const startIcon = itemCount > 9 ? <NinePlusIcon /> : icons[itemCount];
 
   const remainAmount = minimumOrderAmount - itemTotalAmount;
-  const isOrderAvailable = remainAmount <= 0;
+  const isOrderAvailable = orderType === 'TAKE_OUT' ? true : remainAmount <= 0;
 
   let statusMessage = '';
+
   if (orderType === 'DELIVERY') {
     statusMessage = isOrderAvailable ? '배달 가능' : `${remainAmount.toLocaleString()}원 더 담으면 배달 가능`;
   } else if (orderType === 'TAKE_OUT') {
