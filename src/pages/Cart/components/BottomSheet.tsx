@@ -28,10 +28,8 @@ const icons = [
   <NineIcon />,
 ];
 
-type orderKind = 'DELIVERY' | 'TAKE_OUT';
-
 interface BottomSheetProps {
-  orderType: orderKind;
+  orderType: 'DELIVERY' | 'TAKE_OUT';
   itemCount: number;
   itemTotalAmount: number;
   totalAmount: number;
@@ -57,7 +55,7 @@ export default function BottomSheet({
   const startIcon = itemCount > 9 ? <NinePlusIcon /> : icons[itemCount];
 
   const remainAmount = minimumOrderAmount - itemTotalAmount;
-  const isOrderAvailable = remainAmount <= 0;
+  const isOrderAvailable = orderType === 'TAKE_OUT' ? true : remainAmount <= 0;
 
   let statusMessage = '';
 
@@ -67,11 +65,6 @@ export default function BottomSheet({
     statusMessage = '주문 가능';
   }
 
-  const isDisabled = (orderType: orderKind) => {
-    if (orderType === 'DELIVERY') return isOrderAvailable ? 'default' : 'disabled';
-    return 'default';
-  };
-
   return (
     <div className="pointer-events-none fixed inset-0 z-90 flex flex-col justify-end">
       <div className="shadow-4 pointer-events-auto flex justify-between rounded-t-4xl border-b-[0.5px] border-neutral-300 bg-white px-6 py-3">
@@ -80,7 +73,7 @@ export default function BottomSheet({
           <div className="text-xs leading-[160%] font-medium text-neutral-500">{statusMessage}</div>
         </div>
         <Button
-          state={isDisabled(orderType)}
+          state={isOrderAvailable ? 'default' : 'disabled'}
           startIcon={startIcon}
           className="gap-2.5 px-12.5 py-2.5"
           onClick={() => {
