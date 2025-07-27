@@ -86,7 +86,7 @@ export default function OrderCancel() {
                 {orderCancelReason === '기타' && (
                   <input
                     value={customCancelReason}
-                    className="mt-2 ml-2 h-[2.875rem] w-[calc(100%-1rem)] rounded-lg border border-neutral-300 bg-white px-4 py-3 placeholder-neutral-400 placeholder:text-sm placeholder:font-normal"
+                    className="mt-2 ml-2 h-[2.875rem] w-[calc(100%-1rem)] rounded-lg border border-neutral-300 bg-white px-4 py-3 placeholder-neutral-400 outline-none placeholder:text-sm placeholder:font-normal"
                     placeholder="취소 사유를 최소 2자 이상 입력해주세요."
                     onChange={handleCustomCancelReason}
                     maxLength={150}

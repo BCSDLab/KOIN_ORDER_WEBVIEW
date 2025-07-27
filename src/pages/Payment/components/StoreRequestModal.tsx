@@ -39,7 +39,7 @@ export default function StoreRequestModal({
           value={request}
           onChange={(e) => setRequest(e.target.value)}
           placeholder="예)매운맛 조금만 해주세요"
-          className="w-full rounded-xl border border-neutral-300 px-4 py-3"
+          className="w-full rounded-xl border border-neutral-300 px-4 py-3 outline-none"
         />
         <label className="flex items-center gap-3 text-sm font-medium text-neutral-600">
           <input

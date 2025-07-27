@@ -90,7 +90,7 @@ export default function DetailAddress() {
         <div className="text-primary-500 leading-[160%] font-semibold">상세주소</div>
         <div className="pb-3 text-xs leading-[160%]">상세 주소를 입력해주세요</div>
         <input
-          className="w-full rounded-sm border border-neutral-300 bg-white px-4 py-3 placeholder-neutral-400 placeholder:text-sm"
+          className="w-full rounded-sm border border-neutral-300 bg-white px-4 py-3 placeholder-neutral-400 outline-none placeholder:text-sm"
           type="text"
           name="DetailAddress"
           placeholder="상세주소를 입력해주세요 (건물명, 동/호수 등)"

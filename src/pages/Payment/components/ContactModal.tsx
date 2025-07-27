@@ -32,6 +32,11 @@ interface ContactModalProps {
 export default function ContactModal({ isOpen, onClose, currentContact, onSubmit }: ContactModalProps) {
   const [phone, setPhone] = useState(currentContact);
 
+  const handleClickSubmit = () => {
+    onSubmit(phone.replace(/-/g, ''));
+    onClose();
+  };
+
   return (
     <BottomModal className="bottomModal" isOpen={isOpen} onClose={onClose}>
       <BottomModalHeader>
@@ -47,7 +52,7 @@ export default function ContactModal({ isOpen, onClose, currentContact, onSubmit
             value={phone}
             onChange={(e) => setPhone(formatPhoneNumber(e.target.value))}
             placeholder="010-1234-5678"
-            className="w-full rounded-xl border border-neutral-300 px-4 py-3"
+            className="w-full rounded-xl border border-neutral-300 px-4 py-3 outline-none"
           />
           {phone && (
             <button onClick={() => setPhone('')} className="absolute right-4 translate-y-4">
@@ -55,14 +60,7 @@ export default function ContactModal({ isOpen, onClose, currentContact, onSubmit
             </button>
           )}
         </div>
-        <Button
-          size="lg"
-          onClick={() => {
-            onSubmit(phone);
-            onClose();
-          }}
-          className="rounded-xl py-2.5 text-lg"
-        >
+        <Button size="lg" onClick={handleClickSubmit} className="rounded-xl py-2.5 text-lg">
           변경하기
         </Button>
       </BottomModalContent>
