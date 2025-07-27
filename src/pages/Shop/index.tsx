@@ -24,6 +24,7 @@ export default function Shop() {
 
   const { data: shopInfoSummary } = useGetShopInfoSummary(Number(shopId));
   const { data: cartInfo } = useCart(orderType);
+  const totalQuantity = cartInfo.items.reduce((sum, item) => sum + item.quantity, 0);
 
   const handleScrollTo = (name: string) => {
     const element = menuGroupRefs.current[name];
@@ -44,7 +45,7 @@ export default function Shop() {
 
   return (
     <div>
-      <Header name={shopInfoSummary.name} targetRef={targetRef} cartItemCount={cartInfo.items.length} />
+      <Header name={shopInfoSummary.name} targetRef={targetRef} cartItemCount={totalQuantity} />
       <ImageCarousel images={shopInfoSummary.images} targetRef={targetRef} />
       <ShopSummary id={shopId} shopInfoSummary={shopInfoSummary} />
       <ShopMenuGroups id={shopId} selectedMenu={selectedMenu} onSelect={handleScrollTo} />
@@ -55,7 +56,7 @@ export default function Shop() {
         isAutoScrolling={isAutoScrolling}
       />
       {cartInfo.items.length > 0 && cartInfo.orderable_shop_id === Number(shopId) && (
-        <BottomCartModal id={shopId} cartItemCount={cartInfo.items.length} />
+        <BottomCartModal id={shopId} cartItemCount={totalQuantity} />
       )}
     </div>
   );

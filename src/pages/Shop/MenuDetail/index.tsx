@@ -51,7 +51,7 @@ export default function MenuDetail() {
   const info = isEdit && editInfo ? editInfo : menuInfo;
 
   const AUTH_FAIL = ''; //이 케이스는 올바르지 않은 인증정보일 떄 발생합니다. 백엔드 작업이 끝난 후에 다시 작업해야함.
-
+  const totalQuantity = cartInfo.items.reduce((sum, item) => sum + item.quantity, 0);
   const {
     priceId,
     count,
@@ -110,7 +110,7 @@ export default function MenuDetail() {
 
   return (
     <div>
-      <Header name={info.name} targetRef={targetRef} cartItemCount={cartInfo.items.length} />
+      <Header name={info.name} targetRef={targetRef} cartItemCount={totalQuantity} />
       <ImageCarousel images={imagesForCarousel} targetRef={targetRef} />
       <MenuDescription name={info.name} description={info.description} price={info.prices[0].price} />
       <div className="mb-40 px-6">
