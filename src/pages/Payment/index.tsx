@@ -27,7 +27,7 @@ export default function Payment() {
   const [isStoreRequestModalOpen, openStoreRequestModal, closeStoreRequestModal] = useBooleanState(false);
   const [isPaymentFailModalOpen, openPaymentFailModal, closePaymentFailModal] = useBooleanState(false);
 
-  const [request, setRequest] = useState('요청사항 없음');
+  const [request, setRequest] = useState('');
   const [noCutlery, setNoCutlery] = useState(true);
 
   const [ready, setReady] = useState(false);
@@ -88,8 +88,8 @@ export default function Payment() {
   }, [message]);
 
   return (
-    <div className="mx-6 mt-4">
-      <div className="flex items-center gap-3 text-xl font-bold">
+    <div className="mx-6 mt-4 mb-6">
+      <div className="flex items-center gap-3 text-xl font-semibold">
         <Badge
           variant="outlined"
           color="primaryLight"
@@ -124,7 +124,7 @@ export default function Payment() {
           <Button onClick={openStoreRequestModal} color="gray" fullWidth className="mt-2 border-0 py-4 pr-3 pl-6">
             <div className="flex w-full flex-col gap-1">
               <div className="flex w-full items-center justify-between">
-                <p className="text-sm font-normal text-neutral-600">{request}</p>
+                <p className="text-sm font-normal text-neutral-600">{!!request ? request : '요청사항 없음'}</p>
                 <RightArrow />
               </div>
               <p className="text-start text-sm font-medium text-[#3a903e]">
