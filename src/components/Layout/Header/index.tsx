@@ -4,7 +4,7 @@ import CartResetButton from './CartResetButton';
 import { ROUTE_TITLES } from './routeTitles';
 import ArrowBackIcon from '@/assets/Main/arrow-back-icon.svg';
 import CloseIcon from '@/assets/Main/close-icon.svg';
-import { backButtonTapped, closeWebviewPage } from '@/util/ts/bridge';
+import { backButtonTapped } from '@/util/ts/bridge';
 
 export default function Header() {
   const navigate = useNavigate();
@@ -35,7 +35,7 @@ export default function Header() {
         <button
           type="button"
           aria-label="닫기 버튼"
-          onClick={closeWebviewPage}
+          onClick={backButtonTapped}
           className="absolute top-1/2 left-6 -translate-y-1/2"
         >
           <CloseIcon />
