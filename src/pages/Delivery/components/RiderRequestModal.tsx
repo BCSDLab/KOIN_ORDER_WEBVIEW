@@ -89,7 +89,7 @@ export default function RiderRequestModal({
               value={customInputValue}
               placeholder="상세 요청사항을 입력해주세요."
               onChange={handleCustomInput}
-              className="h-[3.125rem] rounded-lg border border-neutral-300 bg-white p-2 placeholder-neutral-400 placeholder:text-sm placeholder:font-normal"
+              className="h-[3.125rem] rounded-lg border border-neutral-300 bg-white p-2 placeholder-neutral-400 outline-none placeholder:text-sm placeholder:font-normal"
             />
           )}
         </form>

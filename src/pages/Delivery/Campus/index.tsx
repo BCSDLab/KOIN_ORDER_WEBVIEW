@@ -90,7 +90,7 @@ export default function Campus() {
   };
 
   return (
-    <div className="flex h-[calc(100vh-4rem)] w-full flex-col items-center px-[1.5rem]">
+    <div className="flex w-full flex-col items-center px-[1.5rem] pb-6">
       <div className="shadow-1 w-full rounded-xl">
         <div id="map" className="h-40 w-full rounded-t-xl border border-neutral-300"></div>
         <div className="flex h-[3.5rem] w-full items-center justify-between rounded-b-xl bg-white px-6 text-[0.813rem] text-neutral-600">
