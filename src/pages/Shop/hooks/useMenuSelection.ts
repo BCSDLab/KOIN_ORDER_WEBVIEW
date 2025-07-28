@@ -74,12 +74,18 @@ export function useMenuSelection(shopId: string, menuInfo: ShopMenuDetailRespons
 
       let newOptions;
       if (isSingle) {
-        newOptions = [{ optionGroupId, optionId }];
+        const otherGroupOptions = prev.selectedOptions.filter((opt) => opt.optionGroupId !== optionGroupId);
+        newOptions = [...otherGroupOptions, { optionGroupId, optionId }];
       } else {
-        newOptions = prev.selectedOptions.filter(
-          (opt) => opt.optionGroupId !== optionGroupId || opt.optionId !== optionId,
+        const isDeselecting = prev.selectedOptions.some(
+          (opt) => opt.optionGroupId === optionGroupId && opt.optionId === optionId,
         );
-        if (!already) {
+
+        if (isDeselecting) {
+          newOptions = prev.selectedOptions.filter(
+            (opt) => !(opt.optionGroupId === optionGroupId && opt.optionId === optionId),
+          );
+        } else {
           newOptions = [...prev.selectedOptions, { optionGroupId, optionId }];
         }
       }
