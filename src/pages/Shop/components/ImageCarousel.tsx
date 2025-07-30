@@ -1,6 +1,7 @@
 import { useRef, useState, useEffect } from 'react';
 import clsx from 'clsx';
 import { ShopInfoSummaryResponse } from '@/api/shop/entity';
+import EmptyThumbnail from '@/assets/Shop/empty_thumbnail.svg';
 
 interface ImageCarouselProps {
   images: ShopInfoSummaryResponse['images'];
@@ -86,6 +87,7 @@ export default function ImageCarousel({ images, targetRef }: ImageCarouselProps)
               )}
             />
           ))}
+        {images.length === 0 && <EmptyThumbnail />}
       </div>
     </div>
   );
