@@ -32,8 +32,8 @@ export default function ShopDetail() {
     <div className="flex h-full flex-col gap-1.5 peer-first:bg-white">
       <div
         className={clsx('px-6 py-3', {
-          'bg-gray-100': !decodedId, // 해시가 없으면 강조
-          'bg-white': !!decodedId, // 해시가 있으면 평범하게
+          'bg-gray-100': !decodedId,
+          'bg-white': !!decodedId,
         })}
       >
         <p className="py-3 text-[15px] leading-[1.6] font-semibold">{data?.name}</p>

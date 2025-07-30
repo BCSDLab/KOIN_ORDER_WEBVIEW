@@ -33,6 +33,11 @@ export default function RiderRequestModal({ isOpen, onClose, initialValue, onSub
     setRequestValue('');
   };
 
+  const handleClickButton = () => {
+    onSubmit(requestValue);
+    onClose();
+  };
+
   return (
     <BottomModal isOpen={isOpen} onClose={onClose}>
       <BottomModalHeader>
@@ -90,13 +95,7 @@ export default function RiderRequestModal({ isOpen, onClose, initialValue, onSub
           )}
         </div>
 
-        <Button
-          onClick={() => {
-            onSubmit(requestValue);
-            onClose();
-          }}
-          className="h-[2.875rem] w-full"
-        >
+        <Button onClick={handleClickButton} className="h-[2.875rem] w-full">
           선택하기
         </Button>
       </BottomModalContent>
