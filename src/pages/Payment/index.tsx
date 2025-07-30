@@ -7,6 +7,7 @@ import ContactModal from './components/ContactModal';
 import DeliveryAddressSection from './components/DeliveryAddressSection';
 import PaymentAmount from './components/PaymentAmount';
 import PaymentFailModal from './components/PaymentFailModal';
+import RiderRequestModal from './components/RiderRequestModal';
 import ShopLocationMap from './components/ShopLocationMap';
 import StoreRequestModal from './components/StoreRequestModal';
 import TossWidget from './components/TossWidget';
@@ -20,20 +21,32 @@ import Badge from '@/components/UI/Badge';
 import Button from '@/components/UI/Button';
 import { useOrderStore } from '@/stores/useOrderStore';
 import useBooleanState from '@/util/hooks/useBooleanState';
+import { useToast } from '@/util/hooks/useToast';
+import formatPhoneNumber from '@/util/ts/formatPhoneNumber';
 
 export default function Payment() {
+  const { showToast } = useToast();
   const [searchParams] = useSearchParams();
   const [isContactModalOpen, openContactModal, closeContactModal] = useBooleanState(false);
   const [isStoreRequestModalOpen, openStoreRequestModal, closeStoreRequestModal] = useBooleanState(false);
+  const [isRiderRequestModalOpen, openRiderRequestModal, closeRiderRequestModal] = useBooleanState(false);
   const [isPaymentFailModalOpen, openPaymentFailModal, closePaymentFailModal] = useBooleanState(false);
-
-  const [request, setRequest] = useState('');
-  const [noCutlery, setNoCutlery] = useState(true);
 
   const [ready, setReady] = useState(false);
   const [widgets, setWidgets] = useState<TossPaymentsWidgets | null>(null);
-  const { userPhoneNumber, deliveryType, outsideAddress, campusAddress, deliveryRequest, setUserPhoneNumber } =
-    useOrderStore();
+  const {
+    userPhoneNumber,
+    deliveryType,
+    outsideAddress,
+    campusAddress,
+    deliveryRequest,
+    ownerRequest,
+    isCutleryDeclined,
+    setDeliveryRequest,
+    setOwnerRequest,
+    setIsCutleryDeclined,
+    setUserPhoneNumber,
+  } = useOrderStore();
 
   const orderType = searchParams.get('orderType');
   const message = searchParams.get('message');
@@ -44,28 +57,38 @@ export default function Payment() {
   const { mutateAsync: temporaryTakeout } = useTemporaryTakeout();
 
   const orderName =
-    cart!.items.length === 1 ? cart!.items[0].name : `${cart!.items[0].name} 외 ${cart!.items.length - 1}건`;
+    cart.items.length === 1 ? cart.items[0].name : `${cart.items[0].name} 외 ${cart.items.length - 1}건`;
 
   const address = deliveryType === 'CAMPUS' ? campusAddress?.full_address : outsideAddress?.full_address;
 
   const pay = async () => {
+    if (!userPhoneNumber) {
+      showToast('연락처를 입력해주세요');
+      return;
+    }
+
+    if (isDelivery && !address) {
+      showToast('배달 주소를 선택해주세요');
+      return;
+    }
+
     let order;
     if (isDelivery) {
       order = await temporaryDelivery({
         address: address!,
         phone_number: userPhoneNumber,
-        to_owner: request,
+        to_owner: ownerRequest,
         to_rider: deliveryRequest,
-        total_menu_price: cart!.items_amount,
-        delivery_tip: cart!.delivery_fee,
-        total_amount: cart!.total_amount,
+        total_menu_price: cart.items_amount,
+        delivery_tip: cart.delivery_fee,
+        total_amount: cart.total_amount,
       });
     } else {
       order = await temporaryTakeout({
         phone_number: userPhoneNumber,
-        to_owner: request,
-        total_menu_price: cart!.items_amount,
-        total_amount: cart!.total_amount,
+        to_owner: ownerRequest,
+        total_menu_price: cart.items_amount,
+        total_amount: cart.total_amount,
       });
     }
 
@@ -79,6 +102,12 @@ export default function Payment() {
     } catch (error) {
       console.error(error);
     }
+  };
+
+  const handleSubmitOwnerRequest = (newRequest: string, newNoCutlery: boolean) => {
+    setOwnerRequest(newRequest);
+    setIsCutleryDeclined(newNoCutlery);
+    closeStoreRequestModal();
   };
 
   useEffect(() => {
@@ -112,7 +141,7 @@ export default function Payment() {
           <Button onClick={openContactModal} color="gray" fullWidth className="mt-2 border-0 py-4 pr-3 pl-6">
             <div className="flex w-full items-center justify-between">
               <p className={clsx('text-sm font-normal', userPhoneNumber ? 'text-neutral-600' : 'text-neutral-300')}>
-                {userPhoneNumber || '연락처를 입력하세요'}
+                {formatPhoneNumber(userPhoneNumber) || '연락처를 입력하세요'}
               </p>
               <RightArrow />
             </div>
@@ -124,29 +153,44 @@ export default function Payment() {
           <Button onClick={openStoreRequestModal} color="gray" fullWidth className="mt-2 border-0 py-4 pr-3 pl-6">
             <div className="flex w-full flex-col gap-1">
               <div className="flex w-full items-center justify-between">
-                <p className="text-sm font-normal text-neutral-600">{!!request ? request : '요청사항 없음'}</p>
+                <p className="text-sm font-normal text-neutral-600">
+                  {!!ownerRequest ? ownerRequest : '요청사항 없음'}
+                </p>
                 <RightArrow />
               </div>
               <p className="text-start text-sm font-medium text-[#3a903e]">
-                {noCutlery ? '수저 · 포크 안받기' : '수저 · 포크 받기'}
+                {isCutleryDeclined ? '수저 · 포크 안받기' : '수저 · 포크 받기'}
               </p>
             </div>
           </Button>
         </div>
+
+        <div>
+          <p className="text-primary-500 text-lg font-semibold">배달기사님에게</p>
+          <Button onClick={openRiderRequestModal} color="gray" fullWidth className="mt-2 border-0 py-4 pr-3 pl-6">
+            <div className="flex w-full items-center justify-between">
+              <p className="text-sm font-normal text-neutral-600">
+                {!!deliveryRequest ? deliveryRequest : '요청사항 없음'}
+              </p>
+              <RightArrow />
+            </div>
+          </Button>
+        </div>
+
         <TossWidget
           widgets={widgets}
           setWidgets={setWidgets}
           setReady={setReady}
           amount={{
             currency: 'KRW',
-            value: cart!.total_amount,
+            value: cart.total_amount,
           }}
         />
         <Agreement />
         <PaymentAmount
-          totalAmount={cart!.total_amount}
-          deliveryAmount={isDelivery ? cart!.delivery_fee : null}
-          menuAmount={cart!.items_amount}
+          totalAmount={cart.total_amount}
+          deliveryAmount={isDelivery ? cart.delivery_fee : null}
+          menuAmount={cart.items_amount}
         />
         <div className="text-center align-middle text-[12px] text-neutral-600">
           위 내용을 확인하였으며 결제에 동의합니다.
@@ -158,7 +202,7 @@ export default function Payment() {
         state={ready ? 'default' : 'disabled'}
         onClick={() => void pay()}
       >
-        {cart!.total_amount.toLocaleString()}원 결제하기
+        {cart.total_amount.toLocaleString()}원 결제하기
       </Button>
 
       <ContactModal
@@ -171,12 +215,18 @@ export default function Payment() {
       <StoreRequestModal
         isOpen={isStoreRequestModalOpen}
         onClose={closeStoreRequestModal}
-        currentRequest={request}
-        currentNoCutlery={noCutlery}
+        currentRequest={ownerRequest}
+        currentNoCutlery={isCutleryDeclined}
         onSubmit={(newRequest, newNoCutlery) => {
-          setRequest(newRequest);
-          setNoCutlery(newNoCutlery);
+          handleSubmitOwnerRequest(newRequest, newNoCutlery);
         }}
+      />
+
+      <RiderRequestModal
+        isOpen={isRiderRequestModalOpen}
+        onClose={closeRiderRequestModal}
+        initialValue={deliveryRequest}
+        onSubmit={(value) => setDeliveryRequest(value)}
       />
 
       <PaymentFailModal
