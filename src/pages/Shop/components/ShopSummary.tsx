@@ -101,9 +101,7 @@ export default function ShopSummary({ shopInfoSummary, id }: ShopSummaryProps) {
           >
             <div className="flex items-center gap-2">
               <SpeakerIcon />
-              <span className="flex h-9.5 w-full items-center overflow-hidden text-[12px] leading-[1.6] text-ellipsis">
-                {shopInfoSummary.introduction}
-              </span>
+              <span className="line-clamp-2 w-full text-[12px] leading-[1.6]">{shopInfoSummary.introduction}</span>
             </div>
             <div className="flex items-center justify-center pr-1">
               <ChevronRightIcon fill="#727272" />
