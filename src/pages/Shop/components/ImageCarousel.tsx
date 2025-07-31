@@ -95,7 +95,7 @@ export default function ImageCarousel({ images, targetRef }: ImageCarouselProps)
             />
           ))}
       </div>
-      {isImageViewerOpen && <ImageViewer isOpen={isImageViewerOpen} images={images} onClose={closeImageViewer} />}
+      {isImageViewerOpen && <ImageViewer images={images} onClose={closeImageViewer} />}
     </div>
   );
 }

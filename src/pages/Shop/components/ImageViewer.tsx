@@ -8,12 +8,9 @@ import 'swiper/swiper-bundle.css';
 interface ImageViewerProps {
   images: ShopInfoSummaryResponse['images'];
   onClose: () => void;
-  isOpen: boolean;
 }
 
-export default function ImageViewer({ images, onClose, isOpen }: ImageViewerProps) {
-  if (!isOpen) return null;
-
+export default function ImageViewer({ images, onClose }: ImageViewerProps) {
   return (
     <Portal>
       <div className="bg-opacity-90 fixed inset-0 z-50 flex h-full w-full items-center justify-center bg-black">
