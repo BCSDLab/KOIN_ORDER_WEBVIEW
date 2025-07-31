@@ -7,20 +7,7 @@ import BottomModal, {
   BottomModalHeader,
 } from '@/components/UI/BottomModal/BottomModal';
 import Button from '@/components/UI/Button';
-
-function formatPhoneNumber(phone: string) {
-  const digits = phone.replace(/\D/g, '');
-
-  if (digits.length <= 3) {
-    return digits;
-  } else if (digits.length <= 7) {
-    return `${digits.slice(0, 3)}-${digits.slice(3)}`;
-  } else if (digits.length <= 11) {
-    return `${digits.slice(0, 3)}-${digits.slice(3, 7)}-${digits.slice(7, 11)}`;
-  } else {
-    return `${digits.slice(0, 3)}-${digits.slice(3, 7)}-${digits.slice(7, 11)}`;
-  }
-}
+import formatPhoneNumber from '@/util/ts/formatPhoneNumber';
 
 interface ContactModalProps {
   isOpen: boolean;
@@ -61,7 +48,7 @@ export default function ContactModal({ isOpen, onClose, currentContact, onSubmit
           )}
         </div>
         <Button size="lg" onClick={handleClickSubmit} className="rounded-xl py-2.5 text-lg">
-          변경하기
+          저장하기
         </Button>
       </BottomModalContent>
       <BottomModalFooter />

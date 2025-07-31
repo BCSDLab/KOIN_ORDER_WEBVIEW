@@ -25,6 +25,11 @@ export default function StoreRequestModal({
   const [request, setRequest] = useState(currentRequest);
   const [noCutlery, setNoCutlery] = useState(currentNoCutlery);
 
+  const handleButtonClick = () => {
+    onSubmit(request, noCutlery);
+    onClose();
+  };
+
   return (
     <BottomModal isOpen={isOpen} onClose={onClose}>
       <BottomModalHeader>
@@ -51,15 +56,8 @@ export default function StoreRequestModal({
           일회용 수저, 포크는 빼 주세요
         </label>
 
-        <Button
-          size="lg"
-          onClick={() => {
-            onSubmit(request, noCutlery);
-            onClose();
-          }}
-          className="rounded-xl py-2.5 text-lg"
-        >
-          변경하기
+        <Button size="lg" onClick={handleButtonClick} className="rounded-xl py-2.5 text-lg">
+          저장하기
         </Button>
       </BottomModalContent>
       <BottomModalFooter />
