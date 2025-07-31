@@ -22,7 +22,7 @@ export default function DeliveryAddressSection({ orderableShopId }: DeliveryAddr
 
   const [isAddressModalOpen, openAddressModal, closeAddressModal] = useBooleanState(false);
   const [modalMessage, setModalMessage] = useState<string>('');
-  const { deliveryType, outsideAddress, campusAddress, deliveryRequest } = useOrderStore();
+  const { deliveryType, outsideAddress, campusAddress } = useOrderStore();
 
   const existingAddress =
     deliveryType === 'CAMPUS' ? !!campusAddress?.full_address : outsideAddress.full_address !== '';
@@ -75,27 +75,10 @@ export default function DeliveryAddressSection({ orderableShopId }: DeliveryAddr
             >
               <div className="flex w-full items-center justify-between text-left">
                 {deliveryType === 'CAMPUS' ? (
-                  <Badge color="primary" size="lg" label={campusAddress?.short_address} />
+                  <Badge color="primary" size="lg" className="box-border py-1" label={campusAddress?.short_address} />
                 ) : (
                   <span className="max-w-3xs text-xs font-normal text-neutral-600">{outsideAddress?.full_address}</span>
                 )}
-                <RightArrow />
-              </div>
-            </Button>
-
-            <div className="my-4 border-t border-neutral-200" />
-
-            <Button
-              color="gray"
-              fullWidth
-              className="border-0 p-0 shadow-none"
-              onClick={() => navigate(`/delivery/${deliveryType === 'CAMPUS' ? 'CAMPUS' : 'OUTSIDE'}`)}
-            >
-              <div className="flex w-full items-center justify-between text-left">
-                <div className="">
-                  <p className="text-primary-500 text-sm font-semibold">배달기사님에게</p>
-                  <p className="text-xs font-normal text-neutral-600">{deliveryRequest}</p>
-                </div>
                 <RightArrow />
               </div>
             </Button>

@@ -19,6 +19,7 @@ import BottomModal, {
 } from '@/components/UI/BottomModal/BottomModal';
 import Button from '@/components/UI/Button';
 import useConfirmPayments from '@/pages/Payment/hooks/useConfirmPayments';
+import { useOrderStore } from '@/stores/useOrderStore';
 import useBooleanState from '@/util/hooks/useBooleanState';
 
 export default function OrderFinish() {
@@ -87,6 +88,10 @@ export default function OrderFinish() {
   const handleClickOrderCancel = () => {
     navigate(`/orderCancel?paymentKey=${paymentKey}`);
   };
+
+  useEffect(() => {
+    useOrderStore.persist.clearStorage();
+  }, []);
 
   return (
     <div className="flex flex-col">

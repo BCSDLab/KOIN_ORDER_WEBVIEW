@@ -26,7 +26,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
       {children}
       <Portal>
         {message && (
-          <div className="pointer-events-none fixed top-1/2 left-1/2 z-50 -translate-x-1/2 -translate-y-1/2 rounded-lg bg-black/90 px-4 py-2 text-sm text-white transition-opacity">
+          <div className="fixed bottom-6 left-1/2 z-50 w-9/10 -translate-x-1/2 rounded-lg bg-[rgba(114,114,114,0.8)] p-4 text-sm text-white transition-opacity">
             {message}
           </div>
         )}
