@@ -2,6 +2,7 @@ import { Navigation, Pagination, Zoom } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { ShopInfoSummaryResponse } from '@/api/shop/entity';
 import Portal from '@/components/Portal';
+import { CSSWithCustomProperties } from '@/types/styles';
 
 import 'swiper/swiper-bundle.css';
 
@@ -11,6 +12,11 @@ interface ImageViewerProps {
 }
 
 export default function ImageViewer({ images, onClose }: ImageViewerProps) {
+  const swiperStyles: CSSWithCustomProperties = {
+    '--swiper-navigation-color': '#fff',
+    '--swiper-pagination-color': '#fff',
+  };
+
   return (
     <Portal>
       <div className="bg-opacity-90 fixed inset-0 z-50 flex h-full w-full items-center justify-center bg-black">
@@ -24,12 +30,7 @@ export default function ImageViewer({ images, onClose }: ImageViewerProps) {
             clickable: true,
           }}
           modules={[Zoom, Navigation, Pagination]}
-          style={
-            {
-              '--swiper-navigation-color': '#fff',
-              '--swiper-pagination-color': '#fff',
-            } as React.CSSProperties
-          }
+          style={swiperStyles}
           className="flex h-full w-full items-center justify-center"
         >
           {images.map((image) => (
