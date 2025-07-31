@@ -12,7 +12,7 @@ import DetailAddress from '@/pages/Delivery/Outside/DetailAddress';
 import OrderFinish from '@/pages/OrderFinish';
 import Payment from '@/pages/Payment';
 import 'dayjs/locale/ko';
-import { ShopView } from '@/pages/Shop/ShopView';
+import ShopView from '@/pages/Shop/ShopView';
 
 dayjs.locale('ko');
 

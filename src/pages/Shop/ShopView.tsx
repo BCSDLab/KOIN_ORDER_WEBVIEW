@@ -3,7 +3,7 @@ import useCart from '../Payment/hooks/useCart';
 import OrderableComponent from './OrderableComponent';
 import UnOrderableComponent from './UnOrderableComponent';
 import { useOrderStore } from '@/stores/useOrderStore';
-export function ShopView() {
+export default function ShopView() {
   const { isOrderable } = useParams();
 
   const { orderType } = useOrderStore();
