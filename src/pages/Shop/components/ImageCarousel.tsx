@@ -1,7 +1,8 @@
 import { useRef, useState, useEffect } from 'react';
 import clsx from 'clsx';
 import { ShopInfoSummaryResponse } from '@/api/shop/entity';
-
+import ImageViewer from '@/pages/Shop/components/ImageViewer';
+import useBooleanState from '@/util/hooks/useBooleanState';
 interface ImageCarouselProps {
   images: ShopInfoSummaryResponse['images'];
   targetRef: React.RefObject<HTMLDivElement | null>;
@@ -11,7 +12,7 @@ export default function ImageCarousel({ images, targetRef }: ImageCarouselProps)
   const containerRef = useRef<HTMLDivElement>(null);
   const [scrollIndex, setScrollIndex] = useState(0);
   const [isInteracting, setIsInteracting] = useState(false);
-
+  const [isImageViewerOpen, openImageViewer, closeImageViewer] = useBooleanState(false);
   const scrollToIndex = (index: number) => {
     if (containerRef.current) {
       containerRef.current.scrollTo({
@@ -69,9 +70,16 @@ export default function ImageCarousel({ images, targetRef }: ImageCarouselProps)
         className="scrollbar-hide flex h-full w-full snap-x snap-mandatory overflow-x-scroll scroll-smooth"
       >
         {images.map((image, index) => (
-          <div key={index} className="h-full w-full flex-shrink-0 snap-start">
+          <button
+            key={index}
+            className="h-full w-full flex-shrink-0 snap-start"
+            onClick={() => {
+              openImageViewer();
+              setIsInteracting(true);
+            }}
+          >
             <img src={image.image_url} alt={`slide ${index}`} className="h-full w-full object-cover" />
-          </div>
+          </button>
         ))}
       </div>
 
@@ -87,6 +95,7 @@ export default function ImageCarousel({ images, targetRef }: ImageCarouselProps)
             />
           ))}
       </div>
+      {isImageViewerOpen && <ImageViewer images={images} onClose={closeImageViewer} />}
     </div>
   );
 }
