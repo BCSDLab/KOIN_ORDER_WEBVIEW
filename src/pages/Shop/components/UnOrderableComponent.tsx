@@ -1,26 +1,29 @@
 import { useRef } from 'react';
 import { useParams } from 'react-router-dom';
-import Header from './components/Header';
-import ImageCarousel from './components/ImageCarousel';
-import ShopMenuGroups from './components/ShopMenuGroups';
-import ShopMenus from './components/ShopMenus';
-import ShopSummary from './components/ShopSummary';
-import { useGetUnOrderableShopInfo } from './hooks/useGetShopInfo';
-import { useGetUnOrderableShopReviews } from './hooks/useGetShopInfo';
-import { useGetUnOrderableShopMenuGroups } from './hooks/useGetShopInfo';
-import { useGetUnOrderableShopMenus } from './hooks/useGetShopInfo';
-import { useInteraction } from './hooks/useInteraction';
+import { useGetUnOrderableShopInfo } from '../hooks/useGetShopInfo';
+import { useGetUnOrderableShopReviews } from '../hooks/useGetShopInfo';
+import { useGetUnOrderableShopMenuGroups } from '../hooks/useGetShopInfo';
+import { useGetUnOrderableShopMenus } from '../hooks/useGetShopInfo';
+import { useInteraction } from '../hooks/useInteraction';
+import Header from './Header';
+import ImageCarousel from './ImageCarousel';
+import ShopMenuGroups from './ShopMenuGroups';
+import ShopMenus from './ShopMenus';
+import ShopSummary from './ShopSummary';
 
-export default function UnOrderableComponent({ totalQuantity }: { totalQuantity: number }) {
+interface UnOrderableComponentProps {
+  totalQuantity: number;
+}
+
+export default function UnOrderableComponent({ totalQuantity }: UnOrderableComponentProps) {
   const { shopId } = useParams();
   if (!shopId) {
     throw new Error('Shop ID is required');
   }
 
   const targetRef = useRef<HTMLDivElement | null>(null);
-  const isAutoScrolling = useRef<boolean>(false);
 
-  const { selectedMenu, menuGroupRefs, handleScrollTo, handleChangeMenu } = useInteraction();
+  const { selectedMenu, menuGroupRefs, isAutoScrolling, handleScrollTo, handleChangeMenu } = useInteraction();
 
   const { data: shopInfoSummary } = useGetUnOrderableShopInfo(Number(shopId));
   const { data: shopReviews } = useGetUnOrderableShopReviews(Number(shopId));

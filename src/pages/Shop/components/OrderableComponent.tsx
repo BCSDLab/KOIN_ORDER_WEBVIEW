@@ -1,33 +1,31 @@
 import { useRef } from 'react';
 import { useParams } from 'react-router-dom';
-import BottomCartModal from './components/BottomCartModal';
-import Header from './components/Header';
-import ImageCarousel from './components/ImageCarousel';
-import ShopMenuGroups from './components/ShopMenuGroups';
-import ShopMenus from './components/ShopMenus';
-import ShopSummary from './components/ShopSummary';
-import { useGetShopInfoSummary } from './hooks/useGetShopInfo';
-import { useGetShopMenuGroups } from './hooks/useGetShopInfo';
-import { useGetShopInfo } from './hooks/useGetShopInfo';
-import { useInteraction } from './hooks/useInteraction';
+import { useGetShopInfoSummary } from '../hooks/useGetShopInfo';
+import { useGetShopMenuGroups } from '../hooks/useGetShopInfo';
+import { useGetShopInfo } from '../hooks/useGetShopInfo';
+import { useInteraction } from '../hooks/useInteraction';
+import BottomCartModal from './BottomCartModal';
+import Header from './Header';
+import ImageCarousel from './ImageCarousel';
+import ShopMenuGroups from './ShopMenuGroups';
+import ShopMenus from './ShopMenus';
+import ShopSummary from './ShopSummary';
 import { CartResponse } from '@/api/cart/entity';
 
-export default function OrderableComponent({
-  cartInfo,
-  totalQuantity,
-}: {
+interface OrderableComponentProps {
   cartInfo: CartResponse;
   totalQuantity: number;
-}) {
+}
+
+export default function OrderableComponent({ cartInfo, totalQuantity }: OrderableComponentProps) {
   const { shopId } = useParams();
   if (!shopId) {
     throw new Error('Shop ID is required');
   }
 
   const targetRef = useRef<HTMLDivElement | null>(null);
-  const isAutoScrolling = useRef<boolean>(false);
 
-  const { selectedMenu, menuGroupRefs, handleScrollTo, handleChangeMenu } = useInteraction();
+  const { selectedMenu, menuGroupRefs, isAutoScrolling, handleScrollTo, handleChangeMenu } = useInteraction();
 
   const { data: shopInfoSummary } = useGetShopInfoSummary(Number(shopId));
   const { data: shopMenuGroups } = useGetShopMenuGroups(Number(shopId));

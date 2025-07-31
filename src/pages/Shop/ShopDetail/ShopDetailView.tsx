@@ -1,18 +1,21 @@
 import { useLocation } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
-import OrderableShopDetail from './OrderableShopDetail';
-import UnOrderableShopDetail from './UnOrderableShopDetail';
+import OrderableShopDetail from './components/OrderableShopDetail';
+import UnOrderableShopDetail from './components/UnOrderableShopDetail';
 
 export default function ShopDetailView() {
-  const { state } = useLocation();
+  const location = useLocation();
   const { id } = useParams();
+
   if (!id) {
     throw new Error('Shop ID is required');
   }
 
-  if (!state) {
+  if (!location) {
     throw new Error('State is required');
   }
 
-  return <>{state.isOrderable ? <OrderableShopDetail shopId={id} /> : <UnOrderableShopDetail shopId={id} />}</>;
+  return (
+    <>{location.state.isOrderable ? <OrderableShopDetail shopId={id} /> : <UnOrderableShopDetail shopId={id} />}</>
+  );
 }

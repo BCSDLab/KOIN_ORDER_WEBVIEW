@@ -3,9 +3,10 @@ import useCart from '../Payment/hooks/useCart';
 import OrderableComponent from './OrderableComponent';
 import UnOrderableComponent from './UnOrderableComponent';
 import { useOrderStore } from '@/stores/useOrderStore';
-export default function ShopView() {
-  const { isOrderable } = useParams();
 
+export default function ShopView() {
+  //const { isOrderable } = useParams();
+  const isOrderable = true;
   const { orderType } = useOrderStore();
 
   const { data: cartInfo } = useCart(orderType);
