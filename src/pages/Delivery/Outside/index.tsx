@@ -69,7 +69,7 @@ export default function DeliveryOutside() {
       <div className="mb-[1.813rem] w-full">
         <div className="sticky top-[3.75rem] -mx-6 bg-[#f8f8fa] px-6 pb-2">
           <span className="text-primary-500 text-[16px] font-semibold">배달주소</span>
-          <div className="sticky top-[3.75rem] my-2 flex h-10 items-center gap-2 rounded-xl border-[1px] border-neutral-400 px-3 py-2">
+          <div className="top-[3.75rem] my-2 flex h-10 items-center gap-2 rounded-xl border-[1px] border-neutral-400 px-3 py-2">
             <SearchIcon />
             <input
               type="text"
