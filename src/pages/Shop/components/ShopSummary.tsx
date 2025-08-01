@@ -105,7 +105,7 @@ export default function ShopSummary({ shopInfoSummary, id }: ShopSummaryProps) {
           )}
           <a
             href="#가게알림"
-            className="shadow-1 flex h-14 max-w-2xl items-center gap-1 rounded-xl bg-white py-2 pr-2 pl-3"
+            className="shadow-1 flex h-14 max-w-2xl min-w-40 items-center gap-1 rounded-xl bg-white py-2 pr-2 pl-3"
             onClick={() => navigate(`/shop-detail/${isOrderableBoolean}/${id}#가게알림`)}
             onKeyDown={(e) => {
               if (e.key === 'Enter' || e.key === ' ') {
