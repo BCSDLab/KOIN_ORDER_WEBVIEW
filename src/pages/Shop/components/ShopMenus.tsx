@@ -81,9 +81,9 @@ export default function ShopMenus({ menuGroupRefs, handleChangeMenu, isAutoScrol
                 disabled={!isOrderableBoolean}
               >
                 <div className="flex flex-col">
-                  <span className="flex h-auto text-start text-lg leading-[1.6] font-semibold">{menu.name}</span>
+                  <span className="flex text-lg leading-[1.6] font-semibold">{menu.name}</span>
                   {menu.description && (
-                    <span className="flex h-auto text-start text-[12px] leading-[1.6] font-normal text-neutral-500">
+                    <span className="block text-left text-[12px] leading-[1.6] font-normal text-neutral-500">
                       {menu.description}
                     </span>
                   )}
