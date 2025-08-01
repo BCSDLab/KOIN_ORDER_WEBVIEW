@@ -62,7 +62,7 @@ export default function ShopSummary({ shopInfoSummary, id }: ShopSummaryProps) {
           {isOrderableBoolean && (
             <a
               href="#배달금액"
-              className="shadow-1 flex h-14 min-w-fit items-center gap-1 rounded-xl bg-white py-2 pr-2 pl-3"
+              className="shadow-1 flex h-14 w-full min-w-fit items-center justify-between gap-1 rounded-xl bg-white py-2 pr-2 pl-3"
               onClick={() => navigate(`/shop-detail/${isOrderableBoolean}/${id}#배달금액`)}
               onKeyDown={(e) => {
                 if (e.key === 'Enter' || e.key === ' ') {
@@ -96,7 +96,7 @@ export default function ShopSummary({ shopInfoSummary, id }: ShopSummaryProps) {
             </a>
           )}
           {!isOrderableBoolean && (
-            <div className="shadow-1 flex h-14 min-w-fit items-center gap-1 rounded-xl bg-white px-8 py-2">
+            <div className="shadow-1 flex h-14 w-full justify-center gap-1 rounded-xl bg-white py-2 pr-2 pl-3">
               <div className="text-center text-xs leading-[1.6] font-medium text-neutral-400">
                 코인 주문이 <br />
                 불가능한 매장이예요.
@@ -105,7 +105,7 @@ export default function ShopSummary({ shopInfoSummary, id }: ShopSummaryProps) {
           )}
           <a
             href="#가게알림"
-            className="shadow-1 flex h-14 max-w-2xl min-w-40 items-center gap-1 rounded-xl bg-white py-2 pr-2 pl-3"
+            className="shadow-1 flex h-14 w-full items-center justify-between gap-1 rounded-xl bg-white py-2 pr-2 pl-3"
             onClick={() => navigate(`/shop-detail/${isOrderableBoolean}/${id}#가게알림`)}
             onKeyDown={(e) => {
               if (e.key === 'Enter' || e.key === ' ') {
