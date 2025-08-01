@@ -3,8 +3,8 @@ import ShopDetail from '../index';
 import { useGetShopDetail } from '@/pages/Shop/hooks/useGetShopDetail';
 
 export default function OrderableShopDetail() {
-  const { shopId } = useParams();
-  const { data } = useGetShopDetail(Number(shopId));
+  const { id } = useParams();
+  const { data } = useGetShopDetail(Number(id));
 
   return <ShopDetail shopInfo={data} />;
 }

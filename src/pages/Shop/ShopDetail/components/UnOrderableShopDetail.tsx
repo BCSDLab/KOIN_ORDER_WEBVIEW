@@ -3,8 +3,8 @@ import { useGetUnOrderableShopDetail } from '../../hooks/useGetShopDetail';
 import ShopDetail from '../index';
 
 export default function UnOrderableShopDetail() {
-  const { shopId } = useParams();
-  const { data: shopInfo } = useGetUnOrderableShopDetail(Number(shopId));
+  const { id } = useParams();
+  const { data: shopInfo } = useGetUnOrderableShopDetail(Number(id));
 
   return <ShopDetail shopInfo={shopInfo} />;
 }
