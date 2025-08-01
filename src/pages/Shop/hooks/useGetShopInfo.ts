@@ -34,6 +34,13 @@ export const useGetUnOrderableShopMenuGroups = (UnOrderableShopId: number) => {
   return useSuspenseQuery({
     queryKey: ['unOrderableShopMenuGroups', UnOrderableShopId],
     queryFn: () => getUnOrderableShopInfo({ UnOrderableShopId }),
+    select: (data) => ({
+      count: data.menu_categories.length,
+      menu_groups: data.menu_categories.map((category) => ({
+        id: category.id,
+        name: category.name,
+      })),
+    }),
   });
 };
 
@@ -48,6 +55,23 @@ export const useGetUnOrderableShopInfo = (UnOrderableShopId: number) => {
   return useSuspenseQuery({
     queryKey: ['unOrderableShopInfo', UnOrderableShopId],
     queryFn: () => getUnOrderableShopInfo({ UnOrderableShopId }),
+    select: (data) => ({
+      shop_id: data.id,
+      name: data.name,
+      introduction: data.description,
+      pay_card: data.pay_card,
+      pqy_bank: data.pay_bank,
+      is_delivery_available: false,
+      is_takeout_available: false,
+      minimum_order_amount: 0,
+      minimum_delivery_tip: 0,
+      maximum_delivery_tip: 0,
+      images:
+        data.image_urls?.map((url, index) => ({
+          image_url: url,
+          is_thumbnail: index === 1 ? true : false,
+        })) || [],
+    }),
   });
 };
 
@@ -55,6 +79,10 @@ export const useGetUnOrderableShopReviews = (UnOrderableShopId: number) => {
   return useSuspenseQuery({
     queryKey: ['unOrderableShopReviews', UnOrderableShopId],
     queryFn: () => getUnOrderableShopReviews({ UnOrderableShopId }),
+    select: (data) => ({
+      rating_average: data.statistics.average_rating,
+      review_count: data.total_count,
+    }),
   });
 };
 
@@ -62,5 +90,23 @@ export const useGetUnOrderableShopMenus = (UnOrderableShopId: number) => {
   return useSuspenseQuery({
     queryKey: ['unOrderableShopMenus', UnOrderableShopId],
     queryFn: () => getUnOrderableShopMenus({ UnOrderableShopId }),
+    select: (data) =>
+      data.menu_categories.map((category) => ({
+        menu_group_id: category.id,
+        menu_group_name: category.name,
+        menus: category.menus.map((menu) => ({
+          id: menu.id,
+          name: menu.name,
+          description: menu.description ?? '',
+          thumbnail_image: menu.image_urls?.[0] || '',
+          is_sold_out: false,
+          prices: (menu.option_prices || []).map((price, index) => ({
+            id: index,
+            name: price.option,
+            price: price.price,
+            is_selected: false,
+          })),
+        })),
+      })),
   });
 };

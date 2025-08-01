@@ -1,33 +1,10 @@
+import { useParams } from 'react-router-dom';
+import { useGetUnOrderableShopDetail } from '../../hooks/useGetShopDetail';
 import ShopDetail from '../index';
-import { useGetUnOrderableShopInfo } from '@/pages/Shop/hooks/useGetShopInfo';
 
-interface UnOrderableShopDetailProps {
-  shopId: string;
-}
+export default function UnOrderableShopDetail() {
+  const { shopId } = useParams();
+  const { data: shopInfo } = useGetUnOrderableShopDetail(Number(shopId));
 
-export default function UnOrderableShopDetail({ shopId }: UnOrderableShopDetailProps) {
-  const { data: shopInfo } = useGetUnOrderableShopInfo(Number(shopId));
-
-  const data = {
-    shop_id: shopInfo.id,
-    orderable_shop_id: 0,
-    name: shopInfo.name,
-    address: shopInfo.address,
-    open_time: shopInfo.open[0].open_time,
-    close_time: shopInfo.open[0].close_time,
-    closed_days: shopInfo.open.filter((time) => time.closed).map((time) => time.day_of_week),
-    phone: shopInfo.phone,
-    introduction: shopInfo.description as string | null,
-    notice: '',
-    delivery_tips: [],
-    owner_info: {
-      name: '',
-      shop_name: '',
-      address: '',
-      company_registration_number: '',
-    },
-    origins: [],
-  };
-
-  return <ShopDetail shopInfo={data} />;
+  return <ShopDetail shopInfo={shopInfo} />;
 }
