@@ -15,7 +15,7 @@ export const ROUTE_TITLES: RouteTitle[] = [
     title: '주문',
   },
   {
-    match: (pathname) => matchPath('/shop-detail/:isOrderable/:id', pathname),
+    match: (pathname) => matchPath('/shop-detail/:id', pathname),
     title: '가게정보·원산지',
   },
   {
