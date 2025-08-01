@@ -18,13 +18,13 @@ export default function DeliveryOutside() {
 
   const navigate = useNavigate();
   const [searchKeyword, setSearchKeyword] = useState<string>('');
-  const [address, setAddress] = useState<Juso | null>(null);
+  const [selectedAddress, setSelectedAddress] = useState<Juso | null>(null);
   const [isModalOpen, openModal, closeModal] = useBooleanState(false);
 
   const { data, refetch, isSuccess, isFetched } = useRoadNameAddress(searchKeyword);
   const { mutate } = useOffCampusDeliveryValidate();
 
-  const roadAddress = address?.road_address;
+  const roadAddress = selectedAddress?.road_address;
 
   const handleAddressSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
@@ -67,24 +67,26 @@ export default function DeliveryOutside() {
   return (
     <div className="mx-6 mt-4 flex min-h-[calc(100dvh-4.75rem)] flex-col items-center justify-between">
       <div className="mb-[1.813rem] w-full">
-        <span className="text-primary-500 text-[16px] font-semibold">배달주소</span>
-        <div className="shadow-1 my-2 flex h-10 items-center gap-2 rounded-xl border-[1px] border-neutral-400 px-3 py-2">
-          <SearchIcon />
-          <input
-            type="text"
-            value={searchKeyword}
-            onChange={(e) => setSearchKeyword(e.target.value)}
-            placeholder="주소를 입력해주세요."
-            onKeyDown={(e) => handleAddressSearch(e)}
-            className="w-full focus:border-transparent focus:ring-0 focus:outline-none"
-          />
-        </div>
-        <div className="flex gap-1">
-          <InfoIcon />
-          <span className="text-[10px] leading-[1.6] text-neutral-500">주소지는 병천으로만 설정 가능해요</span>
+        <div className="sticky top-[3.75rem] -mx-6 bg-[#f8f8fa] px-6 pb-2">
+          <span className="text-primary-500 text-[16px] font-semibold">배달주소</span>
+          <div className="top-[3.75rem] my-2 flex h-10 items-center gap-2 rounded-xl border-[1px] border-neutral-400 px-3 py-2">
+            <SearchIcon />
+            <input
+              type="text"
+              value={searchKeyword}
+              onChange={(e) => setSearchKeyword(e.target.value)}
+              placeholder="주소를 입력해주세요."
+              onKeyDown={(e) => handleAddressSearch(e)}
+              className="w-full focus:border-transparent focus:ring-0 focus:outline-none"
+            />
+          </div>
+          <div className="flex gap-1">
+            <InfoIcon />
+            <span className="text-[10px] leading-[1.6] text-neutral-500">주소지는 병천으로만 설정 가능해요</span>
+          </div>
         </div>
         {!isSuccess && !isFetched && (
-          <div className="mt-4 text-[13px] leading-[1.6] font-normal text-neutral-600">
+          <div className="mt-2 text-[13px] leading-[1.6] font-normal text-neutral-600">
             <p className="mb-2 text-sm font-medium">이렇게 검색해보세요!</p>
             <ul className="space-y-2">
               <li className="relative pl-4">
@@ -107,23 +109,27 @@ export default function DeliveryOutside() {
           </div>
         )}
         {isSuccess && data && data.addresses.length > 0 && (
-          <div className="shadow-1 mt-4 flex flex-col divide-y divide-neutral-300 rounded-xl border-[1px] border-neutral-300">
+          <div className="shadow-1 mt-2 flex flex-col divide-y divide-neutral-300 overflow-y-auto rounded-xl border-[1px] border-neutral-300">
             {data.addresses.map((address, index) => {
               const isFirst = index === 0;
               const isLast = index === data.addresses.length - 1;
+              const isSelected = selectedAddress?.eng_address === address.eng_address;
 
               const className = twMerge(
-                clsx('flex flex-col items-start p-4 focus-within:bg-gray-300', {
-                  'focus-within:rounded-t-xl': isFirst,
-                  'focus-within:rounded-b-xl': isLast,
+                clsx('flex flex-col items-start p-4 bg-white', {
+                  'bg-neutral-200': isSelected,
+                  'rounded-t-xl': isFirst,
+                  'rounded-b-xl': isLast,
                 }),
               );
               return (
-                <button key={address.eng_address} className={className} onClick={() => setAddress(address)}>
-                  <div className="text-sm leading-[1.6] font-medium text-neutral-800">
+                <button key={address.eng_address} className={className} onClick={() => setSelectedAddress(address)}>
+                  <div className="text-start text-sm leading-[1.6] font-medium text-neutral-800">
                     {address.bd_nm === '' ? address.road_address : address.bd_nm}
                   </div>
-                  <div className="text-[12px] leading-[1.6] font-normal text-neutral-500">{address.road_address}</div>
+                  <div className="text-start text-[12px] leading-[1.6] font-normal text-neutral-500">
+                    {address.road_address}
+                  </div>
                 </button>
               );
             })}
@@ -143,9 +149,9 @@ export default function DeliveryOutside() {
       </div>
       <Button
         fullWidth
-        className="mt-auto mb-5 h-[2.875rem]"
-        onClick={() => handleAddressSelect(address!)}
-        disabled={!address}
+        className="mt-auto mb-5 h-[2.875rem] disabled:border-neutral-300 disabled:bg-neutral-300"
+        onClick={() => handleAddressSelect(selectedAddress!)}
+        disabled={!selectedAddress}
       >
         주소 선택
       </Button>
