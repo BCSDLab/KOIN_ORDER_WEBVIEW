@@ -18,13 +18,13 @@ export default function DeliveryOutside() {
 
   const navigate = useNavigate();
   const [searchKeyword, setSearchKeyword] = useState<string>('');
-  const [address, setAddress] = useState<Juso | null>(null);
+  const [selectedAddress, setSelectedAddress] = useState<Juso | null>(null);
   const [isModalOpen, openModal, closeModal] = useBooleanState(false);
 
   const { data, refetch, isSuccess, isFetched } = useRoadNameAddress(searchKeyword);
   const { mutate } = useOffCampusDeliveryValidate();
 
-  const roadAddress = address?.road_address;
+  const roadAddress = selectedAddress?.road_address;
 
   const handleAddressSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
@@ -111,15 +111,18 @@ export default function DeliveryOutside() {
             {data.addresses.map((address, index) => {
               const isFirst = index === 0;
               const isLast = index === data.addresses.length - 1;
+              const isSelected = selectedAddress?.eng_address === address.eng_address;
+              console.log(address.eng_address, isSelected);
 
               const className = twMerge(
-                clsx('flex flex-col items-start p-4 focus-within:bg-gray-300', {
-                  'focus-within:rounded-t-xl': isFirst,
-                  'focus-within:rounded-b-xl': isLast,
+                clsx('flex flex-col items-start p-4 bg-white', {
+                  'bg-neutral-200': isSelected,
+                  'rounded-t-xl': isFirst,
+                  'rounded-b-xl': isLast,
                 }),
               );
               return (
-                <button key={address.eng_address} className={className} onClick={() => setAddress(address)}>
+                <button key={address.eng_address} className={className} onClick={() => setSelectedAddress(address)}>
                   <div className="text-sm leading-[1.6] font-medium text-neutral-800">
                     {address.bd_nm === '' ? address.road_address : address.bd_nm}
                   </div>
@@ -144,8 +147,8 @@ export default function DeliveryOutside() {
       <Button
         fullWidth
         className="mt-auto mb-5 h-[2.875rem]"
-        onClick={() => handleAddressSelect(address!)}
-        disabled={!address}
+        onClick={() => handleAddressSelect(selectedAddress!)}
+        disabled={!selectedAddress}
       >
         주소 선택
       </Button>
