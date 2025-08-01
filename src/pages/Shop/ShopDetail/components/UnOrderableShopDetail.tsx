@@ -4,7 +4,7 @@ import ShopDetail from '../index';
 
 export default function UnOrderableShopDetail() {
   const { id } = useParams();
-  const { data: shopInfo } = useGetUnOrderableShopDetail(Number(id));
+  const { data } = useGetUnOrderableShopDetail(Number(id));
 
-  return <ShopDetail shopInfo={shopInfo} />;
+  return <ShopDetail shopInfo={data} />;
 }
