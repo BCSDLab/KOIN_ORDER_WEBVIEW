@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import type { ShopInfoSummaryResponse } from '@/api/shop/entity.ts';
 import ChevronRightIcon from '@/assets/Common/chevron-right.svg';
 import StarIcon from '@/assets/Common/star-icon.svg';
@@ -8,11 +9,13 @@ import Badge from '@/components/UI/Badge';
 interface ShopSummaryProps {
   id: string;
   shopInfoSummary: ShopInfoSummaryResponse;
-  isOrderable: boolean;
 }
 
-export default function ShopSummary({ shopInfoSummary, id, isOrderable }: ShopSummaryProps) {
+export default function ShopSummary({ shopInfoSummary, id }: ShopSummaryProps) {
   const navigate = useNavigate();
+  const { isOrderable } = useParams();
+
+  const isOrderableBoolean = isOrderable === 'true';
 
   return (
     <>
@@ -32,10 +35,10 @@ export default function ShopSummary({ shopInfoSummary, id, isOrderable }: ShopSu
           </div>
           <div
             className="shadow-1 flex items-center justify-center gap-1 rounded-full border-[0.5px] border-neutral-400 bg-white py-1 pr-2 pl-3"
-            onClick={() => navigate(`/shop-detail/${id}`, { state: { isOrderable: isOrderable } })}
+            onClick={() => navigate(`/shop-detail/${isOrderableBoolean}/${id}`)}
             onKeyDown={(e) => {
               if (e.key === 'Enter' || e.key === ' ') {
-                navigate(`/shop-detail/${id}`, { state: { isOrderable: isOrderable } });
+                navigate(`/shop-detail/${isOrderableBoolean}/${id}`);
               }
             }}
             tabIndex={0}
@@ -48,53 +51,65 @@ export default function ShopSummary({ shopInfoSummary, id, isOrderable }: ShopSu
             </div>
           </div>
         </div>
-        {shopInfoSummary.is_delivery_available ||
-          (shopInfoSummary.is_takeout_available && (
-            <div className="mt-4 self-start">
-              {shopInfoSummary.is_delivery_available && <Badge label="배달 가능" color="white" size="sm" />}
-              {shopInfoSummary.is_takeout_available && <Badge label="포장 가능" color="white" size="sm" />}
-            </div>
-          ))}
+        {(shopInfoSummary.is_delivery_available || shopInfoSummary.is_takeout_available) && (
+          <div className="mt-4 self-start">
+            {shopInfoSummary.is_delivery_available && <Badge label="배달 가능" color="white" size="sm" />}
+            {shopInfoSummary.is_takeout_available && <Badge label="포장 가능" color="white" size="sm" />}
+          </div>
+        )}
+
         <div className="mt-4 flex w-full justify-between gap-3 self-start">
-          <a
-            href="#배달금액"
-            className="shadow-1 flex h-14 min-w-fit items-center gap-1 rounded-xl bg-white py-2 pr-2 pl-3"
-            onClick={() => navigate(`/shop-detail/${id}#배달금액`, { state: { isOrderable: isOrderable } })}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' || e.key === ' ') {
-                navigate(`/shop-detail/${id}#배달금액`, { state: { isOrderable: isOrderable } });
-              }
-            }}
-            tabIndex={0}
-            role="button"
-            aria-pressed="false"
-          >
-            <div className="flex w-fit flex-col gap-[2px]">
-              <div className="flex gap-2">
-                <span className="text-[12px] leading-[1.6] font-normal">최소주문</span>
-                <span className="text-[12px] leading-[1.6] font-normal text-neutral-500">
-                  {shopInfoSummary.minimum_order_amount.toLocaleString()}원
-                </span>
-              </div>
-              <div className="flex gap-2">
-                <span className="text-[12px] leading-[1.6] font-normal">배달금액</span>
-                <span className="text-[12px] leading-[1.6] font-normal text-neutral-500">
-                  {shopInfoSummary.minimum_delivery_tip.toLocaleString()} -{' '}
-                  {shopInfoSummary.maximum_delivery_tip.toLocaleString()}원
-                </span>
+          {isOrderableBoolean && (
+            <a
+              href="#배달금액"
+              className="shadow-1 flex h-14 min-w-fit items-center gap-1 rounded-xl bg-white py-2 pr-2 pl-3"
+              onClick={() => navigate(`/shop-detail/${isOrderableBoolean}/${id}#배달금액`)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  navigate(`/shop-detail/${isOrderableBoolean}/${id}#배달금액`);
+                }
+              }}
+              tabIndex={0}
+              role="button"
+              aria-pressed="false"
+            >
+              <>
+                <div className="flex w-fit flex-col gap-[2px]">
+                  <div className="flex gap-2">
+                    <span className="text-[12px] leading-[1.6] font-normal">최소주문</span>
+                    <span className="text-[12px] leading-[1.6] font-normal text-neutral-500">
+                      {shopInfoSummary.minimum_order_amount.toLocaleString()}원
+                    </span>
+                  </div>
+                  <div className="flex gap-2">
+                    <span className="text-[12px] leading-[1.6] font-normal">배달금액</span>
+                    <span className="text-[12px] leading-[1.6] font-normal text-neutral-500">
+                      {shopInfoSummary.minimum_delivery_tip.toLocaleString()} -{' '}
+                      {shopInfoSummary.maximum_delivery_tip.toLocaleString()}원
+                    </span>
+                  </div>
+                </div>
+                <div className="flex h-5 w-5 items-center justify-center">
+                  <ChevronRightIcon fill="#727272" />
+                </div>
+              </>
+            </a>
+          )}
+          {!isOrderableBoolean && (
+            <div className="shadow-1 flex h-14 min-w-fit items-center gap-1 rounded-xl bg-white px-8 py-2">
+              <div className="text-center text-xs leading-[1.6] font-medium text-neutral-400">
+                코인 주문이 <br />
+                불가능한 매장이예요.
               </div>
             </div>
-            <div className="flex h-5 w-5 items-center justify-center">
-              <ChevronRightIcon fill="#727272" />
-            </div>
-          </a>
+          )}
           <a
             href="#가게알림"
             className="shadow-1 flex h-14 min-w-fit items-center gap-1 rounded-xl bg-white py-2 pr-2 pl-3"
-            onClick={() => navigate(`/shop-detail/${id}#가게알림`, { state: { isOrderable: isOrderable } })}
+            onClick={() => navigate(`/shop-detail/${isOrderableBoolean}/${id}#가게알림`)}
             onKeyDown={(e) => {
               if (e.key === 'Enter' || e.key === ' ') {
-                navigate(`/shop-detail/${id}#가게알림`, { state: { isOrderable: isOrderable } });
+                navigate(`/shop-detail/${isOrderableBoolean}/${id}#가게알림`);
               }
             }}
             tabIndex={0}

@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ShopInfoResponse } from '@/api/shop/entity';
+import { useParams } from 'react-router-dom';
+import type { ShopInfoResponse } from '@/api/shop/entity';
 import EmptyThumbnail from '@/assets/Shop/empty_thumbnail.svg';
 import SoldOutIcon from '@/assets/Shop/sold-out-icon.svg';
 
@@ -9,18 +10,14 @@ interface ShopMenusProps {
   handleChangeMenu: (name: string) => void;
   isAutoScrolling: React.RefObject<boolean>;
   shopMenus: ShopInfoResponse[];
-  isOrderable: boolean;
 }
 
-export default function ShopMenus({
-  menuGroupRefs,
-  handleChangeMenu,
-  isAutoScrolling,
-  shopMenus,
-  isOrderable,
-}: ShopMenusProps) {
+export default function ShopMenus({ menuGroupRefs, handleChangeMenu, isAutoScrolling, shopMenus }: ShopMenusProps) {
   const navigate = useNavigate();
   const visibleMap = useRef<Record<string, boolean>>({});
+  const { isOrderable } = useParams();
+
+  const isOrderableBoolean = isOrderable === 'true';
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -81,7 +78,7 @@ export default function ShopMenus({
                 key={menu.id}
                 name={menu.name}
                 onClick={() => navigate(`menus/${menu.id}`)}
-                disabled={!isOrderable}
+                disabled={!isOrderableBoolean}
               >
                 <div className="flex flex-col">
                   <span className="flex h-auto text-start text-lg leading-[1.6] font-semibold">{menu.name}</span>
@@ -113,12 +110,12 @@ export default function ShopMenus({
                       <span className="text-sm leading-[1.6] font-semibold text-white">품절</span>
                     </div>
                   )}
-                  {menu.thumbnail_image === '' && (
+                  {!menu.thumbnail_image && (
                     <div className="flex h-full w-full items-center justify-center rounded-md">
                       <EmptyThumbnail />
                     </div>
                   )}
-                  {menu.thumbnail_image !== '' && (
+                  {menu.thumbnail_image && (
                     <img src={menu.thumbnail_image} alt={menu.name} className="h-full w-full rounded-md object-cover" />
                   )}
                 </div>

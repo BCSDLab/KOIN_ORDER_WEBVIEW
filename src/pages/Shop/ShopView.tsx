@@ -1,24 +1,11 @@
 import { useParams } from 'react-router-dom';
-import useCart from '../Payment/hooks/useCart';
-import OrderableComponent from './OrderableComponent';
-import UnOrderableComponent from './UnOrderableComponent';
-import { useOrderStore } from '@/stores/useOrderStore';
+import OrderableComponent from './components/OrderableComponent';
+import UnOrderableComponent from './components/UnOrderableComponent';
 
 export default function ShopView() {
-  //const { isOrderable } = useParams();
-  const isOrderable = true;
-  const { orderType } = useOrderStore();
+  const { isOrderable } = useParams();
 
-  const { data: cartInfo } = useCart(orderType);
-  const totalQuantity = cartInfo.items.reduce((sum, item) => sum + item.quantity, 0);
+  const isOrderableBoolean = isOrderable === 'true';
 
-  return (
-    <div>
-      {isOrderable ? (
-        <OrderableComponent cartInfo={cartInfo} totalQuantity={totalQuantity} />
-      ) : (
-        <UnOrderableComponent totalQuantity={totalQuantity} />
-      )}
-    </div>
-  );
+  return <>{isOrderableBoolean ? <OrderableComponent /> : <UnOrderableComponent />}</>;
 }
