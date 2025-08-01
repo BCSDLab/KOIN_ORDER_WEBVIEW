@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import clsx from 'clsx';
 import { useParams } from 'react-router-dom';
 import { DAYS } from '../constants/day';
-import { ShopDetailInfoResponse } from '@/api/shop/entity';
+import type { ShopDetailInfoResponse } from '@/api/shop/entity';
 
 interface ShopDetailProps {
   shopInfo: ShopDetailInfoResponse;
@@ -10,6 +10,7 @@ interface ShopDetailProps {
 
 export default function ShopDetail({ shopInfo }: ShopDetailProps) {
   const { id } = useParams();
+
   if (!id) {
     return <div className="p-6">가게 정보를 불러올 수 없습니다.</div>;
   }
@@ -55,7 +56,7 @@ export default function ShopDetail({ shopInfo }: ShopDetailProps) {
             <div className="flex gap-4 text-sm leading-[1.6] font-medium">
               <p className="w-14 shrink-0">운영시간</p>
               <p>
-                {shopInfo?.open_time?.slice(0, 5)} ~ {shopInfo?.close_time?.slice(0, 5)}
+                {shopInfo.open_time.slice(0, 5)} ~ {shopInfo.close_time.slice(0, 5)}
               </p>
             </div>
             <div className="flex gap-4 text-sm leading-[1.6] font-medium">
@@ -68,7 +69,7 @@ export default function ShopDetail({ shopInfo }: ShopDetailProps) {
             </div>
             <div className="flex gap-4 text-sm leading-[1.6] font-medium">
               <p className="w-14 shrink-0">전화번호</p>
-              <p>{shopInfo?.phone}</p>
+              <p>{shopInfo.phone}</p>
             </div>
           </div>
         </div>

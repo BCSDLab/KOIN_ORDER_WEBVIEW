@@ -1,11 +1,11 @@
-import { useLocation } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import OrderableShopDetail from './components/OrderableShopDetail';
 import UnOrderableShopDetail from './components/UnOrderableShopDetail';
 
 export default function ShopDetailView() {
-  const location = useLocation();
-  const { id } = useParams();
+  const { id, isOrderable } = useParams();
+
+  const isOrderableBoolean = isOrderable === 'true';
 
   if (!id) {
     throw new Error('Shop ID is required');
@@ -15,7 +15,5 @@ export default function ShopDetailView() {
     throw new Error('State is required');
   }
 
-  return (
-    <>{location.state.isOrderable ? <OrderableShopDetail shopId={id} /> : <UnOrderableShopDetail shopId={id} />}</>
-  );
+  return <>{isOrderableBoolean ? <OrderableShopDetail /> : <UnOrderableShopDetail />}</>;
 }
