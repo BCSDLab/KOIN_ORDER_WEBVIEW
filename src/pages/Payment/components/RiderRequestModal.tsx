@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import CloseIcon from '@/assets/Main/close-icon.svg';
 import BottomModal, {
   BottomModalHeader,
@@ -18,6 +18,7 @@ interface RiderRequestModalProps {
 export default function RiderRequestModal({ isOpen, onClose, initialValue, onSubmit }: RiderRequestModalProps) {
   const { data } = useGetRiderRequest();
   const requestList = data.contents.map((item) => item.content);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const isCustom = !requestList.includes(initialValue);
   const [requestValue, setRequestValue] = useState(initialValue);
@@ -38,10 +39,16 @@ export default function RiderRequestModal({ isOpen, onClose, initialValue, onSub
     onClose();
   };
 
-  const handleChangeRequestValue = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChangeRequestValue = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const input = e.target.value.trimStart();
     if (input.length <= 30) {
       setRequestValue(input);
+    }
+
+    const textarea = textareaRef.current;
+    if (textarea) {
+      textarea.style.height = 'auto';
+      textarea.style.height = `${textarea.scrollHeight}px`;
     }
   };
 
@@ -92,21 +99,18 @@ export default function RiderRequestModal({ isOpen, onClose, initialValue, onSub
           </label>
 
           {isCustomSelected && (
-            <div className="relative">
-              <input
-                type="text"
+            <div>
+              <textarea
                 value={requestValue}
                 onChange={handleChangeRequestValue}
                 placeholder="상세 요청사항을 입력해주세요."
-                className="w-full rounded-sm border border-neutral-300 px-4 py-3 pr-16 placeholder-neutral-400 outline-none placeholder:text-sm"
+                className="w-full resize-none overflow-hidden rounded-sm border border-neutral-300 px-4 py-3 text-sm placeholder-neutral-400 outline-none placeholder:text-sm"
+                rows={1}
+                ref={textareaRef}
               />
-              <span
-                className={`absolute top-1/2 right-4 -translate-y-1/2 text-sm ${
-                  requestValue ? 'text-black' : 'text-neutral-400'
-                }`}
-              >
+              <div className={`text-right text-[10px] ${requestValue ? 'text-black' : 'text-neutral-400'}`}>
                 {requestValue.length}/30
-              </span>
+              </div>
             </div>
           )}
         </div>
