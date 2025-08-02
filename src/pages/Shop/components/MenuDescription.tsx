@@ -12,7 +12,7 @@ export default function MenuDescription({ name, description, price }: MenuDescri
         {price.toLocaleString()}원
       </span>
       {description && (
-        <span className="text-xm mb-2 h-auto self-start leading-[1.6] text-neutral-500">{description}</span>
+        <span className="text-xm mb-2 h-[1.1875rem] self-start leading-[1.6] text-neutral-500">{description}</span>
       )}
     </div>
   );

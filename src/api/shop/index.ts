@@ -4,14 +4,10 @@ import {
   ShopDetailInfoParams,
   ShopDetailInfoResponse,
   ShopInfoResponse,
-  OrderableShopInfoParams,
-  UnOrderableShopInfoParams,
+  ShopInfoParams,
   ShopInfoSummaryResponse,
   ShopMenuGroupsResponse,
   ShopMenuDetailResponse,
-  UnOrderableShopDetailInfoResponse,
-  UnOrderableShopReviewsResponse,
-  UnOrderableShopMenusResponse,
 } from './entity';
 
 export const getShopDetailInfo = async ({ orderableShopId }: ShopDetailInfoParams) => {
@@ -24,39 +20,24 @@ export const getShopDeliveryInfo = async ({ orderableShopId }: ShopDetailInfoPar
   return response;
 };
 
-export const getShopInfo = async ({ orderableShopId }: OrderableShopInfoParams) => {
+export const getShopInfo = async ({ orderableShopId }: ShopInfoParams) => {
   const response = await apiClient.get<ShopInfoResponse[]>(`order/shop/${orderableShopId}/menus`);
   return response;
 };
 
-export const getUnOrderableShopMenus = async ({ UnOrderableShopId }: UnOrderableShopInfoParams) => {
-  const response = await apiClient.get<UnOrderableShopMenusResponse>(`shops/${UnOrderableShopId}/menus`);
-  return response;
-};
-
-export const getShopInfoSummary = async ({ orderableShopId }: OrderableShopInfoParams) => {
+export const getShopInfoSummary = async ({ orderableShopId }: ShopInfoParams) => {
   const response = await apiClient.get<ShopInfoSummaryResponse>(`order/shop/${orderableShopId}/summary`);
   return response;
 };
 
-export const getShopMenuGroups = async ({ orderableShopId }: OrderableShopInfoParams) => {
+export const getShopMenuGroups = async ({ orderableShopId }: ShopInfoParams) => {
   const response = await apiClient.get<ShopMenuGroupsResponse>(`order/shop/${orderableShopId}/menus/groups`);
   return response;
 };
 
-export const getShopMenuDetail = async ({ orderableShopId, orderableShopMenuId }: OrderableShopInfoParams) => {
+export const getShopMenuDetail = async ({ orderableShopId, orderableShopMenuId }: ShopInfoParams) => {
   const response = await apiClient.get<ShopMenuDetailResponse>(
     `order/shop/${orderableShopId}/menus/${orderableShopMenuId}`,
   );
-  return response;
-};
-
-export const getUnOrderableShopInfo = async ({ UnOrderableShopId }: UnOrderableShopInfoParams) => {
-  const response = await apiClient.get<UnOrderableShopDetailInfoResponse>(`shops/${UnOrderableShopId}`);
-  return response;
-};
-
-export const getUnOrderableShopReviews = async ({ UnOrderableShopId }: UnOrderableShopInfoParams) => {
-  const response = await apiClient.get<UnOrderableShopReviewsResponse>(`shops/${UnOrderableShopId}/reviews`);
   return response;
 };

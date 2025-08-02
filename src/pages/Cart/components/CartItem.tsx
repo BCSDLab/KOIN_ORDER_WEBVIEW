@@ -52,9 +52,7 @@ export default function CartItem({ shopId, item }: CartItemProps) {
           color="gray"
           className="text-xs leading-[160%] font-normal text-neutral-600 shadow-none"
           onClick={() =>
-            navigate(
-              `/shop/true/${shopId}/menus/${item.orderable_shop_menu_id}?editCartItemId=${item.cart_menu_item_id}`,
-            )
+            navigate(`/shop/${shopId}/menus/${item.orderable_shop_menu_id}?editCartItemId=${item.cart_menu_item_id}`)
           }
         >
           옵션 변경
