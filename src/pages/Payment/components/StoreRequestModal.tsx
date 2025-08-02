@@ -30,6 +30,13 @@ export default function StoreRequestModal({
     onClose();
   };
 
+  const handleChangeRequest = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const input = e.target.value.trimStart();
+    if (input.length <= 30) {
+      setRequest(input);
+    }
+  };
+
   return (
     <BottomModal isOpen={isOpen} onClose={onClose}>
       <BottomModalHeader>
@@ -39,13 +46,22 @@ export default function StoreRequestModal({
         </button>
       </BottomModalHeader>
       <BottomModalContent>
-        <input
-          type="text"
-          value={request}
-          onChange={(e) => setRequest(e.target.value)}
-          placeholder="예)매운맛 조금만 해주세요"
-          className="w-full rounded-xl border border-neutral-300 px-4 py-3 outline-none"
-        />
+        <div className="relative">
+          <input
+            type="text"
+            value={request}
+            onChange={handleChangeRequest}
+            placeholder="예)매운맛 조금만 해주세요"
+            className="w-full rounded-xl border border-neutral-300 px-4 py-3 outline-none"
+          />
+          <span
+            className={`absolute top-1/2 right-4 -translate-y-1/2 text-sm ${
+              request ? 'text-black' : 'text-neutral-400'
+            }`}
+          >
+            {request.length}/30
+          </span>
+        </div>
         <label className="flex items-center gap-3 text-sm font-medium text-neutral-600">
           <input
             type="checkbox"

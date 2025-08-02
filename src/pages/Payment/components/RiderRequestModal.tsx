@@ -38,6 +38,13 @@ export default function RiderRequestModal({ isOpen, onClose, initialValue, onSub
     onClose();
   };
 
+  const handleChangeRequestValue = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const input = e.target.value.trimStart();
+    if (input.length <= 30) {
+      setRequestValue(input);
+    }
+  };
+
   return (
     <BottomModal isOpen={isOpen} onClose={onClose}>
       <BottomModalHeader>
@@ -85,13 +92,22 @@ export default function RiderRequestModal({ isOpen, onClose, initialValue, onSub
           </label>
 
           {isCustomSelected && (
-            <input
-              type="text"
-              value={requestValue}
-              onChange={(e) => setRequestValue(e.target.value.trimStart())}
-              placeholder="상세 요청사항을 입력해주세요."
-              className="rounded-sm border border-neutral-300 px-4 py-3 placeholder-neutral-400 outline-none placeholder:text-sm"
-            />
+            <div className="relative">
+              <input
+                type="text"
+                value={requestValue}
+                onChange={handleChangeRequestValue}
+                placeholder="상세 요청사항을 입력해주세요."
+                className="w-full rounded-sm border border-neutral-300 px-4 py-3 pr-16 placeholder-neutral-400 outline-none placeholder:text-sm"
+              />
+              <span
+                className={`absolute top-1/2 right-4 -translate-y-1/2 text-sm ${
+                  requestValue ? 'text-black' : 'text-neutral-400'
+                }`}
+              >
+                {requestValue.length}/30
+              </span>
+            </div>
           )}
         </div>
 
