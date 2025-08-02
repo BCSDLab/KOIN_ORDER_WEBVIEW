@@ -10,7 +10,9 @@ const useTouchModalOutside = ({ onOutsideClick }: UseOutsideClickOptions) => {
 
   useEffect(() => {
     const handleOutsideClick = (e: MouseEvent) => {
-      const clickedElement = e.target as Node;
+      if (!(e.target instanceof Node)) return;
+
+      const clickedElement = e.target;
       const container = containerRef.current;
       const background = backgroundRef.current;
 
