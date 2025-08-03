@@ -40,7 +40,7 @@ export default function UnOrderableComponent({ totalQuantity }: UnOrderableCompo
     <>
       <Header name={shopInfoSummary.name} targetRef={targetRef} cartItemCount={totalQuantity} />
       <ImageCarousel images={shopInfoSummaryData.images} targetRef={targetRef} />
-      <ShopSummary id={shopId} shopInfoSummary={shopInfoSummaryData} isOrderable={false} />
+      <ShopSummary id={shopId} shopInfoSummary={shopInfoSummaryData} />
       <ShopMenuGroups
         selectedMenu={selectedMenu}
         onSelect={handleScrollTo}
@@ -51,7 +51,6 @@ export default function UnOrderableComponent({ totalQuantity }: UnOrderableCompo
         handleChangeMenu={handleChangeMenu}
         isAutoScrolling={isAutoScrolling}
         shopMenus={unOrderableShopMenus}
-        isOrderable={false}
       />
     </>
   );

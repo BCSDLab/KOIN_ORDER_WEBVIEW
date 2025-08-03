@@ -35,14 +35,13 @@ export default function OrderableComponent({ cartInfo, totalQuantity }: Orderabl
     <>
       <Header name={shopInfoSummary.name} targetRef={targetRef} cartItemCount={totalQuantity} />
       <ImageCarousel images={shopInfoSummary.images} targetRef={targetRef} />
-      <ShopSummary id={shopId} shopInfoSummary={shopInfoSummary} isOrderable={true} />
+      <ShopSummary id={shopId} shopInfoSummary={shopInfoSummary} />
       <ShopMenuGroups selectedMenu={selectedMenu} onSelect={handleScrollTo} shopMenuGroups={shopMenuGroups} />
       <ShopMenus
         menuGroupRefs={menuGroupRefs}
         handleChangeMenu={handleChangeMenu}
         isAutoScrolling={isAutoScrolling}
         shopMenus={shopInfo}
-        isOrderable={true}
       />
       {cartInfo.items.length > 0 && cartInfo.orderable_shop_id === Number(shopId) && (
         <BottomCartModal id={shopId} cartItemCount={totalQuantity} />
