@@ -1,5 +1,13 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { getShopInfo, getShopInfoSummary, getShopMenuDetail, getShopMenuGroups } from '@/api/shop';
+import {
+  getShopInfo,
+  getShopInfoSummary,
+  getShopMenuDetail,
+  getShopMenuGroups,
+  getUnOrderableShopInfo,
+  getUnOrderableShopReviews,
+  getUnOrderableShopMenus,
+} from '@/api/shop';
 
 export const useGetShopInfo = (orderableShopId: number) => {
   return useSuspenseQuery({
@@ -22,9 +30,37 @@ export const useGetShopMenuGroups = (orderableShopId: number) => {
   });
 };
 
+export const useGetUnOrderableShopMenuGroups = (UnOrderableShopId: number) => {
+  return useSuspenseQuery({
+    queryKey: ['unOrderableShopMenuGroups', UnOrderableShopId],
+    queryFn: () => getUnOrderableShopInfo({ UnOrderableShopId }),
+  });
+};
+
 export const useGetShopMenuDetail = (orderableShopId: number, orderableShopMenuId: number) => {
   return useSuspenseQuery({
     queryKey: ['shopMenuDetail', orderableShopId],
     queryFn: () => getShopMenuDetail({ orderableShopId, orderableShopMenuId }),
+  });
+};
+
+export const useGetUnOrderableShopInfo = (UnOrderableShopId: number) => {
+  return useSuspenseQuery({
+    queryKey: ['unOrderableShopInfo', UnOrderableShopId],
+    queryFn: () => getUnOrderableShopInfo({ UnOrderableShopId }),
+  });
+};
+
+export const useGetUnOrderableShopReviews = (UnOrderableShopId: number) => {
+  return useSuspenseQuery({
+    queryKey: ['unOrderableShopReviews', UnOrderableShopId],
+    queryFn: () => getUnOrderableShopReviews({ UnOrderableShopId }),
+  });
+};
+
+export const useGetUnOrderableShopMenus = (UnOrderableShopId: number) => {
+  return useSuspenseQuery({
+    queryKey: ['unOrderableShopMenus', UnOrderableShopId],
+    queryFn: () => getUnOrderableShopMenus({ UnOrderableShopId }),
   });
 };

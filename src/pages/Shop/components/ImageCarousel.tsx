@@ -1,6 +1,7 @@
 import { useRef, useState, useEffect } from 'react';
 import clsx from 'clsx';
 import { ShopInfoSummaryResponse } from '@/api/shop/entity';
+import EmptyThumbnail from '@/assets/Shop/empty_thumbnail.svg';
 import ImageViewer from '@/pages/Shop/components/ImageViewer';
 import useBooleanState from '@/util/hooks/useBooleanState';
 interface ImageCarouselProps {
@@ -96,6 +97,7 @@ export default function ImageCarousel({ images, targetRef }: ImageCarouselProps)
           ))}
       </div>
       {isImageViewerOpen && <ImageViewer images={images} onClose={closeImageViewer} />}
+      {images.length === 0 && <EmptyThumbnail />}
     </div>
   );
 }

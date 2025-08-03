@@ -8,9 +8,10 @@ import Badge from '@/components/UI/Badge';
 interface ShopSummaryProps {
   id: string;
   shopInfoSummary: ShopInfoSummaryResponse;
+  isOrderable: boolean;
 }
 
-export default function ShopSummary({ shopInfoSummary, id }: ShopSummaryProps) {
+export default function ShopSummary({ shopInfoSummary, id, isOrderable }: ShopSummaryProps) {
   const navigate = useNavigate();
 
   return (
@@ -31,10 +32,10 @@ export default function ShopSummary({ shopInfoSummary, id }: ShopSummaryProps) {
           </div>
           <div
             className="shadow-1 flex items-center justify-center gap-1 rounded-full border-[0.5px] border-neutral-400 bg-white py-1 pr-2 pl-3"
-            onClick={() => navigate(`/shop-detail/${id}`)}
+            onClick={() => navigate(`/shop-detail/${id}`, { state: { isOrderable: isOrderable } })}
             onKeyDown={(e) => {
               if (e.key === 'Enter' || e.key === ' ') {
-                navigate(`/shop-detail/${id}`);
+                navigate(`/shop-detail/${id}`, { state: { isOrderable: isOrderable } });
               }
             }}
             tabIndex={0}
@@ -57,11 +58,11 @@ export default function ShopSummary({ shopInfoSummary, id }: ShopSummaryProps) {
         <div className="mt-4 flex w-full justify-between gap-3 self-start">
           <a
             href="#배달금액"
-            className="shadow-1 flex h-14 w-full min-w-fit items-center justify-between gap-3 rounded-xl bg-white py-2 pr-2 pl-3"
-            onClick={() => navigate(`/shop-detail/${id}#배달금액`)}
+            className="shadow-1 flex h-14 min-w-fit items-center gap-1 rounded-xl bg-white py-2 pr-2 pl-3"
+            onClick={() => navigate(`/shop-detail/${id}#배달금액`, { state: { isOrderable: isOrderable } })}
             onKeyDown={(e) => {
               if (e.key === 'Enter' || e.key === ' ') {
-                navigate(`/shop-detail/${id}#배달금액`);
+                navigate(`/shop-detail/${id}#배달금액`, { state: { isOrderable: isOrderable } });
               }
             }}
             tabIndex={0}
@@ -78,32 +79,33 @@ export default function ShopSummary({ shopInfoSummary, id }: ShopSummaryProps) {
               <div className="flex gap-2">
                 <span className="text-[12px] leading-[1.6] font-normal">배달금액</span>
                 <span className="text-[12px] leading-[1.6] font-normal text-neutral-500">
-                  {shopInfoSummary.minimum_delivery_tip} - {shopInfoSummary.maximum_delivery_tip}원
+                  {shopInfoSummary.minimum_delivery_tip.toLocaleString()} -{' '}
+                  {shopInfoSummary.maximum_delivery_tip.toLocaleString()}원
                 </span>
               </div>
             </div>
-            <div className="flex items-center justify-center pr-1">
+            <div className="flex h-5 w-5 items-center justify-center">
               <ChevronRightIcon fill="#727272" />
             </div>
           </a>
           <a
             href="#가게알림"
-            className="shadow-1 flex h-14 w-full items-center justify-between gap-2 rounded-xl bg-white py-2 pr-2 pl-3"
-            onClick={() => navigate(`/shop-detail/${id}#가게알림`)}
+            className="shadow-1 flex h-14 min-w-fit items-center gap-1 rounded-xl bg-white py-2 pr-2 pl-3"
+            onClick={() => navigate(`/shop-detail/${id}#가게알림`, { state: { isOrderable: isOrderable } })}
             onKeyDown={(e) => {
               if (e.key === 'Enter' || e.key === ' ') {
-                navigate(`/shop-detail/${id}#가게알림`);
+                navigate(`/shop-detail/${id}#가게알림`, { state: { isOrderable: isOrderable } });
               }
             }}
             tabIndex={0}
             role="button"
             aria-pressed="false"
           >
-            <div className="flex items-center gap-2">
-              <SpeakerIcon />
-              <span className="line-clamp-2 w-full text-[12px] leading-[1.6]">{shopInfoSummary.introduction}</span>
-            </div>
-            <div className="flex items-center justify-center pr-1">
+            <SpeakerIcon />
+            <span className="h-9.5 w-24 overflow-hidden text-[12px] leading-[1.6] text-ellipsis">
+              {shopInfoSummary.introduction}
+            </span>
+            <div className="flex h-5 w-5 items-center justify-center">
               <ChevronRightIcon fill="#727272" />
             </div>
           </a>
