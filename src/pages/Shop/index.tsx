@@ -9,6 +9,7 @@ import ShopMenus from './components/ShopMenus';
 import ShopSummary from './components/ShopSummary';
 import { useGetShopInfoSummary } from './hooks/useGetShopInfo';
 import { useOrderStore } from '@/stores/useOrderStore';
+import { getCookie } from '@/util/ts/cookie';
 
 export default function Shop() {
   const { shopId } = useParams();
@@ -48,6 +49,7 @@ export default function Shop() {
       <Header name={shopInfoSummary.name} targetRef={targetRef} cartItemCount={totalQuantity} />
       <ImageCarousel images={shopInfoSummary.images} targetRef={targetRef} />
       <ShopSummary id={shopId} shopInfoSummary={shopInfoSummary} />
+      <div>accessToken: {getCookie('AUTH_TOKEN_KEY')}</div>
       <ShopMenuGroups id={shopId} selectedMenu={selectedMenu} onSelect={handleScrollTo} />
       <ShopMenus
         id={shopId}
