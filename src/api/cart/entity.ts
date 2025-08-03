@@ -33,7 +33,7 @@ export interface CartResponse {
 
 export interface CartSummaryResponse {
   orderable_shop_id: number;
-  shop_mininum_order_amount: number;
+  shop_minimum_order_amount: number;
   cart_items_amount: number;
   is_available: boolean;
 }
@@ -53,6 +53,7 @@ export interface AddCartRequest {
 
 export interface UpdateCartItemRequest {
   orderable_shop_menu_price_id: number;
+  quantity: number;
   options: {
     option_group_id: number;
     option_id: number;

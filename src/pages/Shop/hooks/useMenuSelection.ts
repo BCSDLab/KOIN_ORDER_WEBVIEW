@@ -25,6 +25,8 @@ export function useMenuSelection(shopId: string, menuInfo: ShopMenuDetailRespons
       ? (menuInfo.prices.find((p) => p.is_selected)?.id ?? menuInfo.prices[0].id)
       : menuInfo.prices[0].id;
 
+    const initialCount = isEdit ? menuInfo.quantity : 1;
+
     const initialSelectedOptions: SelectedOption[] = isEdit
       ? menuInfo.option_groups.flatMap((group) =>
           group.options
@@ -38,7 +40,7 @@ export function useMenuSelection(shopId: string, menuInfo: ShopMenuDetailRespons
 
     setState({
       priceId: initialPriceId,
-      count: 1,
+      count: initialCount,
       selectedOptions: initialSelectedOptions,
     });
   }, [shopId, menuInfo, isEdit]);
@@ -130,6 +132,7 @@ export function useMenuSelection(shopId: string, menuInfo: ShopMenuDetailRespons
 
   const updateCartItemOptionsRequest = {
     orderable_shop_menu_price_id: state.priceId,
+    quantity: state.count,
     options: state.selectedOptions.map((sel) => ({
       option_group_id: sel.optionGroupId,
       option_id: sel.optionId,
