@@ -22,10 +22,10 @@ export default function App() {
       <Routes>
         <Route path="test" element={<TestPage />} />
 
-        <Route path="shop/:shopId" element={<ShopView />} />
-        <Route path="shop/:shopId/menus/:menuId" element={<MenuDetail />} />
+        <Route path="shop/:isOrderable/:shopId" element={<ShopView />} />
+        <Route path="shop/:isOrderable/:shopId/menus/:menuId" element={<MenuDetail />} />
         <Route element={<AppLayout />}>
-          <Route path="shop-detail/:id" element={<ShopDetailView />} />
+          <Route path="shop-detail/:isOrderable/:id" element={<ShopDetailView />} />
           <Route path="cart" element={<Cart />} />
           <Route path="delivery">
             <Route path="outside/detail" element={<DetailAddress />} />
