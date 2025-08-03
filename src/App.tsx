@@ -17,6 +17,7 @@ import ShopView from '@/pages/Shop/ShopView';
 dayjs.locale('ko');
 
 export default function App() {
+  //
   return (
     <BrowserRouter>
       <Routes>
