@@ -27,8 +27,8 @@ export interface ShopDetailInfoResponse {
   orderable_shop_id: number;
   name: string;
   address: string;
-  open_time: string | null;
-  close_time: string | null;
+  open_time: string;
+  close_time: string;
   closed_days: Day[];
   phone: string;
   introduction: string | null;
