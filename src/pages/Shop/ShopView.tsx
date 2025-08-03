@@ -1,7 +1,7 @@
 import { useParams } from 'react-router-dom';
 import useCart from '../Payment/hooks/useCart';
-import OrderableComponent from './OrderableComponent';
-import UnOrderableComponent from './UnOrderableComponent';
+import OrderableComponent from './components/OrderableComponent';
+import UnOrderableComponent from './components/UnOrderableComponent';
 import { useOrderStore } from '@/stores/useOrderStore';
 
 export default function ShopView() {

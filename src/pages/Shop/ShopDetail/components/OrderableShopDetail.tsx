@@ -1,5 +1,5 @@
-import { useGetShopDetail } from '../hooks/useGetShopDetail';
-import ShopDetail from './index';
+import ShopDetail from '../index';
+import { useGetShopDetail } from '@/pages/Shop/hooks/useGetShopDetail';
 
 interface OrderableShopDetailProps {
   shopId: string;

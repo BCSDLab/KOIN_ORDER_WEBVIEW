@@ -1,5 +1,5 @@
-import { useGetUnOrderableShopInfo } from '../hooks/useGetShopInfo';
-import ShopDetail from '.';
+import ShopDetail from '../index';
+import { useGetUnOrderableShopInfo } from '@/pages/Shop/hooks/useGetShopInfo';
 
 interface UnOrderableShopDetailProps {
   shopId: string;

@@ -1,7 +1,7 @@
 import { useLocation } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
-import OrderableShopDetail from './OrderableShopDetail';
-import UnOrderableShopDetail from './UnOrderableShopDetail';
+import OrderableShopDetail from './components/OrderableShopDetail';
+import UnOrderableShopDetail from './components/UnOrderableShopDetail';
 
 export default function ShopDetailView() {
   const { state } = useLocation();

@@ -44,7 +44,7 @@ export default function ShopDetail({ shopInfo }: ShopDetailProps) {
           <div className="flex gap-4 text-sm leading-[1.6] font-medium">
             <p className="w-14 shrink-0">운영시간</p>
             <p>
-              {shopInfo.open_time?.slice(0, 5)} ~ {shopInfo.close_time.slice(0, 5)}
+              {shopInfo.open_time.slice(0, 5)} ~ {shopInfo.close_time.slice(0, 5)}
             </p>
           </div>
           <div className="flex gap-4 text-sm leading-[1.6] font-medium">
