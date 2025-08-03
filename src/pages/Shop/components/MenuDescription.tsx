@@ -1,12 +1,15 @@
+import clsx from 'clsx';
+
 interface MenuDescriptionProps {
   name: string;
   description: string | null;
   price: number;
+  noImage: boolean;
 }
 
-export default function MenuDescription({ name, description, price }: MenuDescriptionProps) {
+export default function MenuDescription({ name, description, price, noImage }: MenuDescriptionProps) {
   return (
-    <div className="flex flex-col items-center justify-center px-6 py-4">
+    <div className={clsx('flex flex-col items-center justify-center px-6 py-4', noImage && 'mt-15')}>
       <span className="mb-2 h-8 self-start text-xl leading-[1.6] font-bold">{name}</span>
       <span className="text-primary-500 mb-2 h-8 self-start text-xl leading-[1.6] font-bold">
         {price.toLocaleString()}원

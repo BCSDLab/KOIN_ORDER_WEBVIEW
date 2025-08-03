@@ -71,6 +71,8 @@ export default function MenuDetail() {
     is_thumbnail: false,
   }));
 
+  const hasImage = imagesForCarousel.length > 0;
+
   const handleAddToCart = () => {
     if (isEdit && 'orderable_shop_menu_price_id' in updateCartItemOptionsRequest) {
       updateCartItemOptions(updateCartItemOptionsRequest, {
@@ -110,9 +112,14 @@ export default function MenuDetail() {
 
   return (
     <div>
-      <Header name={info.name} targetRef={targetRef} cartItemCount={totalQuantity} />
-      <ImageCarousel images={imagesForCarousel} targetRef={targetRef} />
-      <MenuDescription name={info.name} description={info.description} price={info.prices[0].price} />
+      <Header name={info.name} targetRef={targetRef} cartItemCount={totalQuantity} noImage={!hasImage} />
+      {hasImage && <ImageCarousel images={imagesForCarousel} targetRef={targetRef} />}
+      <MenuDescription
+        name={info.name}
+        description={info.description}
+        price={info.prices[0].price}
+        noImage={!hasImage}
+      />
       <div className="mb-40 px-6">
         {menuInfo.prices.length > 1 && (
           <MenuPriceSelects prices={info.prices} selectedPriceId={priceId} selectPrice={selectPrice} />

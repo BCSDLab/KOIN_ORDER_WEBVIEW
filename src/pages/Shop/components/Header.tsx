@@ -8,11 +8,13 @@ interface HeaderProps {
   name: string;
   targetRef: React.RefObject<HTMLDivElement | null>;
   cartItemCount: number;
+  noImage?: boolean;
 }
-
-export default function Header({ name, targetRef, cartItemCount }: HeaderProps) {
+export default function Header({ name, targetRef, cartItemCount, noImage }: HeaderProps) {
   const navigate = useNavigate();
   const [opacity, setOpacity] = useState(0);
+
+  const currentOpacity = noImage ? 1 : opacity;
 
   const backToPreviousPage = () => {
     if (window.history.length > 1) {
@@ -23,6 +25,8 @@ export default function Header({ name, targetRef, cartItemCount }: HeaderProps) 
   };
 
   useEffect(() => {
+    if (noImage) return;
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         const ratio = entry.intersectionRatio;
@@ -51,7 +55,7 @@ export default function Header({ name, targetRef, cartItemCount }: HeaderProps) 
     <header
       className="fixed top-0 right-0 left-0 z-10 flex h-[60px] items-center justify-center px-8"
       style={{
-        backgroundColor: `rgba(248, 248, 250, ${opacity})`,
+        backgroundColor: `rgba(248, 248, 250, ${currentOpacity})`,
       }}
     >
       <button
@@ -60,12 +64,12 @@ export default function Header({ name, targetRef, cartItemCount }: HeaderProps) 
         onClick={backToPreviousPage}
         className="absolute top-1/2 left-6 -translate-y-1/2"
       >
-        <ArrowBackIcon fill={getTransitionColor(opacity)} />
+        <ArrowBackIcon fill={getTransitionColor(currentOpacity)} />
       </button>
       <span
         className="font-[Pretendard] text-lg font-semibold"
         style={{
-          color: `rgba(0, 0, 0, ${opacity})`,
+          color: `rgba(0, 0, 0, ${currentOpacity})`,
         }}
       >
         {name}
@@ -77,7 +81,7 @@ export default function Header({ name, targetRef, cartItemCount }: HeaderProps) 
           onClick={() => navigate('/cart')}
           className="relative flex items-center justify-center"
         >
-          <CartIcon fill={getTransitionColor(opacity)} />
+          <CartIcon fill={getTransitionColor(currentOpacity)} />
           {cartItemCount > 0 && (
             <div className="bg-primary-500 absolute -top-1/2 -right-1/2 flex h-4 w-4 items-center justify-center rounded-full text-[12px] font-medium text-white">
               {cartItemCount}

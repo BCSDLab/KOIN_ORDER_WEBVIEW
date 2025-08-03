@@ -1,8 +1,8 @@
 import { type ReactNode, type HTMLAttributes, useRef } from 'react';
 import { twMerge } from 'tailwind-merge';
 import Portal from '@/components/Portal';
+import useHandleOutside from '@/util/hooks/useHandleOutside';
 import useScrollLock from '@/util/hooks/useScrollLock';
-import useTouchOutside from '@/util/hooks/useTouchOutside';
 
 interface BottomModalProps extends HTMLAttributes<HTMLDivElement> {
   isOpen: boolean;
@@ -11,17 +11,27 @@ interface BottomModalProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 export default function BottomModal({ isOpen, onClose, children, className }: BottomModalProps) {
-  const modalRef = useRef<HTMLDialogElement>(null);
+  const containerRef = useRef<HTMLDialogElement>(null);
+  const backgroundRef = useRef<HTMLDivElement>(null);
 
-  useTouchOutside(modalRef, onClose);
   useScrollLock(isOpen);
+
+  useHandleOutside<HTMLDialogElement, HTMLDivElement>({
+    containerRef,
+    backgroundRef,
+    onOutsideClick: onClose,
+  });
 
   if (!isOpen) return null;
 
   return (
     <Portal>
-      <div className="fixed inset-0 z-100 flex flex-col justify-end bg-black/70">
-        <dialog ref={modalRef} className={twMerge('w-full max-w-none rounded-t-4xl bg-white', className)} open={isOpen}>
+      <div ref={backgroundRef} className="fixed inset-0 z-100 flex flex-col justify-end bg-black/70">
+        <dialog
+          ref={containerRef}
+          className={twMerge('w-full max-w-none rounded-t-4xl bg-white', className)}
+          open={isOpen}
+        >
           {children}
         </dialog>
       </div>
