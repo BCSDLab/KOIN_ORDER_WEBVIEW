@@ -1,7 +1,11 @@
 import { useGetUnOrderableShopInfo } from '../hooks/useGetShopInfo';
 import ShopDetail from '.';
 
-export default function UnOrderableShopDetail({ shopId }: { shopId: string }) {
+interface UnOrderableShopDetailProps {
+  shopId: string;
+}
+
+export default function UnOrderableShopDetail({ shopId }: UnOrderableShopDetailProps) {
   const { data: shopInfo } = useGetUnOrderableShopInfo(Number(shopId));
 
   const data = {

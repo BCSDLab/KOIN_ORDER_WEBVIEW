@@ -12,13 +12,12 @@ import { useGetShopInfo } from './hooks/useGetShopInfo';
 import { useInteraction } from './hooks/useInteraction';
 import { CartResponse } from '@/api/cart/entity';
 
-export default function OrderableComponent({
-  cartInfo,
-  totalQuantity,
-}: {
+interface OrderableComponentProps {
   cartInfo: CartResponse;
   totalQuantity: number;
-}) {
+}
+
+export default function OrderableComponent({ cartInfo, totalQuantity }: OrderableComponentProps) {
   const { shopId } = useParams();
   if (!shopId) {
     throw new Error('Shop ID is required');

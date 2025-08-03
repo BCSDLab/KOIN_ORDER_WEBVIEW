@@ -3,7 +3,11 @@ import { useParams } from 'react-router-dom';
 import { DAYS } from '../constants/day';
 import { ShopDetailInfoResponse } from '@/api/shop/entity';
 
-export default function ShopDetail({ shopInfo }: { shopInfo: ShopDetailInfoResponse }) {
+interface ShopDetailProps {
+  shopInfo: ShopDetailInfoResponse;
+}
+
+export default function ShopDetail({ shopInfo }: ShopDetailProps) {
   const { id } = useParams();
   if (!id) {
     return <div className="p-6">가게 정보를 불러올 수 없습니다.</div>;

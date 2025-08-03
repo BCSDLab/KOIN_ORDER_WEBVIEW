@@ -11,7 +11,11 @@ import { useGetUnOrderableShopMenuGroups } from './hooks/useGetShopInfo';
 import { useGetUnOrderableShopMenus } from './hooks/useGetShopInfo';
 import { useInteraction } from './hooks/useInteraction';
 
-export default function UnOrderableComponent({ totalQuantity }: { totalQuantity: number }) {
+interface UnOrderableComponentProps {
+  totalQuantity: number;
+}
+
+export default function UnOrderableComponent({ totalQuantity }: UnOrderableComponentProps) {
   const { shopId } = useParams();
   if (!shopId) {
     throw new Error('Shop ID is required');
