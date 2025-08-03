@@ -10,13 +10,12 @@ import ImageCarousel from './ImageCarousel';
 import ShopMenuGroups from './ShopMenuGroups';
 import ShopMenus from './ShopMenus';
 import ShopSummary from './ShopSummary';
+import useCart from '@/pages/Payment/hooks/useCart';
+import { useOrderStore } from '@/stores/useOrderStore';
 
-interface UnOrderableComponentProps {
-  totalQuantity: number;
-}
-
-export default function UnOrderableComponent({ totalQuantity }: UnOrderableComponentProps) {
+export default function UnOrderableComponent() {
   const { shopId } = useParams();
+  const { orderType } = useOrderStore();
   if (!shopId) {
     throw new Error('Shop ID is required');
   }
@@ -29,12 +28,15 @@ export default function UnOrderableComponent({ totalQuantity }: UnOrderableCompo
   const { data: shopReviews } = useGetUnOrderableShopReviews(Number(shopId));
   const { data: unOrderableShopMenuGroups } = useGetUnOrderableShopMenuGroups(Number(shopId));
   const { data: unOrderableShopMenus } = useGetUnOrderableShopMenus(Number(shopId));
+  const { data: cartInfo } = useCart(orderType);
 
   const shopInfoSummaryData = {
     ...shopInfoSummary,
     orderable_shop_id: Number(shopId),
     ...shopReviews,
   };
+
+  const totalQuantity = cartInfo.items.reduce((sum, item) => sum + item.quantity, 0);
 
   return (
     <>

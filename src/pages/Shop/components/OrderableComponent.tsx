@@ -10,15 +10,12 @@ import ImageCarousel from './ImageCarousel';
 import ShopMenuGroups from './ShopMenuGroups';
 import ShopMenus from './ShopMenus';
 import ShopSummary from './ShopSummary';
-import type { CartResponse } from '@/api/cart/entity';
+import useCart from '@/pages/Payment/hooks/useCart';
+import { useOrderStore } from '@/stores/useOrderStore';
 
-interface OrderableComponentProps {
-  cartInfo: CartResponse;
-  totalQuantity: number;
-}
-
-export default function OrderableComponent({ cartInfo, totalQuantity }: OrderableComponentProps) {
+export default function OrderableComponent() {
   const { shopId } = useParams();
+  const { orderType } = useOrderStore();
   if (!shopId) {
     throw new Error('Shop ID is required');
   }
@@ -30,6 +27,9 @@ export default function OrderableComponent({ cartInfo, totalQuantity }: Orderabl
   const { data: shopInfoSummary } = useGetShopInfoSummary(Number(shopId));
   const { data: shopMenuGroups } = useGetShopMenuGroups(Number(shopId));
   const { data: shopInfo } = useGetShopInfo(Number(shopId));
+  const { data: cartInfo } = useCart(orderType);
+
+  const totalQuantity = cartInfo.items.reduce((sum, item) => sum + item.quantity, 0);
 
   return (
     <>
