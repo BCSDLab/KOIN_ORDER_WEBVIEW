@@ -113,12 +113,12 @@ export default function ShopMenus({
                       <span className="text-sm leading-[1.6] font-semibold text-white">품절</span>
                     </div>
                   )}
-                  {menu.thumbnail_image === '' && (
+                  {menu.thumbnail_image && (
                     <div className="flex h-full w-full items-center justify-center rounded-md">
                       <EmptyThumbnail />
                     </div>
                   )}
-                  {menu.thumbnail_image !== '' && (
+                  {!menu.thumbnail_image && (
                     <img src={menu.thumbnail_image} alt={menu.name} className="h-full w-full rounded-md object-cover" />
                   )}
                 </div>
