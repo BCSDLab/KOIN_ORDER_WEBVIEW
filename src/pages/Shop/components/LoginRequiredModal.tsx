@@ -1,4 +1,4 @@
-import { AddCartRequest } from '@/api/cart/entity';
+import type { AddCartRequest } from '@/api/cart/entity';
 import Button from '@/components/UI/Button';
 import Modal, { ModalContent } from '@/components/UI/CenterModal/Modal';
 

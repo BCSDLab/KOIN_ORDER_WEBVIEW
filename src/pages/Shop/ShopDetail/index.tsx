@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { DAYS } from '../constants/day';
-import { ShopDetailInfoResponse } from '@/api/shop/entity';
+import type { ShopDetailInfoResponse } from '@/api/shop/entity';
 
 interface ShopDetailProps {
   shopInfo: ShopDetailInfoResponse;

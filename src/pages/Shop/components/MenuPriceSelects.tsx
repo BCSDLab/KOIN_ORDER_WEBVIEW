@@ -1,5 +1,5 @@
 import TypeIcon from './TypeIcon';
-import { Price } from '@/api/shop/entity';
+import type { Price } from '@/api/shop/entity';
 
 interface MenuPriceSelectsProps {
   prices: Price[];

@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ShopInfoResponse } from '@/api/shop/entity';
+import type { ShopInfoResponse } from '@/api/shop/entity';
 import EmptyThumbnail from '@/assets/Shop/empty_thumbnail.svg';
 import SoldOutIcon from '@/assets/Shop/sold-out-icon.svg';
 

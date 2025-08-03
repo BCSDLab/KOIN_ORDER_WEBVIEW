@@ -10,7 +10,7 @@ import ImageCarousel from './ImageCarousel';
 import ShopMenuGroups from './ShopMenuGroups';
 import ShopMenus from './ShopMenus';
 import ShopSummary from './ShopSummary';
-import { CartResponse } from '@/api/cart/entity';
+import type { CartResponse } from '@/api/cart/entity';
 
 interface OrderableComponentProps {
   cartInfo: CartResponse;

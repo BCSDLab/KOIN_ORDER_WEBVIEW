@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { ShopMenuGroupsResponse } from '@/api/shop/entity';
+import type { ShopMenuGroupsResponse } from '@/api/shop/entity';
 import Badge from '@/components/UI/Badge';
 
 interface ShopMenuGroupsProps {
