@@ -22,9 +22,8 @@ export default function UnOrderableComponent({ totalQuantity }: UnOrderableCompo
   }
 
   const targetRef = useRef<HTMLDivElement | null>(null);
-  const isAutoScrolling = useRef<boolean>(false);
 
-  const { selectedMenu, menuGroupRefs, handleScrollTo, handleChangeMenu } = useMenuGroupScroll();
+  const { selectedMenu, menuGroupRefs, isAutoScrolling, handleScrollTo, handleChangeMenu } = useMenuGroupScroll();
 
   const { data: shopInfoSummary } = useGetUnOrderableShopInfo(Number(shopId));
   const { data: shopReviews } = useGetUnOrderableShopReviews(Number(shopId));

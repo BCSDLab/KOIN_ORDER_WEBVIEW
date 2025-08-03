@@ -3,7 +3,7 @@ import { useState, useRef } from 'react';
 export function useMenuGroupScroll() {
   const [selectedMenu, setSelectedMenu] = useState('');
   const menuGroupRefs = useRef<Record<string, HTMLDivElement | null>>({});
-  const isAutoScrolling = useRef(false);
+  const isAutoScrolling = useRef<boolean>(false);
 
   const handleScrollTo = (name: string) => {
     const element = menuGroupRefs.current[name];
@@ -26,6 +26,7 @@ export function useMenuGroupScroll() {
   return {
     selectedMenu,
     menuGroupRefs,
+    isAutoScrolling,
     handleScrollTo,
     handleChangeMenu,
   };

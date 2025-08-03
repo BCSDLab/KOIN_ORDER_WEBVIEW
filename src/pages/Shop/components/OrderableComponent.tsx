@@ -24,9 +24,8 @@ export default function OrderableComponent({ cartInfo, totalQuantity }: Orderabl
   }
 
   const targetRef = useRef<HTMLDivElement | null>(null);
-  const isAutoScrolling = useRef<boolean>(false);
 
-  const { selectedMenu, menuGroupRefs, handleScrollTo, handleChangeMenu } = useMenuGroupScroll();
+  const { selectedMenu, menuGroupRefs, isAutoScrolling, handleScrollTo, handleChangeMenu } = useMenuGroupScroll();
 
   const { data: shopInfoSummary } = useGetShopInfoSummary(Number(shopId));
   const { data: shopMenuGroups } = useGetShopMenuGroups(Number(shopId));
