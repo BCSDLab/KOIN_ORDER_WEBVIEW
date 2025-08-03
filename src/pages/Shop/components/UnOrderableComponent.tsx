@@ -4,7 +4,7 @@ import { useGetUnOrderableShopInfo } from '../hooks/useGetShopInfo';
 import { useGetUnOrderableShopReviews } from '../hooks/useGetShopInfo';
 import { useGetUnOrderableShopMenuGroups } from '../hooks/useGetShopInfo';
 import { useGetUnOrderableShopMenus } from '../hooks/useGetShopInfo';
-import { useInteraction } from '../hooks/useInteraction';
+import { useMenuGroupScroll } from '../hooks/useMenuGroupScroll';
 import Header from './Header';
 import ImageCarousel from './ImageCarousel';
 import ShopMenuGroups from './ShopMenuGroups';
@@ -24,7 +24,7 @@ export default function UnOrderableComponent({ totalQuantity }: UnOrderableCompo
   const targetRef = useRef<HTMLDivElement | null>(null);
   const isAutoScrolling = useRef<boolean>(false);
 
-  const { selectedMenu, menuGroupRefs, handleScrollTo, handleChangeMenu } = useInteraction();
+  const { selectedMenu, menuGroupRefs, handleScrollTo, handleChangeMenu } = useMenuGroupScroll();
 
   const { data: shopInfoSummary } = useGetUnOrderableShopInfo(Number(shopId));
   const { data: shopReviews } = useGetUnOrderableShopReviews(Number(shopId));

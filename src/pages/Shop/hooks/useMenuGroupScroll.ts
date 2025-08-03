@@ -1,6 +1,6 @@
 import { useState, useRef } from 'react';
 
-export function useInteraction() {
+export function useMenuGroupScroll() {
   const [selectedMenu, setSelectedMenu] = useState('');
   const menuGroupRefs = useRef<Record<string, HTMLDivElement | null>>({});
   const isAutoScrolling = useRef(false);
