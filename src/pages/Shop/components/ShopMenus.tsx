@@ -1,23 +1,20 @@
 import { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useParams } from 'react-router-dom';
-import type { ShopInfoResponse } from '@/api/shop/entity';
-import EmptyThumbnail from '@/assets/Shop/empty_thumbnail.svg';
+import { useGetShopInfo } from '../hooks/useGetShopInfo';
 import SoldOutIcon from '@/assets/Shop/sold-out-icon.svg';
 
 interface ShopMenusProps {
+  id: string;
   menuGroupRefs: React.RefObject<Record<string, HTMLDivElement | null>>;
   handleChangeMenu: (name: string) => void;
   isAutoScrolling: React.RefObject<boolean>;
-  shopMenus: ShopInfoResponse[];
 }
 
-export default function ShopMenus({ menuGroupRefs, handleChangeMenu, isAutoScrolling, shopMenus }: ShopMenusProps) {
+export default function ShopMenus({ id, menuGroupRefs, handleChangeMenu, isAutoScrolling }: ShopMenusProps) {
   const navigate = useNavigate();
   const visibleMap = useRef<Record<string, boolean>>({});
-  const { isOrderable } = useParams();
 
-  const isOrderableBoolean = isOrderable === 'true';
+  const { data: shopInfo } = useGetShopInfo(Number(id));
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -61,7 +58,7 @@ export default function ShopMenus({ menuGroupRefs, handleChangeMenu, isAutoScrol
 
   return (
     <div id="shop-menus-container" className="mb-40 flex flex-col items-center gap-3 px-6">
-      {shopMenus.map((shop) => (
+      {shopInfo.map((shop) => (
         <div
           key={shop.menu_group_id}
           className="flex w-full scroll-mt-[124px] flex-col gap-3"
@@ -78,7 +75,6 @@ export default function ShopMenus({ menuGroupRefs, handleChangeMenu, isAutoScrol
                 key={menu.id}
                 name={menu.name}
                 onClick={() => navigate(`menus/${menu.id}`)}
-                disabled={!isOrderableBoolean}
               >
                 <div className="flex flex-col">
                   <span className="flex text-lg leading-[1.6] font-semibold">{menu.name}</span>
@@ -96,7 +92,7 @@ export default function ShopMenus({ menuGroupRefs, handleChangeMenu, isAutoScrol
                       );
                     }
                     return (
-                      <div key={price.id} className="m-1 flex h-[1.1375rem] gap-1">
+                      <div key={price.id} className="flex h-[1.1375rem] gap-1">
                         <span className="text-sm leading-[1.6] font-normal">{price.name} : </span>
                         <span className="text-sm leading-[1.6] font-semibold">{price.price.toLocaleString()}원</span>
                       </div>
@@ -110,14 +106,11 @@ export default function ShopMenus({ menuGroupRefs, handleChangeMenu, isAutoScrol
                       <span className="text-sm leading-[1.6] font-semibold text-white">품절</span>
                     </div>
                   )}
-                  {!menu.thumbnail_image && (
-                    <div className="flex h-full w-full items-center justify-center rounded-md">
-                      <EmptyThumbnail />
-                    </div>
-                  )}
-                  {menu.thumbnail_image && (
-                    <img src={menu.thumbnail_image} alt={menu.name} className="h-full w-full rounded-md object-cover" />
-                  )}
+                  <img
+                    src={menu.thumbnail_image}
+                    alt={menu.name}
+                    className="h-20 w-20 self-baseline-last rounded-md object-cover"
+                  />
                 </div>
               </button>
             ))}

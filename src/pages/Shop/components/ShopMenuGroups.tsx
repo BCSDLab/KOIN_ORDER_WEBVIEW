@@ -1,14 +1,15 @@
 import { useEffect, useRef } from 'react';
-import { ShopMenuGroupsResponse } from '@/api/shop/entity';
+import { useGetShopMenuGroups } from '../hooks/useGetShopInfo';
 import Badge from '@/components/UI/Badge';
 
 interface ShopMenuGroupsProps {
+  id: string;
   selectedMenu: string;
-  shopMenuGroups: ShopMenuGroupsResponse;
   onSelect: (name: string) => void;
 }
 
-export default function ShopMenuGroups({ selectedMenu, onSelect, shopMenuGroups }: ShopMenuGroupsProps) {
+export default function ShopMenuGroups({ id, selectedMenu, onSelect }: ShopMenuGroupsProps) {
+  const { data: shopMenuGroups } = useGetShopMenuGroups(Number(id));
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const badgeRefs = useRef<Record<string, HTMLButtonElement | null>>({});
 
