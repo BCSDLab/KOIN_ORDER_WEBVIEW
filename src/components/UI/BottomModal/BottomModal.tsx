@@ -1,7 +1,7 @@
 import { type ReactNode, type HTMLAttributes, useRef } from 'react';
 import { twMerge } from 'tailwind-merge';
 import Portal from '@/components/Portal';
-import useTouchModalOutside from '@/util/hooks/useHandleOutside';
+import useHandleOutside from '@/util/hooks/useHandleOutside';
 import useScrollLock from '@/util/hooks/useScrollLock';
 
 interface BottomModalProps extends HTMLAttributes<HTMLDivElement> {
@@ -16,7 +16,7 @@ export default function BottomModal({ isOpen, onClose, children, className }: Bo
 
   useScrollLock(isOpen);
 
-  useTouchModalOutside<HTMLDialogElement, HTMLDivElement>({
+  useHandleOutside<HTMLDialogElement, HTMLDivElement>({
     containerRef,
     backgroundRef,
     onOutsideClick: onClose,
