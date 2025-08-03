@@ -109,7 +109,7 @@ export default function MenuDetail() {
   };
 
   return (
-    <div>
+    <>
       <Header name={info.name} targetRef={targetRef} cartItemCount={totalQuantity} />
       <ImageCarousel images={imagesForCarousel} targetRef={targetRef} />
       <MenuDescription name={info.name} description={info.description} price={info.prices[0].price} />
@@ -133,6 +133,6 @@ export default function MenuDetail() {
         onClose={closeLoginRequiredModal}
         menuOptions={'menuInfo' in addToCartRequest ? addToCartRequest : undefined}
       />
-    </div>
+    </>
   );
 }

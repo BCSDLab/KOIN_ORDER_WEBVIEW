@@ -12,13 +12,9 @@ export default function ShopView() {
   const { data: cartInfo } = useCart(orderType);
   const totalQuantity = cartInfo.items.reduce((sum, item) => sum + item.quantity, 0);
 
-  return (
-    <div>
-      {isOrderable ? (
-        <OrderableComponent cartInfo={cartInfo} totalQuantity={totalQuantity} />
-      ) : (
-        <UnOrderableComponent totalQuantity={totalQuantity} />
-      )}
-    </div>
+  return isOrderable ? (
+    <OrderableComponent cartInfo={cartInfo} totalQuantity={totalQuantity} />
+  ) : (
+    <UnOrderableComponent totalQuantity={totalQuantity} />
   );
 }

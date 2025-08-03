@@ -81,7 +81,7 @@ export default function UnOrderableComponent({ totalQuantity }: UnOrderableCompo
   }));
 
   return (
-    <div>
+    <>
       <Header name={shopInfoSummary.name} targetRef={targetRef} cartItemCount={totalQuantity} />
       <ImageCarousel images={carouselImages} targetRef={targetRef} />
       <ShopSummary id={shopId} shopInfoSummary={shopInfoSummaryData} isOrderable={false} />
@@ -93,6 +93,6 @@ export default function UnOrderableComponent({ totalQuantity }: UnOrderableCompo
         shopMenus={shopMenus}
         isOrderable={false}
       />
-    </div>
+    </>
   );
 }

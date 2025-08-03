@@ -8,9 +8,5 @@ interface OrderableShopDetailProps {
 export default function OrderableShopDetail({ shopId }: OrderableShopDetailProps) {
   const { data } = useGetShopDetail(Number(shopId));
 
-  return (
-    <>
-      <ShopDetail shopInfo={data} />
-    </>
-  );
+  return <ShopDetail shopInfo={data} />;
 }

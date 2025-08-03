@@ -14,5 +14,5 @@ export default function ShopDetailView() {
     throw new Error('State is required');
   }
 
-  return <>{state.isOrderable ? <OrderableShopDetail shopId={id} /> : <UnOrderableShopDetail shopId={id} />}</>;
+  return state.isOrderable ? <OrderableShopDetail shopId={id} /> : <UnOrderableShopDetail shopId={id} />;
 }

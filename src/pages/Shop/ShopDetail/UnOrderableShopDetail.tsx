@@ -29,9 +29,5 @@ export default function UnOrderableShopDetail({ shopId }: UnOrderableShopDetailP
     origins: [],
   };
 
-  return (
-    <>
-      <ShopDetail shopInfo={data} />
-    </>
-  );
+  return <ShopDetail shopInfo={data} />;
 }

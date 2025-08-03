@@ -33,7 +33,7 @@ export default function OrderableComponent({ cartInfo, totalQuantity }: Orderabl
   const { data: shopInfo } = useGetShopInfo(Number(shopId));
 
   return (
-    <div>
+    <>
       <Header name={shopInfoSummary.name} targetRef={targetRef} cartItemCount={totalQuantity} />
       <ImageCarousel images={shopInfoSummary.images} targetRef={targetRef} />
       <ShopSummary id={shopId} shopInfoSummary={shopInfoSummary} isOrderable={true} />
@@ -48,6 +48,6 @@ export default function OrderableComponent({ cartInfo, totalQuantity }: Orderabl
       {cartInfo.items.length > 0 && cartInfo.orderable_shop_id === Number(shopId) && (
         <BottomCartModal id={shopId} cartItemCount={totalQuantity} />
       )}
-    </div>
+    </>
   );
 }
