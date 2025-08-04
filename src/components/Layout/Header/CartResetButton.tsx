@@ -9,7 +9,7 @@ export default function CartResetButton() {
   const [isResetModalOpen, openResetModal, closeResetModal] = useBooleanState(false);
   const { data: cartInfo } = useCart(orderType);
 
-  const isDisabled = cartInfo.items.length === 0;
+  const isDisabled = cartInfo?.items.length === 0;
   return (
     <>
       <button

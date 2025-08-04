@@ -25,6 +25,10 @@ export default function Cart() {
 
   let infoMessage = '';
 
+  if (!cartInfo) {
+    return null;
+  }
+
   if (!cartInfo.is_delivery_available && cartInfo.is_takeout_available) {
     infoMessage = '이 가게는 포장주문만 가능해요';
   } else if (cartInfo.is_delivery_available && !cartInfo.is_takeout_available) {
