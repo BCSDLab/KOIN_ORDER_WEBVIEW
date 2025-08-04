@@ -4,6 +4,7 @@ import UnOrderableShopDetail from './components/UnOrderableShopDetail';
 
 export default function ShopDetailView() {
   const { id, isOrderable } = useParams();
+
   if (!id) {
     throw new Error('Shop ID is required');
   }

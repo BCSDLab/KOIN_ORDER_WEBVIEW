@@ -9,6 +9,7 @@ interface ShopDetailProps {
 
 export default function ShopDetail({ shopInfo }: ShopDetailProps) {
   const { id } = useParams();
+
   if (!id) {
     return <div className="p-6">가게 정보를 불러올 수 없습니다.</div>;
   }

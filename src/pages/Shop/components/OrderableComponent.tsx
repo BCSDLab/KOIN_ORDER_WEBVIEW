@@ -16,6 +16,7 @@ import { useOrderStore } from '@/stores/useOrderStore';
 export default function OrderableComponent() {
   const { shopId } = useParams();
   const { orderType } = useOrderStore();
+
   if (!shopId) {
     throw new Error('Shop ID is required');
   }
