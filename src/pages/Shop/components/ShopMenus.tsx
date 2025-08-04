@@ -16,6 +16,10 @@ export default function ShopMenus({ menuGroupRefs, handleChangeMenu, isAutoScrol
   const visibleMap = useRef<Record<string, boolean>>({});
   const { isOrderable } = useParams();
 
+  if (isOrderable !== 'true' && isOrderable !== 'false') {
+    throw new Error('isOrderable parameter is required');
+  }
+
   const isOrderableBoolean = isOrderable === 'true';
 
   useEffect(() => {

@@ -14,6 +14,10 @@ export default function ShopSummary({ shopInfoSummary, id }: ShopSummaryProps) {
   const navigate = useNavigate();
   const { isOrderable } = useParams();
 
+  if (isOrderable !== 'true' && isOrderable !== 'false') {
+    throw new Error('isOrderable parameter is required');
+  }
+
   const isOrderableBoolean = isOrderable === 'true';
 
   return (
