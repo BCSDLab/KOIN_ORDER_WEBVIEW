@@ -7,7 +7,7 @@ import { backButtonTapped } from '@/util/ts/bridge';
 interface HeaderProps {
   name: string;
   targetRef: React.RefObject<HTMLDivElement | null>;
-  cartItemCount: number | undefined;
+  cartItemCount: number;
   noImage?: boolean;
 }
 export default function Header({ name, targetRef, cartItemCount, noImage }: HeaderProps) {
@@ -82,7 +82,7 @@ export default function Header({ name, targetRef, cartItemCount, noImage }: Head
           className="relative flex items-center justify-center"
         >
           <CartIcon fill={getTransitionColor(currentOpacity)} />
-          {cartItemCount && (
+          {cartItemCount > 0 && (
             <div className="bg-primary-500 absolute -top-1/2 -right-1/2 flex h-4 w-4 items-center justify-center rounded-full text-[12px] font-medium text-white">
               {cartItemCount}
             </div>

@@ -24,7 +24,7 @@ export default function Shop() {
 
   const { data: shopInfoSummary } = useGetShopInfoSummary(Number(shopId));
   const { data: cartInfo } = useCart(orderType);
-  const totalQuantity = cartInfo?.items.reduce((sum, item) => sum + item.quantity, 0);
+  const totalQuantity = cartInfo.items.reduce((sum, item) => sum + item.quantity, 0);
 
   const handleScrollTo = (name: string) => {
     const element = menuGroupRefs.current[name];
@@ -55,7 +55,7 @@ export default function Shop() {
         handleChangeMenu={handleChangeMenu}
         isAutoScrolling={isAutoScrolling}
       />
-      {cartInfo?.items.length && cartInfo?.items.length > 0 && cartInfo?.orderable_shop_id === Number(shopId) && (
+      {cartInfo.items.length > 0 && cartInfo.orderable_shop_id === Number(shopId) && (
         <BottomCartModal id={shopId} cartItemCount={totalQuantity} />
       )}
     </div>

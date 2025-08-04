@@ -56,10 +56,6 @@ export default function Payment() {
   const { mutateAsync: temporaryDelivery } = useTemporaryDelivery();
   const { mutateAsync: temporaryTakeout } = useTemporaryTakeout();
 
-  if (!cart) {
-    return null;
-  }
-
   const orderName =
     cart.items.length === 1 ? cart.items[0].name : `${cart.items[0].name} 외 ${cart.items.length - 1}건`;
 

@@ -28,16 +28,12 @@ const icons = [
 
 interface BottomCartModalProps {
   id: string;
-  cartItemCount: number | undefined;
+  cartItemCount: number;
 }
 
 export default function BottomCartModal({ id, cartItemCount }: BottomCartModalProps) {
   const navigate = useNavigate();
   const { data } = useGetCartSummary(Number(id));
-
-  if (!cartItemCount || !data) {
-    return null;
-  }
 
   const startIcon = cartItemCount > 9 ? <NinePlusIcon /> : icons[cartItemCount];
 
