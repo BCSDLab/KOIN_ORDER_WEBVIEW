@@ -24,7 +24,7 @@ export type Day = 'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY' | '
 
 export interface ShopDetailInfoResponse {
   shop_id: number;
-  orderable_shop_id: number;
+  orderable_shop_id: number | null;
   name: string;
   address: string;
   open_time: string;
@@ -177,7 +177,7 @@ interface Image {
 
 export interface ShopInfoSummaryResponse {
   shop_id: number;
-  orderable_shop_id: number;
+  orderable_shop_id: number | null;
   name: string;
   introduction: string | null;
   pay_card: boolean;

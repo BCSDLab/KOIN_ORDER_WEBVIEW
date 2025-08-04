@@ -14,7 +14,7 @@ export const useGetUnOrderableShopDetail = (UnOrderableShopId: number) => {
     queryFn: () => getUnOrderableShopInfo({ UnOrderableShopId }),
     select: (data) => ({
       shop_id: data.id,
-      orderable_shop_id: 0,
+      orderable_shop_id: null,
       name: data.name,
       address: data.address,
       open_time: data.open[0].open_time ?? '',

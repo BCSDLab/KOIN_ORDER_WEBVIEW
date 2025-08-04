@@ -16,6 +16,7 @@ import { useOrderStore } from '@/stores/useOrderStore';
 export default function UnOrderableComponent() {
   const { shopId } = useParams();
   const { orderType } = useOrderStore();
+
   if (!shopId) {
     throw new Error('Shop ID is required');
   }
@@ -32,7 +33,6 @@ export default function UnOrderableComponent() {
 
   const shopInfoSummaryData = {
     ...shopInfoSummary,
-    orderable_shop_id: Number(shopId),
     ...shopReviews,
   };
 

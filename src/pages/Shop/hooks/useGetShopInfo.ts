@@ -57,6 +57,7 @@ export const useGetUnOrderableShopInfo = (UnOrderableShopId: number) => {
     queryFn: () => getUnOrderableShopInfo({ UnOrderableShopId }),
     select: (data) => ({
       shop_id: data.id,
+      orderable_shop_id: null,
       name: data.name,
       introduction: data.description,
       pay_card: data.pay_card,
