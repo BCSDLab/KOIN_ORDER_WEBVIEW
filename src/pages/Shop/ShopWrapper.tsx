@@ -14,7 +14,7 @@ function ErrorFallback({ error }: { error: Error }) {
 
 export default function ShopRouteWrapper() {
   return (
-    <Suspense fallback={<div className="p-4">로딩 중...</div>}>
+    <Suspense fallback={<div className="p-4">로딩 중... 캐시 테스트</div>}>
       <ErrorBoundary FallbackComponent={ErrorFallback}>
         <Shop />
       </ErrorBoundary>
