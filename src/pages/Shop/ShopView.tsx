@@ -5,5 +5,11 @@ import UnOrderableComponent from './components/UnOrderableComponent';
 export default function ShopView() {
   const { isOrderable } = useParams();
 
-  return isOrderable ? <OrderableComponent /> : <UnOrderableComponent />;
+  if (isOrderable !== 'true' && isOrderable !== 'false') {
+    throw new Error('State is required');
+  }
+
+  const isOrderableBoolean = isOrderable === 'true';
+
+  return isOrderableBoolean ? <OrderableComponent /> : <UnOrderableComponent />;
 }

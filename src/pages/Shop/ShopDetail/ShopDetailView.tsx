@@ -13,5 +13,7 @@ export default function ShopDetailView() {
     throw new Error('State is required');
   }
 
-  return isOrderable ? <OrderableShopDetail shopId={id} /> : <UnOrderableShopDetail shopId={id} />;
+  const isOrderableBoolean = isOrderable === 'true';
+
+  return isOrderableBoolean ? <OrderableShopDetail shopId={id} /> : <UnOrderableShopDetail shopId={id} />;
 }
