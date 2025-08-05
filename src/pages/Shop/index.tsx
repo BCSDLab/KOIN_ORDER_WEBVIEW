@@ -48,6 +48,7 @@ export default function Shop() {
       <Header name={shopInfoSummary.name} targetRef={targetRef} cartItemCount={totalQuantity} />
       <ImageCarousel images={shopInfoSummary.images} targetRef={targetRef} />
       <ShopSummary id={shopId} shopInfoSummary={shopInfoSummary} />
+      <div>{localStorage.getItem('refreshToken')}</div>
       <ShopMenuGroups id={shopId} selectedMenu={selectedMenu} onSelect={handleScrollTo} />
       <ShopMenus
         id={shopId}
