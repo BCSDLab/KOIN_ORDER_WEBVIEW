@@ -111,7 +111,7 @@ export default function MenuDetail() {
   };
 
   return (
-    <div>
+    <div className="pb-24">
       <Header name={info.name} targetRef={targetRef} cartItemCount={totalQuantity} noImage={!hasImage} />
       {hasImage && <ImageCarousel images={imagesForCarousel} targetRef={targetRef} />}
       <MenuDescription
