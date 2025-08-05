@@ -17,7 +17,16 @@ export default function Header({ name, targetRef, cartItemCount, noImage }: Head
   const currentOpacity = noImage ? 1 : opacity;
 
   const backToPreviousPage = () => {
-    backButtonTapped();
+    // 1. 히스토리 백 시도
+    const prevPath = window.location.pathname;
+    navigate(-1);
+
+    setTimeout(() => {
+      // 2. 만약 위치가 바뀌지 않았다면 네이티브 팝
+      if (window.location.pathname === prevPath) {
+        backButtonTapped();
+      }
+    }, 100); // SPA 라우팅 딜레이 고려
   };
 
   useEffect(() => {
