@@ -17,11 +17,7 @@ export default function Header({ name, targetRef, cartItemCount, noImage }: Head
   const currentOpacity = noImage ? 1 : opacity;
 
   const backToPreviousPage = () => {
-    if (window.history.length > 1) {
-      navigate(-1);
-    } else {
-      backButtonTapped();
-    }
+    backButtonTapped();
   };
 
   useEffect(() => {
