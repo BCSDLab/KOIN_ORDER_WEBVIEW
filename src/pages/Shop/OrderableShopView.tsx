@@ -1,19 +1,19 @@
 import { useRef } from 'react';
 import { useParams } from 'react-router-dom';
-import { useGetShopInfoSummary } from '../hooks/useGetShopInfo';
-import { useGetShopMenuGroups } from '../hooks/useGetShopInfo';
-import { useGetShopInfo } from '../hooks/useGetShopInfo';
-import { useMenuGroupScroll } from '../hooks/useMenuGroupScroll';
-import BottomCartModal from './BottomCartModal';
-import Header from './Header';
-import ImageCarousel from './ImageCarousel';
-import ShopMenuGroups from './ShopMenuGroups';
-import ShopMenus from './ShopMenus';
-import ShopSummary from './ShopSummary';
+import BottomCartModal from './components/BottomCartModal';
+import Header from './components/Header';
+import ImageCarousel from './components/ImageCarousel';
+import ShopMenuGroups from './components/ShopMenuGroups';
+import ShopMenus from './components/ShopMenus';
+import ShopSummary from './components/ShopSummary';
+import { useGetShopInfo } from './hooks/useGetShopInfo';
+import { useGetShopMenuGroups } from './hooks/useGetShopInfo';
+import { useGetShopInfoSummary } from './hooks/useGetShopInfo';
+import { useMenuGroupScroll } from './hooks/useMenuGroupScroll';
 import useCart from '@/pages/Payment/hooks/useCart';
 import { useOrderStore } from '@/stores/useOrderStore';
 
-export default function OrderableComponent() {
+export default function OrderableShopView() {
   const { shopId } = useParams();
   const { orderType } = useOrderStore();
 
@@ -36,13 +36,14 @@ export default function OrderableComponent() {
     <>
       <Header name={shopInfoSummary.name} targetRef={targetRef} cartItemCount={totalQuantity} />
       <ImageCarousel images={shopInfoSummary.images} targetRef={targetRef} />
-      <ShopSummary id={shopId} shopInfoSummary={shopInfoSummary} />
+      <ShopSummary id={shopId} shopInfoSummary={shopInfoSummary} isOrderable={true} />
       <ShopMenuGroups selectedMenu={selectedMenu} onSelect={handleScrollTo} shopMenuGroups={shopMenuGroups} />
       <ShopMenus
         menuGroupRefs={menuGroupRefs}
         handleChangeMenu={handleChangeMenu}
         isAutoScrolling={isAutoScrolling}
         shopMenus={shopInfo}
+        isOrderable={true}
       />
       {cartInfo.items.length > 0 && cartInfo.orderable_shop_id === Number(shopId) && (
         <BottomCartModal id={shopId} cartItemCount={totalQuantity} />

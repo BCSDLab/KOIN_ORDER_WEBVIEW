@@ -1,4 +1,4 @@
-import { useParams, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import type { ShopInfoSummaryResponse } from '@/api/shop/entity.ts';
 import ChevronRightIcon from '@/assets/Common/chevron-right.svg';
 import StarIcon from '@/assets/Common/star-icon.svg';
@@ -8,17 +8,10 @@ import Badge from '@/components/UI/Badge';
 interface ShopSummaryProps {
   id: string;
   shopInfoSummary: ShopInfoSummaryResponse;
+  isOrderable: boolean;
 }
 
-export default function ShopSummary({ shopInfoSummary, id }: ShopSummaryProps) {
-  const { isOrderable } = useParams();
-
-  if (isOrderable !== 'true' && isOrderable !== 'false') {
-    throw new Error('isOrderable parameter is required');
-  }
-
-  const isOrderableBoolean = isOrderable === 'true';
-
+export default function ShopSummary({ shopInfoSummary, id, isOrderable }: ShopSummaryProps) {
   return (
     <>
       <div className="flex flex-col items-center justify-center p-6">
@@ -36,7 +29,7 @@ export default function ShopSummary({ shopInfoSummary, id }: ShopSummaryProps) {
             </div>
           </div>
           <Link
-            to={`/shop-detail/${isOrderable}/${id}`}
+            to={isOrderable ? `/shop-detail/true/${id}` : `/shop-detail/false/${id}`}
             className="shadow-1 flex items-center justify-center gap-1 rounded-full border-[0.5px] border-neutral-400 bg-white py-1 pr-2 pl-3"
           >
             <div className="text-[10px] text-neutral-500">가게정보·원산지</div>
@@ -53,9 +46,9 @@ export default function ShopSummary({ shopInfoSummary, id }: ShopSummaryProps) {
             </div>
           ))}
         <div className="mt-4 flex w-full justify-between gap-3 self-start">
-          {isOrderableBoolean && (
+          {isOrderable && (
             <Link
-              to={`/shop-detail/${isOrderable}/${id}#배달금액`}
+              to={`/shop-detail/true/${id}#배달금액`}
               className="shadow-1 flex h-14 w-full min-w-fit items-center justify-between gap-1 rounded-xl bg-white py-2 pr-2 pl-3"
             >
               <div className="flex w-fit flex-col gap-[2px]">
@@ -78,7 +71,7 @@ export default function ShopSummary({ shopInfoSummary, id }: ShopSummaryProps) {
               </div>
             </Link>
           )}
-          {!isOrderableBoolean && (
+          {!isOrderable && (
             <div className="shadow-1 flex h-14 w-full justify-center gap-1 rounded-xl bg-white py-2 pr-2 pl-3">
               <div className="text-center text-xs leading-[1.6] font-medium text-neutral-400">
                 코인 주문이 <br />
@@ -87,7 +80,7 @@ export default function ShopSummary({ shopInfoSummary, id }: ShopSummaryProps) {
             </div>
           )}
           <Link
-            to={`/shop-detail/${isOrderable}/${id}#가게알림`}
+            to={isOrderable ? `/shop-detail/true/${id}#가게알림` : `/shop-detail/false/${id}#가게알림`}
             className="shadow-1 flex h-14 w-full items-center justify-between gap-1 rounded-xl bg-white py-2 pr-2 pl-3"
           >
             <SpeakerIcon />

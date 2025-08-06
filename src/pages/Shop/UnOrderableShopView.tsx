@@ -1,19 +1,19 @@
 import { useRef } from 'react';
 import { useParams } from 'react-router-dom';
-import { useGetUnOrderableShopInfo } from '../hooks/useGetShopInfo';
-import { useGetUnOrderableShopReviews } from '../hooks/useGetShopInfo';
-import { useGetUnOrderableShopMenuGroups } from '../hooks/useGetShopInfo';
-import { useGetUnOrderableShopMenus } from '../hooks/useGetShopInfo';
-import { useMenuGroupScroll } from '../hooks/useMenuGroupScroll';
-import Header from './Header';
-import ImageCarousel from './ImageCarousel';
-import ShopMenuGroups from './ShopMenuGroups';
-import ShopMenus from './ShopMenus';
-import ShopSummary from './ShopSummary';
+import Header from './components/Header';
+import ImageCarousel from './components/ImageCarousel';
+import ShopMenuGroups from './components/ShopMenuGroups';
+import ShopMenus from './components/ShopMenus';
+import ShopSummary from './components/ShopSummary';
+import { useGetUnOrderableShopInfo } from './hooks/useGetShopInfo';
+import { useGetUnOrderableShopReviews } from './hooks/useGetShopInfo';
+import { useGetUnOrderableShopMenuGroups } from './hooks/useGetShopInfo';
+import { useGetUnOrderableShopMenus } from './hooks/useGetShopInfo';
+import { useMenuGroupScroll } from './hooks/useMenuGroupScroll';
 import useCart from '@/pages/Payment/hooks/useCart';
 import { useOrderStore } from '@/stores/useOrderStore';
 
-export default function UnOrderableComponent() {
+export default function UnOrderableShopView() {
   const { shopId } = useParams();
   const { orderType } = useOrderStore();
 
@@ -42,7 +42,7 @@ export default function UnOrderableComponent() {
     <>
       <Header name={shopInfoSummary.name} targetRef={targetRef} cartItemCount={totalQuantity} />
       <ImageCarousel images={shopInfoSummaryData.images} targetRef={targetRef} />
-      <ShopSummary id={shopId} shopInfoSummary={shopInfoSummaryData} />
+      <ShopSummary id={shopId} shopInfoSummary={shopInfoSummaryData} isOrderable={false} />
       <ShopMenuGroups
         selectedMenu={selectedMenu}
         onSelect={handleScrollTo}
@@ -53,6 +53,7 @@ export default function UnOrderableComponent() {
         handleChangeMenu={handleChangeMenu}
         isAutoScrolling={isAutoScrolling}
         shopMenus={unOrderableShopMenus}
+        isOrderable={false}
       />
     </>
   );
