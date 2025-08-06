@@ -14,7 +14,7 @@ import PrimaryPlus from '@/assets/Cart/primary-plus-icon.svg';
 import RightArrow from '@/assets/Payment/arrow-go-icon.svg';
 import Button from '@/components/UI/Button';
 import { useOrderStore } from '@/stores/useOrderStore';
-import { closeWebviewPage } from '@/util/ts/bridge';
+import { backButtonTapped } from '@/util/ts/bridge';
 
 export default function Cart() {
   const navigate = useNavigate();
@@ -49,7 +49,7 @@ export default function Cart() {
           startIcon={<Plus />}
           color="gray"
           className="mt-[14px] gap-2.5 border-0 py-[7px] pr-4 pl-[14px] text-[13px] font-bold"
-          onClick={() => closeWebviewPage()}
+          onClick={backButtonTapped}
         >
           메뉴 추가
         </Button>
