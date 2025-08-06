@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import AddToCartBottomModal from '../components/AddToCartBottomModal';
 import Header from '../components/Header';
@@ -22,6 +22,10 @@ import { useToast } from '@/util/hooks/useToast';
 
 export default function MenuDetail() {
   const { shopId, menuId } = useParams();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   if (!shopId) {
     throw new Error('Shop ID is required');
@@ -111,7 +115,7 @@ export default function MenuDetail() {
   };
 
   return (
-    <div>
+    <div className="pb-24">
       <Header name={info.name} targetRef={targetRef} cartItemCount={totalQuantity} noImage={!hasImage} />
       {hasImage && <ImageCarousel images={imagesForCarousel} targetRef={targetRef} />}
       <MenuDescription
