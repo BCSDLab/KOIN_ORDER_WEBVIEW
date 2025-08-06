@@ -1,5 +1,8 @@
-import TypeIcon from './TypeIcon';
 import { OptionGroup } from '@/api/shop/entity';
+import CheckboxFalse from '@/assets/Shop/checkbox-false.svg';
+import CheckboxTrue from '@/assets/Shop/checkbox-true.svg';
+import RadioFalse from '@/assets/Shop/radio-false.svg';
+import RadioTrue from '@/assets/Shop/radio-true.svg';
 import Badge from '@/components/UI/Badge';
 
 interface SelectedOption {
@@ -7,11 +10,21 @@ interface SelectedOption {
   optionId: number;
 }
 
+interface TypeIconProps {
+  isSingle: boolean;
+  checked: boolean;
+}
+
 interface MenuOptionsProps {
   optionGroups: OptionGroup[];
   selectedOptions: SelectedOption[];
   selectOption: (optionGroupId: number, optionId: number, isSingle: boolean, maxSelect: number) => void;
 }
+
+const TypeIcon = ({ isSingle, checked }: TypeIconProps) => {
+  if (isSingle) return checked ? <RadioTrue /> : <RadioFalse />;
+  if (!isSingle) return checked ? <CheckboxTrue /> : <CheckboxFalse />;
+};
 
 export default function MenuOptions({ optionGroups, selectedOptions, selectOption }: MenuOptionsProps) {
   return (
