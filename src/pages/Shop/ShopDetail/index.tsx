@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import clsx from 'clsx';
 import { DAYS } from '../constants/day';
 import type { ShopDetailInfoResponse } from '@/api/shop/entity';
 
@@ -8,11 +8,7 @@ interface ShopDetailProps {
 }
 
 export default function ShopDetail({ shopInfo }: ShopDetailProps) {
-  const { id } = useParams();
-
-  if (!id) {
-    return <div className="p-6">가게 정보를 불러올 수 없습니다.</div>;
-  }
+  const decodedId = decodeURIComponent(window.location.hash.replace('#', ''));
 
   useEffect(() => {
     if (window.location.hash) {
@@ -26,12 +22,19 @@ export default function ShopDetail({ shopInfo }: ShopDetailProps) {
           });
         }, 50);
       }
+    } else {
+      window.scrollTo(0, 0);
     }
   }, []);
 
   return (
     <div className="flex h-full flex-col gap-1.5 peer-first:bg-white">
-      <div className="bg-white px-6 py-3">
+      <div
+        className={clsx('px-6 py-3', {
+          'bg-gray-100': !decodedId,
+          'bg-white': !!decodedId,
+        })}
+      >
         <p className="py-3 text-[15px] leading-[1.6] font-semibold">{shopInfo.name}</p>
         <div className="flex flex-col gap-2">
           <div className="flex gap-4 text-sm leading-[1.6] font-medium">
@@ -66,11 +69,23 @@ export default function ShopDetail({ shopInfo }: ShopDetailProps) {
         <p className="py-3 text-[15px] leading-[1.6] font-semibold">가게 소개</p>
         <p className="text-sm leading-[1.6] font-medium">{shopInfo.introduction}</p>
       </div>
-      <div id="가게알림" className="bg-white px-6 py-3">
+      <div
+        id="가게알림"
+        className={clsx('px-6', 'py-3', {
+          'bg-neutral-100': decodedId === '가게알림',
+          'bg-white': decodedId !== '가게알림',
+        })}
+      >
         <p className="py-3 text-[15px] leading-[1.6] font-semibold">가게 알림</p>
         <p className="text-sm leading-[1.6] font-medium">{shopInfo.notice}</p>
       </div>
-      <div id="배달금액" className="bg-white px-6 py-3">
+      <div
+        id="배달금액"
+        className={clsx('px-6 py-3', {
+          'bg-neutral-100': decodedId === '배달금액',
+          'bg-white': decodedId !== '배달금액',
+        })}
+      >
         <p className="py-3 text-[15px] leading-[1.6] font-semibold">주문금액별 총 배달팁</p>
         <table className="w-full border border-gray-200 text-left text-sm">
           <tbody>
