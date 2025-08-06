@@ -94,7 +94,7 @@ export default function MenuDetail() {
               openResetModal();
               break;
             case 'MENU_SOLD_OUT':
-              setNoticeMessage('영업시간이 아니라서\n장바구니에 담을 수 없어요.');
+              setNoticeMessage(parsed.message);
               openNoticeModal();
               break;
             case AUTH_FAIL: //이 케이스는 올바르지 않은 인증정보일 떄 발생합니다.
