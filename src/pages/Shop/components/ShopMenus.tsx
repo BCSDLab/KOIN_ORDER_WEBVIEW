@@ -74,12 +74,13 @@ export default function ShopMenus({ id, menuGroupRefs, handleChangeMenu, isAutoS
                 className={`flex w-full items-center justify-between py-3 pr-3 pl-4 ${idx !== 0 ? 'border-t border-neutral-300' : ''}`}
                 key={menu.id}
                 name={menu.name}
+                disabled={menu.is_sold_out}
                 onClick={() => navigate(`menus/${menu.id}`)}
               >
                 <div className="flex flex-col">
                   <span className="flex text-lg leading-[1.6] font-semibold">{menu.name}</span>
                   {menu.description && (
-                    <span className="block text-left text-[12px] leading-[1.6] font-normal text-neutral-500">
+                    <span className="line-clamp-2 text-left text-[12px] leading-[1.6] font-normal text-neutral-500">
                       {menu.description}
                     </span>
                   )}

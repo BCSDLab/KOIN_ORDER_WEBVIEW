@@ -59,8 +59,10 @@ export default function MenuOptions({ optionGroups, selectedOptions, selectOptio
                       aria-checked={checked}
                     >
                       <TypeIcon isSingle={isSingle} checked={checked} />
-                      <span className="text-base">{option.name}</span>
-                      <span className="ml-auto text-base font-semibold">+{option.price.toLocaleString()}원</span>
+                      <span className="max-[380px]:text-[15px]">{option.name}</span>
+                      <span className="ml-auto font-semibold max-[380px]:text-[15px]">
+                        +{option.price.toLocaleString()}원
+                      </span>
                     </button>
                   );
                 })}
