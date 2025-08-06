@@ -79,7 +79,7 @@ export default function ShopMenus({ id, menuGroupRefs, handleChangeMenu, isAutoS
                 <div className="flex flex-col">
                   <span className="flex text-lg leading-[1.6] font-semibold">{menu.name}</span>
                   {menu.description && (
-                    <span className="block text-left text-[12px] leading-[1.6] font-normal text-neutral-500">
+                    <span className="line-clamp-2 text-left text-[12px] leading-[1.6] font-normal text-neutral-500">
                       {menu.description}
                     </span>
                   )}
