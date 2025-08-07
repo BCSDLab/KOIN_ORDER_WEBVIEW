@@ -1,6 +1,6 @@
 import { Navigation, Pagination, Zoom } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { ShopInfoSummaryResponse } from '@/api/shop/entity';
+import type { ShopInfoSummaryResponse } from '@/api/shop/entity';
 import Portal from '@/components/Portal';
 import { CSSWithCustomProperties } from '@/types/styles';
 

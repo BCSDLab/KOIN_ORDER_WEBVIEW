@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { ShopMenuDetailResponse } from '@/api/shop/entity';
+import type { ShopMenuDetailResponse } from '@/api/shop/entity';
 import { useToast } from '@/util/hooks/useToast';
 
 export interface SelectedOption {

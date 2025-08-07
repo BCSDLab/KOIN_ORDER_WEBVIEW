@@ -1,5 +1,8 @@
-import TypeIcon from './TypeIcon';
-import { Price } from '@/api/shop/entity';
+import type { Price } from '@/api/shop/entity';
+import CheckboxFalse from '@/assets/Shop/checkbox-false.svg';
+import CheckboxTrue from '@/assets/Shop/checkbox-true.svg';
+import RadioFalse from '@/assets/Shop/radio-false.svg';
+import RadioTrue from '@/assets/Shop/radio-true.svg';
 
 interface MenuPriceSelectsProps {
   prices: Price[];
@@ -9,6 +12,15 @@ interface MenuPriceSelectsProps {
   description?: string;
   required?: boolean;
 }
+
+interface TypeIconProps {
+  isSingle: boolean;
+  checked: boolean;
+}
+const TypeIcon = ({ isSingle, checked }: TypeIconProps) => {
+  if (isSingle) return checked ? <RadioTrue /> : <RadioFalse />;
+  if (!isSingle) return checked ? <CheckboxTrue /> : <CheckboxFalse />;
+};
 
 export default function MenuPriceSelects({
   prices,

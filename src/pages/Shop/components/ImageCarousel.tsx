@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect } from 'react';
 import clsx from 'clsx';
-import { ShopInfoSummaryResponse } from '@/api/shop/entity';
+import type { ShopInfoSummaryResponse } from '@/api/shop/entity';
 import ImageViewer from '@/pages/Shop/components/ImageViewer';
 import useBooleanState from '@/util/hooks/useBooleanState';
 interface ImageCarouselProps {

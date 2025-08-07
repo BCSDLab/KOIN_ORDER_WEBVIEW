@@ -3,9 +3,11 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Cart from './pages/Cart';
 import DeliveryOutside from './pages/Delivery/Outside';
 import OrderCancel from './pages/OrderFinish/OrderCancel';
-import Shop from './pages/Shop';
 import MenuDetail from './pages/Shop/MenuDetail';
-import ShopDetail from './pages/Shop/ShopDetail';
+import OrderableShopView from './pages/Shop/OrderableShopView';
+import OrderableShopDetail from './pages/Shop/ShopDetail/components/OrderableShopDetail';
+import UnOrderableShopDetail from './pages/Shop/ShopDetail/components/UnOrderableShopDetail';
+import UnOrderableShopView from './pages/Shop/UnOrderableShopView';
 import AppLayout from '@/components/Layout';
 import Campus from '@/pages/Delivery/Campus';
 import DetailAddress from '@/pages/Delivery/Outside/DetailAddress';
@@ -19,10 +21,13 @@ export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="shop/:shopId" element={<Shop />} />
-        <Route path="shop/:shopId/menus/:menuId" element={<MenuDetail />} />
+        <Route path="shop/true/:shopId" element={<OrderableShopView />} />
+        <Route path="shop/false/:shopId" element={<UnOrderableShopView />} />
+        <Route path="shop/true/:shopId/menus/:menuId" element={<MenuDetail />} />
+
         <Route element={<AppLayout />}>
-          <Route path="shop-detail/:id" element={<ShopDetail />} />
+          <Route path="shop-detail/true/:shopId" element={<OrderableShopDetail />} />
+          <Route path="shop-detail/false/:shopId" element={<UnOrderableShopDetail />} />
           <Route path="cart" element={<Cart />} />
           <Route path="delivery">
             <Route path="outside/detail" element={<DetailAddress />} />

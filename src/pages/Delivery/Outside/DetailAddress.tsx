@@ -72,7 +72,7 @@ export default function DetailAddress() {
         />
       </div>
 
-      <Button className="mt-auto h-[2.875rem]" fullWidth onClick={handleClickSaveAddress}>
+      <Button className="mt-auto mb-5 h-[2.875rem]" fullWidth onClick={handleClickSaveAddress}>
         주소 선택
       </Button>
 
