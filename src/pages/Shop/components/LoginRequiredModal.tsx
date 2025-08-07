@@ -1,6 +1,7 @@
 import type { AddCartRequest } from '@/api/cart/entity';
 import Button from '@/components/UI/Button';
 import Modal, { ModalContent } from '@/components/UI/CenterModal/Modal';
+import { redirectToLogin } from '@/util/ts/bridge';
 
 interface LoginRequiredModalProps {
   isOpen: boolean;
@@ -9,7 +10,7 @@ interface LoginRequiredModalProps {
 }
 
 export default function LoginRequiredModal({ isOpen, onClose, menuOptions }: LoginRequiredModalProps) {
-  const redirectToLogin = () => {
+  const clickLoginButton = () => {
     if (menuOptions) {
       localStorage.setItem('menuOptions', JSON.stringify(menuOptions));
     }
@@ -40,7 +41,7 @@ export default function LoginRequiredModal({ isOpen, onClose, menuOptions }: Log
           >
             닫기
           </Button>
-          <Button size="lg" color="primary" className="font-medium shadow-none" fullWidth onClick={redirectToLogin}>
+          <Button size="lg" color="primary" className="font-medium shadow-none" fullWidth onClick={clickLoginButton}>
             로그인하기
           </Button>
         </div>
