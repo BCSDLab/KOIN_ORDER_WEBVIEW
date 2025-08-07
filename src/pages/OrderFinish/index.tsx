@@ -66,6 +66,7 @@ export default function OrderFinish() {
 
     if (entryPoint === 'payment') {
       confirmPayment();
+      useOrderStore.persist.clearStorage();
     }
   }, [confirmPayments, orderId, paymentKey]);
 
@@ -88,10 +89,6 @@ export default function OrderFinish() {
   const handleClickOrderCancel = () => {
     navigate(`/orderCancel?paymentKey=${paymentKey}`);
   };
-
-  useEffect(() => {
-    useOrderStore.persist.clearStorage();
-  }, []);
 
   return (
     <div className="flex flex-col">

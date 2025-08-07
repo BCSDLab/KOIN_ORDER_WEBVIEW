@@ -53,6 +53,7 @@ export interface AddCartRequest {
 
 export interface UpdateCartItemRequest {
   orderable_shop_menu_price_id: number;
+  quantity: number;
   options: {
     option_group_id: number;
     option_id: number;

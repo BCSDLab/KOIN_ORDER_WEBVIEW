@@ -153,7 +153,7 @@ export default function Payment() {
           <Button onClick={openStoreRequestModal} color="gray" fullWidth className="mt-2 border-0 py-4 pr-3 pl-6">
             <div className="flex w-full flex-col gap-1">
               <div className="flex w-full items-center justify-between">
-                <p className="text-sm font-normal text-neutral-600">
+                <p className="text-start text-sm font-normal text-neutral-600">
                   {!!ownerRequest ? ownerRequest : '요청사항 없음'}
                 </p>
                 <RightArrow />
@@ -169,7 +169,7 @@ export default function Payment() {
           <p className="text-primary-500 text-lg font-semibold">배달기사님에게</p>
           <Button onClick={openRiderRequestModal} color="gray" fullWidth className="mt-2 border-0 py-4 pr-3 pl-6">
             <div className="flex w-full items-center justify-between">
-              <p className="text-sm font-normal text-neutral-600">
+              <p className="text-start text-sm font-normal text-neutral-600">
                 {!!deliveryRequest ? deliveryRequest : '요청사항 없음'}
               </p>
               <RightArrow />

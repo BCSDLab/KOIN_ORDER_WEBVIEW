@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import AddToCartBottomModal from '../components/AddToCartBottomModal';
 import Header from '../components/Header';
@@ -22,6 +22,10 @@ import { useToast } from '@/util/hooks/useToast';
 
 export default function MenuDetail() {
   const { shopId, menuId } = useParams();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   if (!shopId) {
     throw new Error('Shop ID is required');
@@ -71,6 +75,8 @@ export default function MenuDetail() {
     is_thumbnail: false,
   }));
 
+  const hasImage = imagesForCarousel.length > 0;
+
   const handleAddToCart = () => {
     if (isEdit && 'orderable_shop_menu_price_id' in updateCartItemOptionsRequest) {
       updateCartItemOptions(updateCartItemOptionsRequest, {
@@ -92,7 +98,7 @@ export default function MenuDetail() {
               openResetModal();
               break;
             case 'MENU_SOLD_OUT':
-              setNoticeMessage('영업시간이 아니라서\n장바구니에 담을 수 없어요.');
+              setNoticeMessage(parsed.message);
               openNoticeModal();
               break;
             case AUTH_FAIL: //이 케이스는 올바르지 않은 인증정보일 떄 발생합니다.
@@ -109,10 +115,15 @@ export default function MenuDetail() {
   };
 
   return (
-    <>
-      <Header name={info.name} targetRef={targetRef} cartItemCount={totalQuantity} />
-      <ImageCarousel images={imagesForCarousel} targetRef={targetRef} />
-      <MenuDescription name={info.name} description={info.description} price={info.prices[0].price} />
+    <div className="pb-24">
+      <Header name={info.name} targetRef={targetRef} cartItemCount={totalQuantity} noImage={!hasImage} />
+      {hasImage && <ImageCarousel images={imagesForCarousel} targetRef={targetRef} />}
+      <MenuDescription
+        name={info.name}
+        description={info.description}
+        price={info.prices[0].price}
+        noImage={!hasImage}
+      />
       <div className="mb-40 px-6">
         {menuInfo.prices.length > 1 && (
           <MenuPriceSelects prices={info.prices} selectedPriceId={priceId} selectPrice={selectPrice} />
@@ -133,6 +144,6 @@ export default function MenuDetail() {
         onClose={closeLoginRequiredModal}
         menuOptions={'menuInfo' in addToCartRequest ? addToCartRequest : undefined}
       />
-    </>
+    </div>
   );
 }
