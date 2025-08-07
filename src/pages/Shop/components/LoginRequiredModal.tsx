@@ -13,7 +13,7 @@ export default function LoginRequiredModal({ isOpen, onClose, menuOptions }: Log
     if (menuOptions) {
       localStorage.setItem('menuOptions', JSON.stringify(menuOptions));
     }
-    // 브릿지 추가 예정
+    redirectToLogin();
     onClose();
   };
 

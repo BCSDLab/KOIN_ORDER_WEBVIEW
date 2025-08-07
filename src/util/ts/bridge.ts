@@ -141,3 +141,7 @@ export async function backButtonTapped(): Promise<void> {
 export async function closeWebviewPage(): Promise<void> {
   await window.NativeBridge?.call('finish');
 }
+
+export async function redirectToLogin(): Promise<void> {
+  await window.NativeBridge?.call('redirectToLogin');
+}
