@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 
 export function useMenuGroupScroll() {
   const [selectedMenu, setSelectedMenu] = useState('');
@@ -11,17 +11,26 @@ export function useMenuGroupScroll() {
       isAutoScrolling.current = true;
       element.scrollIntoView({ behavior: 'smooth', block: 'start' });
       setSelectedMenu(name);
-      setTimeout(() => {
-        isAutoScrolling.current = false;
-      }, 500);
     }
   };
 
   const handleChangeMenu = (name: string) => {
-    if (!isAutoScrolling.current) {
-      setSelectedMenu(name);
-    }
+    setSelectedMenu(name);
   };
+
+  useEffect(() => {
+    const handleScrollEnd = () => {
+      if (isAutoScrolling.current) {
+        isAutoScrolling.current = false;
+      }
+    };
+
+    window.addEventListener('scrollend', handleScrollEnd);
+
+    return () => {
+      window.removeEventListener('scrollend', handleScrollEnd);
+    };
+  }, []);
 
   return {
     selectedMenu,
