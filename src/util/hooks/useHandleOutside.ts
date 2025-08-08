@@ -30,11 +30,11 @@ const useHandleOutside = <Container extends HTMLElement = HTMLElement, Backgroun
     };
 
     document.addEventListener('mousedown', handleOutsideClick);
-    document.addEventListener('touchstart', handleOutsideClick);
+    document.addEventListener('touchend', handleOutsideClick);
 
     return () => {
       document.removeEventListener('mousedown', handleOutsideClick);
-      document.removeEventListener('touchstart', handleOutsideClick);
+      document.removeEventListener('touchend', handleOutsideClick);
     };
   }, [containerRef, backgroundRef, onOutsideClick]);
 };

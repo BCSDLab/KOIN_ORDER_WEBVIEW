@@ -19,7 +19,10 @@ export default function BottomModal({ isOpen, onClose, children, className }: Bo
   useHandleOutside<HTMLDialogElement, HTMLDivElement>({
     containerRef,
     backgroundRef,
-    onOutsideClick: onClose,
+    onOutsideClick: (e) => {
+      e.preventDefault?.();
+      onClose();
+    },
   });
 
   if (!isOpen) return null;
