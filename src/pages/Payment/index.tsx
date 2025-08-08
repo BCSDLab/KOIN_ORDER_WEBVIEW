@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { TossPaymentsWidgets } from '@tosspayments/tosspayments-sdk';
 import clsx from 'clsx';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import Agreement from './components/Agreement';
 import ContactModal from './components/ContactModal';
 import DeliveryAddressSection from './components/DeliveryAddressSection';
@@ -26,6 +26,7 @@ import { useToast } from '@/util/hooks/useToast';
 import formatPhoneNumber from '@/util/ts/formatPhoneNumber';
 
 export default function Payment() {
+  const navigate = useNavigate();
   const { showToast } = useToast();
   const [searchParams] = useSearchParams();
   const [isContactModalOpen, openContactModal, closeContactModal] = useBooleanState(false);
@@ -105,6 +106,18 @@ export default function Payment() {
     } catch (error) {
       console.error(error);
     }
+  };
+
+  const handleCloseFailModal = () => {
+    closePaymentFailModal();
+    searchParams.delete('message');
+    navigate(
+      {
+        pathname: window.location.pathname,
+        search: searchParams.toString(),
+      },
+      { replace: true },
+    );
   };
 
   const handleSubmitOwnerRequest = (newRequest: string, newNoCutlery: boolean) => {
@@ -238,7 +251,7 @@ export default function Payment() {
 
       <PaymentFailModal
         isOpen={isPaymentFailModalOpen}
-        onClose={closePaymentFailModal}
+        onClose={handleCloseFailModal}
         errorMessage={message || '알 수 없는 오류가 발생했습니다.'}
       />
     </div>
