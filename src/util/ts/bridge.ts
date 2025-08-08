@@ -61,11 +61,11 @@ window.onNativeCallback = (callbackId: string, result: unknown) => {
   window.NativeBridge?.handleCallback(callbackId, result);
 };
 
-function isAndroid() {
+export function isAndroid() {
   return !!window.Android;
 }
 
-function isIOS() {
+export function isIOS() {
   return !!window.webkit?.messageHandlers;
 }
 
