@@ -15,6 +15,7 @@ export default function ImageViewer({ images, onClose }: ImageViewerProps) {
   const swiperStyles: CSSWithCustomProperties = {
     '--swiper-navigation-color': '#fff',
     '--swiper-pagination-color': '#fff',
+    '--swiper-pagination-bottom': '30px',
   };
 
   return (
