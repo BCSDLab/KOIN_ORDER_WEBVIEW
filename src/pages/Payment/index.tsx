@@ -12,6 +12,7 @@ import ShopLocationMap from './components/ShopLocationMap';
 import StoreRequestModal from './components/StoreRequestModal';
 import TossWidget from './components/TossWidget';
 import useCart from './hooks/useCart';
+import useStudentInfo from './hooks/useStudentInfo';
 import useTemporaryDelivery from './hooks/useTemporaryDelivery';
 import useTemporaryTakeout from './hooks/useTemporaryTakeout';
 import PickupIcon from '@/assets/Delivery/bucket.svg';
@@ -51,6 +52,8 @@ export default function Payment() {
   const orderType = searchParams.get('orderType');
   const message = searchParams.get('message');
   const isDelivery = orderType === 'DELIVERY';
+
+  const { data: studentInfo } = useStudentInfo();
 
   const { data: cart } = useCart(orderType as 'DELIVERY' | 'TAKE_OUT');
   const { mutateAsync: temporaryDelivery } = useTemporaryDelivery();
@@ -111,6 +114,10 @@ export default function Payment() {
   };
 
   useEffect(() => {
+    if (studentInfo?.phone_number && !userPhoneNumber) {
+      setUserPhoneNumber(studentInfo.phone_number);
+    }
+
     if (message) {
       openPaymentFailModal();
     }
