@@ -32,7 +32,6 @@ const formatTime = (seconds: number) => {
 const SMS_CODE_LENGTH = 6;
 const PHONE_NUMBER_LENGTH = 11;
 const CODE_EXPIRE_SECONDS = 180;
-const CODE_WARNING_SECONDS = 120;
 
 export default function ContactModal({ isOpen, onClose, currentContact, onSubmit }: ContactModalProps) {
   const { showToast } = useToast();
@@ -51,16 +50,20 @@ export default function ContactModal({ isOpen, onClose, currentContact, onSubmit
   const { mutate: verifySmsCode } = verifySms;
 
   const shouldDisableSubmit = !isPhoneValid || authCode.length !== SMS_CODE_LENGTH || timer === 0;
-  const shouldShowWarning = timer <= CODE_WARNING_SECONDS && authCode.length === 0;
 
   const resetState = () => {
-    setPhone('');
+    setPhone(currentContact);
     setAuthCode('');
     isFalseCodeSent();
     setCodeErrorMessage('');
     setPhoneErrorMessage('');
     setTimer(0);
     isFalseEditing();
+  };
+
+  const closeModal = () => {
+    resetState();
+    onClose();
   };
 
   const handleClickSubmit = () => {
@@ -128,10 +131,10 @@ export default function ContactModal({ isOpen, onClose, currentContact, onSubmit
   }, [phone]);
 
   return (
-    <BottomModal className="bottomModal" isOpen={isOpen} onClose={onClose}>
+    <BottomModal className="bottomModal" isOpen={isOpen} onClose={closeModal}>
       <BottomModalHeader>
         <div className="flex w-full justify-between">연락처</div>
-        <button type="button" onClick={onClose}>
+        <button type="button" onClick={closeModal}>
           <CloseIcon />
         </button>
       </BottomModalHeader>
@@ -215,14 +218,14 @@ export default function ContactModal({ isOpen, onClose, currentContact, onSubmit
                   <Warning />
                   {codeErrorMessage}
                 </div>
-              ) : shouldShowWarning ? (
+              ) : (
                 <div className="mt-1 text-sm leading-[160%] text-neutral-500">
                   {MESSAGES.VERIFICATION.DEFAULT}{' '}
-                  <a href={INQUIRE_FORM} className="text-primary-500">
+                  <a href={INQUIRE_FORM} className="text-info-500 underline">
                     문의하기
                   </a>
                 </div>
-              ) : null}
+              )}
             </div>
 
             <Button
