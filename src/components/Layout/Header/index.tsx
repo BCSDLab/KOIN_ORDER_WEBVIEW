@@ -4,14 +4,20 @@ import CartResetButton from './CartResetButton';
 import { ROUTE_TITLES } from './routeTitles';
 import ArrowBackIcon from '@/assets/Main/arrow-back-icon.svg';
 import CloseIcon from '@/assets/Main/close-icon.svg';
-import { backButtonTapped } from '@/util/ts/bridge';
+import { backButtonTapped, isAndroid } from '@/util/ts/bridge';
 
 export default function Header() {
   const navigate = useNavigate();
   const { pathname } = useLocation();
 
   const backToPreviousPage = () => {
-    if (window.history.length > 1) {
+    if (pathname.startsWith('/payment')) {
+      if (isAndroid()) {
+        backButtonTapped();
+      } else {
+        navigate('/cart', { replace: true });
+      }
+    } else if (window.history.length > 1) {
       navigate(-1);
     } else {
       backButtonTapped();
