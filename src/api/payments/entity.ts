@@ -5,6 +5,7 @@ export interface DeliveryTemporaryRequest {
   to_rider: string;
   total_menu_price: number;
   delivery_tip: number;
+  provide_cutlery: boolean;
   total_amount: number;
   provide_cutlery: boolean;
 }
@@ -12,6 +13,7 @@ export interface DeliveryTemporaryRequest {
 export interface TakeoutTemporaryRequest {
   phone_number: string;
   to_owner: string;
+  provide_cutlery: boolean;
   total_menu_price: number;
   total_amount: number;
   provide_cutlery: boolean;
@@ -37,6 +39,7 @@ export interface ConfirmPaymentsResponse {
   shop_address: string;
   to_owner: string;
   to_rider: string;
+  provide_cutlery: boolean;
   shop_name: string;
   menus: {
     name: string;

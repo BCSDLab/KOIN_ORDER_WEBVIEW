@@ -89,6 +89,7 @@ export default function Payment() {
         phone_number: userPhoneNumber,
         to_owner: ownerRequest,
         to_rider: deliveryRequest,
+        provide_cutlery: !isCutleryDeclined,
         total_menu_price: cart.items_amount,
         delivery_tip: cart.delivery_fee,
         total_amount: cart.total_amount,
@@ -98,6 +99,7 @@ export default function Payment() {
       order = await temporaryTakeout({
         phone_number: userPhoneNumber,
         to_owner: ownerRequest,
+        provide_cutlery: !isCutleryDeclined,
         total_menu_price: cart.items_amount,
         total_amount: cart.total_amount,
         provide_cutlery: !isCutleryDeclined,
