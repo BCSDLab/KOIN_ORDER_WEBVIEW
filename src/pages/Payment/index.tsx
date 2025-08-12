@@ -68,7 +68,7 @@ export default function Payment() {
 
   const pay = async () => {
     if (!agreement) {
-      showToast('결제 진행을 위해 약관에 동의해주세요.');
+      showToast('결제 이용 약관에 동의해주세요');
       return;
     }
 
