@@ -26,7 +26,7 @@ export default function DetailAddress() {
   useMarker(map);
 
   const handleDetailAddress = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setDetailAddressValue(e.target.value.trim());
+    setDetailAddressValue(e.target.value);
   };
 
   const handleClickSaveAddress = () => {
