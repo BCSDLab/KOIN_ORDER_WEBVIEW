@@ -184,18 +184,19 @@ export default function Payment() {
             </div>
           </Button>
         </div>
-
-        <div>
-          <p className="text-primary-500 text-lg font-semibold">배달기사님에게</p>
-          <Button onClick={openRiderRequestModal} color="gray" fullWidth className="mt-2 border-0 py-4 pr-3 pl-6">
-            <div className="flex w-full items-center justify-between">
-              <p className="text-start text-sm font-normal text-neutral-600">
-                {!!deliveryRequest ? deliveryRequest : '요청사항 없음'}
-              </p>
-              <RightArrow />
-            </div>
-          </Button>
-        </div>
+        {isDelivery && (
+          <div>
+            <p className="text-primary-500 text-lg font-semibold">배달기사님에게</p>
+            <Button onClick={openRiderRequestModal} color="gray" fullWidth className="mt-2 border-0 py-4 pr-3 pl-6">
+              <div className="flex w-full items-center justify-between">
+                <p className="text-start text-sm font-normal text-neutral-600">
+                  {!!deliveryRequest ? deliveryRequest : '요청사항 없음'}
+                </p>
+                <RightArrow />
+              </div>
+            </Button>
+          </div>
+        )}
 
         <TossWidget
           widgets={widgets}
