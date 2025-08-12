@@ -93,7 +93,6 @@ export default function Payment() {
         total_menu_price: cart.items_amount,
         delivery_tip: cart.delivery_fee,
         total_amount: cart.total_amount,
-        provide_cutlery: !isCutleryDeclined,
       });
     } else {
       order = await temporaryTakeout({
@@ -102,7 +101,6 @@ export default function Payment() {
         provide_cutlery: !isCutleryDeclined,
         total_menu_price: cart.items_amount,
         total_amount: cart.total_amount,
-        provide_cutlery: !isCutleryDeclined,
       });
     }
     try {
