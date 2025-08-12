@@ -25,8 +25,13 @@ export default function TossWidget({
 }) {
   useEffect(() => {
     async function fetchPaymentWidgets() {
+      // ------ 결제위젯 초기화 ------
       const tossPayments = await loadTossPayments(clientKey);
+      // 회원 결제
       const widgets = tossPayments.widgets({ customerKey });
+      // 비회원 결제
+      // const widgets = tossPayments.widgets({ customerKey: ANONYMOUS });
+
       setWidgets(widgets);
     }
     void fetchPaymentWidgets();
@@ -37,14 +42,16 @@ export default function TossWidget({
 
     async function renderPaymentWidgets() {
       if (widgets == null) return;
-
+      // ------ 주문의 결제 금액 설정 ------
       await widgets.setAmount(amount);
 
       const [, agreementWidget] = await Promise.all([
+        // ------ 결제 UI 렌더링 ------
         widgets.renderPaymentMethods({
           selector: '#payment-method',
           variantKey: 'DEFAULT',
         }),
+        // ------ 이용약관 UI 렌더링 ------
         widgets.renderAgreement({
           selector: '#agreement',
           variantKey: 'AGREEMENT',
