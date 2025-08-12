@@ -107,7 +107,7 @@ export default function Payment() {
       await widgets!.requestPayment({
         orderId: order.order_id,
         orderName: orderName,
-        successUrl: window.location.origin + `/result?orderType=${orderType}&entryPoint=payment`,
+        successUrl: window.location.origin + `/payment/return?orderType=${orderType}&entryPoint=payment`,
         failUrl: window.location.origin + `/payment?orderType=${orderType}`,
       });
     } catch (error) {
