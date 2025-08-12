@@ -111,14 +111,14 @@ export default function OrderCancel() {
       <Modal className="centerModal" isOpen={isCancelModalOpen} onClose={closeCancelModal}>
         <ModalContent>
           <div>주문 취소를 그만두시겠어요?</div>
-          <div className="flex h-12 gap-2 text-[15px]">
+          <div className="flex gap-2 text-[15px]">
             <Button
               onClick={closeCancelModal}
-              className="w-[7.125rem] border border-neutral-400 bg-white font-medium text-neutral-600"
+              className="border border-neutral-400 bg-white py-3 font-medium text-neutral-600"
             >
               그만하기
             </Button>
-            <Button onClick={handleClickMoveMainPage} className="w-[7.125rem] font-medium">
+            <Button onClick={handleClickMoveMainPage} className="py-3 font-medium">
               계속하기
             </Button>
           </div>
