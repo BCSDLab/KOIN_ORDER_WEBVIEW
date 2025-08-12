@@ -21,7 +21,7 @@ export default function useValidateCart({ orderType }: { orderType: 'DELIVERY' |
   const [errorCode, setErrorCode] = useState<string | null>(null);
 
   const mutation = useMutation({
-    mutationFn: validateCart,
+    mutationFn: () => validateCart(orderType),
     onSuccess: () => {
       setErrorCode(null);
       navigate(`/payment?orderType=${orderType}`);
