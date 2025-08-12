@@ -15,61 +15,66 @@ export default function TossWidget({
   setWidgets,
   setReady,
   amount,
+  setAgreement,
 }: {
   widgets: TossPaymentsWidgets | null;
   setWidgets: React.Dispatch<React.SetStateAction<TossPaymentsWidgets | null>>;
   setReady: React.Dispatch<React.SetStateAction<boolean>>;
   amount: Amount;
+  setAgreement: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   useEffect(() => {
     async function fetchPaymentWidgets() {
-      // ------  결제위젯 초기화 ------
       const tossPayments = await loadTossPayments(clientKey);
-      // 회원 결제
-      const widgets = tossPayments.widgets({
-        customerKey,
-      });
-      // 비회원 결제
-      // const widgets = tossPayments.widgets({ customerKey: ANONYMOUS });
-
+      const widgets = tossPayments.widgets({ customerKey });
       setWidgets(widgets);
     }
-
     void fetchPaymentWidgets();
   }, [clientKey, customerKey]);
 
   useEffect(() => {
+    let unbind: (() => void) | undefined;
+
     async function renderPaymentWidgets() {
-      if (widgets == null) {
-        return;
-      }
-      // ------ 주문의 결제 금액 설정 ------
+      if (widgets == null) return;
+
       await widgets.setAmount(amount);
 
-      await Promise.all([
-        // ------  결제 UI 렌더링 ------
+      const [, agreementWidget] = await Promise.all([
         widgets.renderPaymentMethods({
           selector: '#payment-method',
           variantKey: 'DEFAULT',
         }),
-        // ------  이용약관 UI 렌더링 ------
         widgets.renderAgreement({
           selector: '#agreement',
           variantKey: 'AGREEMENT',
         }),
       ]);
 
+      const anyAgreement = agreementWidget as unknown as {
+        on?: (event: 'agreementStatusChange', callback: (s: { agreedRequiredTerms: boolean }) => void) => void;
+        off?: (event: 'agreementStatusChange', callback: (s: { agreedRequiredTerms: boolean }) => void) => void;
+      };
+
+      const handler = (status: { agreedRequiredTerms: boolean }) => {
+        setAgreement(!!status.agreedRequiredTerms);
+      };
+      anyAgreement.on?.('agreementStatusChange', handler);
+
+      unbind = () => anyAgreement.off?.('agreementStatusChange', handler);
+
       setReady(true);
     }
 
     void renderPaymentWidgets();
+
+    return () => {
+      unbind?.();
+    };
   }, [widgets]);
 
   useEffect(() => {
-    if (widgets == null) {
-      return;
-    }
-
+    if (widgets == null) return;
     void widgets.setAmount(amount);
   }, [widgets, amount]);
 

@@ -35,6 +35,7 @@ export default function Payment() {
   const [isPaymentFailModalOpen, openPaymentFailModal, closePaymentFailModal] = useBooleanState(false);
 
   const [ready, setReady] = useState(false);
+  const [agreement, setAgreement] = useState(true);
   const [widgets, setWidgets] = useState<TossPaymentsWidgets | null>(null);
   const {
     userPhoneNumber,
@@ -66,6 +67,11 @@ export default function Payment() {
   const address = deliveryType === 'CAMPUS' ? campusAddress?.full_address : outsideAddress?.full_address;
 
   const pay = async () => {
+    if (!agreement) {
+      showToast('결제 진행을 위해 약관에 동의해주세요.');
+      return;
+    }
+
     if (!userPhoneNumber) {
       showToast('연락처를 입력해주세요');
       return;
@@ -206,6 +212,7 @@ export default function Payment() {
             currency: 'KRW',
             value: cart.total_amount,
           }}
+          setAgreement={setAgreement}
         />
         <Agreement />
         <PaymentAmount
