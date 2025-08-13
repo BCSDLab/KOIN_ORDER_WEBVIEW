@@ -27,8 +27,11 @@ export const getTemporaryTakeout = async (body: TakeoutTemporaryRequest) => {
 };
 
 export const getPaymentInfo = async (paymentId: number) => {
-  const response = await apiClient.get<ConfirmPaymentsResponse>(`payments/${paymentId}`, {
+  const response = await apiClient.get<ConfirmPaymentsResponse>(`payments`, {
     headers: getAuthHeader(),
+    params: {
+      paymentId,
+    },
   });
   return response;
 };
