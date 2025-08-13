@@ -11,9 +11,15 @@ export default function PaymentConfirm() {
   const paymentKey = searchParams.get('paymentKey');
   const amount = searchParams.get('amount');
 
+  if (!orderType || !orderId || !paymentKey || !amount) {
+    // 예상 상황 : 토스 결제 성공한 상황, 그러나 토스 측에서 정보를 주지 않았거나 FE에서 url 파라미터를 잘못 전달
+    // TODO : 결제 취소 로직 구현 혹은 별도의 에러 페이지 렌더링 (다음 스프린트 진행 시 논의 후)
+    return <div>결제 정보가 부족합니다.</div>;
+  }
+
   const { mutateAsync: confirmPayments, isPending } = useConfirmPayments({
-    orderType: orderType!,
-    paymentKey: paymentKey!,
+    orderType: orderType,
+    paymentKey: paymentKey,
   });
 
   useEffect(() => {
@@ -21,8 +27,8 @@ export default function PaymentConfirm() {
     if (!ready) return;
 
     confirmPayments({
-      order_id: orderId!,
-      payment_key: paymentKey!,
+      order_id: orderId,
+      payment_key: paymentKey,
       amount: Number(amount),
     });
   }, [orderId, paymentKey, amount, confirmPayments]);

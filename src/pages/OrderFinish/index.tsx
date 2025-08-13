@@ -18,6 +18,7 @@ import BottomModal, {
 } from '@/components/UI/BottomModal/BottomModal';
 import Button from '@/components/UI/Button';
 import useBooleanState from '@/util/hooks/useBooleanState';
+import { backButtonTapped } from '@/util/ts/bridge';
 
 type OrderKind = 'order' | 'preparation' | 'delivery';
 
@@ -38,6 +39,11 @@ export default function OrderFinish() {
   const { paymentId } = useParams();
   const [searchParams] = useSearchParams();
   const paymentKey = searchParams.get('paymentKey') || ''; //API 응답값에 추가 요청 예정
+
+  if (!paymentId) {
+    // 잘못된 경로로 접근 시 메인 화면으로 이동(임시 처리)
+    backButtonTapped();
+  }
 
   const { data: paymentInfo } = usePaymentInfo(Number(paymentId));
 
