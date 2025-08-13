@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import clsx from 'clsx';
-import { useSearchParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import useCancelPayment from './hooks/useCancelPayment';
 import CheckIcon from '@/assets/OrderFinish/check-icon.svg';
 import Button from '@/components/UI/Button';
 import Modal, { ModalContent } from '@/components/UI/CenterModal/Modal';
 import useBooleanState from '@/util/hooks/useBooleanState';
+import { backButtonTapped } from '@/util/ts/bridge';
 
 const orderCancelReasons: string[] = [
   '단순 변심이에요',
@@ -16,11 +17,15 @@ const orderCancelReasons: string[] = [
 ];
 
 export default function OrderCancel() {
-  const [searchParams] = useSearchParams();
-  const paymentKey = searchParams.get('paymentKey');
+  const { paymentId } = useParams();
+
+  if (!paymentId) {
+    // 잘못된 경로로 접근 시 메인 화면으로 이동(임시 처리)
+    backButtonTapped();
+  }
 
   const [isCancelModalOpen, openCancelModal, closeCancelModal] = useBooleanState(false);
-  const { mutate: cancelPayment } = useCancelPayment(paymentKey!);
+  const { mutate: cancelPayment } = useCancelPayment(Number(paymentId));
 
   const [selectedCancelReason, setSelectedCancelReason] = useState<string>('');
   const [customCancelReason, setCustomCancelReason] = useState<string>('');

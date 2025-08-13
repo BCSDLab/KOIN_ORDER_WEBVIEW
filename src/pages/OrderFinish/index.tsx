@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import clsx from 'clsx';
 import dayjs from 'dayjs';
-import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import usePaymentInfo from './hooks/usePaymentInfo';
 import CloseIcon from '@/assets/Main/close-icon.svg';
 import CallIcon from '@/assets/OrderFinish/call-icon.svg';
@@ -37,8 +37,6 @@ const stateMessage = {
 export default function OrderFinish() {
   const navigate = useNavigate();
   const { paymentId } = useParams();
-  const [searchParams] = useSearchParams();
-  const paymentKey = searchParams.get('paymentKey') || ''; //API 응답값에 추가 요청 예정
 
   if (!paymentId) {
     // 잘못된 경로로 접근 시 메인 화면으로 이동(임시 처리)
@@ -62,7 +60,7 @@ export default function OrderFinish() {
   };
 
   const handleClickOrderCancel = () => {
-    navigate(`/orderCancel?paymentKey=${paymentKey}`);
+    navigate(`/orderCancel/${paymentId}`);
   };
 
   // TODO: paymentInfo가 없을 경우 처리

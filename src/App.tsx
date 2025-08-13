@@ -37,7 +37,7 @@ export default function App() {
             <Route path="campus" element={<Campus />} />
           </Route>
           <Route path="payment" element={<Payment />} />
-          <Route path="orderCancel" element={<OrderCancel />} />
+          <Route path="orderCancel/:paymentId" element={<OrderCancel />} />
           <Route path="result/:paymentId" element={<OrderFinish />} />
         </Route>
       </Routes>
