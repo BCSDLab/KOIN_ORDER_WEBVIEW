@@ -38,14 +38,14 @@ export default function TossWidget({
   }, [clientKey, customerKey]);
 
   useEffect(() => {
-    let unbind: (() => void) | undefined;
+    let cleanup: (() => void) | undefined;
 
     async function renderPaymentWidgets() {
       if (widgets == null) return;
       // ------ 주문의 결제 금액 설정 ------
       await widgets.setAmount(amount);
 
-      const [, agreementWidget] = await Promise.all([
+      const [paymentWidget, agreementWidget] = await Promise.all([
         // ------ 결제 UI 렌더링 ------
         widgets.renderPaymentMethods({
           selector: '#payment-method',
@@ -58,17 +58,15 @@ export default function TossWidget({
         }),
       ]);
 
-      const anyAgreement = agreementWidget as unknown as {
-        on?: (event: 'agreementStatusChange', callback: (s: { agreedRequiredTerms: boolean }) => void) => void;
-        off?: (event: 'agreementStatusChange', callback: (s: { agreedRequiredTerms: boolean }) => void) => void;
-      };
-
       const handler = (status: { agreedRequiredTerms: boolean }) => {
-        setAgreement(!!status.agreedRequiredTerms);
+        setAgreement(status.agreedRequiredTerms);
       };
-      anyAgreement.on?.('agreementStatusChange', handler);
+      agreementWidget.on?.('agreementStatusChange', handler);
 
-      unbind = () => anyAgreement.off?.('agreementStatusChange', handler);
+      cleanup = () => {
+        paymentWidget.destroy?.();
+        agreementWidget.destroy?.();
+      };
 
       setReady(true);
     }
@@ -76,7 +74,7 @@ export default function TossWidget({
     void renderPaymentWidgets();
 
     return () => {
-      unbind?.();
+      cleanup?.();
     };
   }, [widgets]);
 
