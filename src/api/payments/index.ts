@@ -27,11 +27,8 @@ export const getTemporaryTakeout = async (body: TakeoutTemporaryRequest) => {
 };
 
 export const getPaymentInfo = async (paymentId: number) => {
-  const response = await apiClient.get<ConfirmPaymentsResponse>(`payments`, {
+  const response = await apiClient.get<ConfirmPaymentsResponse>(`payments/${paymentId}`, {
     headers: getAuthHeader(),
-    params: {
-      paymentId,
-    },
   });
   return response;
 };
@@ -44,8 +41,8 @@ export const confirmPayments = async (body: ConfirmPaymentsRequest) => {
   return response;
 };
 
-export const cancelPayment = async (paymentKey: string, body: CancelPaymentRequest) => {
-  const response = await apiClient.post<CancelPaymentResponse>(`payments/${paymentKey}/cancel`, {
+export const cancelPayment = async (paymentId: number, body: CancelPaymentRequest) => {
+  const response = await apiClient.post<CancelPaymentResponse>(`payments/${paymentId}/cancel`, {
     body,
     headers: getAuthHeader(),
   });
