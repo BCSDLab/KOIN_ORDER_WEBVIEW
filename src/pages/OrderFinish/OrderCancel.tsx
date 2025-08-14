@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import clsx from 'clsx';
-import { useSearchParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import useCancelPayment from './hooks/useCancelPayment';
 import CheckIcon from '@/assets/OrderFinish/check-icon.svg';
 import Button from '@/components/UI/Button';
 import Modal, { ModalContent } from '@/components/UI/CenterModal/Modal';
 import useBooleanState from '@/util/hooks/useBooleanState';
+import { backButtonTapped } from '@/util/ts/bridge';
 
 const orderCancelReasons: string[] = [
   '단순 변심이에요',
@@ -16,11 +17,15 @@ const orderCancelReasons: string[] = [
 ];
 
 export default function OrderCancel() {
-  const [searchParams] = useSearchParams();
-  const paymentKey = searchParams.get('paymentKey');
+  const { paymentId } = useParams();
+
+  if (!paymentId) {
+    // 잘못된 경로로 접근 시 메인 화면으로 이동(임시 처리)
+    backButtonTapped();
+  }
 
   const [isCancelModalOpen, openCancelModal, closeCancelModal] = useBooleanState(false);
-  const { mutate: cancelPayment } = useCancelPayment(paymentKey!);
+  const { mutate: cancelPayment } = useCancelPayment(Number(paymentId));
 
   const [selectedCancelReason, setSelectedCancelReason] = useState<string>('');
   const [customCancelReason, setCustomCancelReason] = useState<string>('');
@@ -111,14 +116,14 @@ export default function OrderCancel() {
       <Modal className="centerModal" isOpen={isCancelModalOpen} onClose={closeCancelModal}>
         <ModalContent>
           <div>주문 취소를 그만두시겠어요?</div>
-          <div className="flex h-12 gap-2 text-[15px]">
+          <div className="flex gap-2 text-[15px]">
             <Button
               onClick={closeCancelModal}
-              className="w-[7.125rem] border border-neutral-400 bg-white font-medium text-neutral-600"
+              className="border border-neutral-400 bg-white py-3 font-medium text-neutral-600"
             >
               그만하기
             </Button>
-            <Button onClick={handleClickMoveMainPage} className="w-[7.125rem] font-medium">
+            <Button onClick={handleClickMoveMainPage} className="py-3 font-medium">
               계속하기
             </Button>
           </div>

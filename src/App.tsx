@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Cart from './pages/Cart';
 import DeliveryOutside from './pages/Delivery/Outside';
 import OrderCancel from './pages/OrderFinish/OrderCancel';
+import PaymentConfirm from './pages/PaymentConfirm';
 import MenuDetail from './pages/Shop/MenuDetail';
 import OrderableShopView from './pages/Shop/OrderableShopView';
 import OrderableShopDetail from './pages/Shop/ShopDetail/components/OrderableShopDetail';
@@ -24,6 +25,7 @@ export default function App() {
         <Route path="shop/true/:shopId" element={<OrderableShopView />} />
         <Route path="shop/false/:shopId" element={<UnOrderableShopView />} />
         <Route path="shop/true/:shopId/menus/:menuId" element={<MenuDetail />} />
+        <Route path="payment/return" element={<PaymentConfirm />} />
 
         <Route element={<AppLayout />}>
           <Route path="shop-detail/true/:shopId" element={<OrderableShopDetail />} />
@@ -35,8 +37,8 @@ export default function App() {
             <Route path="campus" element={<Campus />} />
           </Route>
           <Route path="payment" element={<Payment />} />
-          <Route path="orderCancel" element={<OrderCancel />} />
-          <Route path="result" element={<OrderFinish />} />
+          <Route path="orderCancel/:paymentId" element={<OrderCancel />} />
+          <Route path="result/:paymentId" element={<OrderFinish />} />
         </Route>
       </Routes>
     </BrowserRouter>

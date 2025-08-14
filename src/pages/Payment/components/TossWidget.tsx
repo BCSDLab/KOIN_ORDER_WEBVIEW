@@ -15,61 +15,71 @@ export default function TossWidget({
   setWidgets,
   setReady,
   amount,
+  setAgreement,
 }: {
   widgets: TossPaymentsWidgets | null;
   setWidgets: React.Dispatch<React.SetStateAction<TossPaymentsWidgets | null>>;
   setReady: React.Dispatch<React.SetStateAction<boolean>>;
   amount: Amount;
+  setAgreement: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   useEffect(() => {
     async function fetchPaymentWidgets() {
-      // ------  결제위젯 초기화 ------
+      // ------ 결제위젯 초기화 ------
       const tossPayments = await loadTossPayments(clientKey);
       // 회원 결제
-      const widgets = tossPayments.widgets({
-        customerKey,
-      });
+      const widgets = tossPayments.widgets({ customerKey });
       // 비회원 결제
       // const widgets = tossPayments.widgets({ customerKey: ANONYMOUS });
 
       setWidgets(widgets);
     }
-
     void fetchPaymentWidgets();
   }, [clientKey, customerKey]);
 
   useEffect(() => {
+    let cleanup: (() => void) | undefined;
+
     async function renderPaymentWidgets() {
-      if (widgets == null) {
-        return;
-      }
+      if (widgets == null) return;
       // ------ 주문의 결제 금액 설정 ------
       await widgets.setAmount(amount);
 
-      await Promise.all([
-        // ------  결제 UI 렌더링 ------
+      const [paymentWidget, agreementWidget] = await Promise.all([
+        // ------ 결제 UI 렌더링 ------
         widgets.renderPaymentMethods({
           selector: '#payment-method',
           variantKey: 'DEFAULT',
         }),
-        // ------  이용약관 UI 렌더링 ------
+        // ------ 이용약관 UI 렌더링 ------
         widgets.renderAgreement({
           selector: '#agreement',
           variantKey: 'AGREEMENT',
         }),
       ]);
 
+      const handler = (status: { agreedRequiredTerms: boolean }) => {
+        setAgreement(status.agreedRequiredTerms);
+      };
+      agreementWidget.on?.('agreementStatusChange', handler);
+
+      cleanup = () => {
+        paymentWidget.destroy?.();
+        agreementWidget.destroy?.();
+      };
+
       setReady(true);
     }
 
     void renderPaymentWidgets();
+
+    return () => {
+      cleanup?.();
+    };
   }, [widgets]);
 
   useEffect(() => {
-    if (widgets == null) {
-      return;
-    }
-
+    if (widgets == null) return;
     void widgets.setAmount(amount);
   }, [widgets, amount]);
 

@@ -58,7 +58,9 @@ export default function ContactModal({ isOpen, onClose, currentContact, onSubmit
     setCodeErrorMessage('');
     setPhoneErrorMessage('');
     setTimer(0);
-    isTrueEditing();
+
+    const setEditingState = currentContact ? isFalseEditing : isTrueEditing;
+    setEditingState();
   };
 
   const closeModal = () => {

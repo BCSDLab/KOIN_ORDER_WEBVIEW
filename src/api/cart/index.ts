@@ -12,9 +12,12 @@ export const getCart = async (type: 'DELIVERY' | 'TAKE_OUT') => {
   });
 };
 
-export const validateCart = async () => {
+export const validateCart = async (orderType: 'DELIVERY' | 'TAKE_OUT') => {
   return await apiClient.get<CartResponse>('cart/validate', {
     headers: getAuthHeader(),
+    params: {
+      order_type: orderType,
+    },
   });
 };
 

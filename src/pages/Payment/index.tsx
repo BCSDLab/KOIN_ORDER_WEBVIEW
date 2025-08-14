@@ -35,6 +35,7 @@ export default function Payment() {
   const [isPaymentFailModalOpen, openPaymentFailModal, closePaymentFailModal] = useBooleanState(false);
 
   const [ready, setReady] = useState(false);
+  const [agreement, setAgreement] = useState(true);
   const [widgets, setWidgets] = useState<TossPaymentsWidgets | null>(null);
   const {
     userPhoneNumber,
@@ -66,6 +67,11 @@ export default function Payment() {
   const address = deliveryType === 'CAMPUS' ? campusAddress?.full_address : outsideAddress?.full_address;
 
   const pay = async () => {
+    if (!agreement) {
+      showToast('결제 이용 약관에 동의해주세요');
+      return;
+    }
+
     if (!userPhoneNumber) {
       showToast('연락처를 입력해주세요');
       return;
@@ -97,12 +103,11 @@ export default function Payment() {
         total_amount: cart.total_amount,
       });
     }
-
     try {
       await widgets!.requestPayment({
         orderId: order.order_id,
         orderName: orderName,
-        successUrl: window.location.origin + `/result?orderType=${orderType}&entryPoint=payment`,
+        successUrl: window.location.origin + `/payment/return?orderType=${orderType}&entryPoint=payment`,
         failUrl: window.location.origin + `/payment?orderType=${orderType}`,
       });
     } catch (error) {
@@ -186,18 +191,19 @@ export default function Payment() {
             </div>
           </Button>
         </div>
-
-        <div>
-          <p className="text-primary-500 text-lg font-semibold">배달기사님에게</p>
-          <Button onClick={openRiderRequestModal} color="gray" fullWidth className="mt-2 border-0 py-4 pr-3 pl-6">
-            <div className="flex w-full items-center justify-between">
-              <p className="text-start text-sm font-normal text-neutral-600">
-                {!!deliveryRequest ? deliveryRequest : '요청사항 없음'}
-              </p>
-              <RightArrow />
-            </div>
-          </Button>
-        </div>
+        {isDelivery && (
+          <div>
+            <p className="text-primary-500 text-lg font-semibold">배달기사님에게</p>
+            <Button onClick={openRiderRequestModal} color="gray" fullWidth className="mt-2 border-0 py-4 pr-3 pl-6">
+              <div className="flex w-full items-center justify-between">
+                <p className="text-start text-sm font-normal text-neutral-600">
+                  {!!deliveryRequest ? deliveryRequest : '요청사항 없음'}
+                </p>
+                <RightArrow />
+              </div>
+            </Button>
+          </div>
+        )}
 
         <TossWidget
           widgets={widgets}
@@ -207,6 +213,7 @@ export default function Payment() {
             currency: 'KRW',
             value: cart.total_amount,
           }}
+          setAgreement={setAgreement}
         />
         <Agreement />
         <PaymentAmount
