@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ArrowBackIcon from '@/assets/Main/arrow-back-icon.svg';
 import CartIcon from '@/assets/Shop/cart-icon.svg';
-import { backButtonTapped } from '@/util/ts/bridge';
+import { backButtonTapped } from '@/util/bridge/nativeAction';
 
 interface HeaderProps {
   name: string;

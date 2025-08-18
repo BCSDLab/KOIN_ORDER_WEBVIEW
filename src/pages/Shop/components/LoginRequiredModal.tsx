@@ -1,7 +1,7 @@
 import type { AddCartRequest } from '@/api/cart/entity';
 import Button from '@/components/UI/Button';
 import Modal, { ModalContent } from '@/components/UI/CenterModal/Modal';
-import { redirectToLogin } from '@/util/ts/bridge';
+import { redirectToLogin } from '@/util/bridge/nativeAction';
 
 interface LoginRequiredModalProps {
   isOpen: boolean;

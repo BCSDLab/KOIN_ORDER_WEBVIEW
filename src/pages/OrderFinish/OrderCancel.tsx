@@ -5,8 +5,8 @@ import useCancelPayment from './hooks/useCancelPayment';
 import CheckIcon from '@/assets/OrderFinish/check-icon.svg';
 import Button from '@/components/UI/Button';
 import Modal, { ModalContent } from '@/components/UI/CenterModal/Modal';
+import { backButtonTapped } from '@/util/bridge/nativeAction';
 import useBooleanState from '@/util/hooks/useBooleanState';
-import { backButtonTapped } from '@/util/ts/bridge';
 
 const orderCancelReasons: string[] = [
   '단순 변심이에요',

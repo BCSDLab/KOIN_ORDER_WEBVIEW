@@ -17,8 +17,8 @@ import BottomModal, {
   BottomModalFooter,
 } from '@/components/UI/BottomModal/BottomModal';
 import Button from '@/components/UI/Button';
+import { backButtonTapped } from '@/util/bridge/nativeAction';
 import useBooleanState from '@/util/hooks/useBooleanState';
-import { backButtonTapped } from '@/util/ts/bridge';
 
 type OrderKind = 'order' | 'preparation' | 'delivery';
 
