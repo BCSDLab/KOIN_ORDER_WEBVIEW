@@ -4,7 +4,8 @@ import CartResetButton from './CartResetButton';
 import { ROUTE_TITLES } from './routeTitles';
 import ArrowBackIcon from '@/assets/Main/arrow-back-icon.svg';
 import CloseIcon from '@/assets/Main/close-icon.svg';
-import { backButtonTapped, isAndroid } from '@/util/ts/bridge';
+import { isAndroid } from '@/util/bridge/bridge';
+import { backButtonTapped } from '@/util/bridge/nativeAction';
 
 export default function Header() {
   const navigate = useNavigate();

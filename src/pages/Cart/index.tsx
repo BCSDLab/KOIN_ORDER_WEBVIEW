@@ -14,7 +14,7 @@ import PrimaryPlus from '@/assets/Cart/primary-plus-icon.svg';
 import RightArrow from '@/assets/Payment/arrow-go-icon.svg';
 import Button from '@/components/UI/Button';
 import { useOrderStore } from '@/stores/useOrderStore';
-import { backButtonTapped } from '@/util/ts/bridge';
+import { backButtonTapped } from '@/util/bridge/nativeAction';
 
 export default function Cart() {
   const navigate = useNavigate();
