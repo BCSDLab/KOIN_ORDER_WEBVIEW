@@ -2,6 +2,7 @@ import dayjs from 'dayjs';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Cart from './pages/Cart';
 import DeliveryOutside from './pages/Delivery/Outside';
+import Login from './pages/Login';
 import OrderCancel from './pages/OrderFinish/OrderCancel';
 import PaymentConfirm from './pages/PaymentConfirm';
 import MenuDetail from './pages/Shop/MenuDetail';
@@ -22,6 +23,7 @@ export default function App() {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="/" element={<Login />} />
         <Route path="shop/true/:shopId" element={<OrderableShopView />} />
         <Route path="shop/false/:shopId" element={<UnOrderableShopView />} />
         <Route path="shop/true/:shopId/menus/:menuId" element={<MenuDetail />} />
