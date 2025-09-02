@@ -19,22 +19,24 @@ jobs:
           script: |
             const fs = require('fs');
 
-            const REVIEWER_COUNT = 2;
-
             const developers = JSON.parse(fs.readFileSync(`${{ github.workspace }}/.github/workflows/reviewer.json`));
             const prCreator = context.payload.pull_request.user.login;
             const prUrl = context.payload.pull_request.html_url;
             const prCreatorJson = developers.reviewers.find(person => person.githubName === prCreator);
+            const candidates = developers.reviewers.filter(person => person.githubName !== prCreator);
 
-            const teamOrderMembers = developers.reviewers.filter((person) => person.team === "order" && person.githubName !== prCreator);
-            const randomReviewers = getUniqueReviewers(teamOrderMembers, REVIEWER_COUNT);
-            if(!prCreatorJson) setOutput(prCreator, prUrl, randomReviewers[0], randomReviewers[1]);
-            else setOutput(prCreatorJson.name, prUrl, randomReviewers[0], randomReviewers[1]);
+            // 랜덤 2명 뽑기
+            function pickTwo(arr) {
+              const a = arr[Math.floor(Math.random() * arr.length)];
+              const rest = arr.filter(item => item !== a);
+              const b = rest[Math.floor(Math.random() * rest.length)];
 
-            function getUniqueReviewers(reviewers, count) {
-              const shuffled = reviewers.sort(() => 0.5 - Math.random());
-              return shuffled.slice(0, count);
+              return [a, b];
             }
+            
+            const [reviewer1, reviewer2] = pickTwo(candidates);
+
+            setOutput(prCreatorJson.name, prUrl, reviewer1, reviewer2);
 
             function setOutput(prCreator, prUrl, reviewer1, reviewer2) {
               core.setOutput('writer', JSON.stringify(prCreator));
