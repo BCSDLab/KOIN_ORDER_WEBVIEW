@@ -23,7 +23,7 @@ export default function useConfirmPayments({ orderType, paymentKey }: UseConfirm
       const errorMessage = JSON.parse(error.message);
 
       if (errorMessage.code === 'PROVIDER_ERROR') return;
-      navigate(`/payment?orderType=${orderType}&message=${errorMessage.message}`);
+      navigate(`/payment?orderType=${orderType}&message=${errorMessage.message}`, { replace: true });
     },
   });
 }
