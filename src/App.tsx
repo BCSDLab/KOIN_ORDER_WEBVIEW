@@ -1,5 +1,6 @@
 import dayjs from 'dayjs';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import DevOnlyWrapper from './components/Wrapper/DevOnly';
 import Cart from './pages/Cart';
 import DeliveryOutside from './pages/Delivery/Outside';
 import Login from './pages/Login';
@@ -23,7 +24,14 @@ export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Login />} />
+        <Route
+          path="/"
+          element={
+            <DevOnlyWrapper>
+              <Login />
+            </DevOnlyWrapper>
+          }
+        />
         <Route path="shop/true/:shopId" element={<OrderableShopView />} />
         <Route path="shop/false/:shopId" element={<UnOrderableShopView />} />
         <Route path="shop/true/:shopId/menus/:menuId" element={<MenuDetail />} />
