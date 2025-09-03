@@ -1,3 +1,14 @@
+export interface LoginRequest {
+  login_id: string;
+  login_pw: string;
+}
+
+export interface LoginResponse {
+  token: string;
+  refresh_token: string;
+  user_type: string;
+}
+
 export interface StudentUserResponse {
   id: number;
   login_id: string;

@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@bcsdlab/utils':
+        specifier: ^0.0.15
+        version: 0.0.15
       '@tanstack/react-query':
         specifier: ^5.74.4
         version: 5.74.4(react@19.1.0)
@@ -208,6 +211,9 @@ packages:
   '@babel/types@7.27.0':
     resolution: {integrity: sha512-H45s8fVLYjbhFH62dIJ3WtmJ6RSPt/3DRO0ZcT2SUiYiQyz3BLVb9ADEnLl91m74aQPS3AzzeajZHYOalWe3bg==}
     engines: {node: '>=6.9.0'}
+
+  '@bcsdlab/utils@0.0.15':
+    resolution: {integrity: sha512-JWJtqsVOMlfHokjCWvPBsA09Zsc2KPqR/z8s/oSzUmuQ3Q9xnKKTkswUffRhb+nv4h5ittCbZxU3QwqkEJFNCg==}
 
   '@esbuild/aix-ppc64@0.25.2':
     resolution: {integrity: sha512-wCIboOL2yXZym2cgm6mlA742s9QeJ8DjGVaL39dLN4rRwrOgOyYSnOaFPhKZGLb2ngj4EyfAFjsNJwPXZvseag==}
@@ -749,6 +755,9 @@ packages:
 
   '@types/geojson@7946.0.16':
     resolution: {integrity: sha512-6C8nqWur3j98U6+lXDfTUWIfgvZU+EumvpHKcYjujKH7woYyLj2sUmff0tRhrqM7BohUw7Pz3ZB1jj2gW9Fvmg==}
+
+  '@types/josa@3.0.5':
+    resolution: {integrity: sha512-BqvmnnEscpq70IgsfXSRQv+t34hBPxoDGB2+q8cGpXkUwmXZ+IH9K+U3dbD0CnDgTlaY+4KpVp7iu3MRcIJctg==}
 
   '@types/json-schema@7.0.15':
     resolution: {integrity: sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==}
@@ -1519,6 +1528,12 @@ packages:
   jiti@2.4.2:
     resolution: {integrity: sha512-rg9zJN+G4n2nfJl5MW3BMygZX56zKPNVEYYqq7adpmMh4Jn2QNEwhvQlFy6jPVdcod7txZtKHWnyZiA3a0zP7A==}
     hasBin: true
+
+  jongseong@0.4.2:
+    resolution: {integrity: sha512-wBNM0B48CgphzeIIGo4vFqrAg4wlxppj7fAMa7kZ2PGgwGzoheWxyiBhz4eIxUtlVPMk9gvUsSxG9pMsTyjfSw==}
+
+  josa@3.0.1:
+    resolution: {integrity: sha512-naRZOzWy/02AbP5p4Tz4lj7wpIJ93+hPk/mne8yHCpT2UZglhh2BF0f/j7SIITqZpb834B0DZ0RjJCrKji3qOQ==}
 
   js-tokens@4.0.0:
     resolution: {integrity: sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==}
@@ -2347,6 +2362,11 @@ snapshots:
       '@babel/helper-string-parser': 7.25.9
       '@babel/helper-validator-identifier': 7.25.9
 
+  '@bcsdlab/utils@0.0.15':
+    dependencies:
+      '@types/josa': 3.0.5
+      josa: 3.0.1
+
   '@esbuild/aix-ppc64@0.25.2':
     optional: true
 
@@ -2748,6 +2768,8 @@ snapshots:
   '@types/estree@1.0.7': {}
 
   '@types/geojson@7946.0.16': {}
+
+  '@types/josa@3.0.5': {}
 
   '@types/json-schema@7.0.15': {}
 
@@ -3722,6 +3744,12 @@ snapshots:
       set-function-name: 2.0.2
 
   jiti@2.4.2: {}
+
+  jongseong@0.4.2: {}
+
+  josa@3.0.1:
+    dependencies:
+      jongseong: 0.4.2
 
   js-tokens@4.0.0: {}
 
