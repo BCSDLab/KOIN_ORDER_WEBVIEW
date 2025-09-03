@@ -43,5 +43,5 @@ export default function PaymentConfirm() {
     );
   }
 
-  return <div>오류 테스트</div>;
+  return null;
 }
