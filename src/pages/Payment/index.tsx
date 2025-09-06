@@ -64,7 +64,7 @@ export default function Payment() {
   const orderName =
     cart.items.length === 1 ? cart.items[0].name : `${cart.items[0].name} 외 ${cart.items.length - 1}건`;
 
-  const address = deliveryType === 'CAMPUS' ? campusAddress?.full_address : outsideAddress?.full_address;
+  const address = deliveryType === 'CAMPUS' ? campusAddress?.full_address : outsideAddress?.address;
 
   const pay = async () => {
     if (!agreement) {

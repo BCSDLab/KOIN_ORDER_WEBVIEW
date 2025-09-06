@@ -49,6 +49,7 @@ export interface CampusDeliveryAddress {
   latitude: number;
   longitude: number;
 }
+
 export interface CampusDeliveryAddressResponse {
   count: number;
   addresses: CampusDeliveryAddress[];
@@ -61,8 +62,8 @@ export interface OffCampusDeliveryAddressRequest {
   eup_myeon_dong: string;
   road: string;
   building: string;
+  address: string;
   detail_address: string;
-  full_address: string;
 }
 
 interface RiderRequestMessage {

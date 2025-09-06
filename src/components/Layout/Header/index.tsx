@@ -36,7 +36,7 @@ export default function Header() {
 
   return (
     <header
-      className={clsx('fixed top-0 right-0 left-0 z-40 flex items-center justify-center', bgClass, 'px-6', layoutClass)}
+      className={clsx('fixed top-0 right-0 left-0 z-40 flex items-center justify-center px-6', bgClass, layoutClass)}
     >
       {pathname.startsWith('/result') ? (
         <button

@@ -8,8 +8,8 @@ export interface OutsideAddress {
   eup_myeon_dong: string;
   road: string;
   building: string;
+  address: string;
   detail_address: string;
-  full_address: string;
 }
 
 export interface CampusAddress {
@@ -53,8 +53,8 @@ export const useOrderStore = create<State & Action>()(
         eup_myeon_dong: '',
         road: '',
         building: '',
+        address: '',
         detail_address: '',
-        full_address: '',
       },
       campusAddress: undefined,
       deliveryRequest: '',
