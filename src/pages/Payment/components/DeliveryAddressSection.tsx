@@ -24,8 +24,7 @@ export default function DeliveryAddressSection({ orderableShopId }: DeliveryAddr
   const [modalMessage, setModalMessage] = useState<string>('');
   const { deliveryType, outsideAddress, campusAddress } = useOrderStore();
 
-  const existingAddress =
-    deliveryType === 'CAMPUS' ? !!campusAddress?.full_address : outsideAddress.full_address !== '';
+  const existingAddress = deliveryType === 'CAMPUS' ? !!campusAddress?.full_address : outsideAddress.address !== '';
 
   const handleOutsideClick = () => {
     if (!deliveryInfo?.off_campus_delivery) {
@@ -77,7 +76,7 @@ export default function DeliveryAddressSection({ orderableShopId }: DeliveryAddr
                 {deliveryType === 'CAMPUS' ? (
                   <Badge color="primary" size="lg" className="box-border py-1" label={campusAddress?.short_address} />
                 ) : (
-                  <span className="max-w-3xs text-xs font-normal text-neutral-600">{outsideAddress?.full_address}</span>
+                  <span className="max-w-3xs text-xs font-normal text-neutral-600">{outsideAddress?.address}</span>
                 )}
                 <RightArrow />
               </div>

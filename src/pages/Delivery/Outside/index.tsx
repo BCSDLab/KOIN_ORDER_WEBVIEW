@@ -51,8 +51,8 @@ export default function DeliveryOutside() {
               eup_myeon_dong: address.emd_nm,
               road: address.rn,
               building: address.bd_nm,
+              address: '',
               detail_address: '',
-              full_address: '',
             });
             navigate('/delivery/outside/detail', { state: { roadAddress } });
           },

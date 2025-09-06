@@ -34,8 +34,8 @@ export default function DetailAddress() {
 
     const updatedOutsideAddress = {
       ...outsideAddress,
+      address: address,
       detail_address: detailAddressValue,
-      full_address: `${address} ${detailAddressValue}`,
     };
 
     setOutsideAddress(updatedOutsideAddress);
