@@ -19,6 +19,8 @@ export default function DeliveryOutside() {
   const navigate = useNavigate();
   const [searchKeyword, setSearchKeyword] = useState<string>('');
   const [selectedAddress, setSelectedAddress] = useState<Juso | null>(null);
+  const [message, setMessage] = useState('');
+  const [modalVariant, setModalVariant] = useState<'invalidArea' | 'campusAddress'>('invalidArea');
   const [isModalOpen, openModal, closeModal] = useBooleanState(false);
 
   const { data, refetch, isSuccess, isFetched } = useRoadNameAddress(searchKeyword);
@@ -41,6 +43,7 @@ export default function DeliveryOutside() {
           si_do: address.si_nm,
           si_gun_gu: address.sgg_nm,
           eup_myeon_dong: address.emd_nm,
+          building: address.bd_nm,
         },
         {
           onSuccess: () => {
@@ -56,12 +59,25 @@ export default function DeliveryOutside() {
             });
             navigate('/delivery/outside/detail', { state: { roadAddress } });
           },
-          onError: () => {
+          onError: (error) => {
+            const parsed = JSON.parse(error.message);
+            if (parsed.code == 'INVALID_DELIVERY_AREA') {
+              setMessage(parsed.message);
+              setModalVariant('invalidArea');
+            } else {
+              setMessage('주소가 교내로 확인됩니다!\n 교내 주문으로 바꾸시겠어요?');
+              setModalVariant('campusAddress');
+            }
             openModal();
           },
         },
       );
     }
+  };
+
+  const GoToCampusDelivery = () => () => {
+    closeModal();
+    navigate('/delivery/campus');
   };
 
   return (
@@ -156,11 +172,22 @@ export default function DeliveryOutside() {
         주소 선택
       </Button>
       <Modal isOpen={isModalOpen} onClose={closeModal}>
-        <div className="flex h-36 w-full flex-col items-center gap-6 px-8 py-6">
-          <p className="text-[15px] leading-[1.6] text-neutral-600">배달이 불가능한 지역이에요.</p>
-          <Button className="h-12 w-[230px]" color="primary" onClick={closeModal}>
-            확인
-          </Button>
+        <div className="flex w-full flex-col items-center gap-6 px-8 py-6">
+          <p className="text-center text-[15px] leading-[1.6] whitespace-pre-line text-neutral-600">{message}</p>
+          {modalVariant === 'invalidArea' ? (
+            <Button className="h-12 w-[230px] font-medium" color="primary" onClick={closeModal}>
+              확인
+            </Button>
+          ) : (
+            <div className="flex w-full gap-2">
+              <Button className="h-12 flex-1 font-medium" color="gray" onClick={closeModal}>
+                아니오
+              </Button>
+              <Button className="h-12 flex-1 font-medium" color="primary" onClick={GoToCampusDelivery()}>
+                예
+              </Button>
+            </div>
+          )}
         </div>
       </Modal>
     </div>
