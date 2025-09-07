@@ -75,8 +75,9 @@ export interface RiderRequestResponse {
   contents: RiderRequestMessage[];
 }
 
-export interface CampusDeliveryValidateRequest {
+export interface OffCampusDeliveryValidateRequest {
   si_do: string;
   si_gun_gu: string;
   eup_myeon_dong: string;
+  building: string;
 }
