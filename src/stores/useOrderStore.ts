@@ -16,6 +16,7 @@ export interface CampusAddress {
   id: number;
   full_address: string;
   short_address: string;
+  address: string;
   latitude: number;
   longitude: number;
 }

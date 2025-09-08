@@ -14,6 +14,7 @@ interface Place {
   id: number;
   full_address: string;
   short_address: string;
+  address: string;
   latitude: number;
   longitude: number;
 }
@@ -22,6 +23,7 @@ const DEFAULT_PLACE: Place = {
   id: 5,
   full_address: '충남 천안시 동남구 병천면 충절로 1600 한국기술교육대학교 제1캠퍼스 생활관 105동',
   short_address: '105동(함지)',
+  address: '충청남도 천안시 동남구 병천면 충절로 1600 한국기술교육대학교 제1캠퍼스 생활관',
   latitude: 36.76202833,
   longitude: 127.28281109,
 };
@@ -37,6 +39,7 @@ export default function Campus() {
         id: campusAddress.id,
         full_address: campusAddress.full_address,
         short_address: campusAddress.short_address,
+        address: campusAddress.address,
         latitude: campusAddress.latitude,
         longitude: campusAddress.longitude,
       }
@@ -62,6 +65,7 @@ export default function Campus() {
       id: selectedPlace.id,
       full_address: selectedPlace.full_address,
       short_address: selectedPlace.short_address,
+      address: selectedPlace.address,
       latitude: selectedPlace.latitude,
       longitude: selectedPlace.longitude,
     });
