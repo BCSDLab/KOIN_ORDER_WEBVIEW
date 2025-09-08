@@ -1,5 +1,6 @@
 export interface DeliveryTemporaryRequest {
   address: string;
+  address_detail: string;
   phone_number: string;
   to_owner: string;
   to_rider: string;
@@ -34,6 +35,7 @@ export interface ConfirmPaymentsResponse {
   approved_at: string;
   payment_method: string;
   delivery_address: string;
+  delivery_address_detail: string;
   shop_address: string;
   to_owner: string;
   to_rider: string;
@@ -42,6 +44,7 @@ export interface ConfirmPaymentsResponse {
   menus: {
     name: string;
     quantity: number;
+    price: number;
     options: {
       option_group_name: string;
       option_name: string;
@@ -49,6 +52,7 @@ export interface ConfirmPaymentsResponse {
     }[];
   }[];
   order_type: 'DELIVERY' | 'TAKE_OUT';
+  easy_pay_company: 'string';
 }
 
 export interface CancelPaymentRequest {
