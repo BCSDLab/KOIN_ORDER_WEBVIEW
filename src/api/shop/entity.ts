@@ -177,7 +177,7 @@ interface Image {
 
 export interface ShopInfoSummaryResponse {
   shop_id: number;
-  orderable_shop_id?: number | null;
+  orderable_shop_id?: number;
   name: string;
   introduction: string | null;
   pay_card: boolean;
