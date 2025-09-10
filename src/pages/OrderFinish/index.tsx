@@ -2,6 +2,7 @@ import { useState } from 'react';
 import clsx from 'clsx';
 import dayjs from 'dayjs';
 import { useNavigate, useParams } from 'react-router-dom';
+import ReceiptModal from './components/ReceiptModal';
 import usePaymentInfo from './hooks/usePaymentInfo';
 import CloseIcon from '@/assets/Main/close-icon.svg';
 import CallIcon from '@/assets/OrderFinish/call-icon.svg';
@@ -11,14 +12,19 @@ import Receipt from '@/assets/OrderFinish/receipt-icon.svg';
 import ShoppingCart from '@/assets/OrderFinish/shopping-cart-icon.svg';
 import Skillet from '@/assets/OrderFinish/skillet-icon.svg';
 import ArrowGo from '@/assets/Payment/arrow-go-icon.svg';
+import CopyIcon from '@/assets/Payment/copy.svg';
 import BottomModal, {
   BottomModalHeader,
   BottomModalContent,
   BottomModalFooter,
 } from '@/components/UI/BottomModal/BottomModal';
 import Button from '@/components/UI/Button';
+import useMarker from '@/pages/Delivery/hooks/useMarker';
+import useNaverGeocode from '@/pages/Delivery/hooks/useNaverGeocode';
+import useNaverMap from '@/pages/Delivery/hooks/useNaverMap';
 import { backButtonTapped } from '@/util/bridge/nativeAction';
 import useBooleanState from '@/util/hooks/useBooleanState';
+import { useToast } from '@/util/hooks/useToast';
 
 type OrderKind = 'order' | 'preparation' | 'delivery';
 
@@ -34,9 +40,12 @@ const stateMessage = {
   delivery: '배달이 완료되었어요 감사합니다!',
 } as const;
 
+const formatKRW = (number: number) => `${number.toLocaleString()}원`;
+
 export default function OrderFinish() {
   const navigate = useNavigate();
   const { paymentId } = useParams();
+  const { showToast } = useToast();
 
   if (!paymentId) {
     // 잘못된 경로로 접근 시 메인 화면으로 이동(임시 처리)
@@ -45,14 +54,26 @@ export default function OrderFinish() {
 
   const { data: paymentInfo } = usePaymentInfo(Number(paymentId));
 
+  const coords = useNaverGeocode(paymentInfo.delivery_address);
+  const map = useNaverMap(...coords);
+  useMarker(map);
+
   const [orderKind] = useState<OrderKind>('order');
   const [isDeliveryBottomModalOpen, , closeDeliveryBottomModal] = useBooleanState(false);
   const [isCallBottomModalOpen, openCallBottomModal, closeCallBottomModal] = useBooleanState(false);
+  const [isReceiptOpen, openReceipt, closeReceipt] = useBooleanState(false);
 
   const isDelivery = paymentInfo.order_type === 'DELIVERY';
 
   const approvedTime = dayjs(paymentInfo?.approved_at);
   const deliveryFinishTime = approvedTime.add(1, 'hour').format('A h시 mm분');
+
+  const menusSubtotal = paymentInfo.menus.reduce((sum, menu) => {
+    const optionSumPerItem = (menu.options ?? []).reduce((sum, options) => sum + (options.option_price ?? 0), 0);
+    return sum + (menu.price + optionSumPerItem) * menu.quantity;
+  }, 0);
+
+  const deliveryFee = paymentInfo.amount - menusSubtotal;
 
   const handleOpenCallBottomModal = () => {
     closeDeliveryBottomModal();
@@ -61,6 +82,21 @@ export default function OrderFinish() {
 
   const handleClickOrderCancel = () => {
     navigate(`/orderCancel/${paymentId}`);
+  };
+
+  const handleCopyAddress = async (text: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      showToast('주소가 복사되었습니다.');
+    } catch {
+      const textarea = document.createElement('textarea');
+      textarea.value = text;
+      document.body.appendChild(textarea);
+      textarea.select();
+      document.execCommand('copy');
+      textarea.remove();
+      showToast('주소가 복사되었습니다.');
+    }
   };
 
   // TODO: paymentInfo가 없을 경우 처리
@@ -118,7 +154,16 @@ export default function OrderFinish() {
         </div>
       </div>
       <div className="mt-10 px-6">
-        <div className="text-primary-500 mb-5 text-lg font-semibold">{isDelivery ? '배달' : '방문'}정보</div>
+        <div className="shadow-1 mb-4 w-full rounded-xl">
+          <div id="map" className="h-40 w-full rounded-t-xl border border-neutral-300"></div>
+          <div className="flex min-h-[3.5rem] w-full items-center justify-between rounded-b-xl bg-white px-6 py-4 text-[0.813rem] text-neutral-600">
+            {paymentInfo.delivery_address}
+            <button onClick={() => handleCopyAddress(paymentInfo.delivery_address)}>
+              <CopyIcon />
+            </button>
+          </div>
+        </div>
+        <div className="text-primary-500 text-lg font-semibold">{isDelivery ? '배달' : '방문'}정보</div>
         <div className="shadow-1 flex flex-col rounded-2xl border border-white bg-white px-6 text-sm leading-[160%] font-semibold">
           <div className="border-b border-neutral-200 py-4">
             {isDelivery ? '배달' : '가게'}주소
@@ -126,7 +171,7 @@ export default function OrderFinish() {
               {isDelivery ? paymentInfo.delivery_address : paymentInfo.shop_address}
             </div>
           </div>
-          <div className={clsx('pt-4', isDelivery && 'border-b border-neutral-200 pb-4')}>
+          <div className={clsx('py-4', isDelivery && 'border-b border-neutral-200 pb-4')}>
             사장님에게
             <div className={`font-normal text-neutral-500`}>
               {paymentInfo.provide_cutlery ? '수저 · 포크 받기, ' : '수저 · 포크 안 받기 '}
@@ -135,30 +180,96 @@ export default function OrderFinish() {
           </div>
           {isDelivery && (
             <div className="py-4">
-              배달기사님에게<div className="font-normal text-neutral-500">{paymentInfo.to_rider}</div>
+              배달기사님에게
+              <div className="font-normal text-neutral-500">{paymentInfo.to_rider ? paymentInfo.to_rider : '없음'}</div>
             </div>
           )}
         </div>
+        <div className="text-primary-500 my-5 text-lg font-semibold">주문내역</div>
+        <div className="shadow-1 gap-3 rounded-2xl border border-white bg-white px-6 py-4 text-sm leading-[160%]">
+          <div>
+            <div className="flex flex-col gap-4">
+              {paymentInfo.menus.map((menu, menuIndex) => {
+                const optionSumPerItem = (menu.options ?? []).reduce(
+                  (sum, option) => sum + (option.option_price ?? 0),
+                  0,
+                );
+                const lineTotal = (menu.price + optionSumPerItem) * menu.quantity;
+
+                return (
+                  <div key={menuIndex}>
+                    <div className="mb-2.5 flex items-center justify-between">
+                      <div className="flex items-center gap-1">
+                        <div className="text-sm leading-[160%] font-semibold">{menu.name}</div>
+                        <div className="text-sm font-semibold text-neutral-500">{menu.quantity}개</div>
+                      </div>
+                      <div className="text-[15px] leading-[160%] font-semibold">{formatKRW(lineTotal)}</div>
+                    </div>
+
+                    <ul className="ml-4 list-disc">
+                      <li>
+                        <div className="text-[13px] text-neutral-500">가격 : {formatKRW(menu.price)}</div>
+                      </li>
+
+                      {(menu.options ?? []).length > 0 &&
+                        menu.options!.map((option, optionIndex) => {
+                          const optionPrice = option.option_price ?? 0;
+                          return (
+                            <li key={optionIndex}>
+                              <div className="text-[13px] text-neutral-500">
+                                {option.option_group_name} : {option.option_name} (<span>{formatKRW(optionPrice)}</span>
+                                )
+                              </div>
+                            </li>
+                          );
+                        })}
+                    </ul>
+                    {menuIndex !== paymentInfo.menus.length - 1 && <div className="mt-4 border-t border-neutral-100" />}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+
+        <div className="text-primary-500 my-5 text-lg font-semibold">결제정보</div>
+        <div className="shadow-1 mb-5 gap-3 rounded-2xl border border-white bg-white px-6 py-4 text-sm leading-[160%]">
+          <div className="text-[13px] text-neutral-500">
+            <div className="flex justify-between pb-1">
+              메뉴 금액<div>{formatKRW(menusSubtotal)}</div>
+            </div>
+            <div className="flex justify-between">
+              배달 금액<div>{formatKRW(deliveryFee)}</div>
+            </div>
+            <div className="my-4 h-[1px] border-b border-neutral-200" />
+          </div>
+          <div className="font-semibold">
+            <div className="flex justify-between pb-1">
+              총 결제 금액 <div className="text-primary-500 text-[15px]">{formatKRW(paymentInfo.amount)}</div>
+            </div>
+            <div className="flex justify-between">
+              결제 수단 <div className="text-[15px]">{paymentInfo.easy_pay_company}</div>
+            </div>
+          </div>
+        </div>
         <div className="text-primary-500 my-5 text-lg font-semibold">주문정보</div>
-        <div className="shadow-1 mb-16 flex flex-col gap-3 rounded-2xl border border-white bg-white px-6 py-4 text-sm leading-[160%] font-semibold">
-          <div className="align-center flex gap-1 border-b border-neutral-200 pt-1 pb-4 pl-1">
+        <div className="shadow-1 mb-16 flex flex-col gap-4 rounded-2xl bg-white px-6 py-4">
+          <div className="flex gap-1.5 text-sm leading-[160%] font-semibold">
             <div>{paymentInfo.shop_name}</div>
             <ArrowGo />
           </div>
-          <div className="border-b border-neutral-200 pb-3 text-[13px] font-normal text-neutral-500">
-            {paymentInfo.menus.map((menu) => (
-              <div className="flex gap-2">
-                <div>{menu.name}</div>
-                <div>{menu.quantity}개</div>
-              </div>
-            ))}
+          <div className="text-[13px] text-neutral-600">
+            <div className="flex gap-2">
+              주문번호 <div>{paymentInfo.id}</div>
+            </div>
+            <div className="flex gap-2">
+              주문일시 <div>{paymentInfo.requested_at.split(' ')[0]}</div>
+            </div>
           </div>
-          <div className="flex flex-row justify-between pb-2">
-            총 결제 금액 <div>{paymentInfo.amount.toLocaleString()}원</div>
-          </div>
-          <Button className="gap-3 self-center px-16 py-2.5">
+          <div className="h-[1px] border-b border-neutral-200" />
+          <Button className="gap-3 self-center px-16 py-2.5" onClick={openReceipt}>
             <Receipt />
-            상세내역 보기
+            영수증 보기
           </Button>
         </div>
       </div>
@@ -204,6 +315,7 @@ export default function OrderFinish() {
           </BottomModalContent>
           <BottomModalFooter />
         </BottomModal>
+        <ReceiptModal isOpen={isReceiptOpen} onClose={closeReceipt} paymentInfo={paymentInfo} />
       </div>
     </div>
   );

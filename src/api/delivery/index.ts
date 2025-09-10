@@ -6,7 +6,7 @@ import {
   CampusDeliveryAddressResponse,
   OffCampusDeliveryAddressRequest,
   RiderRequestResponse,
-  CampusDeliveryValidateRequest,
+  OffCampusDeliveryValidateRequest,
 } from './entity';
 import { getAuthHeader } from '@/util/ts/auth';
 
@@ -41,7 +41,7 @@ export const getRiderRequestMessages = async () => {
   });
 };
 
-export const postOffCampusDeliveryValidate = async (addressData: CampusDeliveryValidateRequest) => {
+export const postOffCampusDeliveryValidate = async (addressData: OffCampusDeliveryValidateRequest) => {
   return await apiClient.post('delivery/address/off-campus/validate', {
     body: addressData,
   });
