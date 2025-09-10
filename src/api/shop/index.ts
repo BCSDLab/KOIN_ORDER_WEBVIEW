@@ -10,7 +10,6 @@ import {
   ShopMenuGroupsResponse,
   ShopMenuDetailResponse,
   UnOrderableShopDetailInfoResponse,
-  UnOrderableShopReviewsResponse,
   UnOrderableShopMenusResponse,
 } from './entity';
 
@@ -56,7 +55,7 @@ export const getUnOrderableShopInfo = async ({ UnOrderableShopId }: UnOrderableS
   return response;
 };
 
-export const getUnOrderableShopReviews = async ({ UnOrderableShopId }: UnOrderableShopInfoParams) => {
-  const response = await apiClient.get<UnOrderableShopReviewsResponse>(`shops/${UnOrderableShopId}/reviews`);
+export const getUnOrderableShopInfoSummary = async ({ UnOrderableShopId }: UnOrderableShopInfoParams) => {
+  const response = await apiClient.get<ShopInfoSummaryResponse>(`shops/${UnOrderableShopId}/summary`);
   return response;
 };
