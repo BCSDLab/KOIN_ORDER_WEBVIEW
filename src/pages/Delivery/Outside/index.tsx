@@ -20,7 +20,9 @@ export default function DeliveryOutside() {
   const [searchKeyword, setSearchKeyword] = useState<string>('');
   const [selectedAddress, setSelectedAddress] = useState<Juso | null>(null);
   const [message, setMessage] = useState('');
-  const [modalVariant, setModalVariant] = useState<'invalidArea' | 'campusAddress'>('invalidArea');
+  const [modalVariant, setModalVariant] = useState<'INVALID_DELIVERY_AREA' | 'INVALID_DELIVERY_BUILDING'>(
+    'INVALID_DELIVERY_AREA',
+  );
   const [isModalOpen, openModal, closeModal] = useBooleanState(false);
 
   const { data, refetch, isSuccess, isFetched } = useRoadNameAddress(searchKeyword);
@@ -63,10 +65,10 @@ export default function DeliveryOutside() {
             const parsed = JSON.parse(error.message);
             if (parsed.code == 'INVALID_DELIVERY_AREA') {
               setMessage(parsed.message);
-              setModalVariant('invalidArea');
+              setModalVariant('INVALID_DELIVERY_AREA');
             } else {
               setMessage('주소가 교내로 확인됩니다!\n 교내 주문으로 바꾸시겠어요?');
-              setModalVariant('campusAddress');
+              setModalVariant('INVALID_DELIVERY_BUILDING');
             }
             openModal();
           },
@@ -174,7 +176,7 @@ export default function DeliveryOutside() {
       <Modal isOpen={isModalOpen} onClose={closeModal}>
         <div className="flex w-full flex-col items-center gap-6 px-8 py-6">
           <p className="text-center text-[15px] leading-[1.6] whitespace-pre-line text-neutral-600">{message}</p>
-          {modalVariant === 'invalidArea' ? (
+          {modalVariant === 'INVALID_DELIVERY_BUILDING' ? (
             <Button className="h-12 w-[230px] font-medium" color="primary" onClick={closeModal}>
               확인
             </Button>
