@@ -4,6 +4,7 @@ import CartResetButton from './CartResetButton';
 import { ROUTE_TITLES } from './routeTitles';
 import ArrowBackIcon from '@/assets/Main/arrow-back-icon.svg';
 import CloseIcon from '@/assets/Main/close-icon.svg';
+import CartIcon from '@/assets/OrderFinish/shopping-cart-icon.svg';
 import { isAndroid } from '@/util/bridge/bridge';
 import { backButtonTapped } from '@/util/bridge/nativeAction';
 
@@ -25,7 +26,7 @@ export default function Header() {
     }
   };
 
-  const title = ROUTE_TITLES.find((item) => item.match(pathname))?.title ?? '';
+  const title = ROUTE_TITLES.find((item) => item.match(pathname))?.title ?? '주문';
 
   const bgClass = clsx({
     'bg-white': pathname.startsWith('/shop-detail') || pathname.startsWith('/result'),
@@ -59,6 +60,11 @@ export default function Header() {
       )}
       <span className="text-lg font-medium">{title}</span>
       {pathname === '/cart' && <CartResetButton />}
+      {pathname === '/home' && (
+        <button className="absolute top-1/2 right-6 -translate-y-1/2" onClick={() => navigate('/cart')}>
+          <CartIcon />
+        </button>
+      )}
     </header>
   );
 }

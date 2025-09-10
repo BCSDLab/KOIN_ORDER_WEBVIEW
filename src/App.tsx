@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import DevOnlyWrapper from './components/Wrapper/DevOnly';
 import Cart from './pages/Cart';
 import DeliveryOutside from './pages/Delivery/Outside';
+import Home from './pages/Home';
 import Login from './pages/Login';
 import OrderCancel from './pages/OrderFinish/OrderCancel';
 import PaymentConfirm from './pages/PaymentConfirm';
@@ -32,6 +33,7 @@ export default function App() {
             </DevOnlyWrapper>
           }
         />
+        <Route path="home" element={<Home />} />
         <Route path="shop/true/:shopId" element={<OrderableShopView />} />
         <Route path="shop/false/:shopId" element={<UnOrderableShopView />} />
         <Route path="shop/true/:shopId/menus/:menuId" element={<MenuDetail />} />
