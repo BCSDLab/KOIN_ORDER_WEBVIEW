@@ -5,7 +5,7 @@ import {
   getShopMenuDetail,
   getShopMenuGroups,
   getUnOrderableShopInfo,
-  getUnOrderableShopReviews,
+  getUnOrderableShopInfoSummary,
   getUnOrderableShopMenus,
 } from '@/api/shop';
 
@@ -76,14 +76,10 @@ export const useGetUnOrderableShopInfo = (UnOrderableShopId: number) => {
   });
 };
 
-export const useGetUnOrderableShopReviews = (UnOrderableShopId: number) => {
+export const useGetUnOrderableShopInfoSummary = (UnOrderableShopId: number) => {
   return useSuspenseQuery({
-    queryKey: ['unOrderableShopReviews', UnOrderableShopId],
-    queryFn: () => getUnOrderableShopReviews({ UnOrderableShopId }),
-    select: (data) => ({
-      rating_average: data.statistics.average_rating,
-      review_count: data.total_count,
-    }),
+    queryKey: ['unOrderableShopInfoSummary', UnOrderableShopId],
+    queryFn: () => getUnOrderableShopInfoSummary({ UnOrderableShopId }),
   });
 };
 
