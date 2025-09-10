@@ -81,7 +81,7 @@ export default function ReceiptModal({ isOpen, onClose, paymentInfo }: ReceiptMo
           <div className="space-y-2 text-left">
             <div className="font-semibold">배달 주소</div>
             <div className="text-sm break-words text-black">
-              {paymentInfo.delivery_address} {paymentInfo.delivery_address_detail}
+              {paymentInfo.delivery_address} {paymentInfo.delivery_address_details}
             </div>
           </div>
         </div>

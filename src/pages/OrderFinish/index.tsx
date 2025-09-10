@@ -20,7 +20,6 @@ import BottomModal, {
 } from '@/components/UI/BottomModal/BottomModal';
 import Button from '@/components/UI/Button';
 import useMarker from '@/pages/Delivery/hooks/useMarker';
-import useNaverGeocode from '@/pages/Delivery/hooks/useNaverGeocode';
 import useNaverMap from '@/pages/Delivery/hooks/useNaverMap';
 import { backButtonTapped } from '@/util/bridge/nativeAction';
 import useBooleanState from '@/util/hooks/useBooleanState';
@@ -54,8 +53,7 @@ export default function OrderFinish() {
 
   const { data: paymentInfo } = usePaymentInfo(Number(paymentId));
 
-  const coords = useNaverGeocode(paymentInfo.delivery_address);
-  const map = useNaverMap(...coords);
+  const map = useNaverMap(paymentInfo.latitude, paymentInfo.longitude);
   useMarker(map);
 
   const [orderKind] = useState<OrderKind>('order');
@@ -157,7 +155,7 @@ export default function OrderFinish() {
         <div className="shadow-1 mb-4 w-full rounded-xl">
           <div id="map" className="h-40 w-full rounded-t-xl border border-neutral-300"></div>
           <div className="flex min-h-[3.5rem] w-full items-center justify-between rounded-b-xl bg-white px-6 py-4 text-[0.813rem] text-neutral-600">
-            {paymentInfo.delivery_address}
+            {paymentInfo.delivery_address} {paymentInfo.delivery_address_details}
             <button onClick={() => handleCopyAddress(paymentInfo.delivery_address)}>
               <CopyIcon />
             </button>
@@ -168,7 +166,9 @@ export default function OrderFinish() {
           <div className="border-b border-neutral-200 py-4">
             {isDelivery ? '배달' : '가게'}주소
             <div className="font-normal text-neutral-500">
-              {isDelivery ? paymentInfo.delivery_address : paymentInfo.shop_address}
+              {isDelivery
+                ? `${paymentInfo.delivery_address} ${paymentInfo.delivery_address_details}`
+                : paymentInfo.shop_address}
             </div>
           </div>
           <div className={clsx('py-4', isDelivery && 'border-b border-neutral-200 pb-4')}>

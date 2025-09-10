@@ -50,9 +50,9 @@ export default function DeliveryAddressSection({ orderableShopId }: DeliveryAddr
         <p className="text-primary-500 text-lg font-semibold">배달주소</p>
         {existingAddress ? (
           (deliveryType === 'CAMPUS' && deliveryInfo?.off_campus_delivery) ||
-          (deliveryType === 'OUTSIDE' && deliveryInfo?.campus_delivery) ? (
+          (deliveryType === 'OFF_CAMPUS' && deliveryInfo?.campus_delivery) ? (
             <Link
-              to={`/delivery/${deliveryType === 'CAMPUS' ? 'OUTSIDE' : 'CAMPUS'}`}
+              to={`/delivery/${deliveryType === 'CAMPUS' ? 'OFF_CAMPUS' : 'CAMPUS'}`}
               className="text-xs text-neutral-500 underline"
             >
               {deliveryType === 'CAMPUS' ? '교외 주소를 원하시나요?' : '교내 주소를 원하시나요?'}
@@ -70,13 +70,15 @@ export default function DeliveryAddressSection({ orderableShopId }: DeliveryAddr
               color="gray"
               fullWidth
               className="border-0 p-0 shadow-none"
-              onClick={() => navigate(`/delivery/${deliveryType === 'CAMPUS' ? 'CAMPUS' : 'OUTSIDE'}`)}
+              onClick={() => navigate(`/delivery/${deliveryType === 'CAMPUS' ? 'CAMPUS' : 'OFF_CAMPUS'}`)}
             >
               <div className="flex w-full items-center justify-between text-left">
                 {deliveryType === 'CAMPUS' ? (
                   <Badge color="primary" size="lg" className="box-border py-1" label={campusAddress?.short_address} />
                 ) : (
-                  <span className="max-w-3xs text-xs font-normal text-neutral-600">{outsideAddress?.address}</span>
+                  <span className="max-w-3xs text-xs font-normal text-neutral-600">
+                    {outsideAddress?.address} {outsideAddress?.detail_address}
+                  </span>
                 )}
                 <RightArrow />
               </div>
