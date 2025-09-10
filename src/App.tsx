@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import DevOnlyWrapper from './components/Wrapper/DevOnly';
 import Cart from './pages/Cart';
 import DeliveryOutside from './pages/Delivery/Outside';
+import Home from './pages/Home';
 import Login from './pages/Login';
 import OrderCancel from './pages/OrderFinish/OrderCancel';
 import PaymentConfirm from './pages/PaymentConfirm';
@@ -38,6 +39,7 @@ export default function App() {
         <Route path="payment/return" element={<PaymentConfirm />} />
 
         <Route element={<AppLayout />}>
+          <Route path="home" element={<Home />} />
           <Route path="shop-detail/true/:shopId" element={<OrderableShopDetail />} />
           <Route path="shop-detail/false/:shopId" element={<UnOrderableShopDetail />} />
           <Route path="cart" element={<Cart />} />

@@ -133,7 +133,7 @@ export default function OrderFinish() {
         </div>
         <div className="flex flex-row justify-center">
           <div className="is-icon-purple">
-            <ShoppingCart />
+            <ShoppingCart fill="white" />
           </div>
           <div className="bg-primary-300 h-[5px] w-[calc((100vw-184px)/8)] self-center"></div>
           <div

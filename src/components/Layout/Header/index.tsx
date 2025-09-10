@@ -1,5 +1,6 @@
 import clsx from 'clsx';
 import { useLocation, useNavigate } from 'react-router-dom';
+import CartCountButton from './CartCountButton';
 import CartResetButton from './CartResetButton';
 import { ROUTE_TITLES } from './routeTitles';
 import ArrowBackIcon from '@/assets/Main/arrow-back-icon.svg';
@@ -59,6 +60,12 @@ export default function Header() {
       )}
       <span className="text-lg font-medium">{title}</span>
       {pathname === '/cart' && <CartResetButton />}
+      {pathname === '/home' && (
+        <CartCountButton />
+        // <button className="absolute top-1/2 right-6 -translate-y-1/2" onClick={() => navigate('/cart')}>
+        //   <CartIcon />
+        // </button>
+      )}
     </header>
   );
 }
