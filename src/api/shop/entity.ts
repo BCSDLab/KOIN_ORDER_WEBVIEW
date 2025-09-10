@@ -177,18 +177,18 @@ interface Image {
 
 export interface ShopInfoSummaryResponse {
   shop_id: number;
-  orderable_shop_id: number | null;
+  orderable_shop_id?: number | null;
   name: string;
   introduction: string | null;
   pay_card: boolean;
   pqy_bank: boolean;
-  is_delivery_available: boolean;
-  is_takeout_available: boolean;
-  minimum_order_amount: number;
+  is_delivery_available?: boolean;
+  is_takeout_available?: boolean;
+  minimum_order_amount?: number;
   rating_average: number;
   review_count: number;
-  minimum_delivery_tip: number;
-  maximum_delivery_tip: number;
+  minimum_delivery_tip?: number;
+  maximum_delivery_tip?: number;
   images: Image[];
 }
 
