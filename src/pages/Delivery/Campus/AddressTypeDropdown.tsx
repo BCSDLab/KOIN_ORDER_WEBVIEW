@@ -10,6 +10,7 @@ interface Place {
   id: number;
   full_address: string;
   short_address: string;
+  address: string;
   latitude: number;
   longitude: number;
 }
@@ -85,6 +86,7 @@ export default function AddressTypeDropdown({
                         id: address.id,
                         full_address: address.full_address,
                         short_address: address.short_address,
+                        address: address.address,
                         latitude: address.latitude,
                         longitude: address.longitude,
                       })

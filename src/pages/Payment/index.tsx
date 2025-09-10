@@ -64,7 +64,8 @@ export default function Payment() {
   const orderName =
     cart.items.length === 1 ? cart.items[0].name : `${cart.items[0].name} 외 ${cart.items.length - 1}건`;
 
-  const address = deliveryType === 'CAMPUS' ? campusAddress?.full_address : outsideAddress?.address;
+  const address = deliveryType === 'CAMPUS' ? campusAddress?.address : outsideAddress?.address;
+  const address_detail = deliveryType === 'CAMPUS' ? campusAddress?.short_address : outsideAddress?.detail_address;
 
   const pay = async () => {
     if (!agreement) {
@@ -86,6 +87,7 @@ export default function Payment() {
     if (isDelivery) {
       order = await temporaryDelivery({
         address: address!,
+        address_detail: address_detail!,
         phone_number: userPhoneNumber,
         to_owner: ownerRequest,
         to_rider: deliveryRequest,
