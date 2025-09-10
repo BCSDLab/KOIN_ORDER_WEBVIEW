@@ -33,13 +33,13 @@ export default function App() {
             </DevOnlyWrapper>
           }
         />
-        <Route path="home" element={<Home />} />
         <Route path="shop/true/:shopId" element={<OrderableShopView />} />
         <Route path="shop/false/:shopId" element={<UnOrderableShopView />} />
         <Route path="shop/true/:shopId/menus/:menuId" element={<MenuDetail />} />
         <Route path="payment/return" element={<PaymentConfirm />} />
 
         <Route element={<AppLayout />}>
+          <Route path="home" element={<Home />} />
           <Route path="shop-detail/true/:shopId" element={<OrderableShopDetail />} />
           <Route path="shop-detail/false/:shopId" element={<UnOrderableShopDetail />} />
           <Route path="cart" element={<Cart />} />
