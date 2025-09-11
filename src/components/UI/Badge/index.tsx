@@ -5,7 +5,8 @@ import { twMerge } from 'tailwind-merge';
 interface BadgeProps extends HTMLAttributes<HTMLDivElement> {
   variant?: keyof typeof COLOR;
   color?: 'primary' | 'primaryLight' | 'neutral' | 'white';
-  size?: 'sm' | 'md' | 'lg';
+  size?: 'sm' | 'md' | 'lg' | 'xs';
+  font?: 'sm' | 'xs';
   label?: string;
   startIcon?: ReactElement<SVGProps<SVGSVGElement>>;
   endIcon?: ReactElement<SVGProps<SVGSVGElement>>;
@@ -31,15 +32,22 @@ const COLOR: Record<string, Record<string, string>> = {
 };
 
 const SIZE = {
+  xs: `px-2 py-1`,
   sm: 'px-2 py-1.5',
   md: 'px-3 py-1',
   lg: 'px-3 py-1.5',
+};
+
+const FONT = {
+  sm: 'text-sm',
+  xs: 'text-xs',
 };
 
 export default function Badge({
   variant = 'default',
   color = 'primary',
   size = 'lg',
+  font = 'sm',
   label,
   startIcon: startIcon,
   endIcon: endIcon,
@@ -47,9 +55,10 @@ export default function Badge({
 }: BadgeProps) {
   const composedClass = twMerge(
     clsx(
-      'inline-flex items-center rounded-full py-1 font-[Pretendard] font-semibold text-sm gap-1.5 h-fit box-border',
+      'inline-flex items-center rounded-full py-1 font-[Pretendard] font-semibold gap-1.5 h-fit box-border',
       SIZE[size],
       COLOR[color][variant],
+      FONT[font],
       className,
     ),
   );

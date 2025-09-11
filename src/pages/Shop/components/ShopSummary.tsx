@@ -38,13 +38,18 @@ export default function ShopSummary({ shopInfoSummary, id, isOrderable }: ShopSu
             </div>
           </Link>
         </div>
-        {shopInfoSummary.is_delivery_available ||
-          (shopInfoSummary.is_takeout_available && (
-            <div className="mt-4 self-start">
-              {shopInfoSummary.is_delivery_available && <Badge label="배달 가능" color="white" size="sm" />}
-              {shopInfoSummary.is_takeout_available && <Badge label="포장 가능" color="white" size="sm" />}
-            </div>
-          ))}
+        {isOrderable && (shopInfoSummary.is_delivery_available || shopInfoSummary.is_takeout_available) && (
+          <div className="mt-4 self-start">
+            {shopInfoSummary.is_delivery_available && <Badge label="배달 가능" color="white" size="xs" font="xs" />}
+            {shopInfoSummary.is_takeout_available && <Badge label="포장 가능" color="white" size="xs" font="xs" />}
+          </div>
+        )}
+        {!isOrderable && (
+          <div className="mt-4 flex gap-2 self-start">
+            <Badge label="배달 불가" color="neutral" size="xs" variant="outlined" font="xs" />
+            <Badge label="포장 불가" color="neutral" size="xs" variant="outlined" font="xs" />
+          </div>
+        )}
         <div className="mt-4 flex w-full justify-between gap-3 self-start">
           {isOrderable && (
             <Link
