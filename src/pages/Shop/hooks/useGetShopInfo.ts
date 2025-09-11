@@ -4,9 +4,9 @@ import {
   getShopInfoSummary,
   getShopMenuDetail,
   getShopMenuGroups,
-  getUnOrderableShopInfo,
-  getUnOrderableShopReviews,
-  getUnOrderableShopMenus,
+  getUnorderableShopInfo,
+  getUnorderableShopInfoSummary,
+  getUnorderableShopMenus,
 } from '@/api/shop';
 
 export const useGetShopInfo = (orderableShopId: number) => {
@@ -30,10 +30,10 @@ export const useGetShopMenuGroups = (orderableShopId: number) => {
   });
 };
 
-export const useGetUnOrderableShopMenuGroups = (UnOrderableShopId: number) => {
+export const useGetUnorderableShopMenuGroups = (UnorderableShopId: number) => {
   return useSuspenseQuery({
-    queryKey: ['unOrderableShopMenuGroups', UnOrderableShopId],
-    queryFn: () => getUnOrderableShopInfo({ UnOrderableShopId }),
+    queryKey: ['unorderableShopMenuGroups', UnorderableShopId],
+    queryFn: () => getUnorderableShopInfo({ UnorderableShopId }),
     select: (data) => ({
       count: data.menu_categories.length,
       menu_groups: data.menu_categories.map((category) => ({
@@ -51,10 +51,10 @@ export const useGetShopMenuDetail = (orderableShopId: number, orderableShopMenuI
   });
 };
 
-export const useGetUnOrderableShopInfo = (UnOrderableShopId: number) => {
+export const useGetUnorderableShopInfo = (UnorderableShopId: number) => {
   return useSuspenseQuery({
-    queryKey: ['unOrderableShopInfo', UnOrderableShopId],
-    queryFn: () => getUnOrderableShopInfo({ UnOrderableShopId }),
+    queryKey: ['unorderableShopInfo', UnorderableShopId],
+    queryFn: () => getUnorderableShopInfo({ UnorderableShopId }),
     select: (data) => ({
       shop_id: data.id,
       orderable_shop_id: null,
@@ -76,21 +76,17 @@ export const useGetUnOrderableShopInfo = (UnOrderableShopId: number) => {
   });
 };
 
-export const useGetUnOrderableShopReviews = (UnOrderableShopId: number) => {
+export const useGetUnorderableShopInfoSummary = (UnorderableShopId: number) => {
   return useSuspenseQuery({
-    queryKey: ['unOrderableShopReviews', UnOrderableShopId],
-    queryFn: () => getUnOrderableShopReviews({ UnOrderableShopId }),
-    select: (data) => ({
-      rating_average: data.statistics.average_rating,
-      review_count: data.total_count,
-    }),
+    queryKey: ['unorderableShopInfoSummary', UnorderableShopId],
+    queryFn: () => getUnorderableShopInfoSummary({ UnorderableShopId }),
   });
 };
 
-export const useGetUnOrderableShopMenus = (UnOrderableShopId: number) => {
+export const useGetUnorderableShopMenus = (UnorderableShopId: number) => {
   return useSuspenseQuery({
-    queryKey: ['unOrderableShopMenus', UnOrderableShopId],
-    queryFn: () => getUnOrderableShopMenus({ UnOrderableShopId }),
+    queryKey: ['unorderableShopMenus', UnorderableShopId],
+    queryFn: () => getUnorderableShopMenus({ UnorderableShopId }),
     select: (data) =>
       data.menu_categories.map((category) => ({
         menu_group_id: category.id,

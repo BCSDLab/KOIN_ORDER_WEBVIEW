@@ -5,15 +5,14 @@ import ImageCarousel from './components/ImageCarousel';
 import ShopMenuGroups from './components/ShopMenuGroups';
 import ShopMenus from './components/ShopMenus';
 import ShopSummary from './components/ShopSummary';
-import { useGetUnOrderableShopInfo } from './hooks/useGetShopInfo';
-import { useGetUnOrderableShopReviews } from './hooks/useGetShopInfo';
-import { useGetUnOrderableShopMenuGroups } from './hooks/useGetShopInfo';
-import { useGetUnOrderableShopMenus } from './hooks/useGetShopInfo';
+import { useGetUnorderableShopInfoSummary } from './hooks/useGetShopInfo';
+import { useGetUnorderableShopMenuGroups } from './hooks/useGetShopInfo';
+import { useGetUnorderableShopMenus } from './hooks/useGetShopInfo';
 import { useMenuGroupScroll } from './hooks/useMenuGroupScroll';
 import useCart from '@/pages/Payment/hooks/useCart';
 import { useOrderStore } from '@/stores/useOrderStore';
 
-export default function UnOrderableShopView() {
+export default function UnorderableShopView() {
   const { shopId } = useParams();
   const { orderType } = useOrderStore();
 
@@ -25,34 +24,28 @@ export default function UnOrderableShopView() {
 
   const { selectedMenu, menuGroupRefs, isAutoScrolling, handleScrollTo, handleChangeMenu } = useMenuGroupScroll();
 
-  const { data: shopInfoSummary } = useGetUnOrderableShopInfo(Number(shopId));
-  const { data: shopReviews } = useGetUnOrderableShopReviews(Number(shopId));
-  const { data: unOrderableShopMenuGroups } = useGetUnOrderableShopMenuGroups(Number(shopId));
-  const { data: unOrderableShopMenus } = useGetUnOrderableShopMenus(Number(shopId));
+  const { data: shopInfoSummary } = useGetUnorderableShopInfoSummary(Number(shopId));
+  const { data: unorderableShopMenuGroups } = useGetUnorderableShopMenuGroups(Number(shopId));
+  const { data: unorderableShopMenus } = useGetUnorderableShopMenus(Number(shopId));
   const { data: cartInfo } = useCart(orderType);
-
-  const shopInfoSummaryData = {
-    ...shopInfoSummary,
-    ...shopReviews,
-  };
 
   const totalQuantity = cartInfo.items.reduce((sum, item) => sum + item.quantity, 0);
 
   return (
     <>
       <Header name={shopInfoSummary.name} targetRef={targetRef} cartItemCount={totalQuantity} />
-      <ImageCarousel images={shopInfoSummaryData.images} targetRef={targetRef} />
-      <ShopSummary id={shopId} shopInfoSummary={shopInfoSummaryData} isOrderable={false} />
+      <ImageCarousel images={shopInfoSummary.images} targetRef={targetRef} />
+      <ShopSummary id={shopId} shopInfoSummary={shopInfoSummary} isOrderable={false} />
       <ShopMenuGroups
         selectedMenu={selectedMenu}
         onSelect={handleScrollTo}
-        shopMenuGroups={unOrderableShopMenuGroups}
+        shopMenuGroups={unorderableShopMenuGroups}
       />
       <ShopMenus
         menuGroupRefs={menuGroupRefs}
         handleChangeMenu={handleChangeMenu}
         isAutoScrolling={isAutoScrolling}
-        shopMenus={unOrderableShopMenus}
+        shopMenus={unorderableShopMenus}
         isOrderable={false}
       />
     </>

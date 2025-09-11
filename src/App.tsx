@@ -10,13 +10,13 @@ import PaymentConfirm from './pages/PaymentConfirm';
 import MenuDetail from './pages/Shop/MenuDetail';
 import OrderableShopView from './pages/Shop/OrderableShopView';
 import OrderableShopDetail from './pages/Shop/ShopDetail/components/OrderableShopDetail';
-import UnOrderableShopDetail from './pages/Shop/ShopDetail/components/UnOrderableShopDetail';
-import UnOrderableShopView from './pages/Shop/UnOrderableShopView';
+import UnorderableShopView from './pages/Shop/UnorderableShopView';
 import AppLayout from '@/components/Layout';
 import Campus from '@/pages/Delivery/Campus';
 import DetailAddress from '@/pages/Delivery/Outside/DetailAddress';
 import OrderFinish from '@/pages/OrderFinish';
 import Payment from '@/pages/Payment';
+import UnorderableShopDetail from '@/pages/Shop/ShopDetail/components/UnorderableShopDetail';
 import 'dayjs/locale/ko';
 
 dayjs.locale('ko');
@@ -34,14 +34,14 @@ export default function App() {
           }
         />
         <Route path="shop/true/:shopId" element={<OrderableShopView />} />
-        <Route path="shop/false/:shopId" element={<UnOrderableShopView />} />
+        <Route path="shop/false/:shopId" element={<UnorderableShopView />} />
         <Route path="shop/true/:shopId/menus/:menuId" element={<MenuDetail />} />
         <Route path="payment/return" element={<PaymentConfirm />} />
 
         <Route element={<AppLayout />}>
           <Route path="home" element={<Home />} />
           <Route path="shop-detail/true/:shopId" element={<OrderableShopDetail />} />
-          <Route path="shop-detail/false/:shopId" element={<UnOrderableShopDetail />} />
+          <Route path="shop-detail/false/:shopId" element={<UnorderableShopDetail />} />
           <Route path="cart" element={<Cart />} />
           <Route path="delivery">
             <Route path="outside/detail" element={<DetailAddress />} />

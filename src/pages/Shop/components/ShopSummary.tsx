@@ -55,14 +55,14 @@ export default function ShopSummary({ shopInfoSummary, id, isOrderable }: ShopSu
                 <div className="flex gap-2">
                   <span className="text-[12px] leading-[1.6] font-normal">최소주문</span>
                   <span className="text-[12px] leading-[1.6] font-normal text-neutral-500">
-                    {shopInfoSummary.minimum_order_amount.toLocaleString()}원
+                    {shopInfoSummary.minimum_order_amount && shopInfoSummary.minimum_order_amount.toLocaleString()}원
                   </span>
                 </div>
                 <div className="flex gap-2">
                   <span className="text-[12px] leading-[1.6] font-normal">배달금액</span>
                   <span className="text-[12px] leading-[1.6] font-normal text-neutral-500">
-                    {shopInfoSummary.minimum_delivery_tip.toLocaleString()} -{' '}
-                    {shopInfoSummary.maximum_delivery_tip.toLocaleString()}원
+                    {shopInfoSummary.minimum_delivery_tip && shopInfoSummary.minimum_delivery_tip.toLocaleString()} -{' '}
+                    {shopInfoSummary.maximum_delivery_tip && shopInfoSummary.maximum_delivery_tip.toLocaleString()}원
                   </span>
                 </div>
               </div>

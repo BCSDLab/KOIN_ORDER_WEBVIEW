@@ -50,7 +50,7 @@ export interface CategoryGroup {
   name: string;
 }
 
-export interface UnOrderableShopDetailInfoResponse {
+export interface UnorderableShopDetailInfoResponse {
   address: string;
   delivery: boolean;
   delivery_price: number;
@@ -97,7 +97,7 @@ interface Review {
   created_at: string;
 }
 
-export interface UnOrderableShopReviewsResponse {
+export interface UnorderableShopReviewsResponse {
   total_count: number;
   current_count: number;
   total_page: number;
@@ -116,8 +116,8 @@ export interface OrderableShopInfoParams {
   orderableShopMenuId?: number;
 }
 
-export interface UnOrderableShopInfoParams {
-  UnOrderableShopId: number;
+export interface UnorderableShopInfoParams {
+  UnorderableShopId: number;
 }
 
 export interface Price {
@@ -142,31 +142,31 @@ export interface ShopInfoResponse {
   menus: Menu[];
 }
 
-interface UnOrderableOptions {
+interface UnorderableOptions {
   option: string;
   price: number;
 }
 
-export interface UnOrderableMenu {
+export interface UnorderableMenu {
   id: number;
   name: string;
   is_hidden: boolean;
   is_single: boolean;
   single_price: number;
-  option_prices: UnOrderableOptions[];
+  option_prices: UnorderableOptions[];
   description: string | null;
   image_urls: string[];
 }
 
-interface UnOrderableMenuCategory {
+interface UnorderableMenuCategory {
   id: number;
   name: string;
-  menus: UnOrderableMenu[];
+  menus: UnorderableMenu[];
 }
 
-export interface UnOrderableShopMenusResponse {
+export interface UnorderableShopMenusResponse {
   count: number;
-  menu_categories: UnOrderableMenuCategory[];
+  menu_categories: UnorderableMenuCategory[];
   updated_at: string;
 }
 
@@ -177,18 +177,18 @@ interface Image {
 
 export interface ShopInfoSummaryResponse {
   shop_id: number;
-  orderable_shop_id: number | null;
+  orderable_shop_id?: number;
   name: string;
   introduction: string | null;
   pay_card: boolean;
   pqy_bank: boolean;
-  is_delivery_available: boolean;
-  is_takeout_available: boolean;
-  minimum_order_amount: number;
+  is_delivery_available?: boolean;
+  is_takeout_available?: boolean;
+  minimum_order_amount?: number;
   rating_average: number;
   review_count: number;
-  minimum_delivery_tip: number;
-  maximum_delivery_tip: number;
+  minimum_delivery_tip?: number;
+  maximum_delivery_tip?: number;
   images: Image[];
 }
 

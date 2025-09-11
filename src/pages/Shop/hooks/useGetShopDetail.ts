@@ -1,5 +1,5 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { getShopDetailInfo, getUnOrderableShopInfo } from '@/api/shop';
+import { getShopDetailInfo, getUnorderableShopInfo } from '@/api/shop';
 
 export const useGetShopDetail = (orderableShopId: number) => {
   return useSuspenseQuery({
@@ -8,10 +8,10 @@ export const useGetShopDetail = (orderableShopId: number) => {
   });
 };
 
-export const useGetUnOrderableShopDetail = (UnOrderableShopId: number) => {
+export const useGetUnorderableShopDetail = (UnorderableShopId: number) => {
   return useSuspenseQuery({
-    queryKey: ['unOrderableShopDetail', UnOrderableShopId],
-    queryFn: () => getUnOrderableShopInfo({ UnOrderableShopId }),
+    queryKey: ['unorderableShopDetail', UnorderableShopId],
+    queryFn: () => getUnorderableShopInfo({ UnorderableShopId }),
     select: (data) => ({
       shop_id: data.id,
       orderable_shop_id: null,
