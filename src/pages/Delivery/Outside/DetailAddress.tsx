@@ -36,10 +36,12 @@ export default function DetailAddress() {
       ...outsideAddress,
       address: address,
       detail_address: detailAddressValue,
+      latitude: coords[0],
+      longitude: coords[1],
     };
 
     setOutsideAddress(updatedOutsideAddress);
-    setDeliveryType('OUTSIDE');
+    setDeliveryType('OFF_CAMPUS');
     navigate('/payment?orderType=DELIVERY');
     mutate(updatedOutsideAddress);
   };

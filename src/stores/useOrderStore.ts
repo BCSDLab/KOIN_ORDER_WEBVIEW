@@ -10,6 +10,8 @@ export interface OutsideAddress {
   building: string;
   address: string;
   detail_address: string;
+  longitude: number;
+  latitude: number;
 }
 
 export interface CampusAddress {
@@ -23,7 +25,7 @@ export interface CampusAddress {
 
 interface State {
   orderType: 'DELIVERY' | 'TAKE_OUT';
-  deliveryType: 'CAMPUS' | 'OUTSIDE';
+  deliveryType: 'CAMPUS' | 'OFF_CAMPUS';
   outsideAddress: OutsideAddress;
   campusAddress?: CampusAddress;
   deliveryRequest: string;
@@ -33,7 +35,7 @@ interface State {
 }
 interface Action {
   setOrderType: (type: 'DELIVERY' | 'TAKE_OUT') => void;
-  setDeliveryType: (type: 'CAMPUS' | 'OUTSIDE') => void;
+  setDeliveryType: (type: 'CAMPUS' | 'OFF_CAMPUS') => void;
   setOutsideAddress: (addressData: OutsideAddress) => void;
   setCampusAddress: (address: CampusAddress) => void;
   setDeliveryRequest: (request: string) => void;
@@ -56,6 +58,8 @@ export const useOrderStore = create<State & Action>()(
         building: '',
         address: '',
         detail_address: '',
+        longitude: 0,
+        latitude: 0,
       },
       campusAddress: undefined,
       deliveryRequest: '',

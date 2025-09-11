@@ -1,10 +1,13 @@
 export interface DeliveryTemporaryRequest {
   address: string;
   address_detail: string;
+  longitude: number;
+  latitude: number;
   phone_number: string;
   to_owner: string;
   to_rider: string;
   total_menu_price: number;
+  delivery_type: 'CAMPUS' | 'OFF_CAMPUS';
   delivery_tip: number;
   provide_cutlery: boolean;
   total_amount: number;
@@ -35,8 +38,10 @@ export interface ConfirmPaymentsResponse {
   approved_at: string;
   payment_method: string;
   delivery_address: string;
-  delivery_address_detail: string;
+  delivery_address_details: string;
   shop_address: string;
+  longitude: number;
+  latitude: number;
   to_owner: string;
   to_rider: string;
   provide_cutlery: boolean;

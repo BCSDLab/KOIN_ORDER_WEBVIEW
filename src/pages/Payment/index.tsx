@@ -88,11 +88,14 @@ export default function Payment() {
       order = await temporaryDelivery({
         address: address!,
         address_detail: address_detail!,
+        longitude: deliveryType === 'CAMPUS' ? campusAddress!.longitude : outsideAddress!.longitude,
+        latitude: deliveryType === 'CAMPUS' ? campusAddress!.latitude : outsideAddress!.latitude,
         phone_number: userPhoneNumber,
         to_owner: ownerRequest,
         to_rider: deliveryRequest,
         provide_cutlery: !isCutleryDeclined,
         total_menu_price: cart.items_amount,
+        delivery_type: deliveryType,
         delivery_tip: cart.delivery_fee,
         total_amount: cart.total_amount,
       });
