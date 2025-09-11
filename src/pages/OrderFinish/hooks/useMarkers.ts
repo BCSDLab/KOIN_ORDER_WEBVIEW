@@ -1,10 +1,11 @@
 import { useEffect, useMemo, useRef } from 'react';
 
 type MapInstance = naver.maps.Map | null;
+type PositionType = naver.maps.LatLng | { latitude: number; longitude: number } | [number, number];
 
 export interface MarkerInput {
   id: string;
-  position: naver.maps.LatLng | { lat: number; lng: number } | [number, number];
+  position: PositionType;
   iconUrl?: string;
   zIndex?: number;
 }
@@ -12,17 +13,24 @@ export interface MarkerInput {
 export default function useMarkers(map: MapInstance, inputs: MarkerInput[]) {
   const markersRef = useRef<Map<string | number, naver.maps.Marker>>(new Map());
 
+  const normalizeLatLng = (position: PositionType) => {
+    if (position instanceof naver.maps.LatLng) {
+      return position;
+    }
+
+    if (Array.isArray(position)) {
+      return new naver.maps.LatLng(position[0], position[1]);
+    }
+
+    return new naver.maps.LatLng(position.latitude, position.longitude);
+  };
+
   const normalized = useMemo(
     () =>
-      inputs.map((marker) => {
-        const latlng =
-          marker.position instanceof naver.maps.LatLng
-            ? marker.position
-            : Array.isArray(marker.position)
-              ? new naver.maps.LatLng(marker.position[0], marker.position[1])
-              : new naver.maps.LatLng(marker.position.lat, marker.position.lng);
-        return { ...marker, latlng };
-      }),
+      inputs.map((marker) => ({
+        ...marker,
+        latlng: normalizeLatLng(marker.position),
+      })),
     [inputs],
   );
 
@@ -31,7 +39,7 @@ export default function useMarkers(map: MapInstance, inputs: MarkerInput[]) {
 
     const store = markersRef.current;
 
-    for (const data of normalized) {
+    normalized.forEach((data) => {
       const created = new naver.maps.Marker({
         map,
         position: data.latlng,
@@ -44,14 +52,16 @@ export default function useMarkers(map: MapInstance, inputs: MarkerInput[]) {
               anchor: new naver.maps.Point(14, 28),
             }
           : undefined,
+        animation: naver.maps.Animation.DROP,
       });
-
       store.set(data.id, created);
-    }
+    });
 
     return () => {
       if (!map) {
-        for (const [, marker] of markersRef.current) marker.setMap(null);
+        markersRef.current.forEach((marker) => {
+          marker.setMap(null);
+        });
         markersRef.current.clear();
       }
     };
