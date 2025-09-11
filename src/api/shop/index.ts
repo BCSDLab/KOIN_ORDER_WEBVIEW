@@ -5,12 +5,12 @@ import {
   ShopDetailInfoResponse,
   ShopInfoResponse,
   OrderableShopInfoParams,
-  UnOrderableShopInfoParams,
+  UnorderableShopInfoParams,
   ShopInfoSummaryResponse,
   ShopMenuGroupsResponse,
   ShopMenuDetailResponse,
-  UnOrderableShopDetailInfoResponse,
-  UnOrderableShopMenusResponse,
+  UnorderableShopDetailInfoResponse,
+  UnorderableShopMenusResponse,
 } from './entity';
 
 export const getShopDetailInfo = async ({ orderableShopId }: ShopDetailInfoParams) => {
@@ -28,8 +28,8 @@ export const getShopInfo = async ({ orderableShopId }: OrderableShopInfoParams) 
   return response;
 };
 
-export const getUnOrderableShopMenus = async ({ UnOrderableShopId }: UnOrderableShopInfoParams) => {
-  const response = await apiClient.get<UnOrderableShopMenusResponse>(`shops/${UnOrderableShopId}/menus`);
+export const getUnorderableShopMenus = async ({ UnorderableShopId }: UnorderableShopInfoParams) => {
+  const response = await apiClient.get<UnorderableShopMenusResponse>(`shops/${UnorderableShopId}/menus`);
   return response;
 };
 
@@ -50,12 +50,12 @@ export const getShopMenuDetail = async ({ orderableShopId, orderableShopMenuId }
   return response;
 };
 
-export const getUnOrderableShopInfo = async ({ UnOrderableShopId }: UnOrderableShopInfoParams) => {
-  const response = await apiClient.get<UnOrderableShopDetailInfoResponse>(`shops/${UnOrderableShopId}`);
+export const getUnorderableShopInfo = async ({ UnorderableShopId }: UnorderableShopInfoParams) => {
+  const response = await apiClient.get<UnorderableShopDetailInfoResponse>(`shops/${UnorderableShopId}`);
   return response;
 };
 
-export const getUnOrderableShopInfoSummary = async ({ UnOrderableShopId }: UnOrderableShopInfoParams) => {
-  const response = await apiClient.get<ShopInfoSummaryResponse>(`shops/${UnOrderableShopId}/summary`);
+export const getUnorderableShopInfoSummary = async ({ UnorderableShopId }: UnorderableShopInfoParams) => {
+  const response = await apiClient.get<ShopInfoSummaryResponse>(`shops/${UnorderableShopId}/summary`);
   return response;
 };
