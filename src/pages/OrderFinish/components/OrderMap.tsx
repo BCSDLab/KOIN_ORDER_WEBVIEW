@@ -22,19 +22,21 @@ export default function OrderMap({ paymentInfo }: OrderMapProps) {
 
   const map = useNaverMap(latitude, longitude);
 
-  const getHomeMarker = () => {
-    if (!isDelivery) return [];
-    return [
-      {
-        id: 'home',
-        position: { latitude: paymentInfo.latitude, longitude: paymentInfo.longitude },
-        iconUrl: HOME_MARKER,
-        zIndex: 20,
-      },
-    ];
-  };
+  const homeMarkers = isDelivery
+    ? [
+        {
+          id: 'home',
+          position: {
+            latitude: paymentInfo.latitude,
+            longitude: paymentInfo.longitude,
+          },
+          iconUrl: HOME_MARKER,
+          zIndex: 20,
+        },
+      ]
+    : [];
 
-  useMarkers(map, getHomeMarker());
+  useMarkers(map, homeMarkers);
 
   useEffect(() => {
     if (!map) return;
