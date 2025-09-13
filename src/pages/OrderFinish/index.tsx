@@ -19,7 +19,8 @@ import BottomModal, {
   BottomModalFooter,
 } from '@/components/UI/BottomModal/BottomModal';
 import Button from '@/components/UI/Button';
-import { backButtonTapped } from '@/util/bridge/nativeAction';
+import { isNative } from '@/util/bridge/bridge';
+import { backButtonTapped, goToShopDetail } from '@/util/bridge/nativeAction';
 import useBooleanState from '@/util/hooks/useBooleanState';
 
 type OrderKind = 'order' | 'preparation' | 'delivery';
@@ -49,6 +50,9 @@ export default function OrderFinish() {
 
   const { data: paymentInfo } = usePaymentInfo(Number(paymentId));
 
+  // TODO: paymentInfo가 없을 경우 처리
+  if (!paymentInfo) return <div>주문 정보가 없습니다.</div>;
+
   const isDelivery = paymentInfo.order_type === 'DELIVERY';
 
   const [orderKind] = useState<OrderKind>('order');
@@ -75,8 +79,12 @@ export default function OrderFinish() {
     navigate(`/orderCancel/${paymentId}`);
   };
 
-  // TODO: paymentInfo가 없을 경우 처리
-  if (!paymentInfo) return <div>주문 정보가 없습니다.</div>;
+  const handleGoToShopDetail = () => () => {
+    if (isNative()) {
+      return goToShopDetail(paymentInfo.orderable_shop_id);
+    }
+    navigate(`/shop/true/${paymentInfo.orderable_shop_id}`);
+  };
 
   return (
     <div className="flex flex-col">
@@ -222,10 +230,10 @@ export default function OrderFinish() {
         </div>
         <div className="text-primary-500 my-5 text-lg font-semibold">주문정보</div>
         <div className="shadow-1 mb-16 flex flex-col gap-4 rounded-2xl bg-white px-6 py-4">
-          <div className="flex gap-1.5 text-sm leading-[160%] font-semibold">
+          <button className="flex gap-1.5 text-sm leading-[160%] font-semibold" onClick={handleGoToShopDetail()}>
             <div>{paymentInfo.shop_name}</div>
             <ArrowGo />
-          </div>
+          </button>
           <div className="text-[13px] text-neutral-600">
             <div className="flex gap-2">
               주문번호 <div>{paymentInfo.id}</div>
