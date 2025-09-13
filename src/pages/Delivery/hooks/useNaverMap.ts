@@ -16,7 +16,7 @@ function useNaverMap(latitude: number, longitude: number) {
       maxZoom: 20,
       minZoom: 15,
       logoControl: false,
-      scrollWheel: false,
+      scrollWheel: true,
       draggable: true,
     });
     setMap(newMap);
