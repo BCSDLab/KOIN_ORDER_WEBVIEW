@@ -221,3 +221,14 @@ export interface ShopMenuDetailResponse {
   prices: Price[];
   option_groups: OptionGroup[];
 }
+
+export interface StoreCategoriesResponse {
+  total_count: number;
+  shop_categories: StoreCategory[];
+}
+
+export interface StoreCategory {
+  id: number;
+  name: string;
+  image_url: string;
+}
