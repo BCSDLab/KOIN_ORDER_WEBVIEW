@@ -15,11 +15,15 @@ export const backButtonTapped = async () => {
 };
 
 /*
-  로그인 리다이렉트 함수
+  로그인 리다이렉트 함수 (TODO: iOS 메뉴 담기 페이지 구현 완료 시 삭제)
   네이티브 구현 상황
   iOS : 웹뷰 페이지 유지하면서 웹뷰 페이지 위에 로그인 페이지 표시
   Android : 미구현
 */
 export const redirectToLogin = async () => {
   await NativeBridge.call('redirectToLogin');
+};
+
+export const goToShopDetail = async (shopId: number) => {
+  await NativeBridge.call('goToShopDetail', shopId);
 };
