@@ -29,7 +29,7 @@ export default function BottomModal({ isOpen, onClose, children, className }: Bo
 
   return (
     <Portal>
-      <div ref={backgroundRef} className="fixed inset-0 z-100 flex flex-col justify-end bg-black/70">
+      <div ref={backgroundRef} className="fixed inset-0 z-120 flex flex-col justify-end bg-black/70">
         <dialog
           ref={containerRef}
           className={twMerge('w-full max-w-none rounded-t-4xl bg-white', className)}
