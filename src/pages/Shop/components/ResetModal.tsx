@@ -1,3 +1,5 @@
+import useAddCart from '../hooks/useAddCart';
+import { AddCartRequest } from '@/api/cart/entity';
 import Button from '@/components/UI/Button';
 import Modal, { ModalContent } from '@/components/UI/CenterModal/Modal';
 import useResetCart from '@/pages/Cart/hooks/useResetCart';
@@ -5,10 +7,18 @@ import useResetCart from '@/pages/Cart/hooks/useResetCart';
 interface ResetModalProps {
   isOpen: boolean;
   onClose: () => void;
+  cartRequest: AddCartRequest;
 }
 
-export default function ResetModal({ isOpen, onClose }: ResetModalProps) {
-  const { mutate: resetCart } = useResetCart();
+export default function ResetModal({ isOpen, onClose, cartRequest }: ResetModalProps) {
+  const { mutateAsync: resetCart } = useResetCart();
+  const { mutateAsync: addToCart } = useAddCart();
+
+  const handleConfirm = async () => {
+    await resetCart();
+    await addToCart(cartRequest);
+    onClose();
+  };
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
@@ -28,16 +38,7 @@ export default function ResetModal({ isOpen, onClose }: ResetModalProps) {
           >
             아니오
           </Button>
-          <Button
-            size="lg"
-            color="primary"
-            className="font-medium shadow-none"
-            fullWidth
-            onClick={() => {
-              resetCart();
-              onClose();
-            }}
-          >
+          <Button size="lg" color="primary" className="font-medium shadow-none" fullWidth onClick={handleConfirm}>
             예
           </Button>
         </div>
