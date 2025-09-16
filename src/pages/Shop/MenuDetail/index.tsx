@@ -56,6 +56,7 @@ export default function MenuDetail() {
 
   const AUTH_FAIL = ''; //이 케이스는 올바르지 않은 인증정보일 떄 발생합니다. 백엔드 작업이 끝난 후에 다시 작업해야함.
   const totalQuantity = cartInfo.items.reduce((sum, item) => sum + item.quantity, 0);
+
   const {
     priceId,
     count,
@@ -78,14 +79,14 @@ export default function MenuDetail() {
   const hasImage = imagesForCarousel.length > 0;
 
   const handleAddToCart = () => {
-    if (isEdit && 'orderable_shop_menu_price_id' in updateCartItemOptionsRequest) {
+    if (isEdit && updateCartItemOptionsRequest) {
       updateCartItemOptions(updateCartItemOptionsRequest, {
         onSuccess: () => {
           showToast('메뉴 옵션이 변경되었습니다.');
           navigate(-1);
         },
       });
-    } else if ('menuInfo' in addToCartRequest) {
+    } else if (addToCartRequest) {
       addToCart(addToCartRequest, {
         onSuccess: () => {
           showToast('장바구니에 담았습니다');
@@ -101,7 +102,7 @@ export default function MenuDetail() {
               setNoticeMessage(parsed.message);
               openNoticeModal();
               break;
-            case AUTH_FAIL: //이 케이스는 올바르지 않은 인증정보일 떄 발생합니다.
+            case AUTH_FAIL:
               openLoginRequiredModal();
               break;
             default:
@@ -121,11 +122,11 @@ export default function MenuDetail() {
       <MenuDescription
         name={info.name}
         description={info.description}
-        price={info.prices[0].price}
+        price={info.prices[0]?.price ?? 0}
         noImage={!hasImage}
       />
       <div className="mb-40 px-6">
-        {menuInfo.prices.length > 1 && (
+        {info.prices.length > 1 && (
           <MenuPriceSelects prices={info.prices} selectedPriceId={priceId} selectPrice={selectPrice} />
         )}
         <MenuOptions optionGroups={info.option_groups} selectedOptions={selectedOptions} selectOption={selectOption} />
@@ -134,15 +135,17 @@ export default function MenuDetail() {
       <AddToCartBottomModal
         price={totalPrice}
         isActive={isAllRequiredOptionsSelected}
-        onAddToCart={() => handleAddToCart()}
+        onAddToCart={handleAddToCart}
         isEdit={isEdit}
       />
-      <ResetModal isOpen={isResetModalOpen} onClose={closeResetModal} />
+      {isResetModalOpen && addToCartRequest && (
+        <ResetModal isOpen={isResetModalOpen} onClose={closeResetModal} cartRequest={addToCartRequest} />
+      )}
       <NoticeModal isOpen={isNoticeModalOpen} onClose={closeNoticeModal} message={noticeMessage} />
       <LoginRequiredModal
         isOpen={isLoginRequiredModalOpen}
         onClose={closeLoginRequiredModal}
-        menuOptions={'menuInfo' in addToCartRequest ? addToCartRequest : undefined}
+        menuOptions={addToCartRequest ?? undefined}
       />
     </div>
   );

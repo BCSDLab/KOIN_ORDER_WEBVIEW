@@ -230,7 +230,10 @@ export default function OrderFinish() {
         </div>
         <div className="text-primary-500 my-5 text-lg font-semibold">주문정보</div>
         <div className="shadow-1 mb-16 flex flex-col gap-4 rounded-2xl bg-white px-6 py-4">
-          <button className="flex gap-1.5 text-sm leading-[160%] font-semibold" onClick={handleGoToShopDetail()}>
+          <button
+            className="flex items-center gap-1.5 text-sm leading-[160%] font-semibold"
+            onClick={handleGoToShopDetail()}
+          >
             <div>{paymentInfo.shop_name}</div>
             <ArrowGo />
           </button>
