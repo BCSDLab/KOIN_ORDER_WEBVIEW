@@ -1,7 +1,10 @@
+import { useNavigate } from 'react-router-dom';
 import Delivery from '@/assets/Home/delivery-icon.svg';
 import StarIcon from '@/assets/Home/star-icon.svg';
 
 interface MenuCardProps {
+  shopId: number;
+  isOpen: boolean;
   name: string;
   rating: number;
   reviewCount: number;
@@ -16,11 +19,35 @@ interface OrderableShopsImg {
   is_thumbnail: boolean;
 }
 
-export default function ShopCard({ name, rating, reviewCount, deliver, isTakeout, isService, img }: MenuCardProps) {
+export default function ShopCard({
+  shopId,
+  isOpen,
+  name,
+  rating,
+  reviewCount,
+  deliver,
+  isTakeout,
+  isService,
+  img,
+}: MenuCardProps) {
+  const navigate = useNavigate();
   const thumbnailUrl = img.find((image) => image.is_thumbnail)?.image_url || '';
 
   return (
-    <div className="flex items-center gap-5 rounded-lg bg-[#f8f8fa]">
+    <button
+      onClick={() => navigate(`/shop/${isOpen}/${shopId}`)}
+      className="relative flex items-center gap-5 overflow-hidden rounded-lg bg-[#f8f8fa]"
+      type="button"
+    >
+      {!isOpen && (
+        <div className="absolute inset-0 z-10 flex items-center justify-center rounded-lg bg-[rgba(0,0,0,0.6)]">
+          <div className="text-center text-white">
+            <div className="text-lg font-bold">영업종료</div>
+            <div className="text-[16px]">영업이 종료된 가게에요!</div>
+          </div>
+        </div>
+      )}
+
       {thumbnailUrl ? (
         <img src={thumbnailUrl} alt={name} className="h-32 w-32 rounded-lg" />
       ) : (
@@ -53,6 +80,6 @@ export default function ShopCard({ name, rating, reviewCount, deliver, isTakeout
           )}
         </div>
       </div>
-    </div>
+    </button>
   );
 }

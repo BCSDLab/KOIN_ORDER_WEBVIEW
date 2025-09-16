@@ -43,8 +43,6 @@ export default function OrderList() {
     filter: selectedFilters.length > 0 ? selectedFilters : undefined,
   });
 
-  console.log(shops);
-
   const toggleFilter = (filterId: FilterType) => {
     setSelectedFilters((prev) => {
       if (prev.includes(filterId)) return prev.filter((id) => id !== filterId);
@@ -110,6 +108,8 @@ export default function OrderList() {
             return (
               <ShopCard
                 key={shop.shop_id}
+                shopId={shop.orderable_shop_id}
+                isOpen={shop.is_open}
                 name={shop.name}
                 rating={shop.rating_average}
                 reviewCount={shop.review_count}
