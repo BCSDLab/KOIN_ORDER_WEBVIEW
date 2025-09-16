@@ -232,3 +232,35 @@ export interface StoreCategory {
   name: string;
   image_url: string;
 }
+
+export interface OrderableShopsResponse {
+  shop_id: number;
+  orderable_shop_id: number;
+  name: string;
+  is_delivery_available: boolean;
+  is_takeout_available: boolean;
+  service_event: boolean;
+  minimum_order_amount: number;
+  rating_average: number;
+  review_count: number;
+  minimum_delivery_tip: number;
+  maximum_delivery_tip: number;
+  is_open: boolean;
+  category_ids: number[];
+  images: OrderableShopsImg[];
+  open_status: 'OPERATING' | 'PREPARING' | 'CLOSED';
+}
+
+interface OrderableShopsImg {
+  image_url: string;
+  is_thumbnail: boolean;
+}
+
+export interface OrderableShopsParams {
+  sorter?: string;
+  filter?: OrderableShopsFilter[];
+  category_filter?: number;
+  minimum_order_amount?: number;
+}
+
+export type OrderableShopsFilter = 'IS_OPEN' | 'DELIVERY_AVAILABLE' | 'TAKEOUT_AVAILABLE' | 'FREE_DELIVERY_TIP';
