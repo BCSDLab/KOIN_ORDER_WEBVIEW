@@ -1,7 +1,10 @@
+import { useState } from 'react';
 import MenuCard from './MenuCard';
 import Delivery from '@/assets/Home/delivery-icon.svg';
-import DownArrow from '@/assets/Payment/arrow-go-icon.svg';
-import { useOrderableShops } from '@/pages/Home/hooks/useOrderableShops.ts';
+import DownArrow from '@/assets/Home/down-arrow-icon.svg';
+import FreeIcon from '@/assets/Home/free-icon.svg';
+import OpenIcon from '@/assets/Home/open-icon.svg';
+import PackIcon from '@/assets/Home/pack-icon.svg';
 import { useStoreCategories } from '@/pages/Home/hooks/useStoreCategories.ts';
 
 interface Category {
@@ -10,16 +13,35 @@ interface Category {
   image_url: string;
 }
 
+type FilterType = 'IS_OPEN' | 'DELIVERY_AVAILABLE' | 'TAKEOUT_AVAILABLE' | 'FREE_DELIVERY_TIP';
+
+interface FilterButton {
+  id: FilterType;
+  label: string;
+  icon: React.ComponentType<{ fill?: string; className?: string }>;
+}
+
+const filterButtons: FilterButton[] = [
+  { id: 'IS_OPEN', label: '영업중', icon: OpenIcon },
+  { id: 'DELIVERY_AVAILABLE', label: '배달가능', icon: Delivery },
+  { id: 'TAKEOUT_AVAILABLE', label: '포장가능', icon: PackIcon },
+  { id: 'FREE_DELIVERY_TIP', label: '배달팁무료', icon: FreeIcon },
+];
+
 export default function OrderList() {
   const { data: categories } = useStoreCategories();
   const categoriesWithAll = categories.shop_categories.map((category: Category) => ({
     ...category,
   }));
 
-  const { data: openShops } = useOrderableShops({
-    filter: ['IS_OPEN'],
-  });
-  console.log(openShops);
+  const [selectedFilters, setSelectedFilters] = useState<FilterType[]>(['IS_OPEN']);
+
+  const toggleFilter = (filterId: FilterType) => {
+    setSelectedFilters((prev) => {
+      if (prev.includes(filterId)) return prev.filter((id) => id !== filterId);
+      else return [...prev, filterId];
+    });
+  };
 
   return (
     <div className="flex w-full flex-col items-center justify-center gap-4">
@@ -37,38 +59,33 @@ export default function OrderList() {
         ))}
       </div>
 
-      {/* 활성화 효과 넣고 필터 로직까지 한 다음에 분리 ㄱ*/}
       <div className="flex w-full pr-4 min-[600px]:justify-center">
         <div className="flex w-full min-[600px]:flex-wrap min-[600px]:justify-center min-[600px]:gap-2">
-          <button className="mr-4 ml-4 inline-flex shrink-0 items-center justify-center gap-[6px] rounded-3xl bg-white px-2 py-[6px] text-[14px] leading-none text-gray-400 shadow-[0_1px_1px_0_rgba(0,0,0,0.02),_0_2px_4px_0_rgba(0,0,0,0.04)] min-[600px]:mr-0 min-[600px]:ml-0">
+          <button className="mr-4 ml-4 inline-flex shrink-0 items-center justify-center gap-[6px] rounded-3xl border border-solid border-[#b611f5] bg-white px-2 py-[6px] text-[14px] leading-none text-[#b611f5] shadow-[0_1px_1px_0_rgba(0,0,0,0.02),_0_2px_4px_0_rgba(0,0,0,0.04)] min-[600px]:mr-0 min-[600px]:ml-0">
             기본순
-            <DownArrow className="h-4 w-4 rotate-90" />
+            <DownArrow className="h-4 w-4" fill={'#b611f5'} />
           </button>
 
           <div className="flex flex-1 snap-x snap-mandatory gap-2 overflow-x-auto min-[600px]:flex-initial min-[600px]:snap-none min-[600px]:overflow-visible [@media(pointer:coarse)]:[-ms-overflow-style:none] [@media(pointer:coarse)]:[scrollbar-width:none] [@media(pointer:coarse)]:[&::-webkit-scrollbar]:hidden [@media(pointer:fine)]:[scrollbar-width:thin] [@media(pointer:fine)]:[&::-webkit-scrollbar]:h-2 [@media(pointer:fine)]:[&::-webkit-scrollbar]:w-2 [@media(pointer:fine)]:[&::-webkit-scrollbar-thumb]:rounded-full [@media(pointer:fine)]:[&::-webkit-scrollbar-thumb]:bg-neutral-300 [@media(pointer:fine)]:[&::-webkit-scrollbar-track]:bg-transparent">
-            <button className="flex shrink-0 snap-start items-center justify-center gap-[6px] rounded-3xl bg-white px-2 py-[6px] text-[14px] text-gray-400 shadow-[0_1px_1px_0_rgba(0,0,0,0.02),_0_2px_4px_0_rgba(0,0,0,0.04)]">
-              <Delivery fill="#cacaca" />
-              영업중
-            </button>
+            {filterButtons.map((filter) => {
+              const isSelected = selectedFilters.includes(filter.id);
+              return (
+                <button
+                  key={filter.id}
+                  onClick={() => toggleFilter(filter.id)}
+                  className={`flex shrink-0 snap-start items-center justify-center gap-[6px] rounded-3xl px-2 py-[6px] text-[14px] shadow-[0_1px_1px_0_rgba(0,0,0,0.02),_0_2px_4px_0_rgba(0,0,0,0.04)] transition-colors ${
+                    isSelected ? 'bg-[#b611f5] text-white' : 'bg-white text-gray-400'
+                  }`}
+                >
+                  {filter.icon && <Delivery fill={isSelected ? '#fff' : '#cacaca'} />}
+                  {filter.label}
+                </button>
+              );
+            })}
 
             <button className="flex shrink-0 snap-start items-center justify-center gap-[6px] rounded-3xl bg-white px-2 py-[6px] text-[14px] text-gray-400 shadow-[0_1px_1px_0_rgba(0,0,0,0.02),_0_2px_4px_0_rgba(0,0,0,0.04)]">
-              <Delivery fill="#cacaca" />
-              배달가능
-            </button>
-
-            <button className="flex shrink-0 snap-start items-center justify-center gap-[6px] rounded-3xl bg-white px-2 py-[6px] text-[14px] text-gray-400 shadow-[0_1px_1px_0_rgba(0,0,0,0.02),_0_2px_4px_0_rgba(0,0,0,0.04)]">
-              <Delivery fill="#cacaca" />
-              포장가능
-            </button>
-
-            <button className="flex shrink-0 snap-start items-center justify-center gap-[6px] rounded-3xl bg-white px-2 py-[6px] text-[14px] text-gray-400 shadow-[0_1px_1px_0_rgba(0,0,0,0.02),_0_2px_4px_0_rgba(0,0,0,0.04)]">
-              <Delivery fill="#cacaca" />
-              배달팁무료
-            </button>
-
-            <button className="flex shrink-0 snap-start items-center justify-center gap-[6px] rounded-3xl bg-white px-2 py-[6px] text-[14px] text-gray-400 shadow-[0_1px_1px_0_rgba(0,0,0,0.02),_0_2px_4px_0_rgba(0,0,0,0.04)]">
-              <Delivery fill="#cacaca" />
               최소주문금액
+              <DownArrow className="h-4 w-4" fill={'#cacaca'} />
             </button>
           </div>
         </div>
