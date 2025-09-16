@@ -104,7 +104,7 @@ export default function OrderList() {
 
       {shops && shops.length > 0 && <div className="flex h-25 items-center text-center">광고배너</div>}
 
-      <div className="flex flex-col gap-6">
+      <div className="grid grid-cols-1 gap-6 min-[730px]:grid-cols-2 min-[1050px]:grid-cols-3 min-[1400px]:grid-cols-4">
         {shops && shops.length > 0 ? (
           shops.map((shop: OrderableShopsResponse) => {
             return (
@@ -121,7 +121,7 @@ export default function OrderList() {
             );
           })
         ) : (
-          <div className="text-center text-gray-500">
+          <div className="col-span-full text-center text-gray-500">
             {shops?.length === 0 ? (
               <div className="flex flex-col items-center">
                 <PlanetIcon />
@@ -129,7 +129,7 @@ export default function OrderList() {
                 <div className="text-[14px] text-[#4b4b4b]">조건을 변경하고 다시 검색해주세요</div>
               </div>
             ) : (
-              <div className="text-[14px] text-[#4b4b4b]">가게 목록을 불러오는 중...</div>
+              <div className="text-[14px] text-[#4b4b4b]">가게 목록을 불러오는 중입니다.</div>
             )}
           </div>
         )}
