@@ -77,7 +77,7 @@ export default function OrderList() {
   };
 
   return (
-    <div className="flex w-full flex-col items-center justify-center gap-4">
+    <div className="flex h-full w-full flex-col items-center justify-center gap-4">
       <div className="ml-6 flex w-[calc(100%-24px)] snap-x snap-mandatory gap-6 overflow-x-auto pb-4 min-[960px]:ml-0 min-[960px]:snap-none min-[960px]:justify-center [@media(pointer:coarse)]:[-ms-overflow-style:none] [@media(pointer:coarse)]:[scrollbar-width:none] [@media(pointer:coarse)]:[&::-webkit-scrollbar]:hidden [@media(pointer:fine)]:[scrollbar-width:thin] [@media(pointer:fine)]:[&::-webkit-scrollbar]:h-2 [@media(pointer:fine)]:[&::-webkit-scrollbar]:w-2 [@media(pointer:fine)]:[&::-webkit-scrollbar-thumb]:rounded-full [@media(pointer:fine)]:[&::-webkit-scrollbar-thumb]:bg-neutral-300 [@media(pointer:fine)]:[&::-webkit-scrollbar-track]:bg-transparent">
         {categoriesWithAll.map((category) => (
           <button
@@ -150,7 +150,7 @@ export default function OrderList() {
             );
           })
         ) : (
-          <div className="col-span-full text-center text-gray-500">
+          <div className="col-span-full mt-10 flex min-h-[200px] text-center text-gray-500">
             {shops?.length === 0 ? (
               <div className="flex flex-col items-center">
                 <PlanetIcon />
