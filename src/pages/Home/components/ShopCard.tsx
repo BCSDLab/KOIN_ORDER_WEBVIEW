@@ -35,7 +35,7 @@ export default function ShopCard({
 
   return (
     <button
-      onClick={() => navigate(`/shop/${isOpen}/${shopId}`)}
+      onClick={() => navigate(`/shop/true/${shopId}`)}
       className="relative flex items-center gap-5 overflow-hidden rounded-lg bg-[#f8f8fa]"
       type="button"
     >
