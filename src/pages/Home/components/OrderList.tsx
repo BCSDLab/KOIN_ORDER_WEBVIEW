@@ -1,10 +1,13 @@
 import { useState } from 'react';
-import MenuCard from './MenuCard';
+import ShopCard from './ShopCard';
+import { OrderableShopsResponse } from '@/api/shop/entity';
 import Delivery from '@/assets/Home/delivery-icon.svg';
 import DownArrow from '@/assets/Home/down-arrow-icon.svg';
 import FreeIcon from '@/assets/Home/free-icon.svg';
 import OpenIcon from '@/assets/Home/open-icon.svg';
 import PackIcon from '@/assets/Home/pack-icon.svg';
+import PlanetIcon from '@/assets/Home/planet-closed.svg';
+import { useOrderableShops } from '@/pages/Home/hooks/useOrderableShops.ts';
 import { useStoreCategories } from '@/pages/Home/hooks/useStoreCategories.ts';
 
 interface Category {
@@ -35,6 +38,12 @@ export default function OrderList() {
   }));
 
   const [selectedFilters, setSelectedFilters] = useState<FilterType[]>(['IS_OPEN']);
+
+  const { data: shops } = useOrderableShops({
+    filter: selectedFilters.length > 0 ? selectedFilters : undefined,
+  });
+
+  console.log(shops);
 
   const toggleFilter = (filterId: FilterType) => {
     setSelectedFilters((prev) => {
@@ -93,10 +102,37 @@ export default function OrderList() {
         </div>
       </div>
 
-      <div className="mt-20 mb-20 text-center">광고배너</div>
+      {shops && shops.length > 0 && <div className="flex h-25 items-center text-center">광고배너</div>}
+
       <div className="flex flex-col gap-6">
-        <MenuCard />
-        <MenuCard />
+        {shops && shops.length > 0 ? (
+          shops.map((shop: OrderableShopsResponse) => {
+            return (
+              <ShopCard
+                key={shop.shop_id}
+                name={shop.name}
+                rating={shop.rating_average}
+                reviewCount={shop.review_count}
+                deliver={shop.minimum_delivery_tip}
+                isTakeout={shop.is_takeout_available}
+                isService={shop.service_event}
+                img={shop.images}
+              />
+            );
+          })
+        ) : (
+          <div className="text-center text-gray-500">
+            {shops?.length === 0 ? (
+              <div className="flex flex-col items-center">
+                <PlanetIcon />
+                <div className="text-[18px] text-[#b611f5]">이용 가능한 가게가 없어요</div>
+                <div className="text-[14px] text-[#4b4b4b]">조건을 변경하고 다시 검색해주세요</div>
+              </div>
+            ) : (
+              <div className="text-[14px] text-[#4b4b4b]">가게 목록을 불러오는 중...</div>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
