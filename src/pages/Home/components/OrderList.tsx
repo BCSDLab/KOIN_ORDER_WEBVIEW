@@ -1,12 +1,14 @@
 import { useState } from 'react';
 import ShopCard from './ShopCard';
 import { OrderableShopsResponse } from '@/api/shop/entity';
+import CheckIcon from '@/assets/Home/check-icon.svg';
 import Delivery from '@/assets/Home/delivery-icon.svg';
 import DownArrow from '@/assets/Home/down-arrow-icon.svg';
 import FreeIcon from '@/assets/Home/free-icon.svg';
 import OpenIcon from '@/assets/Home/open-icon.svg';
 import PackIcon from '@/assets/Home/pack-icon.svg';
 import PlanetIcon from '@/assets/Home/planet-closed.svg';
+import CloseIcon from '@/assets/Main/close-icon.svg';
 import { useOrderableShops } from '@/pages/Home/hooks/useOrderableShops.ts';
 import { useStoreCategories } from '@/pages/Home/hooks/useStoreCategories.ts';
 
@@ -17,11 +19,17 @@ interface Category {
 }
 
 type FilterType = 'IS_OPEN' | 'DELIVERY_AVAILABLE' | 'TAKEOUT_AVAILABLE' | 'FREE_DELIVERY_TIP';
+type SortType = 'NONE' | 'COUNT' | 'COUNT_ASC' | 'COUNT_DESC' | 'RATING' | 'RATING_ASC' | 'RATING_DESC';
 
 interface FilterButton {
   id: FilterType;
   label: string;
   icon: React.ComponentType<{ fill?: string; className?: string }>;
+}
+
+interface SortOption {
+  id: SortType;
+  label: string;
 }
 
 const filterButtons: FilterButton[] = [
@@ -31,6 +39,12 @@ const filterButtons: FilterButton[] = [
   { id: 'FREE_DELIVERY_TIP', label: '배달팁무료', icon: FreeIcon },
 ];
 
+const sortOptions: SortOption[] = [
+  { id: 'RATING_DESC', label: '별점 높은 순' },
+  { id: 'COUNT_DESC', label: '리뷰순' },
+  { id: 'NONE', label: '기본순' },
+];
+
 export default function OrderList() {
   const { data: categories } = useStoreCategories();
   const categoriesWithAll = categories.shop_categories.map((category: Category) => ({
@@ -38,9 +52,12 @@ export default function OrderList() {
   }));
 
   const [selectedFilters, setSelectedFilters] = useState<FilterType[]>(['IS_OPEN']);
+  const [selectedSort, setSelectedSort] = useState<SortType>('NONE');
+  const [isSortModalOpen, setIsSortModalOpen] = useState(false);
 
   const { data: shops } = useOrderableShops({
     filter: selectedFilters.length > 0 ? selectedFilters : undefined,
+    sorter: selectedSort !== 'NONE' ? selectedSort : undefined,
   });
 
   const toggleFilter = (filterId: FilterType) => {
@@ -48,6 +65,15 @@ export default function OrderList() {
       if (prev.includes(filterId)) return prev.filter((id) => id !== filterId);
       else return [...prev, filterId];
     });
+  };
+
+  const handleSortSelect = (sortId: SortType) => {
+    setSelectedSort(sortId);
+    setIsSortModalOpen(false);
+  };
+
+  const getCurrentSortLabel = () => {
+    return sortOptions.find((option) => option.id === selectedSort)?.label || '기본순';
   };
 
   return (
@@ -68,8 +94,11 @@ export default function OrderList() {
 
       <div className="flex w-full pr-4 min-[600px]:justify-center">
         <div className="flex w-full min-[600px]:flex-wrap min-[600px]:justify-center min-[600px]:gap-2">
-          <button className="mr-4 ml-4 inline-flex shrink-0 items-center justify-center gap-[6px] rounded-3xl border border-solid border-[#b611f5] bg-white px-2 py-[6px] text-[14px] leading-none text-[#b611f5] shadow-[0_1px_1px_0_rgba(0,0,0,0.02),_0_2px_4px_0_rgba(0,0,0,0.04)] min-[600px]:mr-0 min-[600px]:ml-0">
-            기본순
+          <button
+            onClick={() => setIsSortModalOpen(true)}
+            className="mr-4 ml-4 inline-flex shrink-0 items-center justify-center gap-[6px] rounded-3xl border border-solid border-[#b611f5] bg-white px-2 py-[6px] text-[14px] leading-none text-[#b611f5] shadow-[0_1px_1px_0_rgba(0,0,0,0.02),_0_2px_4px_0_rgba(0,0,0,0.04)] min-[600px]:mr-0 min-[600px]:ml-0"
+          >
+            {getCurrentSortLabel()}
             <DownArrow className="h-4 w-4" fill={'#b611f5'} />
           </button>
 
@@ -134,6 +163,36 @@ export default function OrderList() {
           </div>
         )}
       </div>
+
+      {isSortModalOpen && (
+        <>
+          <button className="fixed inset-0 z-40 bg-black/60" type="button" onClick={() => setIsSortModalOpen(false)} />
+
+          <div className="fixed right-0 bottom-0 left-0 z-50 rounded-4xl bg-white">
+            <div className="flex items-center justify-between border-b border-[#e1e1e1] px-8 py-3">
+              <h3 className="text-[18px] font-bold text-[#b611f5]">가게 정렬</h3>
+              <button onClick={() => setIsSortModalOpen(false)} className="text-gray-400 hover:text-gray-600">
+                <CloseIcon />
+              </button>
+            </div>
+
+            <div className="">
+              {sortOptions.map((option) => (
+                <button
+                  key={option.id}
+                  onClick={() => handleSortSelect(option.id)}
+                  className={`flex w-full items-center justify-between px-8 pt-4 pb-3 text-left text-[16px] hover:bg-gray-50 ${
+                    selectedSort === option.id ? 'text-[#b611f5]' : 'text-gray-700'
+                  }`}
+                >
+                  {option.label}
+                  {selectedSort === option.id && <CheckIcon fill="#b611f5" />}
+                </button>
+              ))}
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 }
