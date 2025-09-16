@@ -69,6 +69,8 @@ export default function OrderList() {
           <div className="flex flex-1 snap-x snap-mandatory gap-2 overflow-x-auto min-[600px]:flex-initial min-[600px]:snap-none min-[600px]:overflow-visible [@media(pointer:coarse)]:[-ms-overflow-style:none] [@media(pointer:coarse)]:[scrollbar-width:none] [@media(pointer:coarse)]:[&::-webkit-scrollbar]:hidden [@media(pointer:fine)]:[scrollbar-width:thin] [@media(pointer:fine)]:[&::-webkit-scrollbar]:h-2 [@media(pointer:fine)]:[&::-webkit-scrollbar]:w-2 [@media(pointer:fine)]:[&::-webkit-scrollbar-thumb]:rounded-full [@media(pointer:fine)]:[&::-webkit-scrollbar-thumb]:bg-neutral-300 [@media(pointer:fine)]:[&::-webkit-scrollbar-track]:bg-transparent">
             {filterButtons.map((filter) => {
               const isSelected = selectedFilters.includes(filter.id);
+              const IconComponent = filter.icon;
+
               return (
                 <button
                   key={filter.id}
@@ -77,7 +79,7 @@ export default function OrderList() {
                     isSelected ? 'bg-[#b611f5] text-white' : 'bg-white text-gray-400'
                   }`}
                 >
-                  {filter.icon && <Delivery fill={isSelected ? '#fff' : '#cacaca'} />}
+                  <IconComponent fill={isSelected ? '#f8f8fa' : '#cacaca'} />
                   {filter.label}
                 </button>
               );
