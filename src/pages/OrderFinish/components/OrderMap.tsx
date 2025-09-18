@@ -63,7 +63,7 @@ export default function OrderMap({ paymentInfo }: OrderMapProps) {
       map.fitBounds(bounds, { top: 10, right: 10, bottom: 10, left: 10 });
     } else {
       map.setCenter(new naver.maps.LatLng(shopLatitude, shopLongitude));
-      map.setZoom(20);
+      map.setZoom(16);
     }
   }, [map, isDelivery, paymentInfo.latitude, paymentInfo.longitude, shopLatitude, shopLongitude]);
 

@@ -42,7 +42,7 @@ export default function Header() {
     'bg-[#f8f8fa]': true,
   });
 
-  const layoutClass = pathname.startsWith('/result') ? 'h-15 shadow-4' : 'py-4';
+  const layoutClass = pathname.startsWith('/result') ? 'h-15 shadow-2' : 'py-4';
 
   return (
     <header

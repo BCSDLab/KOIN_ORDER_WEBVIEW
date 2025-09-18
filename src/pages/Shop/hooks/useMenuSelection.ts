@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useReducer } from 'react';
+import type { AddCartRequest, UpdateCartItemRequest } from '@/api/cart/entity';
 import type { ShopMenuDetailResponse } from '@/api/shop/entity';
 import { useToast } from '@/util/hooks/useToast';
 
@@ -13,37 +14,105 @@ export interface MenuSelectionState {
   selectedOptions: SelectedOption[];
 }
 
+type Action =
+  | { type: 'INIT'; payload: { menuInfo: ShopMenuDetailResponse; isEdit: boolean } }
+  | { type: 'SELECT_PRICE'; priceId: number }
+  | { type: 'SELECT_OPTION'; optionGroupId: number; optionId: number; isSingle: boolean }
+  | { type: 'INCREASE' }
+  | { type: 'DECREASE' };
+
+function reducer(state: MenuSelectionState | null, action: Action): MenuSelectionState | null {
+  switch (action.type) {
+    case 'INIT': {
+      const { menuInfo, isEdit } = action.payload;
+
+      const initialPriceId = isEdit
+        ? (menuInfo.prices.find((p) => p.is_selected)?.id ?? menuInfo.prices[0].id)
+        : menuInfo.prices[0].id;
+
+      const initialCount = isEdit ? menuInfo.quantity : 1;
+
+      const initialSelectedOptions: SelectedOption[] = isEdit
+        ? menuInfo.option_groups.flatMap((group) =>
+            group.options
+              .filter((opt) => opt.is_selected)
+              .map((opt) => ({
+                optionGroupId: group.id,
+                optionId: opt.id,
+              })),
+          )
+        : [];
+
+      return {
+        priceId: initialPriceId,
+        count: initialCount,
+        selectedOptions: initialSelectedOptions,
+      };
+    }
+
+    case 'SELECT_PRICE':
+      return state ? { ...state, priceId: action.priceId } : state;
+
+    case 'SELECT_OPTION': {
+      if (!state) return state;
+
+      const { optionGroupId, optionId, isSingle } = action;
+
+      let newOptions: SelectedOption[];
+      if (isSingle) {
+        const other = state.selectedOptions.filter((opt) => opt.optionGroupId !== optionGroupId);
+        newOptions = [...other, { optionGroupId, optionId }];
+      } else {
+        const isDeselecting = state.selectedOptions.some(
+          (opt) => opt.optionGroupId === optionGroupId && opt.optionId === optionId,
+        );
+        newOptions = isDeselecting
+          ? state.selectedOptions.filter((opt) => !(opt.optionGroupId === optionGroupId && opt.optionId === optionId))
+          : [...state.selectedOptions, { optionGroupId, optionId }];
+      }
+
+      return { ...state, selectedOptions: newOptions };
+    }
+
+    case 'INCREASE':
+      return state ? { ...state, count: state.count + 1 } : state;
+
+    case 'DECREASE':
+      return state ? { ...state, count: Math.max(1, state.count - 1) } : state;
+
+    default:
+      return state;
+  }
+}
+
 export function useMenuSelection(shopId: string, menuInfo: ShopMenuDetailResponse | undefined, isEdit: boolean) {
   const { showToast } = useToast();
-
-  const [state, setState] = useState<MenuSelectionState | null>(null);
+  const [state, dispatch] = useReducer(reducer, null as MenuSelectionState | null);
 
   useEffect(() => {
     if (!menuInfo) return;
-
-    const initialPriceId = isEdit
-      ? (menuInfo.prices.find((p) => p.is_selected)?.id ?? menuInfo.prices[0].id)
-      : menuInfo.prices[0].id;
-
-    const initialCount = isEdit ? menuInfo.quantity : 1;
-
-    const initialSelectedOptions: SelectedOption[] = isEdit
-      ? menuInfo.option_groups.flatMap((group) =>
-          group.options
-            .filter((opt) => opt.is_selected)
-            .map((opt) => ({
-              optionGroupId: group.id,
-              optionId: opt.id,
-            })),
-        )
-      : [];
-
-    setState({
-      priceId: initialPriceId,
-      count: initialCount,
-      selectedOptions: initialSelectedOptions,
-    });
+    dispatch({ type: 'INIT', payload: { menuInfo, isEdit } });
   }, [shopId, menuInfo, isEdit]);
+
+  const selectPrice = (priceId: number) => dispatch({ type: 'SELECT_PRICE', priceId });
+
+  const selectOption = (optionGroupId: number, optionId: number, isSingle: boolean, maxSelect: number) => {
+    if (!state) return;
+
+    if (!isSingle) {
+      const groupSelected = state.selectedOptions.filter((opt) => opt.optionGroupId === optionGroupId);
+      const already = groupSelected.some((opt) => opt.optionId === optionId);
+      if (!already && groupSelected.length >= maxSelect) {
+        showToast(`최대 ${maxSelect}개까지 선택할 수 있습니다.`);
+        return;
+      }
+    }
+
+    dispatch({ type: 'SELECT_OPTION', optionGroupId, optionId, isSingle });
+  };
+
+  const increaseCount = () => dispatch({ type: 'INCREASE' });
+  const decreaseCount = () => dispatch({ type: 'DECREASE' });
 
   if (!menuInfo || !state) {
     return {
@@ -55,50 +124,16 @@ export function useMenuSelection(shopId: string, menuInfo: ShopMenuDetailRespons
       increaseCount: () => {},
       decreaseCount: () => {},
       totalPrice: 0,
-      selectedPriceObj: undefined,
+      selectedPriceObj: undefined as ShopMenuDetailResponse['prices'][number] | undefined,
       isAllRequiredOptionsSelected: false,
-      addToCartRequest: {},
-      updateCartItemOptionsRequest: {},
+      addToCartRequest: null as AddCartRequest | null,
+      updateCartItemOptionsRequest: null as UpdateCartItemRequest | null,
     };
   }
 
-  const selectPrice = (priceId: number) => setState((prev) => prev && { ...prev, priceId });
-  const selectOption = (optionGroupId: number, optionId: number, isSingle: boolean, maxSelect: number) => {
-    setState((prev) => {
-      if (!prev) return prev;
-      const groupSelected = prev.selectedOptions.filter((opt) => opt.optionGroupId === optionGroupId);
-      const already = groupSelected.some((opt) => opt.optionId === optionId);
-
-      if (!isSingle && !already && groupSelected.length >= maxSelect) {
-        showToast(`최대 ${maxSelect}개까지 선택할 수 있습니다.`);
-        return prev;
-      }
-
-      let newOptions;
-      if (isSingle) {
-        const otherGroupOptions = prev.selectedOptions.filter((opt) => opt.optionGroupId !== optionGroupId);
-        newOptions = [...otherGroupOptions, { optionGroupId, optionId }];
-      } else {
-        const isDeselecting = prev.selectedOptions.some(
-          (opt) => opt.optionGroupId === optionGroupId && opt.optionId === optionId,
-        );
-
-        if (isDeselecting) {
-          newOptions = prev.selectedOptions.filter(
-            (opt) => !(opt.optionGroupId === optionGroupId && opt.optionId === optionId),
-          );
-        } else {
-          newOptions = [...prev.selectedOptions, { optionGroupId, optionId }];
-        }
-      }
-      return { ...prev, selectedOptions: newOptions };
-    });
-  };
-  const increaseCount = () => setState((prev) => prev && { ...prev, count: prev.count + 1 });
-  const decreaseCount = () => setState((prev) => prev && { ...prev, count: Math.max(0, prev.count - 1) });
-
   const selectedPriceObj = menuInfo.prices.find((p) => p.id === state.priceId);
   const selectedPrice = selectedPriceObj?.price ?? 0;
+
   const optionTotal = state.selectedOptions
     .map((sel) => {
       const group = menuInfo.option_groups.find((g) => g.id === sel.optionGroupId);
@@ -106,6 +141,7 @@ export function useMenuSelection(shopId: string, menuInfo: ShopMenuDetailRespons
       return option?.price ?? 0;
     })
     .reduce((sum, price) => sum + price, 0);
+
   const totalPrice = (selectedPrice + optionTotal) * state.count;
 
   const isAllRequiredOptionsSelected = menuInfo.option_groups
@@ -120,7 +156,7 @@ export function useMenuSelection(shopId: string, menuInfo: ShopMenuDetailRespons
     option_id: sel.optionId,
   }));
 
-  const addToCartRequest = {
+  const addToCartRequest: AddCartRequest = {
     menuInfo: {
       orderable_shop_id: Number(shopId),
       orderable_shop_menu_id: menuInfo.id,

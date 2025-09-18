@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import clsx from 'clsx';
 import { useNavigate } from 'react-router-dom';
 import type { ShopInfoResponse } from '@/api/shop/entity';
 import EmptyThumbnail from '@/assets/Shop/empty_thumbnail.svg';
@@ -77,7 +78,10 @@ export default function ShopMenus({
           <div className="shadow-1 rounded-3xl bg-white">
             {shop.menus.map((menu, idx) => (
               <button
-                className={`flex w-full items-center justify-between py-3 pr-3 pl-4 ${idx !== 0 ? 'border-t border-neutral-300' : ''}`}
+                className={clsx(
+                  'flex w-full items-center justify-between gap-4 py-3 pr-3 pl-4',
+                  idx !== 0 && 'border-t border-neutral-300',
+                )}
                 key={menu.id}
                 name={menu.name}
                 disabled={menu.is_sold_out || !isOrderable}
@@ -86,7 +90,7 @@ export default function ShopMenus({
                 <div className="flex flex-col">
                   <span className="flex h-auto text-start text-lg leading-[1.6] font-semibold">{menu.name}</span>
                   {menu.description && (
-                    <span className="line-clamp-2 text-left text-[12px] leading-[1.6] font-normal text-neutral-500">
+                    <span className="line-clamp-2 text-left text-[12px] leading-[1.6] font-normal break-keep text-neutral-500">
                       {menu.description}
                     </span>
                   )}
