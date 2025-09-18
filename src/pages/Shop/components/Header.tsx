@@ -72,7 +72,7 @@ export default function Header({ name, targetRef, cartItemCount, noImage }: Head
         <ArrowBackIcon fill={getTransitionColor(currentOpacity)} />
       </button>
       <span
-        className="font-[Pretendard] text-lg font-semibold"
+        className="font-[Pretendard] text-lg font-normal"
         style={{
           color: `rgba(0, 0, 0, ${currentOpacity})`,
         }}
