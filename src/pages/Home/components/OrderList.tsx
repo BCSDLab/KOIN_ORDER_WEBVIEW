@@ -58,9 +58,12 @@ export default function OrderList() {
   const [isMinOrderOpen, setIsMinOrderOpen] = useState(false);
   const [minOrderAmount, setMinOrderAmount] = useState<number | null>(null);
 
+  const isMinOrderSelected = minOrderAmount !== null && minOrderAmount !== 99999;
+
   const { data: shops } = useOrderableShops({
     filter: selectedFilters.length > 0 ? selectedFilters : undefined,
     sorter: selectedSort !== 'NONE' ? selectedSort : undefined,
+    minimum_order_amount: isMinOrderSelected ? minOrderAmount : undefined,
   });
 
   const toggleFilter = (filterId: FilterType) => {
@@ -75,9 +78,11 @@ export default function OrderList() {
     setIsSortModalOpen(false);
   };
 
-  const handleMinOrderApply = (amount: number | null) => {
-    setMinOrderAmount(amount);
-    // API 호출 시 minimum_order_amount 파라미터로 전달
+  const getMinOrderLabel = () => {
+    if (minOrderAmount === null || minOrderAmount === 99999) {
+      return '최소주문금액';
+    }
+    return `최소주문금액 ${minOrderAmount.toLocaleString()}원 이하`;
   };
 
   const getCurrentSortLabel = () => {
@@ -131,10 +136,10 @@ export default function OrderList() {
 
             <button
               onClick={() => setIsMinOrderOpen(true)}
-              className="flex shrink-0 snap-start items-center justify-center gap-[6px] rounded-3xl bg-white px-2 py-[6px] text-[14px] text-gray-400 shadow-[0_1px_1px_0_rgba(0,0,0,0.02),_0_2px_4px_0_rgba(0,0,0,0.04)]"
+              className={`flex shrink-0 ${isMinOrderSelected ? 'bg-[#b611f5] text-white' : 'bg-white text-[#cacaca]'} snap-start items-center justify-center gap-[6px] rounded-3xl px-2 py-[6px] text-[14px] text-gray-400 shadow-[0_1px_1px_0_rgba(0,0,0,0.02),_0_2px_4px_0_rgba(0,0,0,0.04)]`}
             >
-              최소주문금액
-              <DownArrow className="h-4 w-4" fill={'#cacaca'} />
+              {getMinOrderLabel()}
+              <DownArrow className="h-4 w-4" fill={`${isMinOrderSelected ? '#fff' : '#cacaca'}`} />
             </button>
           </div>
         </div>
@@ -188,7 +193,7 @@ export default function OrderList() {
         isOpen={isMinOrderOpen}
         onClose={() => setIsMinOrderOpen(false)}
         initialValue={minOrderAmount}
-        onApply={handleMinOrderApply}
+        onApply={setMinOrderAmount}
       />
     </div>
   );
