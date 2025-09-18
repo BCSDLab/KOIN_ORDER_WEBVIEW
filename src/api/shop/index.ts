@@ -11,6 +11,8 @@ import {
   ShopMenuDetailResponse,
   UnorderableShopDetailInfoResponse,
   UnorderableShopMenusResponse,
+  RelatedSearchResponse,
+  RelatedSearchParams,
 } from './entity';
 
 export const getShopDetailInfo = async ({ orderableShopId }: ShopDetailInfoParams) => {
@@ -57,5 +59,12 @@ export const getUnorderableShopInfo = async ({ UnorderableShopId }: UnorderableS
 
 export const getUnorderableShopInfoSummary = async ({ UnorderableShopId }: UnorderableShopInfoParams) => {
   const response = await apiClient.get<ShopInfoSummaryResponse>(`shops/${UnorderableShopId}/summary`);
+  return response;
+};
+
+export const getRelateSearch = async ({ keyword }: RelatedSearchParams) => {
+  const response = await apiClient.get<RelatedSearchResponse>(`order/shop/search/related`, {
+    params: { keyword },
+  });
   return response;
 };
