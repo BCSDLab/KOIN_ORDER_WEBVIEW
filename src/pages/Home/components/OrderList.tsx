@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import BottomSheet from './BottomSheet';
+import MinOrderBottomSheet from './MinOrderBottomSheet';
 import ShopCard from './ShopCard';
 import { OrderableShopsResponse } from '@/api/shop/entity';
 import CheckIcon from '@/assets/Home/check-icon.svg';
@@ -7,8 +9,7 @@ import DownArrow from '@/assets/Home/down-arrow-icon.svg';
 import FreeIcon from '@/assets/Home/free-icon.svg';
 import OpenIcon from '@/assets/Home/open-icon.svg';
 import PackIcon from '@/assets/Home/pack-icon.svg';
-import PlanetIcon from '@/assets/Home/planet-closed.svg';
-import CloseIcon from '@/assets/Main/close-icon.svg';
+import PlanetIcon from '@/assets/Home/planet-closed-icon.svg';
 import { useOrderableShops } from '@/pages/Home/hooks/useOrderableShops.ts';
 import { useStoreCategories } from '@/pages/Home/hooks/useStoreCategories.ts';
 
@@ -54,6 +55,8 @@ export default function OrderList() {
   const [selectedFilters, setSelectedFilters] = useState<FilterType[]>(['IS_OPEN']);
   const [selectedSort, setSelectedSort] = useState<SortType>('NONE');
   const [isSortModalOpen, setIsSortModalOpen] = useState(false);
+  const [isMinOrderOpen, setIsMinOrderOpen] = useState(false);
+  const [minOrderAmount, setMinOrderAmount] = useState<number | null>(null);
 
   const { data: shops } = useOrderableShops({
     filter: selectedFilters.length > 0 ? selectedFilters : undefined,
@@ -70,6 +73,11 @@ export default function OrderList() {
   const handleSortSelect = (sortId: SortType) => {
     setSelectedSort(sortId);
     setIsSortModalOpen(false);
+  };
+
+  const handleMinOrderApply = (amount: number | null) => {
+    setMinOrderAmount(amount);
+    // API 호출 시 minimum_order_amount 파라미터로 전달
   };
 
   const getCurrentSortLabel = () => {
@@ -121,7 +129,10 @@ export default function OrderList() {
               );
             })}
 
-            <button className="flex shrink-0 snap-start items-center justify-center gap-[6px] rounded-3xl bg-white px-2 py-[6px] text-[14px] text-gray-400 shadow-[0_1px_1px_0_rgba(0,0,0,0.02),_0_2px_4px_0_rgba(0,0,0,0.04)]">
+            <button
+              onClick={() => setIsMinOrderOpen(true)}
+              className="flex shrink-0 snap-start items-center justify-center gap-[6px] rounded-3xl bg-white px-2 py-[6px] text-[14px] text-gray-400 shadow-[0_1px_1px_0_rgba(0,0,0,0.02),_0_2px_4px_0_rgba(0,0,0,0.04)]"
+            >
               최소주문금액
               <DownArrow className="h-4 w-4" fill={'#cacaca'} />
             </button>
@@ -150,49 +161,35 @@ export default function OrderList() {
             );
           })
         ) : (
-          <div className="col-span-full mt-10 flex min-h-[200px] text-center text-gray-500">
-            {shops?.length === 0 ? (
-              <div className="flex flex-col items-center">
-                <PlanetIcon />
-                <div className="text-[18px] text-[#b611f5]">이용 가능한 가게가 없어요</div>
-                <div className="text-[14px] text-[#4b4b4b]">조건을 변경하고 다시 검색해주세요</div>
-              </div>
-            ) : (
-              <div className="text-[14px] text-[#4b4b4b]">가게 목록을 불러오는 중입니다.</div>
-            )}
+          <div className="col-span-full mt-10 flex min-h-[200px] flex-col items-center">
+            <PlanetIcon />
+            <div className="mt-4 text-[18px] text-[#b611f5]">이용 가능한 가게가 없어요</div>
+            <div className="text-[14px] text-[#4b4b4b]">조건을 변경하고 다시 검색해주세요</div>
           </div>
         )}
       </div>
 
-      {isSortModalOpen && (
-        <>
-          <button className="fixed inset-0 z-40 bg-black/60" type="button" onClick={() => setIsSortModalOpen(false)} />
+      <BottomSheet isOpen={isSortModalOpen} onClose={() => setIsSortModalOpen(false)} title="가게 정렬">
+        {sortOptions.map((option) => (
+          <button
+            key={option.id}
+            onClick={() => handleSortSelect(option.id)}
+            className={`flex w-full items-center justify-between px-8 pt-4 pb-3 text-left text-[16px] hover:bg-gray-50 ${
+              selectedSort === option.id ? 'text-[#b611f5]' : 'text-gray-700'
+            }`}
+          >
+            {option.label}
+            {selectedSort === option.id && <CheckIcon fill="#b611f5" />}
+          </button>
+        ))}
+      </BottomSheet>
 
-          <div className="fixed right-0 bottom-0 left-0 z-50 rounded-4xl bg-white">
-            <div className="flex items-center justify-between border-b border-[#e1e1e1] px-8 py-3">
-              <h3 className="text-[18px] font-bold text-[#b611f5]">가게 정렬</h3>
-              <button onClick={() => setIsSortModalOpen(false)} className="text-gray-400 hover:text-gray-600">
-                <CloseIcon />
-              </button>
-            </div>
-
-            <div className="">
-              {sortOptions.map((option) => (
-                <button
-                  key={option.id}
-                  onClick={() => handleSortSelect(option.id)}
-                  className={`flex w-full items-center justify-between px-8 pt-4 pb-3 text-left text-[16px] hover:bg-gray-50 ${
-                    selectedSort === option.id ? 'text-[#b611f5]' : 'text-gray-700'
-                  }`}
-                >
-                  {option.label}
-                  {selectedSort === option.id && <CheckIcon fill="#b611f5" />}
-                </button>
-              ))}
-            </div>
-          </div>
-        </>
-      )}
+      <MinOrderBottomSheet
+        isOpen={isMinOrderOpen}
+        onClose={() => setIsMinOrderOpen(false)}
+        initialValue={minOrderAmount}
+        onApply={handleMinOrderApply}
+      />
     </div>
   );
 }
