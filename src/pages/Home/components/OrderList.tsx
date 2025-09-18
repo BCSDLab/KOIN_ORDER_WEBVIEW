@@ -19,6 +19,7 @@ interface Category {
   image_url: string;
 }
 
+type CategoryType = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
 type FilterType = 'IS_OPEN' | 'DELIVERY_AVAILABLE' | 'TAKEOUT_AVAILABLE' | 'FREE_DELIVERY_TIP';
 type SortType = 'NONE' | 'COUNT' | 'COUNT_ASC' | 'COUNT_DESC' | 'RATING' | 'RATING_ASC' | 'RATING_DESC';
 
@@ -52,6 +53,7 @@ export default function OrderList() {
     ...category,
   }));
 
+  const [selectedCategory, setSelectedCategory] = useState<CategoryType | null>(1);
   const [selectedFilters, setSelectedFilters] = useState<FilterType[]>(['IS_OPEN']);
   const [selectedSort, setSelectedSort] = useState<SortType>('NONE');
   const [isSortModalOpen, setIsSortModalOpen] = useState(false);
@@ -63,6 +65,7 @@ export default function OrderList() {
   const { data: shops } = useOrderableShops({
     filter: selectedFilters.length > 0 ? selectedFilters : undefined,
     sorter: selectedSort !== 'NONE' ? selectedSort : undefined,
+    category_filter: selectedCategory !== null ? selectedCategory : undefined,
     minimum_order_amount: isMinOrderSelected ? minOrderAmount : undefined,
   });
 
@@ -95,12 +98,17 @@ export default function OrderList() {
         {categoriesWithAll.map((category) => (
           <button
             key={category.id}
-            onClick={() => {}}
+            onClick={() => setSelectedCategory(category.id as CategoryType)}
             className="flex w-14 shrink-0 snap-start flex-col items-center justify-center gap-1"
             type="button"
           >
-            <img src={category.image_url} alt={category.name} className="h-8 w-8" />
-            <div className="text-xs">{category.name}</div>
+            <img
+              src={category.image_url}
+              alt={category.name}
+              className={`relative h-8 w-8 ${selectedCategory === category.id ? 'z-10' : ''}`}
+            />
+            <div className={`text-xs ${selectedCategory === category.id ? 'z-10' : ''}`}>{category.name}</div>
+            {selectedCategory === category.id && <div className="absolute h-12 w-12 rounded-full bg-[#e1e1e1]" />}
           </button>
         ))}
       </div>
