@@ -4,7 +4,7 @@ import useParamsHandler from '@/util/hooks/useParamsHandler';
 
 export default function SearchBar() {
   const [isModalOpen, openModal, closeModal] = useBooleanState(false);
-  const { params, searchParams } = useParamsHandler();
+  const { searchParams } = useParamsHandler();
 
   return (
     <>

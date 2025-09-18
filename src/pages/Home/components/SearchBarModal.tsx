@@ -19,7 +19,7 @@ export default function SearchBarModal({ onClose }: SearchBarModalProps) {
   const targetRef = useRef<HTMLInputElement | null>(null);
   const debounceTimeout = useRef<number | null>(null);
   const [relateSearchItems, setRelateSearchItems] = useState<RelatedSearchResponse>();
-  const { params, searchParams, setParams } = useParamsHandler();
+  const { searchParams, setParams } = useParamsHandler();
   const navigate = useNavigate();
   useClickTouchOutside(backgroundRef, onClose);
   useEscapeKeyDown(onClose);
