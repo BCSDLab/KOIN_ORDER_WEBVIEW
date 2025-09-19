@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import MinOrderBottomSheet from './MinOrderBottomSheet';
 import ShopCard from './ShopCard';
 import { OrderableShopsResponse } from '@/api/shop/entity';
 import CheckIcon from '@/assets/Home/check-icon.svg';
@@ -9,12 +8,14 @@ import FreeIcon from '@/assets/Home/free-icon.svg';
 import OpenIcon from '@/assets/Home/open-icon.svg';
 import PackIcon from '@/assets/Home/pack-icon.svg';
 import PlanetIcon from '@/assets/Home/planet-closed-icon.svg';
+import PlanetSliderIcon from '@/assets/Home/planet-icon.svg';
 import CloseIcon from '@/assets/Main/close-icon.svg';
 import BottomModal, {
   BottomModalContent,
   BottomModalFooter,
   BottomModalHeader,
 } from '@/components/UI/BottomModal/BottomModal';
+import Button from '@/components/UI/Button';
 import { useOrderableShops } from '@/pages/Home/hooks/useOrderableShops.ts';
 import { useStoreCategories } from '@/pages/Home/hooks/useStoreCategories.ts';
 
@@ -52,6 +53,17 @@ const sortOptions: SortOption[] = [
   { id: 'NONE', label: '기본순' },
 ];
 
+const ALL_VALUE = 99999;
+
+const MIN_ORDER_OPTIONS = [
+  { value: 0, label: '0' },
+  { value: 5000, label: '5,000' },
+  { value: 10000, label: '10,000' },
+  { value: 15000, label: '15,000' },
+  { value: 20000, label: '20,000' },
+  { value: ALL_VALUE, label: '전체' },
+];
+
 export default function OrderList() {
   const { data: categories } = useStoreCategories();
   const categoriesWithAll = categories.shop_categories.map((category: Category) => ({
@@ -65,7 +77,10 @@ export default function OrderList() {
   const [isSortModalOpen, setIsSortModalOpen] = useState(false);
   // const [isSortModalOpen, , closeSortBottomModal] = useBooleanState(false);
   const [isMinOrderOpen, setIsMinOrderOpen] = useState(false);
+
   const [minOrderAmount, setMinOrderAmount] = useState<number | null>(null);
+  // 위와 분리한 이유는 완료 버튼을 눌렀을 때만 적용되게 하기 위해
+  const [selectedValue, setSelectedValue] = useState<number | null>(ALL_VALUE);
 
   const isMinOrderSelected = minOrderAmount !== null && minOrderAmount !== 99999;
 
@@ -97,6 +112,22 @@ export default function OrderList() {
 
   const getCurrentSortLabel = () => {
     return sortOptions.find((option) => option.id === selectedSort)?.label || '기본순';
+  };
+
+  const getSliderPosition = () => {
+    if (selectedValue === null) return 100;
+    const index = MIN_ORDER_OPTIONS.findIndex((opt) => opt.value === selectedValue);
+    return (index / (MIN_ORDER_OPTIONS.length - 1)) * 100;
+  };
+
+  const isPointActive = (optionValue: number) => {
+    if (selectedValue === null) return optionValue === ALL_VALUE;
+    return optionValue <= selectedValue;
+  };
+
+  const handleValueSelect = () => {
+    setMinOrderAmount(selectedValue);
+    setIsMinOrderOpen(false);
   };
 
   return (
@@ -189,6 +220,7 @@ export default function OrderList() {
         )}
       </div>
 
+      {/* 정렬 BottomSheet */}
       <BottomModal isOpen={isSortModalOpen} onClose={() => setIsSortModalOpen(false)}>
         <BottomModalHeader>
           <div className="text-primary-500 font-semibold"> 가게 정렬</div>
@@ -215,12 +247,61 @@ export default function OrderList() {
         <BottomModalFooter />
       </BottomModal>
 
-      <MinOrderBottomSheet
-        isOpen={isMinOrderOpen}
-        onClose={() => setIsMinOrderOpen(false)}
-        initialValue={minOrderAmount}
-        onApply={setMinOrderAmount}
-      />
+      {/* 최소 주문 금액 BottomSheet */}
+      <BottomModal isOpen={isMinOrderOpen} onClose={() => setIsMinOrderOpen(false)}>
+        <BottomModalHeader>
+          <div className="text-primary-500 font-semibold"> 최소주문금액</div>
+          <button onClick={() => setIsMinOrderOpen(false)}>
+            <CloseIcon />
+          </button>
+        </BottomModalHeader>
+        <BottomModalContent>
+          <div className="relative mb-9">
+            <div className="relative h-2 w-full rounded-full bg-[#E9EBED]">
+              <div className="absolute h-2 rounded-full bg-[#C358FC]" style={{ width: `${getSliderPosition()}%` }} />
+              <div className="absolute inset-0 flex items-center justify-between">
+                {MIN_ORDER_OPTIONS.map((option) => (
+                  <button
+                    key={option.label}
+                    onClick={() => setSelectedValue(option.value)}
+                    className="relative flex h-4 w-4 items-center justify-center"
+                    type="button"
+                  >
+                    <div
+                      className={`h-1 w-1 rounded-full ${
+                        isPointActive(option.value) ? 'bg-[#fff]' : 'border-2 border-[#cacaca]'
+                      }`}
+                    />
+                  </button>
+                ))}
+              </div>
+              <div
+                className="absolute top-1/2 flex -translate-x-1/2 -translate-y-1/2 items-center justify-center"
+                style={{ left: `${getSliderPosition()}%` }}
+              >
+                <PlanetSliderIcon />
+              </div>
+            </div>
+
+            <div className="mt-6 flex items-center justify-between px-1">
+              {MIN_ORDER_OPTIONS.map((option) => (
+                <button
+                  key={option.label}
+                  onClick={() => setSelectedValue(option.value)}
+                  className={`text-[14px] ${selectedValue === option.value ? 'font-bold text-[#b611f5]' : 'text-black'}`}
+                  type="button"
+                >
+                  {option.label}
+                </button>
+              ))}
+            </div>
+          </div>
+          <Button onClick={handleValueSelect} className="rounded-xl py-2.5 text-lg">
+            완료
+          </Button>
+        </BottomModalContent>
+        <BottomModalFooter />
+      </BottomModal>
     </div>
   );
 }
