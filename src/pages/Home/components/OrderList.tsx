@@ -146,7 +146,7 @@ export default function OrderList() {
               className={`relative h-8 w-8 ${selectedCategory === category.id ? 'z-10' : ''}`}
             />
             <div className={`text-xs ${selectedCategory === category.id ? 'z-10' : ''}`}>{category.name}</div>
-            {selectedCategory === category.id && <div className="absolute h-12 w-12 rounded-full bg-[#e1e1e1]" />}
+            {selectedCategory === category.id && <div className="absolute h-12 w-12 rounded-full bg-neutral-300" />}
           </button>
         ))}
       </div>
@@ -155,10 +155,10 @@ export default function OrderList() {
         <div className="flex w-full min-[600px]:flex-wrap min-[600px]:justify-center min-[600px]:gap-2">
           <button
             onClick={() => setIsSortModalOpen(true)}
-            className="mr-4 ml-4 inline-flex shrink-0 items-center justify-center gap-[6px] rounded-3xl border border-solid border-[#b611f5] bg-white px-2 py-[6px] text-[14px] leading-none text-[#b611f5] shadow-[0_1px_1px_0_rgba(0,0,0,0.02),_0_2px_4px_0_rgba(0,0,0,0.04)] min-[600px]:mr-0 min-[600px]:ml-0"
+            className="border-primary-500 text-primary-500 mr-4 ml-4 inline-flex shrink-0 items-center justify-center gap-[6px] rounded-3xl border border-solid bg-white px-2 py-[6px] text-[14px] leading-none shadow-[0_1px_1px_0_rgba(0,0,0,0.02),_0_2px_4px_0_rgba(0,0,0,0.04)] min-[600px]:mr-0 min-[600px]:ml-0"
           >
             {getCurrentSortLabel()}
-            <DownArrow className="h-4 w-4" fill={'#b611f5'} />
+            <DownArrow className="fill-primary-500 h-4 w-4" />
           </button>
 
           <div className="flex flex-1 snap-x snap-mandatory gap-2 overflow-x-auto min-[600px]:flex-initial min-[600px]:snap-none min-[600px]:overflow-visible [@media(pointer:coarse)]:[-ms-overflow-style:none] [@media(pointer:coarse)]:[scrollbar-width:none] [@media(pointer:coarse)]:[&::-webkit-scrollbar]:hidden [@media(pointer:fine)]:[scrollbar-width:thin] [@media(pointer:fine)]:[&::-webkit-scrollbar]:h-2 [@media(pointer:fine)]:[&::-webkit-scrollbar]:w-2 [@media(pointer:fine)]:[&::-webkit-scrollbar-thumb]:rounded-full [@media(pointer:fine)]:[&::-webkit-scrollbar-thumb]:bg-neutral-300 [@media(pointer:fine)]:[&::-webkit-scrollbar-track]:bg-transparent">
@@ -171,10 +171,10 @@ export default function OrderList() {
                   key={filter.id}
                   onClick={() => toggleFilter(filter.id)}
                   className={`flex shrink-0 snap-start items-center justify-center gap-[6px] rounded-3xl px-2 py-[6px] text-[14px] shadow-[0_1px_1px_0_rgba(0,0,0,0.02),_0_2px_4px_0_rgba(0,0,0,0.04)] transition-colors ${
-                    isSelected ? 'bg-[#b611f5] text-white' : 'bg-white text-gray-400'
+                    isSelected ? 'bg-primary-500 text-white' : 'bg-white text-neutral-400'
                   }`}
                 >
-                  <IconComponent fill={isSelected ? '#f8f8fa' : '#cacaca'} />
+                  <IconComponent className={isSelected ? 'fill-[#f8f8fa]' : 'fill-neutral-400'} />
                   {filter.label}
                 </button>
               );
@@ -182,10 +182,10 @@ export default function OrderList() {
 
             <button
               onClick={() => setIsMinOrderOpen(true)}
-              className={`flex shrink-0 ${isMinOrderSelected ? 'bg-[#b611f5] text-white' : 'bg-white text-[#cacaca]'} snap-start items-center justify-center gap-[6px] rounded-3xl px-2 py-[6px] text-[14px] text-gray-400 shadow-[0_1px_1px_0_rgba(0,0,0,0.02),_0_2px_4px_0_rgba(0,0,0,0.04)]`}
+              className={`flex shrink-0 ${isMinOrderSelected ? 'bg-primary-500 text-[#f8f8fA]' : 'bg-white text-neutral-400'} snap-start items-center justify-center gap-[6px] rounded-3xl px-2 py-[6px] text-[14px] text-gray-400 shadow-[0_1px_1px_0_rgba(0,0,0,0.02),_0_2px_4px_0_rgba(0,0,0,0.04)]`}
             >
               {getMinOrderLabel()}
-              <DownArrow className="h-4 w-4" fill={`${isMinOrderSelected ? '#fff' : '#cacaca'}`} />
+              <DownArrow className={isMinOrderSelected ? 'h-4 w-4 fill-white' : 'h-4 w-4 fill-neutral-400'} />
             </button>
           </div>
         </div>
@@ -214,8 +214,8 @@ export default function OrderList() {
         ) : (
           <div className="col-span-full mt-10 flex min-h-[200px] flex-col items-center">
             <PlanetIcon />
-            <div className="mt-4 text-[18px] text-[#b611f5]">이용 가능한 가게가 없어요</div>
-            <div className="text-[14px] text-[#4b4b4b]">조건을 변경하고 다시 검색해주세요</div>
+            <div className="text-primary-500 mt-4 text-[18px]">이용 가능한 가게가 없어요</div>
+            <div className="text-[14px] text-neutral-600">조건을 변경하고 다시 검색해주세요</div>
           </div>
         )}
       </div>
@@ -235,11 +235,11 @@ export default function OrderList() {
                 key={option.id}
                 onClick={() => handleSortSelect(option.id)}
                 className={`flex w-full items-center justify-between text-left text-[16px] hover:bg-gray-50 ${
-                  selectedSort === option.id ? 'text-[#b611f5]' : 'text-gray-700'
+                  selectedSort === option.id ? 'text-primary-500' : 'text-gray-700'
                 }`}
               >
                 {option.label}
-                {selectedSort === option.id && <CheckIcon fill="#b611f5" />}
+                {selectedSort === option.id && <CheckIcon className="fill-primary-500" />}
               </button>
             ))}
           </div>
@@ -269,7 +269,7 @@ export default function OrderList() {
                   >
                     <div
                       className={`h-1 w-1 rounded-full ${
-                        isPointActive(option.value) ? 'bg-[#fff]' : 'border-2 border-[#cacaca]'
+                        isPointActive(option.value) ? 'bg-[#fff]' : 'border-2 border-neutral-400'
                       }`}
                     />
                   </button>
@@ -288,7 +288,7 @@ export default function OrderList() {
                 <button
                   key={option.label}
                   onClick={() => setSelectedValue(option.value)}
-                  className={`text-[14px] ${selectedValue === option.value ? 'font-bold text-[#b611f5]' : 'text-black'}`}
+                  className={`text-[14px] ${selectedValue === option.value ? 'text-primary-500 font-bold' : 'text-black'}`}
                   type="button"
                 >
                   {option.label}
