@@ -4,7 +4,7 @@ import SearchBar from './components/SearchBar';
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen w-full flex-col bg-[#f2f2f2]">
+    <div className="flex min-h-screen w-full flex-col bg-[#f8f8fa]">
       <div className="flex justify-center">
         <SearchBar />
       </div>
