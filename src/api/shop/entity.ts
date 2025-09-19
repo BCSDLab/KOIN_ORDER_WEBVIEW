@@ -247,13 +247,8 @@ export interface OrderableShopsResponse {
   maximum_delivery_tip: number;
   is_open: boolean;
   category_ids: number[];
-  images: OrderableShopsImg[];
+  images: Image[];
   open_status: 'OPERATING' | 'PREPARING' | 'CLOSED';
-}
-
-interface OrderableShopsImg {
-  image_url: string;
-  is_thumbnail: boolean;
 }
 
 export interface OrderableShopsParams {
