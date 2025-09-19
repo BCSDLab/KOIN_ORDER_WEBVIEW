@@ -2,14 +2,15 @@ import { useState } from 'react';
 import ShopCard from './ShopCard';
 import { OrderableShopsResponse } from '@/api/shop/entity';
 import CheckIcon from '@/assets/Home/check-icon.svg';
-import Delivery from '@/assets/Home/delivery-icon.svg';
-import DownArrow from '@/assets/Home/down-arrow-icon.svg';
+import DeliveryIcon from '@/assets/Home/delivery-icon.svg';
+import DownArrowIcon from '@/assets/Home/down-arrow-icon.svg';
 import FreeIcon from '@/assets/Home/free-icon.svg';
 import OpenIcon from '@/assets/Home/open-icon.svg';
 import PackIcon from '@/assets/Home/pack-icon.svg';
 import PlanetIcon from '@/assets/Home/planet-closed-icon.svg';
 import PlanetSliderIcon from '@/assets/Home/planet-icon.svg';
 import CloseIcon from '@/assets/Main/close-icon.svg';
+import Badge from '@/components/UI/Badge';
 import BottomModal, {
   BottomModalContent,
   BottomModalFooter,
@@ -42,7 +43,7 @@ interface SortOption {
 
 const filterButtons: FilterButton[] = [
   { id: 'IS_OPEN', label: '영업중', icon: OpenIcon },
-  { id: 'DELIVERY_AVAILABLE', label: '배달가능', icon: Delivery },
+  { id: 'DELIVERY_AVAILABLE', label: '배달가능', icon: DeliveryIcon },
   { id: 'TAKEOUT_AVAILABLE', label: '포장가능', icon: PackIcon },
   { id: 'FREE_DELIVERY_TIP', label: '배달팁무료', icon: FreeIcon },
 ];
@@ -75,11 +76,9 @@ export default function OrderList() {
   const [selectedSort, setSelectedSort] = useState<SortType>('NONE');
 
   const [isSortModalOpen, setIsSortModalOpen] = useState(false);
-  // const [isSortModalOpen, , closeSortBottomModal] = useBooleanState(false);
   const [isMinOrderOpen, setIsMinOrderOpen] = useState(false);
 
   const [minOrderAmount, setMinOrderAmount] = useState<number | null>(null);
-  // 위와 분리한 이유는 완료 버튼을 눌렀을 때만 적용되게 하기 위해
   const [selectedValue, setSelectedValue] = useState<number | null>(ALL_VALUE);
 
   const isMinOrderSelected = minOrderAmount !== null && minOrderAmount !== 99999;
@@ -132,12 +131,12 @@ export default function OrderList() {
 
   return (
     <div className="flex h-full w-full flex-col items-center justify-center gap-4">
-      <div className="ml-6 flex w-[calc(100%-24px)] snap-x snap-mandatory gap-6 overflow-x-auto pb-4 min-[960px]:ml-0 min-[960px]:snap-none min-[960px]:justify-center [@media(pointer:coarse)]:[-ms-overflow-style:none] [@media(pointer:coarse)]:[scrollbar-width:none] [@media(pointer:coarse)]:[&::-webkit-scrollbar]:hidden [@media(pointer:fine)]:[scrollbar-width:thin] [@media(pointer:fine)]:[&::-webkit-scrollbar]:h-2 [@media(pointer:fine)]:[&::-webkit-scrollbar]:w-2 [@media(pointer:fine)]:[&::-webkit-scrollbar-thumb]:rounded-full [@media(pointer:fine)]:[&::-webkit-scrollbar-thumb]:bg-neutral-300 [@media(pointer:fine)]:[&::-webkit-scrollbar-track]:bg-transparent">
+      <div className="scrollbar-responsive ml-6 flex w-[calc(100%-24px)] snap-x snap-mandatory gap-6 overflow-x-auto pb-4 min-[960px]:ml-0 min-[960px]:snap-none min-[960px]:justify-center">
         {categoriesWithAll.map((category) => (
           <button
             key={category.id}
             onClick={() => setSelectedCategory(category.id as CategoryType)}
-            className="flex w-14 shrink-0 snap-start flex-col items-center justify-center gap-1"
+            className="relative flex w-14 shrink-0 snap-start flex-col items-center justify-center gap-2"
             type="button"
           >
             <img
@@ -145,23 +144,31 @@ export default function OrderList() {
               alt={category.name}
               className={`relative h-8 w-8 ${selectedCategory === category.id ? 'z-10' : ''}`}
             />
-            <div className={`text-xs ${selectedCategory === category.id ? 'z-10' : ''}`}>{category.name}</div>
-            {selectedCategory === category.id && <div className="absolute h-12 w-12 rounded-full bg-neutral-300" />}
+            <div className={`relative text-xs ${selectedCategory === category.id ? 'z-10' : ''}`}>{category.name}</div>
+            {selectedCategory === category.id && (
+              <div className="absolute inset-0 m-auto h-12 w-12 rounded-full bg-neutral-300" />
+            )}
           </button>
         ))}
       </div>
 
-      <div className="flex w-full pr-4 min-[600px]:justify-center">
-        <div className="flex w-full min-[600px]:flex-wrap min-[600px]:justify-center min-[600px]:gap-2">
+      <div className="flex w-full pr-4 min-[604px]:justify-center">
+        <div className="flex w-full min-[604px]:flex-wrap min-[604px]:justify-center min-[604px]:gap-2">
           <button
             onClick={() => setIsSortModalOpen(true)}
-            className="border-primary-500 text-primary-500 mr-4 ml-4 inline-flex shrink-0 items-center justify-center gap-[6px] rounded-3xl border border-solid bg-white px-2 py-[6px] text-[14px] leading-none shadow-[0_1px_1px_0_rgba(0,0,0,0.02),_0_2px_4px_0_rgba(0,0,0,0.04)] min-[600px]:mr-0 min-[600px]:ml-0"
+            className="mr-4 ml-4 inline-flex shrink-0 items-center justify-center pb-2 leading-none min-[604px]:mr-0 min-[604px]:ml-0 min-[604px]:pb-0 [@media(pointer:coarse)]:pb-0"
           >
-            {getCurrentSortLabel()}
-            <DownArrow className="fill-primary-500 h-4 w-4" />
+            <Badge
+              label={getCurrentSortLabel()}
+              color="primary"
+              variant="outlined"
+              size="sm"
+              endIcon={<DownArrowIcon className="fill-primary-500 h-4 w-4" />}
+              className="shadow-1"
+            />
           </button>
 
-          <div className="flex flex-1 snap-x snap-mandatory gap-2 overflow-x-auto min-[600px]:flex-initial min-[600px]:snap-none min-[600px]:overflow-visible [@media(pointer:coarse)]:[-ms-overflow-style:none] [@media(pointer:coarse)]:[scrollbar-width:none] [@media(pointer:coarse)]:[&::-webkit-scrollbar]:hidden [@media(pointer:fine)]:[scrollbar-width:thin] [@media(pointer:fine)]:[&::-webkit-scrollbar]:h-2 [@media(pointer:fine)]:[&::-webkit-scrollbar]:w-2 [@media(pointer:fine)]:[&::-webkit-scrollbar-thumb]:rounded-full [@media(pointer:fine)]:[&::-webkit-scrollbar-thumb]:bg-neutral-300 [@media(pointer:fine)]:[&::-webkit-scrollbar-track]:bg-transparent">
+          <div className="scrollbar-responsive flex flex-1 snap-x snap-mandatory gap-2 overflow-x-auto min-[604px]:flex-initial min-[604px]:snap-none min-[604px]:overflow-visible">
             {filterButtons.map((filter) => {
               const isSelected = selectedFilters.includes(filter.id);
               const IconComponent = filter.icon;
@@ -170,22 +177,34 @@ export default function OrderList() {
                 <button
                   key={filter.id}
                   onClick={() => toggleFilter(filter.id)}
-                  className={`flex shrink-0 snap-start items-center justify-center gap-[6px] rounded-3xl px-2 py-[6px] text-[14px] shadow-[0_1px_1px_0_rgba(0,0,0,0.02),_0_2px_4px_0_rgba(0,0,0,0.04)] transition-colors ${
-                    isSelected ? 'bg-primary-500 text-white' : 'bg-white text-neutral-400'
-                  }`}
+                  className={`flex shrink-0 snap-start items-center justify-center transition-colors`}
                 >
-                  <IconComponent className={isSelected ? 'fill-[#f8f8fa]' : 'fill-neutral-400'} />
-                  {filter.label}
+                  <Badge
+                    label={filter.label}
+                    color="neutral"
+                    variant="outlined"
+                    size="sm"
+                    startIcon={<IconComponent className={isSelected ? 'fill-[#f8f8fa]' : 'fill-neutral-400'} />}
+                    className={`shadow-1 ${isSelected ? 'bg-primary-500 text-white' : 'bg-white text-neutral-400'}`}
+                  />
                 </button>
               );
             })}
 
             <button
               onClick={() => setIsMinOrderOpen(true)}
-              className={`flex shrink-0 ${isMinOrderSelected ? 'bg-primary-500 text-[#f8f8fA]' : 'bg-white text-neutral-400'} snap-start items-center justify-center gap-[6px] rounded-3xl px-2 py-[6px] text-[14px] text-gray-400 shadow-[0_1px_1px_0_rgba(0,0,0,0.02),_0_2px_4px_0_rgba(0,0,0,0.04)]`}
+              className={`flex shrink-0 snap-start items-center justify-center`}
             >
-              {getMinOrderLabel()}
-              <DownArrow className={isMinOrderSelected ? 'h-4 w-4 fill-white' : 'h-4 w-4 fill-neutral-400'} />
+              <Badge
+                label={getMinOrderLabel()}
+                color="neutral"
+                variant="outlined"
+                size="sm"
+                endIcon={
+                  <DownArrowIcon className={isMinOrderSelected ? 'h-4 w-4 fill-white' : 'h-4 w-4 fill-neutral-400'} />
+                }
+                className={`shadow-1 ${isMinOrderSelected ? 'bg-primary-500 text-white' : 'bg-white text-neutral-400'}`}
+              />
             </button>
           </div>
         </div>
@@ -223,13 +242,13 @@ export default function OrderList() {
       {/* 정렬 BottomSheet */}
       <BottomModal isOpen={isSortModalOpen} onClose={() => setIsSortModalOpen(false)}>
         <BottomModalHeader>
-          <div className="text-primary-500 font-semibold"> 가게 정렬</div>
+          <div className="text-primary-500 font-semibold select-none"> 가게 정렬</div>
           <button onClick={() => setIsSortModalOpen(false)}>
             <CloseIcon />
           </button>
         </BottomModalHeader>
         <BottomModalContent>
-          <div className="flex flex-col gap-5">
+          <div className="flex flex-col gap-5 select-none">
             {sortOptions.map((option) => (
               <button
                 key={option.id}
@@ -250,7 +269,7 @@ export default function OrderList() {
       {/* 최소 주문 금액 BottomSheet */}
       <BottomModal isOpen={isMinOrderOpen} onClose={() => setIsMinOrderOpen(false)}>
         <BottomModalHeader>
-          <div className="text-primary-500 font-semibold"> 최소주문금액</div>
+          <div className="text-primary-500 font-semibold select-none"> 최소주문금액</div>
           <button onClick={() => setIsMinOrderOpen(false)}>
             <CloseIcon />
           </button>

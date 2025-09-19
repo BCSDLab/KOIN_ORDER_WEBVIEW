@@ -41,10 +41,7 @@ export default function ShopCard({
     >
       {!isOpen && (
         <div className="absolute inset-0 z-10 flex items-center justify-center rounded-lg bg-[rgba(0,0,0,0.6)]">
-          <div className="text-center text-white">
-            <div className="text-lg font-bold">영업종료</div>
-            <div className="text-[16px]">영업이 종료된 가게에요!</div>
-          </div>
+          <div className="text-center text-white">영업이 종료된 가게에요!</div>
         </div>
       )}
 
@@ -55,7 +52,7 @@ export default function ShopCard({
       )}
 
       <div className="flex flex-col gap-2 pr-16">
-        <div className="font-bold">{name}</div>
+        <div className="text-start font-bold">{name}</div>
 
         <div className="flex gap-1 text-xs">
           <div className="flex items-center gap-1">
@@ -72,11 +69,11 @@ export default function ShopCard({
 
         <div className="flex items-center gap-2">
           {isTakeout && (
-            <span className="rounded-[999px] bg-[#f2f2f2] px-[10px] py-0.5 text-xs text-[#4b4b4b]">픽업가능</span>
+            <span className="rounded-[999px] bg-[#f2f2f2] px-[10px] py-0.5 text-xs text-neutral-600">픽업가능</span>
           )}
           {isTakeout && isService && '  |  '}
           {isService && (
-            <span className="rounded-[999px] bg-[#f2f2f2] px-[10px] py-0.5 text-xs text-[#4b4b4b]">서비스 증정</span>
+            <span className="rounded-[999px] bg-[#f2f2f2] px-[10px] py-0.5 text-xs text-neutral-600">서비스 증정</span>
           )}
         </div>
       </div>
