@@ -19,7 +19,7 @@ import BottomModal, {
   BottomModalFooter,
 } from '@/components/UI/BottomModal/BottomModal';
 import Button from '@/components/UI/Button';
-import { isNative } from '@/util/bridge/bridge';
+import { isAndroid } from '@/util/bridge/bridge';
 import { backButtonTapped, goToShopDetail } from '@/util/bridge/nativeAction';
 import useBooleanState from '@/util/hooks/useBooleanState';
 
@@ -80,7 +80,7 @@ export default function OrderFinish() {
   };
 
   const handleGoToShopDetail = () => () => {
-    if (isNative()) {
+    if (isAndroid()) {
       return goToShopDetail(paymentInfo.orderable_shop_id);
     }
     navigate(`/shop/true/${paymentInfo.orderable_shop_id}`);
