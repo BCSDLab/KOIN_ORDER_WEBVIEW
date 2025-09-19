@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import BottomSheet from './BottomSheet';
 import MinOrderBottomSheet from './MinOrderBottomSheet';
 import ShopCard from './ShopCard';
 import { OrderableShopsResponse } from '@/api/shop/entity';
@@ -10,6 +9,12 @@ import FreeIcon from '@/assets/Home/free-icon.svg';
 import OpenIcon from '@/assets/Home/open-icon.svg';
 import PackIcon from '@/assets/Home/pack-icon.svg';
 import PlanetIcon from '@/assets/Home/planet-closed-icon.svg';
+import CloseIcon from '@/assets/Main/close-icon.svg';
+import BottomModal, {
+  BottomModalContent,
+  BottomModalFooter,
+  BottomModalHeader,
+} from '@/components/UI/BottomModal/BottomModal';
 import { useOrderableShops } from '@/pages/Home/hooks/useOrderableShops.ts';
 import { useStoreCategories } from '@/pages/Home/hooks/useStoreCategories.ts';
 
@@ -56,7 +61,9 @@ export default function OrderList() {
   const [selectedCategory, setSelectedCategory] = useState<CategoryType | null>(1);
   const [selectedFilters, setSelectedFilters] = useState<FilterType[]>(['IS_OPEN']);
   const [selectedSort, setSelectedSort] = useState<SortType>('NONE');
+
   const [isSortModalOpen, setIsSortModalOpen] = useState(false);
+  // const [isSortModalOpen, , closeSortBottomModal] = useBooleanState(false);
   const [isMinOrderOpen, setIsMinOrderOpen] = useState(false);
   const [minOrderAmount, setMinOrderAmount] = useState<number | null>(null);
 
@@ -182,20 +189,31 @@ export default function OrderList() {
         )}
       </div>
 
-      <BottomSheet isOpen={isSortModalOpen} onClose={() => setIsSortModalOpen(false)} title="가게 정렬">
-        {sortOptions.map((option) => (
-          <button
-            key={option.id}
-            onClick={() => handleSortSelect(option.id)}
-            className={`flex w-full items-center justify-between px-8 pt-4 pb-3 text-left text-[16px] hover:bg-gray-50 ${
-              selectedSort === option.id ? 'text-[#b611f5]' : 'text-gray-700'
-            }`}
-          >
-            {option.label}
-            {selectedSort === option.id && <CheckIcon fill="#b611f5" />}
+      <BottomModal isOpen={isSortModalOpen} onClose={() => setIsSortModalOpen(false)}>
+        <BottomModalHeader>
+          <div className="text-primary-500 font-semibold"> 가게 정렬</div>
+          <button onClick={() => setIsSortModalOpen(false)}>
+            <CloseIcon />
           </button>
-        ))}
-      </BottomSheet>
+        </BottomModalHeader>
+        <BottomModalContent>
+          <div className="flex flex-col gap-5">
+            {sortOptions.map((option) => (
+              <button
+                key={option.id}
+                onClick={() => handleSortSelect(option.id)}
+                className={`flex w-full items-center justify-between text-left text-[16px] hover:bg-gray-50 ${
+                  selectedSort === option.id ? 'text-[#b611f5]' : 'text-gray-700'
+                }`}
+              >
+                {option.label}
+                {selectedSort === option.id && <CheckIcon fill="#b611f5" />}
+              </button>
+            ))}
+          </div>
+        </BottomModalContent>
+        <BottomModalFooter />
+      </BottomModal>
 
       <MinOrderBottomSheet
         isOpen={isMinOrderOpen}
