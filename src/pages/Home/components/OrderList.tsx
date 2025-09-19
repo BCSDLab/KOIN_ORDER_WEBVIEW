@@ -297,7 +297,7 @@ export default function OrderList() {
             </div>
           </div>
           <Button onClick={handleValueSelect} className="rounded-xl py-2.5 text-lg">
-            완료
+            적용하기
           </Button>
         </BottomModalContent>
         <BottomModalFooter />
