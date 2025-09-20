@@ -246,7 +246,7 @@ export interface MenuResult {
 export interface RelatedSearchParams {
   keyword: string;
 }
-=======
+
 export interface StoreCategoriesResponse {
   total_count: number;
   shop_categories: StoreCategory[];
