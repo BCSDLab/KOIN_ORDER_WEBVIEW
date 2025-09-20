@@ -131,23 +131,23 @@ export default function OrderList() {
 
   return (
     <div className="flex h-full w-full flex-col items-center justify-center gap-4">
-      <div className="scrollbar-responsive ml-6 flex w-[calc(100%-24px)] snap-x snap-mandatory gap-6 overflow-x-auto pb-4 min-[960px]:ml-0 min-[960px]:snap-none min-[960px]:justify-center">
+      <div className="scrollbar-responsive ml-6 flex w-[calc(100%-24px)] snap-x snap-mandatory gap-6 overflow-x-auto pt-2 pb-4 min-[960px]:ml-0 min-[960px]:snap-none min-[960px]:justify-center">
         {categoriesWithAll.map((category) => (
           <button
             key={category.id}
             onClick={() => setSelectedCategory(category.id as CategoryType)}
-            className="relative flex w-14 shrink-0 snap-start flex-col items-center justify-center gap-2"
+            className="flex w-14 shrink-0 snap-start flex-col items-center justify-center gap-3"
             type="button"
           >
-            <img
-              src={category.image_url}
-              alt={category.name}
-              className={`relative h-8 w-8 ${selectedCategory === category.id ? 'z-10' : ''}`}
-            />
+            <div className="relative flex items-center justify-center">
+              <img
+                src={category.image_url}
+                alt={category.name}
+                className={`h-8 w-8 ${selectedCategory === category.id ? 'z-10' : ''}`}
+              />
+              {selectedCategory === category.id && <div className="absolute h-12 w-12 rounded-full bg-neutral-300" />}
+            </div>
             <div className={`relative text-xs ${selectedCategory === category.id ? 'z-10' : ''}`}>{category.name}</div>
-            {selectedCategory === category.id && (
-              <div className="absolute inset-0 m-auto h-12 w-12 rounded-full bg-neutral-300" />
-            )}
           </button>
         ))}
       </div>
