@@ -3,6 +3,7 @@ type Rejecter = (error: unknown) => void;
 
 export const isIOS = () => !!window.webkit?.messageHandlers.tokenBridge;
 export const isAndroid = () => !!window.Android;
+export const isNative = () => isIOS() || isAndroid();
 
 const createBridge = () => {
   const callbacks = new Map<string, { resolve: Resolver; reject: Rejecter; timer?: number }>();

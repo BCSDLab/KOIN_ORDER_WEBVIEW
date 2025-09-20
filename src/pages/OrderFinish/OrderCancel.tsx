@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import clsx from 'clsx';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import useCancelPayment from './hooks/useCancelPayment';
 import CheckIcon from '@/assets/OrderFinish/check-icon.svg';
 import Button from '@/components/UI/Button';
 import Modal, { ModalContent } from '@/components/UI/CenterModal/Modal';
+import { isNative } from '@/util/bridge/bridge';
 import { backButtonTapped } from '@/util/bridge/nativeAction';
 import useBooleanState from '@/util/hooks/useBooleanState';
 
@@ -17,6 +18,7 @@ const orderCancelReasons: string[] = [
 ];
 
 export default function OrderCancel() {
+  const navigate = useNavigate();
   const { paymentId } = useParams();
 
   if (!paymentId) {
@@ -47,6 +49,11 @@ export default function OrderCancel() {
 
   const handleClickMoveMainPage = () => {
     cancelPayment({ cancel_reason: selectedCancelReason === '기타' ? customCancelReason : selectedCancelReason });
+    if (isNative()) {
+      backButtonTapped();
+    } else {
+      navigate('/home');
+    }
   };
 
   const handleClickSubmitReason = () => {

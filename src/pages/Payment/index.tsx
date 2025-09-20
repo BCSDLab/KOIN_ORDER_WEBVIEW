@@ -85,20 +85,31 @@ export default function Payment() {
 
     let order;
     if (isDelivery) {
-      order = await temporaryDelivery({
-        address: address!,
-        address_detail: address_detail!,
-        longitude: deliveryType === 'CAMPUS' ? campusAddress!.longitude : outsideAddress!.longitude,
-        latitude: deliveryType === 'CAMPUS' ? campusAddress!.latitude : outsideAddress!.latitude,
-        phone_number: userPhoneNumber,
-        to_owner: ownerRequest,
-        to_rider: deliveryRequest,
-        provide_cutlery: !isCutleryDeclined,
-        total_menu_price: cart.items_amount,
-        delivery_type: deliveryType,
-        delivery_tip: cart.delivery_fee,
-        total_amount: cart.total_amount,
-      });
+      try {
+        order = await temporaryDelivery({
+          address: address!,
+          address_detail: address_detail!,
+          longitude: deliveryType === 'CAMPUS' ? campusAddress!.longitude : outsideAddress!.longitude,
+          latitude: deliveryType === 'CAMPUS' ? campusAddress!.latitude : outsideAddress!.latitude,
+          phone_number: userPhoneNumber,
+          to_owner: ownerRequest,
+          to_rider: deliveryRequest,
+          provide_cutlery: !isCutleryDeclined,
+          total_menu_price: cart.items_amount,
+          delivery_type: deliveryType,
+          delivery_tip: cart.delivery_fee,
+          total_amount: cart.total_amount,
+        });
+      } catch (error) {
+        if (error instanceof Error) {
+          const parsed = JSON.parse(error.message);
+          if (parsed.code === 'INVALID_ADDRESS_FORMAT') {
+            showToast(parsed.message);
+            return;
+          }
+        }
+        throw error;
+      }
     } else {
       order = await temporaryTakeout({
         phone_number: userPhoneNumber,
@@ -111,12 +122,13 @@ export default function Payment() {
     try {
       await widgets!.requestPayment({
         orderId: order.order_id,
-        orderName: orderName,
-        successUrl: window.location.origin + `/payment/return?orderType=${orderType}&entryPoint=payment`,
-        failUrl: window.location.origin + `/payment?orderType=${orderType}`,
+        orderName,
+        successUrl: `${window.location.origin}/payment/return?orderType=${orderType}&entryPoint=payment`,
+        failUrl: `${window.location.origin}/payment?orderType=${orderType}`,
       });
     } catch (error) {
       console.error(error);
+      showToast('결제 중 오류가 발생했습니다. 다시 시도해주세요.');
     }
   };
 

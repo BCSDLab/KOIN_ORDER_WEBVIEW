@@ -222,6 +222,7 @@ export interface ShopMenuDetailResponse {
   option_groups: OptionGroup[];
 }
 
+
 export interface RelatedSearchResponse {
   search_keyword: string;
   processed_search_keyword: string;
@@ -245,3 +246,42 @@ export interface MenuResult {
 export interface RelatedSearchParams {
   keyword: string;
 }
+=======
+export interface StoreCategoriesResponse {
+  total_count: number;
+  shop_categories: StoreCategory[];
+}
+
+export interface StoreCategory {
+  id: number;
+  name: string;
+  image_url: string;
+}
+
+export interface OrderableShopsResponse {
+  shop_id: number;
+  orderable_shop_id: number;
+  name: string;
+  is_delivery_available: boolean;
+  is_takeout_available: boolean;
+  service_event: boolean;
+  minimum_order_amount: number;
+  rating_average: number;
+  review_count: number;
+  minimum_delivery_tip: number;
+  maximum_delivery_tip: number;
+  is_open: boolean;
+  category_ids: number[];
+  images: Image[];
+  open_status: 'OPERATING' | 'PREPARING' | 'CLOSED';
+}
+
+export interface OrderableShopsParams {
+  sorter?: string;
+  filter?: OrderableShopsFilter[];
+  category_filter?: number;
+  minimum_order_amount?: number;
+}
+
+export type OrderableShopsFilter = 'IS_OPEN' | 'DELIVERY_AVAILABLE' | 'TAKEOUT_AVAILABLE' | 'FREE_DELIVERY_TIP';
+

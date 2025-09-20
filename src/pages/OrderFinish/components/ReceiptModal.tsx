@@ -77,13 +77,17 @@ export default function ReceiptModal({ isOpen, onClose, paymentInfo }: ReceiptMo
               <div>{paymentInfo.easy_pay_company}</div>
             </div>
           </div>
-          <div className="h-[1px] border-b border-neutral-200" />
-          <div className="space-y-2 text-left">
-            <div className="font-semibold">배달 주소</div>
-            <div className="text-sm break-words text-black">
-              {paymentInfo.delivery_address} {paymentInfo.delivery_address_details}
-            </div>
-          </div>
+          {paymentInfo.order_type === 'DELIVERY' && (
+            <>
+              <div className="h-[1px] border-b border-neutral-200" />
+              <div className="space-y-2 text-left">
+                <div className="font-semibold">배달 주소</div>
+                <div className="text-sm break-words text-black">
+                  {paymentInfo.delivery_address} {paymentInfo.delivery_address_details}
+                </div>
+              </div>
+            </>
+          )}
         </div>
       </ModalContent>
     </Modal>
