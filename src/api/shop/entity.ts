@@ -223,7 +223,7 @@ export interface ShopMenuDetailResponse {
 }
 
 export interface RelatedSearchResponse {
-  search_ketword: string;
+  search_keyword: string;
   processed_search_keyword: string;
   shop_name_search_result_count: number;
   menu_name_search_result_count: number;
