@@ -222,7 +222,6 @@ export interface ShopMenuDetailResponse {
   option_groups: OptionGroup[];
 }
 
-
 export interface RelatedSearchResponse {
   search_keyword: string;
   processed_search_keyword: string;
@@ -284,4 +283,3 @@ export interface OrderableShopsParams {
 }
 
 export type OrderableShopsFilter = 'IS_OPEN' | 'DELIVERY_AVAILABLE' | 'TAKEOUT_AVAILABLE' | 'FREE_DELIVERY_TIP';
-
