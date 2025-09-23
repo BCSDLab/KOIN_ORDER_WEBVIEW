@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import { useLocation, useNavigate } from 'react-router-dom';
-import CartCountButton from './CartCountButton';
-import CartResetButton from './CartResetButton';
+import CartCountButton from './components/CartCountButton';
+import CartResetButton from './components/CartResetButton';
 import { ROUTE_TITLES } from './routeTitles';
 import ArrowBackIcon from '@/assets/Main/arrow-back-icon.svg';
 import CloseIcon from '@/assets/Main/close-icon.svg';
@@ -69,7 +69,7 @@ export default function Header() {
       )}
       <span className="text-lg font-medium">{title}</span>
       {pathname === '/cart' && <CartResetButton />}
-      {pathname === '/home' && <CartCountButton />}
+      {(pathname === '/home' || pathname === '/orders' || pathname === '/stores') && <CartCountButton />}
     </header>
   );
 }
