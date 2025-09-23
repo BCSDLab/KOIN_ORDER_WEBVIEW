@@ -1,4 +1,3 @@
-import BottomNav from './components/BottomNav';
 import OrderList from './components/OrderList';
 import SearchBar from './components/SearchBar';
 
@@ -9,11 +8,9 @@ export default function Home() {
         <SearchBar />
       </div>
 
-      <div className="flex flex-1 justify-center pt-15 pb-30">
+      <div className="flex flex-1 justify-center pt-15">
         <OrderList />
       </div>
-
-      <BottomNav />
     </div>
   );
 }
