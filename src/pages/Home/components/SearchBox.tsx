@@ -24,15 +24,19 @@ export default function SearchBox({
   onEnter,
   onSubmit,
 }: SearchBoxProps) {
-  const base =
-    'shadow-1 mt-2 flex h-10 w-[342px] items-center gap-2 rounded-2xl px-3 py-2 max-[341px]:w-full lg:w-[936px]';
   const iconBox = 'flex h-6 w-6 items-center justify-center p-1';
   const textBase = 'text-[14px] leading-[160%]';
   const icon = <SearchIconGray />;
 
   if (mode === 'button') {
     return (
-      <button type="button" onClick={onClick} className={`${base} bg-white`}>
+      <button
+        type="button"
+        onClick={onClick}
+        className={
+          'shadow-1 mt-2 flex h-10 w-[342px] items-center gap-2 rounded-2xl bg-white px-3 py-2 max-[341px]:w-full lg:w-[936px]'
+        }
+      >
         <div className={iconBox}>{icon}</div>
         <div className={`${textBase} text-neutral-400`}>{text}</div>
       </button>
@@ -40,7 +44,11 @@ export default function SearchBox({
   }
 
   return (
-    <div className={`${base} bg-white`}>
+    <div
+      className={
+        'shadow-1 mt-2 flex h-10 w-[342px] items-center gap-2 rounded-2xl bg-white px-3 py-2 max-[341px]:w-full lg:w-[936px]'
+      }
+    >
       <button type="button" onClick={onSubmit} className={iconBox}>
         {icon}
       </button>
