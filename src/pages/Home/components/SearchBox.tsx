@@ -32,7 +32,7 @@ export default function SearchBox({
 
   if (mode === 'button') {
     return (
-      <button type="button" onClick={onClick} className={`${base} bg-[#F8F8FA]`}>
+      <button type="button" onClick={onClick} className={`${base} bg-white`}>
         <div className={iconBox}>{icon}</div>
         <div className={`${textBase} text-neutral-400`}>{text}</div>
       </button>
@@ -47,7 +47,7 @@ export default function SearchBox({
       <input
         ref={inputRef}
         type="text"
-        className={` ${textBase} placeholder-[#727272] focus:outline-none`}
+        className={` ${textBase} placeholder-neutral-500 focus:outline-none`}
         placeholder={text}
         defaultValue={defaultValue}
         autoFocus={autoFocus}
