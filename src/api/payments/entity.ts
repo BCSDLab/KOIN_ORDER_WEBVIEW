@@ -33,6 +33,7 @@ export interface ConfirmPaymentsRequest {
 
 export interface ConfirmPaymentsResponse {
   id: number;
+  orderable_shop_id: number;
   amount: number;
   requested_at: string;
   approved_at: string;

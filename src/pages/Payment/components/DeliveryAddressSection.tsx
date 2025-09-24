@@ -52,7 +52,7 @@ export default function DeliveryAddressSection({ orderableShopId }: DeliveryAddr
           (deliveryType === 'CAMPUS' && deliveryInfo?.off_campus_delivery) ||
           (deliveryType === 'OFF_CAMPUS' && deliveryInfo?.campus_delivery) ? (
             <Link
-              to={`/delivery/${deliveryType === 'CAMPUS' ? 'OFF_CAMPUS' : 'CAMPUS'}`}
+              to={`/delivery/${deliveryType === 'CAMPUS' ? 'outside' : 'campus'}`}
               className="text-xs text-neutral-500 underline"
             >
               {deliveryType === 'CAMPUS' ? '교외 주소를 원하시나요?' : '교내 주소를 원하시나요?'}
@@ -70,7 +70,7 @@ export default function DeliveryAddressSection({ orderableShopId }: DeliveryAddr
               color="gray"
               fullWidth
               className="border-0 p-0 shadow-none"
-              onClick={() => navigate(`/delivery/${deliveryType === 'CAMPUS' ? 'CAMPUS' : 'OFF_CAMPUS'}`)}
+              onClick={() => navigate(`/delivery/${deliveryType === 'CAMPUS' ? 'campus' : 'outside'}`)}
             >
               <div className="flex w-full items-center justify-between text-left">
                 {deliveryType === 'CAMPUS' ? (

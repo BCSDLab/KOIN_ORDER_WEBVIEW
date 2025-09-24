@@ -2,6 +2,7 @@ import { useState } from 'react';
 import clsx from 'clsx';
 import dayjs from 'dayjs';
 import { useNavigate, useParams } from 'react-router-dom';
+import OrderMap from './components/OrderMap';
 import ReceiptModal from './components/ReceiptModal';
 import usePaymentInfo from './hooks/usePaymentInfo';
 import CloseIcon from '@/assets/Main/close-icon.svg';
@@ -12,18 +13,15 @@ import Receipt from '@/assets/OrderFinish/receipt-icon.svg';
 import ShoppingCart from '@/assets/OrderFinish/shopping-cart-icon.svg';
 import Skillet from '@/assets/OrderFinish/skillet-icon.svg';
 import ArrowGo from '@/assets/Payment/arrow-go-icon.svg';
-import CopyIcon from '@/assets/Payment/copy.svg';
 import BottomModal, {
   BottomModalHeader,
   BottomModalContent,
   BottomModalFooter,
 } from '@/components/UI/BottomModal/BottomModal';
 import Button from '@/components/UI/Button';
-import useMarker from '@/pages/Delivery/hooks/useMarker';
-import useNaverMap from '@/pages/Delivery/hooks/useNaverMap';
-import { backButtonTapped } from '@/util/bridge/nativeAction';
+import { isAndroid } from '@/util/bridge/bridge';
+import { backButtonTapped, goToShopDetail } from '@/util/bridge/nativeAction';
 import useBooleanState from '@/util/hooks/useBooleanState';
-import { useToast } from '@/util/hooks/useToast';
 
 type OrderKind = 'order' | 'preparation' | 'delivery';
 
@@ -44,7 +42,6 @@ const formatKRW = (number: number) => `${number.toLocaleString()}원`;
 export default function OrderFinish() {
   const navigate = useNavigate();
   const { paymentId } = useParams();
-  const { showToast } = useToast();
 
   if (!paymentId) {
     // 잘못된 경로로 접근 시 메인 화면으로 이동(임시 처리)
@@ -53,15 +50,15 @@ export default function OrderFinish() {
 
   const { data: paymentInfo } = usePaymentInfo(Number(paymentId));
 
-  const map = useNaverMap(paymentInfo.latitude, paymentInfo.longitude);
-  useMarker(map);
+  // TODO: paymentInfo가 없을 경우 처리
+  if (!paymentInfo) return <div>주문 정보가 없습니다.</div>;
+
+  const isDelivery = paymentInfo.order_type === 'DELIVERY';
 
   const [orderKind] = useState<OrderKind>('order');
   const [isDeliveryBottomModalOpen, , closeDeliveryBottomModal] = useBooleanState(false);
   const [isCallBottomModalOpen, openCallBottomModal, closeCallBottomModal] = useBooleanState(false);
   const [isReceiptOpen, openReceipt, closeReceipt] = useBooleanState(false);
-
-  const isDelivery = paymentInfo.order_type === 'DELIVERY';
 
   const approvedTime = dayjs(paymentInfo?.approved_at);
   const deliveryFinishTime = approvedTime.add(1, 'hour').format('A h시 mm분');
@@ -82,25 +79,12 @@ export default function OrderFinish() {
     navigate(`/orderCancel/${paymentId}`);
   };
 
-  const handleCopyAddress = async (text: string) => {
-    try {
-      await navigator.clipboard.writeText(text);
-      showToast('주소가 복사되었습니다.');
-    } catch {
-      const textarea = document.createElement('textarea');
-      textarea.value = text;
-      document.body.appendChild(textarea);
-      textarea.select();
-      document.execCommand('copy');
-      textarea.remove();
-      showToast('주소가 복사되었습니다.');
+  const handleGoToShopDetail = () => () => {
+    if (isAndroid()) {
+      return goToShopDetail(paymentInfo.orderable_shop_id);
     }
+    navigate(`/shop/true/${paymentInfo.orderable_shop_id}`);
   };
-
-  // TODO: paymentInfo가 없을 경우 처리
-  if (!paymentInfo) {
-    return <div>주문 정보가 없습니다.</div>;
-  }
 
   return (
     <div className="flex flex-col">
@@ -152,16 +136,8 @@ export default function OrderFinish() {
         </div>
       </div>
       <div className="mt-10 px-6">
-        <div className="shadow-1 mb-4 w-full rounded-xl">
-          <div id="map" className="h-40 w-full rounded-t-xl border border-neutral-300"></div>
-          <div className="flex min-h-[3.5rem] w-full items-center justify-between rounded-b-xl bg-white px-6 py-4 text-[0.813rem] text-neutral-600">
-            {paymentInfo.delivery_address} {paymentInfo.delivery_address_details}
-            <button onClick={() => handleCopyAddress(paymentInfo.delivery_address)}>
-              <CopyIcon />
-            </button>
-          </div>
-        </div>
-        <div className="text-primary-500 text-lg font-semibold">{isDelivery ? '배달' : '방문'}정보</div>
+        <div className="text-primary-500 mb-5 text-lg font-semibold">{isDelivery ? '배달' : '방문'}정보</div>
+        <OrderMap paymentInfo={paymentInfo} />
         <div className="shadow-1 flex flex-col rounded-2xl border border-white bg-white px-6 text-sm leading-[160%] font-semibold">
           <div className="border-b border-neutral-200 py-4">
             {isDelivery ? '배달' : '가게'}주소
@@ -254,10 +230,13 @@ export default function OrderFinish() {
         </div>
         <div className="text-primary-500 my-5 text-lg font-semibold">주문정보</div>
         <div className="shadow-1 mb-16 flex flex-col gap-4 rounded-2xl bg-white px-6 py-4">
-          <div className="flex gap-1.5 text-sm leading-[160%] font-semibold">
+          <button
+            className="flex items-center gap-1.5 text-sm leading-[160%] font-semibold"
+            onClick={handleGoToShopDetail()}
+          >
             <div>{paymentInfo.shop_name}</div>
             <ArrowGo />
-          </div>
+          </button>
           <div className="text-[13px] text-neutral-600">
             <div className="flex gap-2">
               주문번호 <div>{paymentInfo.id}</div>

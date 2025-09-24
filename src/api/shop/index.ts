@@ -71,3 +71,14 @@ export const getRelateSearch = async ({ keyword }: RelatedSearchParams) => {
   });
   return response;
 };
+
+export const getStoreCategories = async () => {
+  return await apiClient.get<StoreCategoriesResponse>('shops/categories');
+};
+
+export const getOrderableShops = async (params: OrderableShopsParams) => {
+  const response = await apiClient.get<OrderableShopsResponse[], OrderableShopsParams>(`/order/shops`, {
+    params,
+  });
+  return response;
+};
