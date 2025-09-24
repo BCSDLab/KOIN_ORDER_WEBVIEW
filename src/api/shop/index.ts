@@ -13,6 +13,9 @@ import {
   UnorderableShopMenusResponse,
   RelatedSearchResponse,
   RelatedSearchParams,
+  StoreCategoriesResponse,
+  OrderableShopsResponse,
+  OrderableShopsParams,
 } from './entity';
 
 export const getShopDetailInfo = async ({ orderableShopId }: ShopDetailInfoParams) => {
