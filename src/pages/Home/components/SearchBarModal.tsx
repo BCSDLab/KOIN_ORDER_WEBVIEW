@@ -1,11 +1,12 @@
 import React, { useRef, useState, useEffect, useCallback } from 'react';
+import clsx from 'clsx';
 import { useNavigate } from 'react-router-dom';
 import SearchBox from './SearchBox';
 import { getRelateSearch } from '@/api/shop';
 import { RelatedSearchResponse } from '@/api/shop/entity';
 import Header from '@/components/Layout/Header';
-import useDebounce from '@/pages/Home/components/hooks/useDebounce';
 import RelateSearchItem from '@/pages/Home/components/RelateSearchItem';
+import useDebounce from '@/util/hooks/useDebounce';
 import useEscapeKeyDown from '@/util/hooks/useEscapeKeyDown';
 import useParamsHandler from '@/util/hooks/useParamsHandler';
 import useClickTouchOutside from '@/util/hooks/useTouchOutside';
@@ -70,7 +71,10 @@ export default function SearchBarModal({ onClose }: SearchBarModalProps) {
 
   return (
     <div
-      className={`fixed inset-0 z-50 flex items-start justify-center pt-14 ${isResults ? '' : 'bg-[rgba(0,0,0,0.70)]'}`}
+      className={clsx(
+        'fixed inset-0 z-50 flex items-start justify-center pt-14',
+        isResults ? 'bg-[#F8F8FA]' : 'bg-[rgba(0,0,0,0.70)]',
+      )}
     >
       <Header />
       <div ref={backgroundRef} className="flex w-full flex-col items-center bg-[#F8F8FA] pt-1">
