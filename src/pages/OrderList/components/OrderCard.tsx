@@ -36,7 +36,10 @@ export default function OrderCard({ orderInfo }: OrderCardProps) {
   const navigate = useNavigate();
 
   return (
-    <div className="rounded-xl border-[0.5px] border-neutral-200 bg-white px-4 py-6">
+    <button
+      className="rounded-xl border-[0.5px] border-neutral-200 bg-white px-4 py-6"
+      onClick={() => navigate(`/shop/true/${orderInfo.orderable_shop_id}`)}
+    >
       <div className="flex justify-between">
         <div className="text-primary-500 flex items-center gap-1">
           <div className="font-semibold">{getOrderStatusText(orderInfo.order_status)}</div>
@@ -68,9 +71,9 @@ export default function OrderCard({ orderInfo }: OrderCardProps) {
           리뷰 쓰기
         </Button>
         <Button color="primary" className="py-3 text-sm" fullWidth disabled={orderInfo.open_status}>
-          같은 메뉴 담기
+          {orderInfo.open_status ? '같은 메뉴 담기' : '같은 메뉴 담기(오픈 전)'}
         </Button>
       </div>
-    </div>
+    </button>
   );
 }
