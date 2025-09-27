@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import clsx from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import useSendSmsVerification from '../hooks/useSendSmsVerification';
@@ -51,10 +51,8 @@ function ContactForm({ currentContact, onClose, onSubmit }: ContactFormProps) {
   const intervalIdRef = useRef<number | null>(null);
 
   const isEditing = isPhoneChanging || !currentContact;
-  const phone = useMemo(
-    () => (isEditing ? draftPhone : (currentContact ?? '')),
-    [isEditing, draftPhone, currentContact],
-  );
+  const phone = isEditing ? draftPhone : (currentContact ?? '');
+
   const isPhoneValid = phone.length === PHONE_NUMBER_LENGTH;
   const shouldDisableSubmit = !isPhoneValid || authCode.length !== SMS_CODE_LENGTH || timer === 0;
 
