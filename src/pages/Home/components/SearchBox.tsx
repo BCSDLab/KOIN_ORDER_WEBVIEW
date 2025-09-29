@@ -9,8 +9,7 @@ export interface SearchBoxProps {
   defaultValue?: string;
   autoFocus?: boolean;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  onEnter?: () => void;
-  onSubmit?: () => void;
+  className?: string;
 }
 
 export default function SearchBox({
@@ -21,11 +20,9 @@ export default function SearchBox({
   defaultValue,
   autoFocus,
   onChange,
-  onEnter,
-  onSubmit,
+  className,
 }: SearchBoxProps) {
   const iconBox = 'flex h-6 w-6 items-center justify-center p-1';
-  const textBase = 'text-[14px] leading-[160%]';
   const icon = <SearchIconGray />;
 
   if (mode === 'button') {
@@ -38,7 +35,7 @@ export default function SearchBox({
         }
       >
         <div className={iconBox}>{icon}</div>
-        <div className={`${textBase} text-neutral-400`}>{text}</div>
+        <div className={'text-[14px] leading-[160%] text-neutral-400'}>{text}</div>
       </button>
     );
   }
@@ -49,19 +46,18 @@ export default function SearchBox({
         'shadow-1 mt-2 flex h-10 w-[342px] items-center gap-2 rounded-2xl bg-white px-3 py-2 max-[341px]:w-full lg:w-[936px]'
       }
     >
-      <button type="button" onClick={onSubmit} className={iconBox}>
+      <button type="button" className={iconBox}>
         {icon}
       </button>
       <input
         ref={inputRef}
         type="text"
-        className={` ${textBase} placeholder-neutral-500 focus:outline-none`}
+        className={className}
         placeholder={text}
         defaultValue={defaultValue}
         autoFocus={autoFocus}
         autoComplete="off"
         onChange={onChange}
-        onKeyUp={(e) => e.key === 'Enter' && onEnter?.()}
       />
     </div>
   );
