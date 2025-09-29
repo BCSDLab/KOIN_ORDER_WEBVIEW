@@ -36,9 +36,18 @@ export default function OrderCard({ orderInfo }: OrderCardProps) {
   const navigate = useNavigate();
 
   return (
-    <button
-      className="rounded-xl border-[0.5px] border-neutral-200 bg-white px-4 py-6"
+    <div
+      role="button"
+      tabIndex={0}
+      className="cursor-pointer rounded-xl border-[0.5px] border-neutral-200 bg-white px-4 py-6"
       onClick={() => navigate(`/shop/true/${orderInfo.orderable_shop_id}`)}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          navigate(`/shop/true/${orderInfo.orderable_shop_id}`);
+        }
+      }}
+      aria-label={`${orderInfo.orderable_shop_name} 주문 카드`}
     >
       <div className="flex justify-between">
         <div className="text-primary-500 flex items-center gap-1">
@@ -47,7 +56,10 @@ export default function OrderCard({ orderInfo }: OrderCardProps) {
         </div>
         <button
           className="flex items-center gap-0.5 text-xs text-neutral-500"
-          onClick={() => navigate(`/result/${orderInfo.payment_id}`)}
+          onClick={(e) => {
+            e.stopPropagation();
+            navigate(`/result/${orderInfo.payment_id}`);
+          }}
         >
           <div>주문상세</div>
           <LeftArrowIcon />
@@ -60,7 +72,7 @@ export default function OrderCard({ orderInfo }: OrderCardProps) {
           alt="상점 메인 썸네일"
           className="h-22 w-22 rounded-sm border-[0.5px] border-neutral-200 object-cover"
         />
-        <div className="my-1">
+        <div className="my-1 text-start">
           <div className="font-semibold">{orderInfo.orderable_shop_name}</div>
           <div className="my-1.5 text-sm font-medium">{orderInfo.order_title}</div>
           <div className="text-sm font-semibold">{orderInfo.total_amount.toLocaleString()}원</div>
@@ -74,6 +86,6 @@ export default function OrderCard({ orderInfo }: OrderCardProps) {
           {orderInfo.open_status ? '같은 메뉴 담기' : '같은 메뉴 담기(오픈 전)'}
         </Button>
       </div>
-    </button>
+    </div>
   );
 }
