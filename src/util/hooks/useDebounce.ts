@@ -1,35 +1,45 @@
-import { useRef, useCallback, useEffect } from 'react';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { useEffect, useLayoutEffect, useMemo, useRef } from 'react';
+import type { DependencyList, EffectCallback } from 'react';
 
-export default function useDebounce<T extends (...args: readonly unknown[]) => void | Promise<void>>(
-  callback: T,
-  delay: number,
-): (...args: Parameters<T>) => void {
-  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const savedCallback = useRef<T>(callback);
-  useEffect(() => {
-    savedCallback.current = callback;
+function useIsomorphicLayoutEffect(effect: EffectCallback, deps?: DependencyList) {
+  const effectHook = typeof window !== 'undefined' ? useLayoutEffect : useEffect;
+
+  effectHook(effect, deps);
+}
+
+const DEBOUNCE_DEFAULT_TIME = 300;
+
+function useDebouncedCallback<F extends (...args: any[]) => ReturnType<F>>(
+  callback: F,
+  debounceTime: number = DEBOUNCE_DEFAULT_TIME,
+) {
+  const timer = useRef<NodeJS.Timeout | null>(null);
+  const callbackRef = useRef(callback);
+
+  useIsomorphicLayoutEffect(() => {
+    callbackRef.current = callback;
   }, [callback]);
 
-  const debounced = useCallback(
-    (...args: Parameters<T>) => {
-      if (timer.current) {
-        clearTimeout(timer.current);
-      }
-      timer.current = setTimeout(() => {
-        void savedCallback.current(...args);
-      }, delay);
-    },
-    [delay],
-  );
+  useIsomorphicLayoutEffect(() => {
+    if (timer.current) {
+      clearTimeout(timer.current);
+    }
+  }, []);
 
-  useEffect(
-    () => () => {
-      if (timer.current) {
-        clearTimeout(timer.current);
-      }
-    },
-    [],
-  );
+  return useMemo(
+    () =>
+      (...params: Parameters<F>) => {
+        if (timer.current) {
+          clearTimeout(timer.current);
+        }
 
-  return debounced;
+        timer.current = setTimeout(() => {
+          callbackRef.current(...params);
+        }, debounceTime);
+      },
+    [debounceTime],
+  );
 }
+
+export default useDebouncedCallback;
