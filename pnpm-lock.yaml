@@ -44,10 +44,13 @@ importers:
         version: 9.25.1
       '@tailwindcss/vite':
         specifier: ^4.1.4
-        version: 4.1.4(vite@6.3.2(jiti@2.4.2)(lightningcss@1.29.2))
+        version: 4.1.4(vite@6.3.2(@types/node@24.5.2)(jiti@2.4.2)(lightningcss@1.29.2))
       '@types/navermaps':
         specifier: ^3.7.9
         version: 3.7.9
+      '@types/node':
+        specifier: ^24.5.2
+        version: 24.5.2
       '@types/react':
         specifier: ^19.0.10
         version: 19.1.2
@@ -62,7 +65,7 @@ importers:
         version: 8.31.0(eslint@9.25.1(jiti@2.4.2))(typescript@5.7.3)
       '@vitejs/plugin-react':
         specifier: ^4.3.4
-        version: 4.4.1(vite@6.3.2(jiti@2.4.2)(lightningcss@1.29.2))
+        version: 4.4.1(vite@6.3.2(@types/node@24.5.2)(jiti@2.4.2)(lightningcss@1.29.2))
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
@@ -122,10 +125,10 @@ importers:
         version: 8.31.0(eslint@9.25.1(jiti@2.4.2))(typescript@5.7.3)
       vite:
         specifier: ^6.3.1
-        version: 6.3.2(jiti@2.4.2)(lightningcss@1.29.2)
+        version: 6.3.2(@types/node@24.5.2)(jiti@2.4.2)(lightningcss@1.29.2)
       vite-plugin-svgr:
         specifier: ^4.3.0
-        version: 4.3.0(rollup@4.40.0)(typescript@5.7.3)(vite@6.3.2(jiti@2.4.2)(lightningcss@1.29.2))
+        version: 4.3.0(rollup@4.40.0)(typescript@5.7.3)(vite@6.3.2(@types/node@24.5.2)(jiti@2.4.2)(lightningcss@1.29.2))
 
 packages:
 
@@ -767,6 +770,9 @@ packages:
 
   '@types/navermaps@3.7.9':
     resolution: {integrity: sha512-5ZazQfVRq9P1+QbpJ8PA5W9CnsdtWQEiGG6ZWTJuNXzu4iQXov9rRMaWIdD5g+eIKZ2cI1CDE49zYUwUAXNqQQ==}
+
+  '@types/node@24.5.2':
+    resolution: {integrity: sha512-FYxk1I7wPv3K2XBaoyH2cTnocQEu8AOZ60hPbsyukMPLv5/5qr7V1i8PLHdl6Zf87I+xZXFvPCXYjiTFq+YSDQ==}
 
   '@types/react-dom@19.1.2':
     resolution: {integrity: sha512-XGJkWF41Qq305SKWEILa1O8vzhb3aOo3ogBlSmiqNko/WmRb6QIaweuZCXjKygVDXpzXb5wyxKTSOsmkuqj+Qw==}
@@ -2141,6 +2147,9 @@ packages:
     resolution: {integrity: sha512-nWJ91DjeOkej/TA8pXQ3myruKpKEYgqvpw9lz4OPHj/NWFNluYrjbz9j01CJ8yKQd2g4jFoOkINCTW2I5LEEyw==}
     engines: {node: '>= 0.4'}
 
+  undici-types@7.12.0:
+    resolution: {integrity: sha512-goOacqME2GYyOZZfb5Lgtu+1IDmAlAEu5xnD3+xTzS10hT0vzpf0SPjkXwAw9Jm+4n/mQGDP3LO8CPbYROeBfQ==}
+
   update-browserslist-db@1.1.3:
     resolution: {integrity: sha512-UxhIZQ+QInVdunkDAaiazvvT/+fXL5Osr0JZlJulepYu6Jd7qJtDZjlur0emRlT71EN3ScPoE7gvsuIKKNavKw==}
     hasBin: true
@@ -2728,12 +2737,12 @@ snapshots:
       '@tailwindcss/oxide-win32-arm64-msvc': 4.1.4
       '@tailwindcss/oxide-win32-x64-msvc': 4.1.4
 
-  '@tailwindcss/vite@4.1.4(vite@6.3.2(jiti@2.4.2)(lightningcss@1.29.2))':
+  '@tailwindcss/vite@4.1.4(vite@6.3.2(@types/node@24.5.2)(jiti@2.4.2)(lightningcss@1.29.2))':
     dependencies:
       '@tailwindcss/node': 4.1.4
       '@tailwindcss/oxide': 4.1.4
       tailwindcss: 4.1.4
-      vite: 6.3.2(jiti@2.4.2)(lightningcss@1.29.2)
+      vite: 6.3.2(@types/node@24.5.2)(jiti@2.4.2)(lightningcss@1.29.2)
 
   '@tanstack/query-core@5.74.4': {}
 
@@ -2778,6 +2787,10 @@ snapshots:
   '@types/navermaps@3.7.9':
     dependencies:
       '@types/geojson': 7946.0.16
+
+  '@types/node@24.5.2':
+    dependencies:
+      undici-types: 7.12.0
 
   '@types/react-dom@19.1.2(@types/react@19.1.2)':
     dependencies:
@@ -2864,14 +2877,14 @@ snapshots:
       '@typescript-eslint/types': 8.31.0
       eslint-visitor-keys: 4.2.0
 
-  '@vitejs/plugin-react@4.4.1(vite@6.3.2(jiti@2.4.2)(lightningcss@1.29.2))':
+  '@vitejs/plugin-react@4.4.1(vite@6.3.2(@types/node@24.5.2)(jiti@2.4.2)(lightningcss@1.29.2))':
     dependencies:
       '@babel/core': 7.26.10
       '@babel/plugin-transform-react-jsx-self': 7.25.9(@babel/core@7.26.10)
       '@babel/plugin-transform-react-jsx-source': 7.25.9(@babel/core@7.26.10)
       '@types/babel__core': 7.20.5
       react-refresh: 0.17.0
-      vite: 6.3.2(jiti@2.4.2)(lightningcss@1.29.2)
+      vite: 6.3.2(@types/node@24.5.2)(jiti@2.4.2)(lightningcss@1.29.2)
     transitivePeerDependencies:
       - supports-color
 
@@ -4357,6 +4370,8 @@ snapshots:
       has-symbols: 1.1.0
       which-boxed-primitive: 1.1.1
 
+  undici-types@7.12.0: {}
+
   update-browserslist-db@1.1.3(browserslist@4.24.4):
     dependencies:
       browserslist: 4.24.4
@@ -4367,18 +4382,18 @@ snapshots:
     dependencies:
       punycode: 2.3.1
 
-  vite-plugin-svgr@4.3.0(rollup@4.40.0)(typescript@5.7.3)(vite@6.3.2(jiti@2.4.2)(lightningcss@1.29.2)):
+  vite-plugin-svgr@4.3.0(rollup@4.40.0)(typescript@5.7.3)(vite@6.3.2(@types/node@24.5.2)(jiti@2.4.2)(lightningcss@1.29.2)):
     dependencies:
       '@rollup/pluginutils': 5.1.4(rollup@4.40.0)
       '@svgr/core': 8.1.0(typescript@5.7.3)
       '@svgr/plugin-jsx': 8.1.0(@svgr/core@8.1.0(typescript@5.7.3))
-      vite: 6.3.2(jiti@2.4.2)(lightningcss@1.29.2)
+      vite: 6.3.2(@types/node@24.5.2)(jiti@2.4.2)(lightningcss@1.29.2)
     transitivePeerDependencies:
       - rollup
       - supports-color
       - typescript
 
-  vite@6.3.2(jiti@2.4.2)(lightningcss@1.29.2):
+  vite@6.3.2(@types/node@24.5.2)(jiti@2.4.2)(lightningcss@1.29.2):
     dependencies:
       esbuild: 0.25.2
       fdir: 6.4.4(picomatch@4.0.2)
@@ -4387,6 +4402,7 @@ snapshots:
       rollup: 4.40.0
       tinyglobby: 0.2.13
     optionalDependencies:
+      '@types/node': 24.5.2
       fsevents: 2.3.3
       jiti: 2.4.2
       lightningcss: 1.29.2
