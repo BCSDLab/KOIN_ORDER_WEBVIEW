@@ -14,6 +14,7 @@ import PrimaryPlus from '@/assets/Cart/primary-plus-icon.svg';
 import RightArrow from '@/assets/Payment/arrow-go-icon.svg';
 import Button from '@/components/UI/Button';
 import { useOrderStore } from '@/stores/useOrderStore';
+import { isNative } from '@/util/bridge/bridge';
 import { backButtonTapped } from '@/util/bridge/nativeAction';
 
 export default function Cart() {
@@ -30,6 +31,14 @@ export default function Cart() {
   } else if (cartInfo.is_delivery_available && !cartInfo.is_takeout_available) {
     infoMessage = '이 가게는 배달주문만 가능해요';
   }
+
+  const touchAddMenuButton = () => {
+    if (isNative()) {
+      backButtonTapped();
+    } else {
+      navigate('/home');
+    }
+  };
 
   useEffect(() => {
     const storedMenuOptions = localStorage.getItem('menuOptions');
@@ -49,7 +58,7 @@ export default function Cart() {
           startIcon={<Plus />}
           color="gray"
           className="mt-[14px] gap-2.5 border-0 py-[7px] pr-4 pl-[14px] text-[13px] font-bold"
-          onClick={backButtonTapped}
+          onClick={touchAddMenuButton}
         >
           메뉴 추가
         </Button>
