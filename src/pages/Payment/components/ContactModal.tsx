@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 import clsx from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import useSendSmsVerification from '../hooks/useSendSmsVerification';
@@ -13,6 +13,7 @@ import Button from '@/components/UI/Button';
 import { MESSAGES } from '@/constants/message';
 import { INQUIRE_FORM } from '@/constants/url';
 import useBooleanState from '@/util/hooks/useBooleanState';
+import useTimer from '@/util/hooks/useTimer';
 import { useToast } from '@/util/hooks/useToast';
 import formatPhoneNumber from '@/util/ts/formatPhoneNumber';
 
@@ -39,7 +40,6 @@ function ContactForm({ currentContact, onClose, onSubmit }: ContactFormProps) {
   const { mutate: sendSmsVerification, isPending: isSending } = sendSms;
   const { mutate: verifySmsCode, isPending: isVerifying } = verifySms;
 
-  const [timer, setTimer] = useState(0);
   const [authCode, setAuthCode] = useState('');
   const [draftPhone, setDraftPhone] = useState('');
   const [codeErrorMessage, setCodeErrorMessage] = useState('');
@@ -47,8 +47,7 @@ function ContactForm({ currentContact, onClose, onSubmit }: ContactFormProps) {
   const [isCodeSent, isCodeSentTrue, isCodeSentFalse] = useBooleanState(false);
   const [isPhoneChanging, startPhoneChanging, stopPhoneChanging] = useBooleanState(false);
 
-  const expiresAtRef = useRef<number | null>(null);
-  const intervalIdRef = useRef<number | null>(null);
+  const { seconds: timer, start: startTimer, reset: resetTimer } = useTimer();
 
   const isEditing = isPhoneChanging || !currentContact;
   const phone = isEditing ? draftPhone : (currentContact ?? '');
@@ -56,33 +55,13 @@ function ContactForm({ currentContact, onClose, onSubmit }: ContactFormProps) {
   const isPhoneValid = phone.length === PHONE_NUMBER_LENGTH;
   const shouldDisableSubmit = !isPhoneValid || authCode.length !== SMS_CODE_LENGTH || timer === 0;
 
-  useEffect(() => {
-    if (intervalIdRef.current != null) return;
-
-    intervalIdRef.current = window.setInterval(() => {
-      if (!expiresAtRef.current) return;
-
-      const remain = Math.max(0, Math.ceil((expiresAtRef.current - Date.now()) / 1000));
-      setTimer(remain);
-
-      if (remain === 0) expiresAtRef.current = null;
-    }, 1000);
-
-    return () => {
-      if (intervalIdRef.current != null) {
-        clearInterval(intervalIdRef.current);
-        intervalIdRef.current = null;
-      }
-    };
-  }, []);
-
   const resetState = () => {
     setDraftPhone('');
     setAuthCode('');
     isCodeSentFalse();
     setCodeErrorMessage('');
     setPhoneErrorMessage('');
-    setTimer(0);
+    resetTimer();
     if (currentContact) stopPhoneChanging();
     else startPhoneChanging();
   };
@@ -102,7 +81,7 @@ function ContactForm({ currentContact, onClose, onSubmit }: ContactFormProps) {
     sendSmsVerification(phone, {
       onSuccess: () => {
         isCodeSentTrue();
-        setTimer(CODE_EXPIRE_SECONDS);
+        startTimer(CODE_EXPIRE_SECONDS);
         showToast(MESSAGES.VERIFICATION.CODE_SENT);
       },
       onError: (error) => {
@@ -165,7 +144,7 @@ function ContactForm({ currentContact, onClose, onSubmit }: ContactFormProps) {
               setDraftPhone('');
               isCodeSentFalse();
               setAuthCode('');
-              setTimer(0);
+              resetTimer();
               setCodeErrorMessage('');
               setPhoneErrorMessage('');
             }}
