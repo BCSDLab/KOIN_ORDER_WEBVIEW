@@ -36,8 +36,8 @@ function ContactForm({ currentContact, onClose, onSubmit }: ContactFormProps) {
   const { showToast } = useToast();
 
   const { sendSms, verifySms } = useSendSmsVerification();
-  const { mutate: sendSmsVerification } = sendSms;
-  const { mutate: verifySmsCode } = verifySms;
+  const { mutate: sendSmsVerification, isPending: isSending } = sendSms;
+  const { mutate: verifySmsCode, isPending: isVerifying } = verifySms;
 
   const [timer, setTimer] = useState(0);
   const [authCode, setAuthCode] = useState('');
@@ -177,7 +177,7 @@ function ContactForm({ currentContact, onClose, onSubmit }: ContactFormProps) {
         {isEditing && (
           <Button
             color="gray"
-            disabled={!isPhoneValid}
+            disabled={!isPhoneValid || isSending}
             className={twMerge(
               clsx(
                 'absolute top-2 right-4 px-2.5 text-xs font-normal text-neutral-600 shadow-none',
@@ -232,7 +232,7 @@ function ContactForm({ currentContact, onClose, onSubmit }: ContactFormProps) {
             size="lg"
             onClick={handleClickSubmit}
             className="rounded-xl py-2.5 text-lg"
-            disabled={shouldDisableSubmit}
+            disabled={shouldDisableSubmit || isVerifying}
             state={shouldDisableSubmit ? 'disabled' : 'default'}
           >
             확인
