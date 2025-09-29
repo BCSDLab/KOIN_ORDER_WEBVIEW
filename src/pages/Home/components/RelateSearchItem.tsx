@@ -16,12 +16,10 @@ export default function RelateSearchItem({ tag, content, onClick }: RelatedSearc
       className="flex h-12 w-[342px] items-center justify-between border-b border-[#eee] p-2 max-[341px]:w-full lg:w-[936px]"
     >
       <div className="flex items-center gap-1">
-        <div>{tag === 'store' ? <StoreIcon /> : <MenuIcon />}</div>
+        {tag === 'store' ? <StoreIcon /> : <MenuIcon />}
         <p className="text-[10px] text-neutral-500">{content}</p>
       </div>
-      <div>
-        <NavigateStoreIcon />
-      </div>
+      <NavigateStoreIcon />
     </button>
   );
 }
