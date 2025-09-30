@@ -1,10 +1,12 @@
 import dayjs from 'dayjs';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Searchbar from './components/Layout/Searchbar';
 import DevOnlyWrapper from './components/Wrapper/DevOnly';
 import Cart from './pages/Cart';
 import DeliveryOutside from './pages/Delivery/Outside';
 import Home from './pages/Home';
 import Login from './pages/Login';
+import NearbyStores from './pages/NearbyStores';
 import OrderCancel from './pages/OrderFinish/OrderCancel';
 import OrderList from './pages/OrderList';
 import PaymentConfirm from './pages/PaymentConfirm';
@@ -40,7 +42,10 @@ export default function App() {
         <Route path="payment/return" element={<PaymentConfirm />} />
 
         <Route element={<HomeLayout />}>
-          <Route path="home" element={<Home />} />
+          <Route element={<Searchbar />}>
+            <Route path="home" element={<Home />} />
+            <Route path="shops" element={<NearbyStores />} />
+          </Route>
           <Route path="orders" element={<OrderList />} />
         </Route>
 

@@ -23,13 +23,13 @@ export default function BottomNav() {
       </button>
 
       <button
-        onClick={() => navigate('/stores')}
+        onClick={() => navigate('/shops')}
         className={clsx(
           'flex w-[42px] flex-col items-center gap-0.5',
-          isActive('/stores') ? 'text-primary-500' : 'text-neutral-500',
+          isActive('/shops') ? 'text-primary-500' : 'text-neutral-500',
         )}
       >
-        <StoreIcon className={clsx(isActive('/stores') ? 'fill-primary-500' : 'fill-neutral-300')} />
+        <StoreIcon className={clsx(isActive('/shops') ? 'fill-primary-500' : 'fill-neutral-300')} />
         주변상점
       </button>
 
