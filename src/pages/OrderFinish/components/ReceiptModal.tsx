@@ -11,11 +11,6 @@ interface ReceiptModalProps {
 const formatKRW = (number: number) => `${number.toLocaleString()}원`;
 
 export default function ReceiptModal({ isOpen, onClose, paymentInfo }: ReceiptModalProps) {
-  const menusSubtotal = paymentInfo.menus.reduce((sum, menu) => {
-    const optionSumPerItem = (menu.options ?? []).reduce((sum, options) => sum + (options.option_price ?? 0), 0);
-    return sum + (menu.price + optionSumPerItem) * menu.quantity;
-  }, 0);
-
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalContent className="px-4 py-6 text-center text-sm text-black">
@@ -54,11 +49,11 @@ export default function ReceiptModal({ isOpen, onClose, paymentInfo }: ReceiptMo
           <div>
             <div className="flex justify-between">
               <div className="font-semibold">주문 금액</div>
-              <div>{formatKRW(menusSubtotal)}</div>
+              <div>{formatKRW(paymentInfo.total_menu_price)}</div>
             </div>
             <div className="flex justify-between">
               <div className="font-semibold">배달비</div>
-              <div>{formatKRW(paymentInfo.amount - menusSubtotal)}</div>
+              <div>{formatKRW(paymentInfo.delivery_tip)}</div>
             </div>
           </div>
           <div className="h-[1px] border-b border-neutral-200" />
