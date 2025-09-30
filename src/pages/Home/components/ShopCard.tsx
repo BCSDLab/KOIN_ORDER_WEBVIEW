@@ -8,9 +8,9 @@ interface MenuCardProps {
   name: string;
   rating: number;
   reviewCount: number;
-  deliver: number;
-  isTakeout: boolean;
-  isService: boolean;
+  deliver?: number;
+  isTakeout?: boolean;
+  isService?: boolean;
   img: OrderableShopsImg[];
 }
 
