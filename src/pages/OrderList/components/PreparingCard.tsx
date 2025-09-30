@@ -72,7 +72,18 @@ export default function PreparingCard({ orderInfo }: PreparingCardProps) {
   const statusDescription = getStatusDescription(orderInfo.order_status);
 
   return (
-    <div className="rounded-xl border-[0.5px] border-neutral-200 bg-white px-6 py-4">
+    <div
+      role="button"
+      tabIndex={0}
+      onClick={() => navigate(`/shop/true/${orderInfo.orderable_shop_id}`)}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          navigate(`/shop/true/${orderInfo.orderable_shop_id}`);
+        }
+      }}
+      className="rounded-xl border-[0.5px] border-neutral-200 bg-white px-6 py-4"
+    >
       <div className="bg-primary-100 inline-flex items-center gap-1 rounded-sm px-1.5 py-0.5">
         {orderInfo.order_type === 'DELIVERY' ? <BikeIcon /> : <PickupIcon />}
         <div className="text-primary-500 text-xs font-medium">
@@ -103,7 +114,10 @@ export default function PreparingCard({ orderInfo }: PreparingCardProps) {
         color="neutral"
         fullWidth
         className="border-primary-500 mt-4 py-2 text-sm"
-        onClick={() => navigate(`/result/${orderInfo.payment_id}`)}
+        onClick={(e) => {
+          e.stopPropagation();
+          navigate(`/result/${orderInfo.payment_id}`);
+        }}
       >
         주문 상세 보기
       </Button>

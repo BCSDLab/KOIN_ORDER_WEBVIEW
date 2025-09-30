@@ -1,6 +1,4 @@
-import { useState } from 'react';
 import clsx from 'clsx';
-import dayjs from 'dayjs';
 import { useNavigate, useParams } from 'react-router-dom';
 import OrderMap from './components/OrderMap';
 import ReceiptModal from './components/ReceiptModal';
@@ -23,19 +21,33 @@ import { isAndroid } from '@/util/bridge/bridge';
 import { backButtonTapped, goToShopDetail } from '@/util/bridge/nativeAction';
 import useBooleanState from '@/util/hooks/useBooleanState';
 
-type OrderKind = 'order' | 'preparation' | 'delivery';
-
-const stateTitle = {
-  order: '주문 확인중',
-  preparation: '준비중',
-  delivery: '배달 완료',
+const ORDER_STATE_TEXT = {
+  CONFIRMING: { title: '주문 확인중', message: '사장님이 주문을 확인하고 있어요!' },
+  COOKING: { title: '준비중', message: '가게에서 열심히 음식을 조리하고있어요!' },
+  DELIVERED: { title: '배달 완료', message: '배달이 완료되었어요 감사합니다!' },
+  PICKED_UP: { title: '수령 완료', message: '포장 수령이 완료되었어요 감사합니다!' },
+  CANCELED: { title: '주문 취소', message: '주문이 취소되었어요' },
 } as const;
 
-const stateMessage = {
-  order: '사장님이 주문을 확인하고 있어요!',
-  preparation: '가게에서 열심히 음식을 조리하고있어요!',
-  delivery: '배달이 완료되었어요 감사합니다!',
-} as const;
+type OrderStateKey = keyof typeof ORDER_STATE_TEXT;
+
+const isValidOrderStateKey = (value: string): value is OrderStateKey => {
+  return value in ORDER_STATE_TEXT;
+};
+
+function getOrderStateText(orderStatus: string) {
+  return isValidOrderStateKey(orderStatus) ? ORDER_STATE_TEXT[orderStatus] : { title: '', message: '' };
+}
+
+function formatKoreanTime(time: string): string {
+  const [hh, mm] = time.split(':').map(Number);
+
+  const period = hh < 12 ? '오전' : '오후';
+  const hour = hh % 12 === 0 ? 12 : hh % 12;
+  const minute = Number(mm);
+
+  return `${period} ${hour}시 ${minute}분`;
+}
 
 const formatKRW = (number: number) => `${number.toLocaleString()}원`;
 
@@ -53,22 +65,12 @@ export default function OrderFinish() {
   // TODO: paymentInfo가 없을 경우 처리
   if (!paymentInfo) return <div>주문 정보가 없습니다.</div>;
 
+  const { title, message } = getOrderStateText(paymentInfo.order_status);
   const isDelivery = paymentInfo.order_type === 'DELIVERY';
 
-  const [orderKind] = useState<OrderKind>('order');
   const [isDeliveryBottomModalOpen, , closeDeliveryBottomModal] = useBooleanState(false);
   const [isCallBottomModalOpen, openCallBottomModal, closeCallBottomModal] = useBooleanState(false);
   const [isReceiptOpen, openReceipt, closeReceipt] = useBooleanState(false);
-
-  const approvedTime = dayjs(paymentInfo?.approved_at);
-  const deliveryFinishTime = approvedTime.add(1, 'hour').format('A h시 mm분');
-
-  const menusSubtotal = paymentInfo.menus.reduce((sum, menu) => {
-    const optionSumPerItem = (menu.options ?? []).reduce((sum, options) => sum + (options.option_price ?? 0), 0);
-    return sum + (menu.price + optionSumPerItem) * menu.quantity;
-  }, 0);
-
-  const deliveryFee = paymentInfo.amount - menusSubtotal;
 
   const handleOpenCallBottomModal = () => {
     closeDeliveryBottomModal();
@@ -90,13 +92,14 @@ export default function OrderFinish() {
     <div className="flex flex-col">
       <div className="flex flex-row justify-between px-6 py-6">
         <div className="text-primary-500 flex h-auto flex-col justify-center text-xl leading-[160%] font-bold">
-          {stateTitle[orderKind]}
-          <div className={orderKind === 'preparation' ? 'font-bold text-[#7D08A4]' : 'hidden'}>
-            {`${deliveryFinishTime} 도착 예정`}
-          </div>
-          <div className="text-xs leading-[160%] font-normal text-neutral-500">{stateMessage[orderKind]}</div>
+          {title}
+          {['COOKING', 'DELIVERING', 'PACKAGED'].includes(paymentInfo.order_status) && (
+            <div className="font-bold text-[#7D08A4]">{`${formatKoreanTime(paymentInfo.estimated_at)} 도착 예정`}</div>
+          )}
+
+          <div className="text-xs leading-[160%] font-normal text-neutral-500">{message}</div>
         </div>
-        {orderKind === 'order' && (
+        {paymentInfo.order_status === 'CONFIRMING' && (
           <Button
             onClick={handleClickOrderCancel}
             className="h-[1.938rem] w-[4.125rem] self-end rounded-3xl px-2 text-xs leading-[160%] font-semibold"
@@ -108,8 +111,12 @@ export default function OrderFinish() {
       <div>
         <div className="flex flex-row justify-between px-6 pt-4 pb-1.5">
           <div className="is-text-purple">주문확인</div>
-          <div className={orderKind === 'order' ? 'is-text-gray' : 'is-text-purple'}>준비중</div>
-          <div className={orderKind !== 'delivery' ? 'is-text-gray' : 'is-text-purple'}>
+          <div className={paymentInfo.order_status === 'CONFIRMING' ? 'is-text-gray' : 'is-text-purple'}>준비중</div>
+          <div
+            className={clsx(
+              ['DELIVERED', 'PICKED_UP'].includes(paymentInfo.order_status) ? 'is-text-purple' : 'is-text-gray',
+            )}
+          >
             {isDelivery ? '배달' : '수령'}완료
           </div>
         </div>
@@ -117,20 +124,27 @@ export default function OrderFinish() {
           <div className="is-icon-purple">
             <ShoppingCart fill="white" />
           </div>
-          <div className="bg-primary-300 h-[5px] w-[calc((100vw-184px)/8)] self-center"></div>
+          <div className="bg-primary-300 h-[5px] w-[calc((100vw-184px)/8)] self-center" />
           <div
-            className={`h-[5px] w-[calc((100vw-184px)/8*3)] self-center ${orderKind === 'order' ? 'bg-neutral-400' : 'bg-primary-300'}`}
+            className={`h-[5px] w-[calc((100vw-184px)/8*3)] self-center ${paymentInfo.order_status === 'CONFIRMING' ? 'bg-neutral-400' : 'bg-primary-300'}`}
           ></div>
-          <div className={orderKind === 'order' ? 'is-icon-gray' : 'is-icon-purple'}>
+          <div className={paymentInfo.order_status === 'CONFIRMING' ? 'is-icon-gray' : 'is-icon-purple'}>
             <Skillet />
           </div>
           <div
-            className={`h-[5px] w-[calc((100vw-184px)/8)] self-center ${orderKind === 'order' ? 'bg-neutral-400' : 'bg-primary-300'}`}
-          ></div>
+            className={`h-[5px] w-[calc((100vw-184px)/8)] self-center ${paymentInfo.order_status === 'CONFIRMING' ? 'bg-neutral-400' : 'bg-primary-300'}`}
+          />
           <div
-            className={`h-[5px] w-[calc((100vw-184px)/8*3)] self-center ${orderKind !== 'delivery' ? 'bg-neutral-400' : 'bg-primary-300'}`}
-          ></div>
-          <div className={orderKind !== 'delivery' ? 'is-icon-gray' : 'is-icon-purple'}>
+            className={clsx(
+              'h-[5px] w-[calc((100vw-184px)/8*3)] self-center',
+              ['DELIVERED', 'PICKED_UP'].includes(paymentInfo.order_status) ? 'bg-primary-300' : 'bg-neutral-400',
+            )}
+          />
+          <div
+            className={clsx(
+              ['DELIVERED', 'PICKED_UP'].includes(paymentInfo.order_status) ? 'is-icon-purple' : 'is-icon-gray',
+            )}
+          >
             {isDelivery ? <Motorcycle /> : <PackageIcon />}
           </div>
         </div>
@@ -212,10 +226,10 @@ export default function OrderFinish() {
         <div className="shadow-1 mb-5 gap-3 rounded-2xl border border-white bg-white px-6 py-4 text-sm leading-[160%]">
           <div className="text-[13px] text-neutral-500">
             <div className="flex justify-between pb-1">
-              메뉴 금액<div>{formatKRW(menusSubtotal)}</div>
+              메뉴 금액<div>{formatKRW(paymentInfo.total_menu_price)}</div>
             </div>
             <div className="flex justify-between">
-              배달 금액<div>{formatKRW(deliveryFee)}</div>
+              배달 금액<div>{formatKRW(paymentInfo.delivery_tip)}</div>
             </div>
             <div className="my-4 h-[1px] border-b border-neutral-200" />
           </div>
