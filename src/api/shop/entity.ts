@@ -259,3 +259,37 @@ export interface OrderableShopsParams {
 }
 
 export type OrderableShopsFilter = 'IS_OPEN' | 'DELIVERY_AVAILABLE' | 'TAKEOUT_AVAILABLE' | 'FREE_DELIVERY_TIP';
+
+export interface StoreListParams {
+  sorter?: string;
+  filter?: string | undefined;
+}
+
+export interface StoreListResponse {
+  count: number;
+  shops: ShopInfo[];
+}
+
+export interface ShopInfo {
+  category_ids: number[];
+  delivery: boolean;
+  id: number;
+  name: string;
+  pay_bank: boolean;
+  pay_card: boolean;
+  phone: string;
+  open: OpenInfo[];
+  is_event: boolean;
+  is_open: boolean;
+  average_rate: number;
+  review_count: number;
+  benefit_details: string;
+  images: string[];
+}
+
+export interface OpenInfo {
+  day_of_week: 'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY' | 'SATURDAY' | 'SUNDAY';
+  closed: boolean;
+  open_time: string;
+  close_time: string;
+}

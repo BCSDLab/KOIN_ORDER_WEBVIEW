@@ -14,6 +14,8 @@ import {
   StoreCategoriesResponse,
   OrderableShopsResponse,
   OrderableShopsParams,
+  StoreListResponse,
+  StoreListParams,
 } from './entity';
 
 export const getShopDetailInfo = async ({ orderableShopId }: ShopDetailInfoParams) => {
@@ -69,6 +71,13 @@ export const getStoreCategories = async () => {
 
 export const getOrderableShops = async (params: OrderableShopsParams) => {
   const response = await apiClient.get<OrderableShopsResponse[], OrderableShopsParams>(`/order/shops`, {
+    params,
+  });
+  return response;
+};
+
+export const getStoreList = async (params: StoreListParams) => {
+  const response = await apiClient.get<StoreListResponse, StoreListParams>(`/v3/shops`, {
     params,
   });
   return response;
