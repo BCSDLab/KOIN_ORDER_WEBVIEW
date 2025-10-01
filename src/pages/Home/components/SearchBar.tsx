@@ -33,9 +33,7 @@ export default function SearchBar() {
           'shadow-1 mt-2 flex h-10 w-[342px] items-center gap-2 rounded-2xl bg-white px-3 py-2 max-[341px]:w-full lg:w-[936px]'
         }
       >
-        <span className="flex h-6 w-6 items-center justify-center p-1">
-          <SearchIconGray />
-        </span>
+        <SearchIconGray />
         <input
           type="text"
           placeholder="검색어를 입력해주세요."
