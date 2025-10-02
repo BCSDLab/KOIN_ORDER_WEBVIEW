@@ -7,6 +7,7 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 import OrderCancel from './pages/OrderFinish/OrderCancel';
 import PaymentConfirm from './pages/PaymentConfirm';
+import Search from './pages/Search';
 import MenuDetail from './pages/Shop/MenuDetail';
 import OrderableShopView from './pages/Shop/OrderableShopView';
 import OrderableShopDetail from './pages/Shop/ShopDetail/components/OrderableShopDetail';
@@ -40,6 +41,7 @@ export default function App() {
 
         <Route element={<AppLayout />}>
           <Route path="home" element={<Home />} />
+          <Route path="search" element={<Search />} />
           <Route path="shop-detail/true/:shopId" element={<OrderableShopDetail />} />
           <Route path="shop-detail/false/:shopId" element={<UnorderableShopDetail />} />
           <Route path="cart" element={<Cart />} />
