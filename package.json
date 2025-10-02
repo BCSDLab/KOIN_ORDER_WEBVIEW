@@ -7,7 +7,16 @@
     "start": "vite --open --host",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+
+    "test": "vitest",
+    "coverage": "vitest run --coverage",
+
+    "e2e": "playwright test",
+    "e2e:report": "playwright show-report",
+    "e2e:ui": "playwright test --ui",
+
+    "test:all": "pnpm test:run && pnpm e2e"
   },
   "dependencies": {
     "@bcsdlab/utils": "^0.0.15",
