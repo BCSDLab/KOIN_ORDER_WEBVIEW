@@ -1,8 +1,8 @@
 import clsx from 'clsx';
 import { useNavigate } from 'react-router-dom';
+import RelateSearchItem from './RelateSearchItem';
 import { RelatedSearchResponse } from '@/api/shop/entity';
 import TopModal from '@/components/UI/TopModal/TopModal';
-import RelateSearchItem from '@/pages/Home/components/RelateSearchItem';
 
 interface SearchBarModalProps {
   onClose: () => void;
