@@ -6,13 +6,14 @@ import DeliveryOutside from './pages/Delivery/Outside';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import OrderCancel from './pages/OrderFinish/OrderCancel';
+import OrderList from './pages/OrderList';
 import PaymentConfirm from './pages/PaymentConfirm';
 import Search from './pages/Search';
 import MenuDetail from './pages/Shop/MenuDetail';
 import OrderableShopView from './pages/Shop/OrderableShopView';
 import OrderableShopDetail from './pages/Shop/ShopDetail/components/OrderableShopDetail';
 import UnorderableShopView from './pages/Shop/UnorderableShopView';
-import AppLayout from '@/components/Layout';
+import AppLayout, { HomeLayout } from '@/components/Layout';
 import Campus from '@/pages/Delivery/Campus';
 import DetailAddress from '@/pages/Delivery/Outside/DetailAddress';
 import OrderFinish from '@/pages/OrderFinish';
@@ -39,9 +40,12 @@ export default function App() {
         <Route path="shop/true/:shopId/menus/:menuId" element={<MenuDetail />} />
         <Route path="payment/return" element={<PaymentConfirm />} />
 
-        <Route element={<AppLayout />}>
+        <Route element={<HomeLayout />}>
           <Route path="home" element={<Home />} />
           <Route path="search" element={<Search />} />
+          <Route path="orders" element={<OrderList />} />
+        </Route>
+        <Route element={<AppLayout />}>
           <Route path="shop-detail/true/:shopId" element={<OrderableShopDetail />} />
           <Route path="shop-detail/false/:shopId" element={<UnorderableShopDetail />} />
           <Route path="cart" element={<Cart />} />

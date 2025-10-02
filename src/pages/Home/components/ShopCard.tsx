@@ -36,11 +36,11 @@ export default function ShopCard({
   return (
     <button
       onClick={() => navigate(`/shop/true/${shopId}`)}
-      className="relative flex items-center gap-5 overflow-hidden rounded-lg bg-[#f8f8fa]"
+      className="relative flex items-center gap-5 overflow-hidden rounded-lg border-[0.5px] border-neutral-200 bg-white"
       type="button"
     >
       {!isOpen && (
-        <div className="absolute inset-0 z-10 flex items-center justify-center rounded-lg bg-[rgba(0,0,0,0.6)]">
+        <div className="absolute inset-0 z-10 flex items-center justify-center rounded-lg bg-black/60">
           <div className="text-center text-white">영업이 종료된 가게에요!</div>
         </div>
       )}
@@ -62,18 +62,18 @@ export default function ShopCard({
           <div className="text-[#767676]">( 리뷰 {reviewCount}개 )</div>
         </div>
 
-        <div className="flex gap-1 text-xs">
+        <div className="flex items-center gap-1 text-xs text-neutral-600">
           <Delivery fill="#c358fc" />
           <div>배달비 {deliver}원</div>
         </div>
 
         <div className="flex items-center gap-2">
           {isTakeout && (
-            <span className="rounded-[999px] bg-[#f2f2f2] px-[10px] py-0.5 text-xs text-neutral-600">픽업가능</span>
+            <span className="rounded-full bg-[#f2f2f2] px-[10px] py-0.5 text-xs text-neutral-600">픽업가능</span>
           )}
           {isTakeout && isService && '  |  '}
           {isService && (
-            <span className="rounded-[999px] bg-[#f2f2f2] px-[10px] py-0.5 text-xs text-neutral-600">서비스 증정</span>
+            <span className="rounded-full bg-[#f2f2f2] px-[10px] py-0.5 text-xs text-neutral-600">서비스 증정</span>
           )}
         </div>
       </div>
