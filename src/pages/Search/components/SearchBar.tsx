@@ -12,6 +12,7 @@ export default function SearchBar({ onChange }: SearchBarProps) {
         type="text"
         placeholder="검색어를 입력해주세요."
         autoComplete="off"
+        autoFocus
         className="w-full text-[14px] leading-[160%] placeholder-neutral-500 focus:outline-none"
         onChange={onChange}
       />
