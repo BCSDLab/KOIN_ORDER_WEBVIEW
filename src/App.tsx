@@ -8,6 +8,7 @@ import Login from './pages/Login';
 import OrderCancel from './pages/OrderFinish/OrderCancel';
 import OrderList from './pages/OrderList';
 import PaymentConfirm from './pages/PaymentConfirm';
+import Search from './pages/Search';
 import MenuDetail from './pages/Shop/MenuDetail';
 import OrderableShopView from './pages/Shop/OrderableShopView';
 import OrderableShopDetail from './pages/Shop/ShopDetail/components/OrderableShopDetail';
@@ -41,9 +42,9 @@ export default function App() {
 
         <Route element={<HomeLayout />}>
           <Route path="home" element={<Home />} />
+          <Route path="search" element={<Search />} />
           <Route path="orders" element={<OrderList />} />
         </Route>
-
         <Route element={<AppLayout />}>
           <Route path="shop-detail/true/:shopId" element={<OrderableShopDetail />} />
           <Route path="shop-detail/false/:shopId" element={<UnorderableShopDetail />} />

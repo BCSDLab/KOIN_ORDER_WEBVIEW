@@ -69,6 +69,8 @@ export default function Header() {
       )}
       <span className="text-lg font-medium">{title}</span>
       {pathname === '/cart' && <CartResetButton />}
+      {pathname === '/home' && <CartCountButton />}
+      {pathname === '/search' && <CartCountButton />}
       {(pathname === '/home' || pathname === '/orders' || pathname === '/stores') && <CartCountButton />}
     </header>
   );
