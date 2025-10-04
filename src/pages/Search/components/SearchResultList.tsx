@@ -9,7 +9,7 @@ interface SearchResultListProps {
 
 export default function SearchResultList({ keyword }: SearchResultListProps) {
   const { data } = useQuery<RelatedSearchResponse>({
-    queryKey: ['relateSearch', keyword],
+    queryKey: ['order', 'shop', 'search', keyword],
     queryFn: () => getRelateSearch({ keyword }),
     enabled: keyword.length > 0,
   });
