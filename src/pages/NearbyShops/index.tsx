@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import clsx from 'clsx';
 import { ShopInfo } from '@/api/shop/entity';
 import CheckIcon from '@/assets/Home/check-icon.svg';
 import DownArrowIcon from '@/assets/Home/down-arrow-icon.svg';
@@ -13,8 +14,8 @@ import BottomModal, {
 } from '@/components/UI/BottomModal/BottomModal';
 import SearchBar from '@/pages/Home/components/SearchBar';
 import ShopCard from '@/pages/Home/components/ShopCard';
-import { useStoreCategories } from '@/pages/Home/hooks/useStoreCategories';
-import { useStoreList } from '@/pages/Home/hooks/useStoreList';
+import { useShopCategories } from '@/pages/Home/hooks/useShopCategories';
+import { useShopList } from '@/pages/Home/hooks/useShopList';
 
 interface Category {
   id: number;
@@ -36,19 +37,19 @@ const sortOptions: SortOption[] = [
   { id: 'NONE', label: '기본순' },
 ];
 
-export default function NearbyStores() {
-  const { data: categories } = useStoreCategories();
+export default function NearbyShops() {
+  const { data: categories } = useShopCategories();
   const categoriesWithAll = categories.shop_categories.map((category: Category) => ({
     ...category,
   }));
 
-  const [selectedCategory, setSelectedCategory] = useState<CategoryType | null>(1);
+  const [selectedCategory, setSelectedCategory] = useState<CategoryType>(1);
   const [selectedFilters, setSelectedFilters] = useState<string | null>('OPEN');
   const [selectedSort, setSelectedSort] = useState<SortType>('NONE');
 
   const [isSortModalOpen, setIsSortModalOpen] = useState(false);
 
-  const { data } = useStoreList({
+  const { data } = useShopList({
     sorter: selectedSort !== 'NONE' ? selectedSort : undefined,
     filter: selectedFilters === 'OPEN' ? selectedFilters : undefined,
     category: selectedCategory,
@@ -118,15 +119,20 @@ export default function NearbyStores() {
           <div className="scrollbar-responsive flex flex-1 snap-x snap-mandatory gap-2 overflow-x-auto min-[604px]:flex-initial min-[604px]:snap-none min-[604px]:overflow-visible">
             <button
               onClick={() => toggleFilter('OPEN')}
-              className={`flex shrink-0 snap-start items-center justify-center transition-colors`}
+              className="flex shrink-0 snap-start items-center justify-center transition-colors"
             >
               <Badge
                 label="영업중"
                 color="neutral"
                 variant="outlined"
                 size="sm"
-                startIcon={<OpenIcon className={selectedFilters === 'OPEN' ? 'fill-[#f8f8fa]' : 'fill-neutral-400'} />}
-                className={`shadow-1 ${selectedFilters === 'OPEN' ? 'bg-primary-500 text-white' : 'bg-white text-neutral-400'}`}
+                startIcon={
+                  <OpenIcon className={clsx(selectedFilters === 'OPEN' ? 'fill-[#f8f8fa]' : 'fill-neutral-400')} />
+                }
+                className={clsx(
+                  'shadow-1',
+                  selectedFilters === 'OPEN' ? 'bg-primary-500 text-white' : 'bg-white text-neutral-400',
+                )}
               />
             </button>
           </div>
@@ -136,7 +142,7 @@ export default function NearbyStores() {
       <div className="flex h-25 items-center justify-center text-center">광고배너</div>
 
       {/* 메뉴 리스트 */}
-      <div className="grid grid-cols-1 gap-6 px-6 min-[730px]:grid-cols-2 min-[1050px]:grid-cols-3 min-[1400px]:grid-cols-4">
+      <div className="grid w-full grid-cols-1 gap-6 px-6 min-[730px]:grid-cols-2 min-[1050px]:grid-cols-3 min-[1400px]:grid-cols-4">
         {data && data.shops && data.shops.length > 0 ? (
           data.shops.map((shop: ShopInfo) => {
             const formattedImages = shop.images.map((url, index) => ({

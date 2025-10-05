@@ -1,17 +1,17 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { StoreListParams } from '@/api/shop/entity';
-import { getStoreList } from '@/api/shop/index';
+import { ShopListParams } from '@/api/shop/entity';
+import { getShopList } from '@/api/shop/index';
 
-interface UseStoreListParams extends StoreListParams {
-  category?: number | null;
+interface UseShopListParams extends ShopListParams {
+  category?: number;
 }
 
-export const useStoreList = (params: UseStoreListParams = {}) => {
+export const useShopList = (params: UseShopListParams = {}) => {
   const { category, ...apiParams } = params;
 
   const { data: rawData } = useSuspenseQuery({
     queryKey: ['nearbyShops', apiParams],
-    queryFn: () => getStoreList(apiParams),
+    queryFn: () => getShopList(apiParams),
   });
 
   const filteredData = {

@@ -19,7 +19,8 @@ import BottomModal, {
 } from '@/components/UI/BottomModal/BottomModal';
 import Button from '@/components/UI/Button';
 import { useOrderableShops } from '@/pages/Home/hooks/useOrderableShops.ts';
-import { useStoreCategories } from '@/pages/Home/hooks/useStoreCategories.ts';
+import { useShopCategories } from '@/pages/Home/hooks/useShopCategories';
+import useBooleanState from '@/util/hooks/useBooleanState';
 
 interface Category {
   id: number;
@@ -67,7 +68,7 @@ const MIN_ORDER_OPTIONS = [
 ];
 
 export default function Home() {
-  const { data: categories } = useStoreCategories();
+  const { data: categories } = useShopCategories();
   const categoriesWithAll = categories.shop_categories.map((category: Category) => ({
     ...category,
   }));
@@ -76,8 +77,8 @@ export default function Home() {
   const [selectedFilters, setSelectedFilters] = useState<FilterType[]>(['IS_OPEN']);
   const [selectedSort, setSelectedSort] = useState<SortType>('NONE');
 
-  const [isSortModalOpen, setIsSortModalOpen] = useState(false);
-  const [isMinOrderOpen, setIsMinOrderOpen] = useState(false);
+  const [isSortModalOpen, openSortModal, closeSortModal] = useBooleanState(false);
+  const [isMinOrderOpen, openMinOrderModal, closeMinOrderModal] = useBooleanState(false);
 
   const [minOrderAmount, setMinOrderAmount] = useState<number | null>(null);
   const [selectedValue, setSelectedValue] = useState<number | null>(ALL_VALUE);
@@ -100,7 +101,7 @@ export default function Home() {
 
   const handleSortSelect = (sortId: SortType) => {
     setSelectedSort(sortId);
-    setIsSortModalOpen(false);
+    closeSortModal();
   };
 
   const getMinOrderLabel = () => {
@@ -127,7 +128,7 @@ export default function Home() {
 
   const handleValueSelect = () => {
     setMinOrderAmount(selectedValue);
-    setIsMinOrderOpen(false);
+    closeMinOrderModal();
   };
 
   return (
@@ -160,7 +161,7 @@ export default function Home() {
       <div className="flex w-full pr-4 min-[604px]:justify-center">
         <div className="flex w-full min-[604px]:flex-wrap min-[604px]:justify-center min-[604px]:gap-2">
           <button
-            onClick={() => setIsSortModalOpen(true)}
+            onClick={openSortModal}
             className="mr-4 ml-4 inline-flex shrink-0 items-center justify-center pb-2 leading-none min-[604px]:mr-0 min-[604px]:ml-0 min-[604px]:pb-0 [@media(pointer:coarse)]:pb-0"
           >
             <Badge
@@ -196,10 +197,7 @@ export default function Home() {
               );
             })}
 
-            <button
-              onClick={() => setIsMinOrderOpen(true)}
-              className={`flex shrink-0 snap-start items-center justify-center`}
-            >
+            <button onClick={openMinOrderModal} className={`flex shrink-0 snap-start items-center justify-center`}>
               <Badge
                 label={getMinOrderLabel()}
                 color="neutral"
@@ -246,10 +244,10 @@ export default function Home() {
       </div>
 
       {/* 정렬 BottomSheet */}
-      <BottomModal isOpen={isSortModalOpen} onClose={() => setIsSortModalOpen(false)}>
+      <BottomModal isOpen={isSortModalOpen} onClose={closeSortModal}>
         <BottomModalHeader>
           <div className="text-primary-500 font-semibold select-none"> 가게 정렬</div>
-          <button onClick={() => setIsSortModalOpen(false)}>
+          <button onClick={closeSortModal}>
             <CloseIcon />
           </button>
         </BottomModalHeader>
@@ -273,10 +271,10 @@ export default function Home() {
       </BottomModal>
 
       {/* 최소 주문 금액 BottomSheet */}
-      <BottomModal isOpen={isMinOrderOpen} onClose={() => setIsMinOrderOpen(false)}>
+      <BottomModal isOpen={isMinOrderOpen} onClose={closeMinOrderModal}>
         <BottomModalHeader>
           <div className="text-primary-500 font-semibold select-none"> 최소주문금액</div>
-          <button onClick={() => setIsMinOrderOpen(false)}>
+          <button onClick={closeMinOrderModal}>
             <CloseIcon />
           </button>
         </BottomModalHeader>

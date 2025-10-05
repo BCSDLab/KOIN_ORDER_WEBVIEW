@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import { useLocation, useNavigate } from 'react-router-dom';
 import HomeIcon from '/src/assets/Home/home-icon.svg';
-import StoreIcon from '/src/assets/Home/store-icon.svg';
+import ShopIcon from '/src/assets/Home/shop-icon.svg';
 import PaperIcon from '/src/assets/Home/paper-icon.svg';
 
 export default function BottomNav() {
@@ -29,7 +29,7 @@ export default function BottomNav() {
           isActive('/shops') ? 'text-primary-500' : 'text-neutral-500',
         )}
       >
-        <StoreIcon className={clsx(isActive('/shops') ? 'fill-primary-500' : 'fill-neutral-300')} />
+        <ShopIcon className={clsx(isActive('/shops') ? 'fill-primary-500' : 'fill-neutral-300')} />
         주변상점
       </button>
 
