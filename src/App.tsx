@@ -1,6 +1,5 @@
 import dayjs from 'dayjs';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Searchbar from './components/Layout/Searchbar';
 import DevOnlyWrapper from './components/Wrapper/DevOnly';
 import Cart from './pages/Cart';
 import DeliveryOutside from './pages/Delivery/Outside';
@@ -10,6 +9,7 @@ import NearbyStores from './pages/NearbyStores';
 import OrderCancel from './pages/OrderFinish/OrderCancel';
 import OrderList from './pages/OrderList';
 import PaymentConfirm from './pages/PaymentConfirm';
+import Search from './pages/Search';
 import MenuDetail from './pages/Shop/MenuDetail';
 import OrderableShopView from './pages/Shop/OrderableShopView';
 import OrderableShopDetail from './pages/Shop/ShopDetail/components/OrderableShopDetail';
@@ -42,11 +42,10 @@ export default function App() {
         <Route path="payment/return" element={<PaymentConfirm />} />
 
         <Route element={<HomeLayout />}>
-          <Route element={<Searchbar />}>
-            <Route path="home" element={<Home />} />
-            <Route path="shops" element={<NearbyStores />} />
-          </Route>
+          <Route path="home" element={<Home />} />
+          <Route path="shops" element={<NearbyStores />} />
           <Route path="orders" element={<OrderList />} />
+          <Route path="search" element={<Search />} />
         </Route>
         <Route element={<AppLayout />}>
           <Route path="shop-detail/true/:shopId" element={<OrderableShopDetail />} />

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import SearchBar from './components/SearchBar';
 import ShopCard from './components/ShopCard';
 import { OrderableShopsResponse } from '@/api/shop/entity';
 import CheckIcon from '@/assets/Home/check-icon.svg';
@@ -131,6 +132,10 @@ export default function Home() {
 
   return (
     <div className="flex h-full w-full flex-col items-center justify-center gap-4">
+      <div className="w-full px-6">
+        <SearchBar />
+      </div>
+
       <div className="scrollbar-responsive ml-6 flex w-[calc(100%-24px)] snap-x snap-mandatory gap-6 overflow-x-auto pt-2 pb-4 min-[960px]:ml-0 min-[960px]:snap-none min-[960px]:justify-center">
         {categoriesWithAll.map((category) => (
           <button

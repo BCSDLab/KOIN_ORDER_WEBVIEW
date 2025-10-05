@@ -1,7 +1,4 @@
 import { useState } from 'react';
-import ShopCard from '../Home/components/ShopCard';
-import { useStoreCategories } from '../Home/hooks/useStoreCategories';
-import { useStoreList } from '../Home/hooks/useStoreList';
 import { ShopInfo } from '@/api/shop/entity';
 import CheckIcon from '@/assets/Home/check-icon.svg';
 import DownArrowIcon from '@/assets/Home/down-arrow-icon.svg';
@@ -14,6 +11,10 @@ import BottomModal, {
   BottomModalFooter,
   BottomModalHeader,
 } from '@/components/UI/BottomModal/BottomModal';
+import SearchBar from '@/pages/Home/components/SearchBar';
+import ShopCard from '@/pages/Home/components/ShopCard';
+import { useStoreCategories } from '@/pages/Home/hooks/useStoreCategories';
+import { useStoreList } from '@/pages/Home/hooks/useStoreList';
 
 interface Category {
   id: number;
@@ -70,6 +71,10 @@ export default function NearbyStores() {
 
   return (
     <div className="flex h-full w-full flex-col items-center justify-center gap-4">
+      <div className="w-full px-6">
+        <SearchBar />
+      </div>
+
       {/* 카테고리 */}
       <div className="scrollbar-responsive ml-6 flex w-[calc(100%-24px)] snap-x snap-mandatory gap-6 overflow-x-auto pt-2 pb-4 min-[960px]:ml-0 min-[960px]:snap-none min-[960px]:justify-center">
         {categoriesWithAll.map((category) => (

@@ -10,9 +10,13 @@ export default function Search() {
   }, 200);
 
   return (
-    <div className="flex w-full flex-col gap-4 bg-[#f8f8fa] px-4 pb-2">
+    <div className="relative flex w-full flex-col gap-4 bg-[#f8f8fa] px-4 pb-2">
       <SearchBar onChange={onChange} />
-      <SearchResultList keyword={keyword} />
+      {keyword && (
+        <div className="absolute top-full right-4 left-4 z-30 bg-[#f8f8fa]">
+          <SearchResultList keyword={keyword} />
+        </div>
+      )}
     </div>
   );
 }
