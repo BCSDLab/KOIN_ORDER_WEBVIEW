@@ -1,5 +1,5 @@
+import clsx from 'clsx';
 import { useLocation, useNavigate } from 'react-router-dom';
-import clsx from 'react-router-dom';
 import HomeIcon from '/src/assets/Home/home-icon.svg';
 import StoreIcon from '/src/assets/Home/store-icon.svg';
 import PaperIcon from '/src/assets/Home/paper-icon.svg';
