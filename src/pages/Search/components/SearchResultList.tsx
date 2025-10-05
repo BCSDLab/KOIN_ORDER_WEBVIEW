@@ -19,7 +19,7 @@ export default function SearchResultList({ keyword }: SearchResultListProps) {
   const { shop_name_search_results: shop, menu_name_search_results: menu } = data;
 
   return (
-    <div className="mb-40 flex w-full flex-col items-center">
+    <div className="flex w-full flex-col items-center">
       {shop?.map(({ orderable_shop_name, orderable_shop_id }) => (
         <RelateSearchItem tag="store" content={orderable_shop_name} to={`/shop/true/${orderable_shop_id}`} />
       ))}
