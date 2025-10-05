@@ -34,4 +34,8 @@ export const ROUTE_TITLES: RouteTitle[] = [
     match: (pathname) => pathname === '/orders',
     title: '주문 내역',
   },
+  {
+    match: (pathname) => pathname === '/search',
+    title: '검색',
+  },
 ];

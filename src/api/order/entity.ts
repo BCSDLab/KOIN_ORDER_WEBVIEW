@@ -30,6 +30,7 @@ export interface OrderParams {
 
 export interface InProgressOrder {
   id: number;
+  orderable_shop_id: number;
   payment_id: number;
   order_type: 'DELIVERY' | 'TAKE_OUT';
   orderable_shop_name: string;

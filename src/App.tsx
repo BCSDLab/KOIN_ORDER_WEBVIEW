@@ -48,7 +48,6 @@ export default function App() {
           </Route>
           <Route path="orders" element={<OrderList />} />
         </Route>
-
         <Route element={<AppLayout />}>
           <Route path="shop-detail/true/:shopId" element={<OrderableShopDetail />} />
           <Route path="shop-detail/false/:shopId" element={<UnorderableShopDetail />} />

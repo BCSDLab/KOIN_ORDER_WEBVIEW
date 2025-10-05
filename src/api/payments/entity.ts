@@ -34,10 +34,6 @@ export interface ConfirmPaymentsRequest {
 export interface ConfirmPaymentsResponse {
   id: number;
   orderable_shop_id: number;
-  amount: number;
-  requested_at: string;
-  approved_at: string;
-  payment_method: string;
   delivery_address: string;
   delivery_address_details: string;
   shop_address: string;
@@ -46,6 +42,9 @@ export interface ConfirmPaymentsResponse {
   to_owner: string;
   to_rider: string;
   provide_cutlery: boolean;
+  total_menu_price: number;
+  delivery_tip: number;
+  amount: number;
   shop_name: string;
   menus: {
     name: string;
@@ -59,6 +58,11 @@ export interface ConfirmPaymentsResponse {
   }[];
   order_type: 'DELIVERY' | 'TAKE_OUT';
   easy_pay_company: 'string';
+  requested_at: string;
+  approved_at: string;
+  payment_method: string;
+  estimated_at: string;
+  order_status: 'CONFIRMING' | 'COOKING' | 'PACKAGED' | 'PICKED_UP' | 'DELIVERING' | 'DELIVERED' | 'CANCELED';
 }
 
 export interface CancelPaymentRequest {

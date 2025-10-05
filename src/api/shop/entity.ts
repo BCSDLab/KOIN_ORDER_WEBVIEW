@@ -222,6 +222,30 @@ export interface ShopMenuDetailResponse {
   option_groups: OptionGroup[];
 }
 
+export interface RelatedSearchResponse {
+  search_keyword: string;
+  processed_search_keyword: string;
+  shop_name_search_result_count: number;
+  menu_name_search_result_count: number;
+  shop_name_search_results: ShopResult[];
+  menu_name_search_results: MenuResult[];
+}
+
+export interface ShopResult {
+  orderable_shop_id: number;
+  orderable_shop_name: string;
+}
+
+export interface MenuResult {
+  orderable_shop_id: number;
+  orderable_shop_name: string;
+  menu_name: string;
+}
+
+export interface RelatedSearchParams {
+  keyword: string;
+}
+
 export interface StoreCategoriesResponse {
   total_count: number;
   shop_categories: StoreCategory[];
