@@ -48,7 +48,7 @@ export default function ShopCard({
       )}
 
       {thumbnailUrl ? (
-        <img src={thumbnailUrl} alt={name} className="h-32 w-32 rounded-lg" />
+        <img src={thumbnailUrl} alt={name} className="h-32 w-32 flex-shrink-0 rounded-lg object-cover" />
       ) : (
         <div className="flex h-32 w-32 items-center justify-center rounded-lg text-gray-400">이미지 준비중</div>
       )}
