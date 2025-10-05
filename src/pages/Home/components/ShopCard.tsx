@@ -8,6 +8,7 @@ interface MenuCardProps {
   name: string;
   rating: number;
   reviewCount: number;
+  isDelivery?: boolean;
   deliver?: number;
   isTakeout?: boolean;
   isService?: boolean;
@@ -25,6 +26,7 @@ export default function ShopCard({
   name,
   rating,
   reviewCount,
+  isDelivery,
   deliver,
   isTakeout,
   isService,
@@ -62,10 +64,14 @@ export default function ShopCard({
           <div className="text-[#767676]">( 리뷰 {reviewCount}개 )</div>
         </div>
 
-        <div className="flex items-center gap-1 text-xs text-neutral-600">
-          <Delivery fill="#c358fc" />
-          <div>배달비 {deliver}원</div>
-        </div>
+        {deliver && isDelivery ? (
+          <div className="flex items-center gap-1 text-xs text-neutral-600">
+            <Delivery fill="#c358fc" />
+            <div>배달비 {deliver}원</div>
+          </div>
+        ) : (
+          <></>
+        )}
 
         <div className="flex items-center gap-2">
           {isTakeout && (

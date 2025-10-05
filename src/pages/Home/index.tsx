@@ -228,6 +228,7 @@ export default function Home() {
                 name={shop.name}
                 rating={shop.rating_average}
                 reviewCount={shop.review_count}
+                isDelivery={shop.is_delivery_available}
                 deliver={shop.minimum_delivery_tip}
                 isTakeout={shop.is_takeout_available}
                 isService={shop.service_event}
