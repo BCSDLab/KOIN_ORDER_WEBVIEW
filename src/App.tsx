@@ -5,6 +5,7 @@ import Cart from './pages/Cart';
 import DeliveryOutside from './pages/Delivery/Outside';
 import Home from './pages/Home';
 import Login from './pages/Login';
+import NearbyShops from './pages/NearbyShops';
 import OrderCancel from './pages/OrderFinish/OrderCancel';
 import OrderList from './pages/OrderList';
 import PaymentConfirm from './pages/PaymentConfirm';
@@ -42,8 +43,9 @@ export default function App() {
 
         <Route element={<HomeLayout />}>
           <Route path="home" element={<Home />} />
-          <Route path="search" element={<Search />} />
+          <Route path="shops" element={<NearbyShops />} />
           <Route path="orders" element={<OrderList />} />
+          <Route path="search" element={<Search />} />
         </Route>
         <Route element={<AppLayout />}>
           <Route path="shop-detail/true/:shopId" element={<OrderableShopDetail />} />

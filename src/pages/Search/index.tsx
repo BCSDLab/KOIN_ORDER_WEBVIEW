@@ -12,7 +12,7 @@ export default function Search() {
   return (
     <div className="flex w-full flex-col gap-4 bg-[#f8f8fa] px-4 pb-2">
       <SearchBar onChange={onChange} />
-      <SearchResultList keyword={keyword} />
+      {keyword && <SearchResultList keyword={keyword} />}
     </div>
   );
 }

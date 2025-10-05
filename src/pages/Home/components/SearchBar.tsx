@@ -8,7 +8,7 @@ export default function SearchBar() {
     <>
       <button
         type="button"
-        className={'shadow-1 mx-2 mt-2 flex h-10 w-full items-center gap-2 rounded-2xl bg-white px-4 py-2'}
+        className={'shadow-1 mt-2 flex h-10 w-full items-center gap-2 rounded-2xl bg-white px-4 py-2'}
         onClick={() => navigate('/search')}
       >
         <SearchIconGray />
