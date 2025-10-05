@@ -51,6 +51,7 @@ export default function NearbyStores() {
   const { data } = useStoreList({
     sorter: selectedSort !== 'NONE' ? selectedSort : undefined,
     filter: selectedFilters === 'OPEN' ? selectedFilters : undefined,
+    category: selectedCategory,
   });
 
   const getCurrentSortLabel = () => {
