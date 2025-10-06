@@ -84,4 +84,22 @@ describe('useTimer', () => {
     });
     expect(result.current.seconds).toBe(2);
   });
+
+  it('언마운트 후 상태 업데이트 경고가 발생하지 않는다', () => {
+    const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+    const { result, unmount } = renderHook(() => useTimer());
+    act(() => {
+      result.current.start(5);
+    });
+
+    unmount();
+
+    act(() => {
+      vi.advanceTimersByTime(5000);
+    });
+    expect(errorSpy).not.toHaveBeenCalled();
+
+    errorSpy.mockRestore();
+  });
 });
