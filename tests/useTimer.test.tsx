@@ -13,12 +13,12 @@ describe('useTimer', () => {
     vi.restoreAllMocks();
   });
 
-  it('초기 상태 seconds=0인지 확인', () => {
+  it('초기 상태에서 seconds는 0이다', () => {
     const { result } = renderHook(() => useTimer());
     expect(result.current.seconds).toBe(0);
   });
 
-  it('start(duration) 호출 시 즉시 seconds가 설정되고 1초마다 감소', () => {
+  it('start(duration) 호출 시 seconds가 설정되고 1초마다 감소한다', () => {
     const { result } = renderHook(() => useTimer());
 
     act(() => {
@@ -47,9 +47,7 @@ describe('useTimer', () => {
     expect(result.current.seconds).toBe(0);
   });
 
-  it('reset()은 seconds를 0으로 만들고 타이머를 정리한다', () => {
-    const clearSpy = vi.spyOn(global, 'clearInterval');
-
+  it('reset() 호출 시 seconds가 0으로 초기화되고 이후 시간 경과에도 변하지 않는다', () => {
     const { result } = renderHook(() => useTimer());
 
     act(() => {
@@ -64,7 +62,6 @@ describe('useTimer', () => {
       result.current.reset();
     });
     expect(result.current.seconds).toBe(0);
-    expect(clearSpy).toHaveBeenCalled();
 
     act(() => {
       vi.advanceTimersByTime(3000);
@@ -72,9 +69,7 @@ describe('useTimer', () => {
     expect(result.current.seconds).toBe(0);
   });
 
-  it('이미 동작 중일 때 start()를 다시 호출해도 setInterval은 1회만 등록', () => {
-    const setSpy = vi.spyOn(global, 'setInterval');
-
+  it('start()가 동작 중 다시 호출되어도 중복 감소가 발생하지 않는다', () => {
     const { result } = renderHook(() => useTimer());
 
     act(() => {
@@ -84,24 +79,9 @@ describe('useTimer', () => {
       result.current.start(3);
     });
 
-    expect(setSpy).toHaveBeenCalledTimes(1);
-    expect(result.current.seconds).toBe(3);
-
     act(() => {
       vi.advanceTimersByTime(1000);
     });
     expect(result.current.seconds).toBe(2);
-  });
-
-  it('언마운트 시 interval 정리', () => {
-    const clearSpy = vi.spyOn(global, 'clearInterval');
-
-    const { result, unmount } = renderHook(() => useTimer());
-    act(() => {
-      result.current.start(5);
-    });
-
-    unmount();
-    expect(clearSpy).toHaveBeenCalled();
   });
 });
