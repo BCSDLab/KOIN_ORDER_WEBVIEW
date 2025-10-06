@@ -13,7 +13,7 @@ dotenv.config({ path: path.join(process.cwd(), '.env') });
  */
 export default defineConfig({
   testDir: './tests',
-  testMatch: ['**/*.e2e.ts'],
+  testMatch: ['**/*.e2e.ts', '**/*.e2e.tsx'],
   testIgnore: ['**/*.spec.ts', '**/*.test.ts'],
 
   /* Run tests in files in parallel */

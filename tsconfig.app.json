@@ -27,5 +27,5 @@
       "@/*": ["*"]
     }
   },
-  "include": ["src", "svg.d.ts"]
+  "include": ["src", "svg.d.ts", "tests"]
 }
