@@ -37,7 +37,7 @@ export default tseslint.config(
     ignores: ['dist'],
   },
   {
-    files: ['**/*.{ts,tsx}', 'playwright.config.ts', 'tests/**/*.ts'],
+    files: ['**/*.{ts,tsx}', 'playwright.config.ts', 'tests/**/*.{ts,tsx}'],
     languageOptions: {
       ecmaVersion: 2021,
       sourceType: 'module',
