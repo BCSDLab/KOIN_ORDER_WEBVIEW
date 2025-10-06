@@ -1,4 +1,3 @@
-import dayjs from 'dayjs';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import DevOnlyWrapper from './components/Wrapper/DevOnly';
 import Cart from './pages/Cart';
@@ -20,9 +19,6 @@ import DetailAddress from '@/pages/Delivery/Outside/DetailAddress';
 import OrderFinish from '@/pages/OrderFinish';
 import Payment from '@/pages/Payment';
 import UnorderableShopDetail from '@/pages/Shop/ShopDetail/components/UnorderableShopDetail';
-import 'dayjs/locale/ko';
-
-dayjs.locale('ko');
 
 export default function App() {
   return (
