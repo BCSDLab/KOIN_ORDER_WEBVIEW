@@ -73,7 +73,7 @@ export default function NearbyShops() {
 
   return (
     <div className="flex h-full w-full flex-col items-center justify-center gap-4">
-      <div className="w-full px-6">
+      <div className="w-full max-w-245 px-6">
         <SearchBar />
       </div>
 

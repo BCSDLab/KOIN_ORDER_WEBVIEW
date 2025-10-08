@@ -69,7 +69,7 @@ const MIN_ORDER_OPTIONS = [
 
 export default function Home() {
   const { data: categories } = useShopCategories();
-  const categoriesWithAll = categories.shop_categories.map((category: Category) => ({
+  const categoriesWithAll = categories?.shop_categories.map((category: Category) => ({
     ...category,
   }));
 
@@ -133,21 +133,28 @@ export default function Home() {
 
   return (
     <div className="flex h-full w-full flex-col items-center justify-center gap-4">
-      <div className="w-full px-6">
+      <div className="w-full max-w-245 px-6">
         <SearchBar />
       </div>
 
-      <div className="scrollbar-responsive ml-6 flex w-[calc(100%-24px)] snap-x snap-mandatory gap-6 overflow-x-auto pt-2 pb-4 min-[960px]:ml-0 min-[960px]:snap-none min-[960px]:justify-center">
+      <div
+        className="scrollbar-responsive ml-6 flex w-[calc(100%-24px)] snap-x snap-mandatory gap-6 overflow-x-auto pt-2 pb-4 min-[960px]:ml-0 min-[960px]:snap-none min-[960px]:justify-center"
+        role="tablist"
+      >
         {categoriesWithAll.map((category) => (
           <button
             key={category.id}
             onClick={() => setSelectedCategory(category.id as CategoryType)}
             className="flex w-14 shrink-0 snap-start flex-col items-center justify-center gap-3"
             type="button"
+            role="tab"
+            aria-selected={selectedCategory === category.id}
+            data-testid={`category-${category.name}`}
           >
             <div className="relative flex items-center justify-center">
               <img
                 src={category.image_url}
+                role="presentation"
                 alt={category.name}
                 className={`h-8 w-8 ${selectedCategory === category.id ? 'z-10' : ''}`}
               />
@@ -162,6 +169,8 @@ export default function Home() {
         <div className="flex w-full min-[604px]:flex-wrap min-[604px]:justify-center min-[604px]:gap-2">
           <button
             onClick={openSortModal}
+            data-testid="sortButton"
+            aria-label={`정렬: ${getCurrentSortLabel()}`}
             className="mr-4 ml-4 inline-flex shrink-0 items-center justify-center pb-2 leading-none min-[604px]:mr-0 min-[604px]:ml-0 min-[604px]:pb-0 [@media(pointer:coarse)]:pb-0"
           >
             <Badge
@@ -257,6 +266,8 @@ export default function Home() {
               <button
                 key={option.id}
                 onClick={() => handleSortSelect(option.id)}
+                data-testid={`sortOption-${option.id}`}
+                aria-selected={selectedSort === option.id}
                 className={`flex w-full items-center justify-between text-left text-[16px] hover:bg-gray-50 ${
                   selectedSort === option.id ? 'text-primary-500' : 'text-gray-700'
                 }`}

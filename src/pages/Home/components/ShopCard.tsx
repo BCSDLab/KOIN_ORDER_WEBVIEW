@@ -38,6 +38,7 @@ export default function ShopCard({
   return (
     <button
       onClick={() => navigate(`/shop/true/${shopId}`)}
+      data-testid={`shopCard-${shopId}`}
       className="relative flex items-center gap-5 overflow-hidden rounded-lg border-[0.5px] border-neutral-200 bg-white"
       type="button"
     >
@@ -54,14 +55,18 @@ export default function ShopCard({
       )}
 
       <div className="flex flex-col gap-2 pr-16">
-        <div className="text-start font-bold">{name}</div>
+        <div className="text-start font-bold" data-testid={`shopName-${shopId}`}>
+          {name}
+        </div>
 
         <div className="flex gap-1 text-xs">
           <div className="flex items-center gap-1">
             <StarIcon fill="#ffc62b" />
             <div>{rating}</div>
           </div>
-          <div className="text-[#767676]">( 리뷰 {reviewCount}개 )</div>
+          <div className="text-[#767676]" data-testid={`reviewCount-${shopId}`}>
+            ( 리뷰 {reviewCount}개 )
+          </div>
         </div>
 
         {!!deliver && isDelivery && (
