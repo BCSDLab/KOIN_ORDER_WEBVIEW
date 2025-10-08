@@ -1,9 +1,9 @@
 import { Suspense } from 'react';
 import { describe, it, expect, beforeEach } from 'vitest';
+import { render, screen, fireEvent, waitFor } from '../../../tests/test-utils';
 import './mocks/useShopCategories.mock';
 import './mocks/useOrderableShops.mock';
-import Home from '../src/pages/Home';
-import { render, screen, fireEvent, waitFor } from './test-utils';
+import Home from '.';
 
 const renderHome = () =>
   render(
