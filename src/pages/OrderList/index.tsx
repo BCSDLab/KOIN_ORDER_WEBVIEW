@@ -71,9 +71,7 @@ export default function OrderList() {
 
   const [confirmedKeyword, setConfirmedKeyword] = useState('');
 
-  const {
-    data: orders = [],
-  } = useOrderHistory({
+  const { data: orders = [] } = useOrderHistory({
     page: 1,
     limit: 10,
     period: appliedPeriod,
@@ -112,7 +110,6 @@ export default function OrderList() {
   return (
     <>
       <OrderHistoryTab activeTab={tab} onTabChange={setTab} />
-      
       {isPast ? (
         <>
           <div className="pt-[50px]">
@@ -131,12 +128,10 @@ export default function OrderList() {
               isPeriod={appliedPeriod !== 'NONE'}
               isOrder={appliedOrder !== 'NONE' || appliedOrderInfo !== 'NONE'}
             />
-  
             <div className="pt-[122px]">
               {tab === 'past' && (shownOrders.length === 0 ? <EmptyOrders /> : <OrderCardList orders={shownOrders} />)}
             </div>
           </div>
-          
           {isOpen && (
             <FilterModal
               isOpen={isOpen}
@@ -151,7 +146,7 @@ export default function OrderList() {
             />
           )}
         </>
-       ) : (
+      ) : (
         <PreparingCardList orders={PreparingOrders} />
       )}
     </>
