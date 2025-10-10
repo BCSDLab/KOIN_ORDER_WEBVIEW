@@ -1,13 +1,14 @@
-import dayjs from 'dayjs';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import DevOnlyWrapper from './components/Wrapper/DevOnly';
 import Cart from './pages/Cart';
 import DeliveryOutside from './pages/Delivery/Outside';
 import Home from './pages/Home';
 import Login from './pages/Login';
+import NearbyShops from './pages/NearbyShops';
 import OrderCancel from './pages/OrderFinish/OrderCancel';
 import OrderList from './pages/OrderList';
 import PaymentConfirm from './pages/PaymentConfirm';
+import Search from './pages/Search';
 import MenuDetail from './pages/Shop/MenuDetail';
 import OrderableShopView from './pages/Shop/OrderableShopView';
 import OrderableShopDetail from './pages/Shop/ShopDetail/components/OrderableShopDetail';
@@ -18,9 +19,6 @@ import DetailAddress from '@/pages/Delivery/Outside/DetailAddress';
 import OrderFinish from '@/pages/OrderFinish';
 import Payment from '@/pages/Payment';
 import UnorderableShopDetail from '@/pages/Shop/ShopDetail/components/UnorderableShopDetail';
-import 'dayjs/locale/ko';
-
-dayjs.locale('ko');
 
 export default function App() {
   return (
@@ -41,9 +39,10 @@ export default function App() {
 
         <Route element={<HomeLayout />}>
           <Route path="home" element={<Home />} />
+          <Route path="shops" element={<NearbyShops />} />
           <Route path="orders" element={<OrderList />} />
+          <Route path="search" element={<Search />} />
         </Route>
-
         <Route element={<AppLayout />}>
           <Route path="shop-detail/true/:shopId" element={<OrderableShopDetail />} />
           <Route path="shop-detail/false/:shopId" element={<UnorderableShopDetail />} />

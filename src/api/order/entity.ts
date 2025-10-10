@@ -27,3 +27,16 @@ export interface OrderParams {
   type: 'NONE' | 'DELIVERY' | 'TAKE_OUT';
   query: string;
 }
+
+export interface InProgressOrder {
+  id: number;
+  orderable_shop_id: number;
+  payment_id: number;
+  order_type: 'DELIVERY' | 'TAKE_OUT';
+  orderable_shop_name: string;
+  orderable_shop_thumbnail: string;
+  estimated_at: string;
+  order_status: 'CONFIRMING' | 'COOKING' | 'PACKAGED' | 'PICKED_UP' | 'DELIVERING' | 'DELIVERED' | 'CANCELED';
+  order_title: string;
+  total_amount: number;
+}

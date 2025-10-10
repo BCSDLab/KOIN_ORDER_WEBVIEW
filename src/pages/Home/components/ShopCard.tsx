@@ -8,9 +8,10 @@ interface MenuCardProps {
   name: string;
   rating: number;
   reviewCount: number;
-  deliver: number;
-  isTakeout: boolean;
-  isService: boolean;
+  isDelivery?: boolean;
+  deliver?: number;
+  isTakeout?: boolean;
+  isService?: boolean;
   img: OrderableShopsImg[];
 }
 
@@ -25,6 +26,7 @@ export default function ShopCard({
   name,
   rating,
   reviewCount,
+  isDelivery,
   deliver,
   isTakeout,
   isService,
@@ -36,6 +38,7 @@ export default function ShopCard({
   return (
     <button
       onClick={() => navigate(`/shop/true/${shopId}`)}
+      data-testid={`shopCard-${shopId}`}
       className="relative flex items-center gap-5 overflow-hidden rounded-lg border-[0.5px] border-neutral-200 bg-white"
       type="button"
     >
@@ -46,26 +49,32 @@ export default function ShopCard({
       )}
 
       {thumbnailUrl ? (
-        <img src={thumbnailUrl} alt={name} className="h-32 w-32 rounded-lg" />
+        <img src={thumbnailUrl} alt={name} className="h-32 w-32 flex-shrink-0 rounded-lg object-cover" />
       ) : (
         <div className="flex h-32 w-32 items-center justify-center rounded-lg text-gray-400">이미지 준비중</div>
       )}
 
       <div className="flex flex-col gap-2 pr-16">
-        <div className="text-start font-bold">{name}</div>
+        <div className="text-start font-bold" data-testid={`shopName-${shopId}`}>
+          {name}
+        </div>
 
         <div className="flex gap-1 text-xs">
           <div className="flex items-center gap-1">
             <StarIcon fill="#ffc62b" />
             <div>{rating}</div>
           </div>
-          <div className="text-[#767676]">( 리뷰 {reviewCount}개 )</div>
+          <div className="text-[#767676]" data-testid={`reviewCount-${shopId}`}>
+            ( 리뷰 {reviewCount}개 )
+          </div>
         </div>
 
-        <div className="flex items-center gap-1 text-xs text-neutral-600">
-          <Delivery fill="#c358fc" />
-          <div>배달비 {deliver}원</div>
-        </div>
+        {!!deliver && isDelivery && (
+          <div className="flex items-center gap-1 text-xs text-neutral-600">
+            <Delivery fill="#c358fc" />
+            <div>배달비 {deliver}원</div>
+          </div>
+        )}
 
         <div className="flex items-center gap-2">
           {isTakeout && (

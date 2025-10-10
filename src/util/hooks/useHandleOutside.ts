@@ -7,14 +7,18 @@ interface UseOutsideClickProps<
   containerRef: React.RefObject<Container | null>;
   backgroundRef: React.RefObject<Background | null>;
   onOutsideClick: (e: MouseEvent | TouchEvent) => void;
+  enabled?: boolean;
 }
 
 const useHandleOutside = <Container extends HTMLElement = HTMLElement, Background extends HTMLElement = HTMLElement>({
   containerRef,
   backgroundRef,
   onOutsideClick,
+  enabled = true,
 }: UseOutsideClickProps<Container, Background>) => {
   useEffect(() => {
+    if (!enabled) return;
+
     const handleOutsideClick = (e: MouseEvent | TouchEvent) => {
       if (!(e.target instanceof Node)) return;
 

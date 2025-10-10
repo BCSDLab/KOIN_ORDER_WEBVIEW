@@ -37,13 +37,13 @@ export default tseslint.config(
     ignores: ['dist'],
   },
   {
-    files: ['**/*.{ts,tsx}'],
+    files: ['**/*.{ts,tsx}', 'playwright.config.ts', 'tests/**/*.{ts,tsx}'],
     languageOptions: {
       ecmaVersion: 2021,
       sourceType: 'module',
       parser: tseslint.parser,
       parserOptions: {
-        project: ['./tsconfig.json', './tsconfig.app.json', './tsconfig.node.json'],
+        project: ['./tsconfig.json', './tsconfig.app.json', './tsconfig.node.json', './tsconfig.eslint.json'],
       },
       globals: {
         ...globals.browser,

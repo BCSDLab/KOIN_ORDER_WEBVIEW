@@ -27,7 +27,15 @@ export const ROUTE_TITLES: RouteTitle[] = [
     title: '장바구니',
   },
   {
+    match: (pathname) => pathname === '/shops',
+    title: '주변상점',
+  },
+  {
     match: (pathname) => pathname === '/orders',
     title: '주문 내역',
+  },
+  {
+    match: (pathname) => pathname === '/search',
+    title: '검색',
   },
 ];
