@@ -71,7 +71,7 @@ export default function OrderList() {
 
   const [confirmedKeyword, setConfirmedKeyword] = useState('');
 
- const {
+  const {
     data: orders = [],
     fetchNextPage,
     hasNextPage,
@@ -115,7 +115,9 @@ export default function OrderList() {
   return (
     <>
       <OrderHistoryTab activeTab={tab} onTabChange={setTab} />
+      
       {isPast ? (
+      <>
         <div className="pt-[50px]">
           <FilteringSearchBar
             isScrolled={isScrolled}
@@ -137,6 +139,7 @@ export default function OrderList() {
             {tab === 'past' && (shownOrders.length === 0 ? <EmptyOrders /> : <OrderCardList orders={shownOrders} />)}
           </div>
         </div>
+        
         {isOpen && (
           <FilterModal
             isOpen={isOpen}
@@ -149,9 +152,10 @@ export default function OrderList() {
               setIsOpen(false);
             }}
           />
+        )}
+      </>
          ) : (
         <PreparingCardList orders={PreparingOrders} />
       )}
     </>
   );
-}
