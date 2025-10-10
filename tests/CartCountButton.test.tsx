@@ -34,6 +34,7 @@ describe('CartCountButton', () => {
       expect(screen.getByTestId('cart-icon')).toBeInTheDocument();
     });
   });
+
   describe('조건부 렌더링', () => {
     it('장바구니가 비어있으면 배지가 표시되지 않아야한다.', () => {
       vi.mocked(useCart).mockReturnValue({ data: EMPTY_CART });
@@ -42,6 +43,7 @@ describe('CartCountButton', () => {
 
       expect(screen.queryByText(/\d/)).not.toBeInTheDocument();
     });
+
     it('장바구니에 상품이 있다면 배지가 올바른 상품 수를 표시해야 한다.', () => {
       vi.mocked(useCart).mockReturnValue({ data: CART_WITH_ITEMS });
 
@@ -52,6 +54,7 @@ describe('CartCountButton', () => {
       expect(screen.queryByText(expectedCount.toString())).toBeInTheDocument();
     });
   });
+
   describe('네비게이션', () => {
     it('버튼을 클릭하면 /cart 페이지로 이동해야 한다', () => {
       render(<CartCountButton />);

@@ -9,6 +9,7 @@ describe('useBooleanState', () => {
 
       expect(result.current[0]).toBe(true);
     });
+
     it('setTrue는 값을 true로 만든다', () => {
       const { result } = renderHook(() => useBooleanState(true));
 
@@ -18,6 +19,7 @@ describe('useBooleanState', () => {
 
       expect(result.current[0]).toBe(true);
     });
+
     it('setFalse는 값을 false로 만든다.', () => {
       const { result } = renderHook(() => useBooleanState(true));
 
@@ -27,6 +29,7 @@ describe('useBooleanState', () => {
 
       expect(result.current[0]).toBe(false);
     });
+
     it('toggle은 초기값을 반전시다', () => {
       const { result } = renderHook(() => useBooleanState(true));
 
@@ -37,12 +40,14 @@ describe('useBooleanState', () => {
       expect(result.current[0]).toBe(false);
     });
   });
+
   describe('초기값이 false일 때', () => {
     it('value는 초기값을 가진다', () => {
       const { result } = renderHook(() => useBooleanState(false));
 
       expect(result.current[0]).toBe(false);
     });
+
     it('setTrue는 value를 true로 만든다', () => {
       const { result } = renderHook(() => useBooleanState(false));
 
@@ -52,6 +57,7 @@ describe('useBooleanState', () => {
 
       expect(result.current[0]).toBe(true);
     });
+
     it('setFalse는 value를 false로 만든다.', () => {
       const { result } = renderHook(() => useBooleanState(false));
 
@@ -61,6 +67,7 @@ describe('useBooleanState', () => {
 
       expect(result.current[0]).toBe(false);
     });
+
     it('toggle은 초기값을 반전시킨다', () => {
       const { result } = renderHook(() => useBooleanState(false));
 

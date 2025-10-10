@@ -1,6 +1,6 @@
-import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, vi, expect, beforeEach, it } from 'vitest';
 import { EMPTY_CART, CART_WITH_ITEMS } from './cartMockData.mock';
+import { render, screen, fireEvent } from './test-utils';
 import CartResetButton from '@/components/Layout/Header/components/CartResetButton';
 import useCart from '@/pages/Payment/hooks/useCart';
 
@@ -26,6 +26,7 @@ describe('CartResetButton', () => {
       expect(button).toBeInTheDocument();
     });
   });
+
   describe('버튼 조건부 활성화', () => {
     it('카트의 상품 개수가 0이면 버튼이 비활성화된다.', () => {
       vi.mocked(useCart).mockReturnValue({ data: EMPTY_CART });
@@ -36,6 +37,7 @@ describe('CartResetButton', () => {
 
       expect(button).toBeDisabled();
     });
+
     it('카트에 상품이 있다면 버튼을 활성화된다.', () => {
       vi.mocked(useCart).mockReturnValue({ data: CART_WITH_ITEMS });
 
@@ -46,6 +48,7 @@ describe('CartResetButton', () => {
       expect(button).toBeEnabled();
     });
   });
+
   describe('버튼 클릭', () => {
     it('버튼 클릭 시 modal이 뜬다', () => {
       vi.mocked(useCart).mockReturnValue({ data: CART_WITH_ITEMS });
