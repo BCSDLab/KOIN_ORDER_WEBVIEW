@@ -34,7 +34,7 @@ const periodOptions: PeriodOption[] = [
 ];
 
 const orderOptions: OrderOption[] = [
-  { id: 'DELIVERY', label: '배달' },
+  { id: 'DELIVERY', label: '배달.' },
   { id: 'TAKE_OUT', label: '포장' },
 ];
 
