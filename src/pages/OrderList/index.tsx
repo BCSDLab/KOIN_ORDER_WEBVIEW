@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
+import EmptyCard from './components/EmptyCard';
 import FilterModal from './components/FilteringModal';
 import FilteringSearchBar from './components/FilteringSearchBar';
-import EmptyCard from './components/EmptyCard';
 import OrderCardList from './components/OrderCardList';
 import OrderHistoryTab from './components/OrderHistoryTab';
 import PreparingCardList from './components/PreparingCardList';
@@ -73,9 +73,6 @@ export default function OrderList() {
 
   const {
     data: orders = [],
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
   } = useOrderHistory({
     page: 1,
     limit: 10,
@@ -117,44 +114,44 @@ export default function OrderList() {
       <OrderHistoryTab activeTab={tab} onTabChange={setTab} />
       
       {isPast ? (
-      <>
-        <div className="pt-[50px]">
-          <FilteringSearchBar
-            isScrolled={isScrolled}
-            openFilter={() => setIsOpen(true)}
-            isFiltered={isFiltered}
-            onReset={() => {
-              setAppliedPeriod('NONE');
-              setAppliedOrder('NONE');
-              setAppliedOrderInfo('NONE');
-            }}
-            onSearchConfirm={(keyword) => setConfirmedKeyword(keyword)}
-            periodLabel={getPeriodLabel(appliedPeriod)}
-            orderLabel={getOrderLabel(appliedOrder, appliedOrderInfo)}
-            isPeriod={appliedPeriod !== 'NONE'}
-            isOrder={appliedOrder !== 'NONE' || appliedOrderInfo !== 'NONE'}
-          />
-
-          <div className="pt-[122px]">
-            {tab === 'past' && (shownOrders.length === 0 ? <EmptyOrders /> : <OrderCardList orders={shownOrders} />)}
+        <>
+          <div className="pt-[50px]">
+            <FilteringSearchBar
+              isScrolled={isScrolled}
+              openFilter={() => setIsOpen(true)}
+              isFiltered={isFiltered}
+              onReset={() => {
+                setAppliedPeriod('NONE');
+                setAppliedOrder('NONE');
+                setAppliedOrderInfo('NONE');
+              }}
+              onSearchConfirm={(keyword) => setConfirmedKeyword(keyword)}
+              periodLabel={getPeriodLabel(appliedPeriod)}
+              orderLabel={getOrderLabel(appliedOrder, appliedOrderInfo)}
+              isPeriod={appliedPeriod !== 'NONE'}
+              isOrder={appliedOrder !== 'NONE' || appliedOrderInfo !== 'NONE'}
+            />
+  
+            <div className="pt-[122px]">
+              {tab === 'past' && (shownOrders.length === 0 ? <EmptyOrders /> : <OrderCardList orders={shownOrders} />)}
+            </div>
           </div>
-        </div>
-        
-        {isOpen && (
-          <FilterModal
-            isOpen={isOpen}
-            onClose={() => setIsOpen(false)}
-            defaultFilters={{ period: appliedPeriod, order: appliedOrder, orderInfo: appliedOrderInfo }}
-            onApply={({ period, order, orderInfo }) => {
-              setAppliedPeriod(period);
-              setAppliedOrder(order);
-              setAppliedOrderInfo(orderInfo);
-              setIsOpen(false);
-            }}
-          />
-        )}
-      </>
-         ) : (
+          
+          {isOpen && (
+            <FilterModal
+              isOpen={isOpen}
+              onClose={() => setIsOpen(false)}
+              defaultFilters={{ period: appliedPeriod, order: appliedOrder, orderInfo: appliedOrderInfo }}
+              onApply={({ period, order, orderInfo }) => {
+                setAppliedPeriod(period);
+                setAppliedOrder(order);
+                setAppliedOrderInfo(orderInfo);
+                setIsOpen(false);
+              }}
+            />
+          )}
+        </>
+       ) : (
         <PreparingCardList orders={PreparingOrders} />
       )}
     </>
