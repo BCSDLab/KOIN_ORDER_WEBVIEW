@@ -22,7 +22,7 @@ export interface OrderResponse {
 export interface OrderParams {
   page: number;
   limit: number;
-  period: 'NONE' | 'LAST_3MONTH' | 'LAST_6MONTH' | 'LAST_1YEAR';
+  period: 'NONE' | 'LAST_3_MONTHS' | 'LAST_6_MONTHS' | 'LAST_1_YEAR';
   status: 'NONE' | 'COMPLETED' | 'CANCELED';
   type: 'NONE' | 'DELIVERY' | 'TAKE_OUT';
   query: string;
