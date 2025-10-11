@@ -1,6 +1,6 @@
 import { describe, vi, expect, beforeEach, it } from 'vitest';
 import { EMPTY_CART, CART_WITH_ITEMS } from './cartMockData.mock';
-import { render, screen, fireEvent } from './test-utils';
+import { render, screen, fireEvent } from '@/../tests/test-utils';
 import CartResetButton from '@/components/Layout/Header/components/CartResetButton';
 import useCart from '@/pages/Payment/hooks/useCart';
 
