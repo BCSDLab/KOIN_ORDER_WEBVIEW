@@ -13,7 +13,7 @@ export default defineConfig({
   testIgnore: ['**/*.spec.{ts,tsx}', '**/*.test.{ts,tsx}'],
 
   fullyParallel: true,
-  forbidOnly: !is_CI,
+  forbidOnly: is_CI,
   retries: is_CI ? 2 : 0,
   workers: is_CI ? 1 : undefined,
   reporter: [['list'], ['html']],
