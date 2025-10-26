@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import clsx from 'clsx';
 import CloseIcon from '@/assets/Main/close-icon.svg';
 import RefreshIcon from '@/assets/OrderHistory/refresh-icon.svg';
 import BottomModal, {
@@ -7,6 +6,7 @@ import BottomModal, {
   BottomModalFooter,
   BottomModalHeader,
 } from '@/components/UI/BottomModal/BottomModal';
+import Button from '@/components/UI/Button';
 
 type PeriodType = 'NONE' | 'LAST_3_MONTHS' | 'LAST_6_MONTHS' | 'LAST_1_YEAR';
 type OrderType = 'NONE' | 'DELIVERY' | 'TAKE_OUT';
@@ -43,14 +43,14 @@ const orderInfoOptions: OrderInfoOption[] = [
   { id: 'CANCELED', label: '취소' },
 ];
 
-interface Props {
+interface FilterModalProps {
   isOpen: boolean;
   onClose: () => void;
   onApply: (filters: { period: PeriodType; order: OrderType; orderInfo: OrderInfoType }) => void;
   defaultFilters: { period: PeriodType; order: OrderType; orderInfo: OrderInfoType };
 }
 
-export default function FilterModal({ isOpen, onClose, onApply, defaultFilters }: Props) {
+export default function FilterModal({ isOpen, onClose, onApply, defaultFilters }: FilterModalProps) {
   const [selectedPeriod, setSelectedPeriod] = useState<PeriodType>('NONE');
   const [selectedOrder, setSelectedOrder] = useState<OrderType>('NONE');
   const [selectedOrderInfo, setSelectedOrderInfo] = useState<OrderInfoType>('NONE');
@@ -90,63 +90,68 @@ export default function FilterModal({ isOpen, onClose, onApply, defaultFilters }
         <div className="text-base font-semibold">조회 기간</div>
         <div className="flex gap-3">
           {periodOptions.map((periodOption) => (
-            <button
+            <Button
               key={periodOption.id}
               type="button"
+              size="sm"
+              color={selectedPeriod === periodOption.id ? 'primary' : 'white'}
+              className="shadow-1 grow-0 border-[0.5px] sm:grow"
               onClick={() => setSelectedPeriod(periodOption.id)}
-              className={clsx(
-                'shadow-1 rounded-2xl border border-[0.5px] border-neutral-300 px-3 py-[6px]',
-                selectedPeriod === periodOption.id ? 'bg-primary-500 border-primary-500 text-[#F8F8FA]' : '',
-              )}
             >
               {periodOption.label}
-            </button>
+            </Button>
           ))}
         </div>
         <div className="my-3 mt-3 border-[1px] border-[#EEE]" />
         <div className="text-base font-semibold">주문 상태</div>
         <div className="flex gap-3">
           {orderOptions.map((orderOption) => (
-            <button
+            <Button
               key={orderOption.id}
               type="button"
+              size="sm"
+              color={selectedOrder === orderOption.id ? 'primary' : 'white'}
+              className="shadow-1 grow-0 border-[0.5px] sm:grow"
               onClick={() => setSelectedOrder(orderOption.id)}
-              className={clsx(
-                'shadow-1 rounded-2xl border border-[0.5px] border-neutral-300 px-3 py-[6px]',
-                selectedOrder === orderOption.id ? 'bg-primary-500 border-primary-500 text-[#F8F8FA]' : '',
-              )}
             >
               {orderOption.label}
-            </button>
+            </Button>
           ))}
         </div>
         <div className="mt-1 flex text-base font-semibold">주문 정보</div>
         <div className="flex gap-3">
           {orderInfoOptions.map((orderInfoOption) => (
-            <button
+            <Button
               key={orderInfoOption.id}
               type="button"
+              size="sm"
+              color={selectedOrderInfo === orderInfoOption.id ? 'primary' : 'white'}
+              className="shadow-1 grow-0 border-[0.5px] sm:grow"
               onClick={() => setSelectedOrderInfo(orderInfoOption.id)}
-              className={clsx(
-                'shadow-1 rounded-2xl border border-[0.5px] border-neutral-300 px-3 py-[6px]',
-                selectedOrderInfo === orderInfoOption.id ? 'bg-primary-500 border-primary-500 text-[#F8F8FA]' : '',
-              )}
             >
               {orderInfoOption.label}
-            </button>
+            </Button>
           ))}
         </div>
         <div className="mt-4 flex gap-3">
-          <button
-            className="flex items-center gap-2 rounded-xl border border-neutral-400 px-4 py-[11px]"
+          <Button
+            type="button"
+            color="neutral"
+            className="grow-0 rounded-xl border border-neutral-400 px-4 py-[10px] text-neutral-800 shadow-none sm:grow"
             onClick={handleReset}
+            endIcon={<RefreshIcon />}
           >
-            <span className="flex text-base font-semibold">초기화</span>
-            <RefreshIcon />
-          </button>
-          <button className="bg-primary-500 flex items-center rounded-xl px-[92px] py-[10px]" onClick={handleApply}>
-            <span className="text-base font-semibold text-white">적용하기</span>
-          </button>
+            초기화
+          </Button>
+
+          <Button
+            type="button"
+            color="primary"
+            className="flex-1 rounded-xl py-[10px] shadow-none"
+            onClick={handleApply}
+          >
+            적용하기
+          </Button>
         </div>
       </BottomModalContent>
 
