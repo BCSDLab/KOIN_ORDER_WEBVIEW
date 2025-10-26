@@ -1,5 +1,4 @@
 import { useState, useEffect, useMemo } from 'react';
-import EmptyCard from './components/EmptyCard';
 import FilterModal from './components/FilteringModal';
 import FilteringSearchBar from './components/FilteringSearchBar';
 import OrderCardList from './components/OrderCardList';
@@ -60,18 +59,20 @@ export default function OrderList() {
   const [isOpen, setIsOpen] = useState(false);
   const [tab, setTab] = useState<'past' | 'preparing'>('past');
   const isPast = tab === 'past';
-
   const isScrolled = useScrolled();
 
   const [appliedPeriod, setAppliedPeriod] = useState<PeriodType>('NONE');
   const [appliedOrder, setAppliedOrder] = useState<OrderType>('NONE');
   const [appliedOrderInfo, setAppliedOrderInfo] = useState<OrderInfoType>('NONE');
-
   const isFiltered = appliedPeriod !== 'NONE' || appliedOrder !== 'NONE' || appliedOrderInfo !== 'NONE';
-
   const [confirmedKeyword, setConfirmedKeyword] = useState('');
 
-  const { data: orders = [] } = useOrderHistory({
+  const {
+    data: orders = [],
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useOrderHistory({
     page: 1,
     limit: 10,
     period: appliedPeriod,
@@ -81,15 +82,6 @@ export default function OrderList() {
   });
   const { data: PreparingOrders } = useInProgressOrder();
 
-  if (isPast && orders.length === 0) {
-    return (
-      <>
-        <OrderHistoryTab activeTab={tab} onTabChange={setTab} />
-        <EmptyCard activeTab="past" setActiveTab={setTab} />
-      </>
-    );
-  }
-
   const shownOrders = useMemo(() => {
     if (!orders) return [];
     if (!confirmedKeyword) return orders;
@@ -97,15 +89,6 @@ export default function OrderList() {
       (o) => o.order_title.includes(confirmedKeyword) || o.orderable_shop_name.includes(confirmedKeyword),
     );
   }, [orders, confirmedKeyword]);
-
-  if (!isPast && PreparingOrders.length === 0) {
-    return (
-      <>
-        <OrderHistoryTab activeTab={tab} onTabChange={setTab} />
-        <EmptyCard activeTab="preparing" setActiveTab={setTab} />
-      </>
-    );
-  }
 
   return (
     <>
@@ -129,7 +112,17 @@ export default function OrderList() {
               isOrder={appliedOrder !== 'NONE' || appliedOrderInfo !== 'NONE'}
             />
             <div className="pt-[122px]">
-              {tab === 'past' && (shownOrders.length === 0 ? <EmptyOrders /> : <OrderCardList orders={shownOrders} />)}
+              {tab === 'past' &&
+                (shownOrders.length === 0 ? (
+                  <EmptyOrders />
+                ) : (
+                  <OrderCardList
+                    orders={shownOrders}
+                    hasNextPage={hasNextPage}
+                    isFetchingNextPage={isFetchingNextPage}
+                    onLoadMore={() => fetchNextPage()}
+                  />
+                ))}
             </div>
           </div>
           {isOpen && (
