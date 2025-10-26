@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import clsx from 'clsx';
-import ArrowDownIconWhite from '@/assets/OrderHistory/arrow-down-icon-white.svg';
 import ArrowDownIcon from '@/assets/OrderHistory/arrow-down-icon.svg';
 import RefreshIcon from '@/assets/OrderHistory/refresh-icon.svg';
 import SearchIconGray from '@/assets/OrderHistory/search-icon-gray.svg';
@@ -31,27 +30,28 @@ export default function FilteringSearchBar({
   isOrder,
 }: FilterProps) {
   const [keyword, setKeyword] = useState('');
-  const [isFocused, focus, blur] = useBooleanState(false);
+  const [isSearchActive, activateSearch, deactivateSearch] = useBooleanState(false);
 
-  useScrollLock(isFocused);
+  useScrollLock(isSearchActive);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       onSearchConfirm(keyword.trim());
-      blur();
+      deactivateSearch();
     }
   };
 
   const handleCancel = () => {
     setKeyword('');
     onSearchConfirm('');
-    blur();
+    deactivateSearch();
   };
+
   return (
     <div
       className={clsx(
         'fixed top-[110px] right-0 left-0 z-120 flex h-[122px] flex-col bg-[#F8F8FA] px-6',
-        isScrolled ? 'shadow-1' : '',
+        isScrolled ? 'shadow-2' : '',
       )}
     >
       <div className="fontfamily-pretendard flex items-center justify-between gap-4 text-[14px] leading-[160%]">
@@ -63,7 +63,7 @@ export default function FilteringSearchBar({
             value={keyword}
             onChange={(e) => setKeyword(e.target.value)}
             onKeyDown={handleKeyDown}
-            onFocus={focus}
+            onFocus={activateSearch}
             className="flex w-full placeholder-neutral-400 focus:outline-none"
           />
         </div>
@@ -74,8 +74,11 @@ export default function FilteringSearchBar({
         )}
       </div>
 
-      {isFocused && (
-        <button className="fixed inset-x-0 top-[232px] bottom-0 z-[110] bg-[rgba(0,0,0,0.70)]" onClick={blur} />
+      {isSearchActive && (
+        <button
+          className="fixed inset-x-0 top-[232px] bottom-0 z-[110] bg-[rgba(0,0,0,0.70)]"
+          onClick={deactivateSearch}
+        />
       )}
 
       {isFiltered ? (
@@ -96,7 +99,7 @@ export default function FilteringSearchBar({
               )}
             >
               <span>{periodLabel}</span>
-              {isPeriod ? <ArrowDownIconWhite /> : <ArrowDownIcon />}
+              {isPeriod ? <ArrowDownIcon fill="white" /> : <ArrowDownIcon />}
             </button>
             <button
               onClick={openFilter}
@@ -106,7 +109,7 @@ export default function FilteringSearchBar({
               )}
             >
               <span>{orderLabel}</span>
-              {isOrder ? <ArrowDownIconWhite /> : <ArrowDownIcon />}
+              {isOrder ? <ArrowDownIcon fill="white" /> : <ArrowDownIcon />}
             </button>
           </div>
         </>
