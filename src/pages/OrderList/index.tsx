@@ -7,6 +7,7 @@ import PreparingCardList from './components/PreparingCardList';
 import useInProgressOrder from './hooks/useInProgressOrder';
 import { useOrderHistory } from './hooks/useOrderHistory';
 import SleepingIcon from '@/assets/OrderHistory/sleeping-icon.svg';
+import useBooleanState from '@/util/hooks/useBooleanState';
 
 type PeriodType = 'NONE' | 'LAST_3_MONTHS' | 'LAST_6_MONTHS' | 'LAST_1_YEAR';
 type OrderType = 'NONE' | 'DELIVERY' | 'TAKE_OUT';
@@ -22,10 +23,10 @@ function EmptyOrders() {
 }
 
 function useScrolled() {
-  const [isScrolled, setIsScrolled] = useState(false);
+  const [isScrolled, setTrue, setFalse] = useBooleanState(false);
 
   useEffect(() => {
-    const onScroll = () => setIsScrolled(window.scrollY > 0);
+    const onScroll = () => (window.scrollY > 0 ? setTrue() : setFalse());
     window.addEventListener('scroll', onScroll);
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
@@ -58,14 +59,28 @@ function getOrderLabel(order: OrderType, orderInfo: OrderInfoType) {
 export default function OrderList() {
   const [isOpen, setIsOpen] = useState(false);
   const [tab, setTab] = useState<'past' | 'preparing'>('past');
-  const isPast = tab === 'past';
-  const isScrolled = useScrolled();
 
   const [appliedPeriod, setAppliedPeriod] = useState<PeriodType>('NONE');
   const [appliedOrder, setAppliedOrder] = useState<OrderType>('NONE');
   const [appliedOrderInfo, setAppliedOrderInfo] = useState<OrderInfoType>('NONE');
   const isFiltered = appliedPeriod !== 'NONE' || appliedOrder !== 'NONE' || appliedOrderInfo !== 'NONE';
   const [confirmedKeyword, setConfirmedKeyword] = useState('');
+
+  const isPast = tab === 'past';
+  const isScrolled = useScrolled();
+
+  const resetFilters = () => {
+    setAppliedPeriod('NONE');
+    setAppliedOrder('NONE');
+    setAppliedOrderInfo('NONE');
+  };
+
+  const applyFilters = (period: PeriodType, order: OrderType, orderInfo: OrderInfoType) => {
+    setAppliedPeriod(period);
+    setAppliedOrder(order);
+    setAppliedOrderInfo(orderInfo);
+    setIsOpen(false);
+  };
 
   const {
     data: orders = [],
@@ -78,17 +93,14 @@ export default function OrderList() {
     period: appliedPeriod,
     status: appliedOrderInfo,
     type: appliedOrder,
-    query: '',
+    query: confirmedKeyword,
   });
   const { data: PreparingOrders } = useInProgressOrder();
 
   const shownOrders = useMemo(() => {
     if (!orders) return [];
-    if (!confirmedKeyword) return orders;
-    return orders.filter(
-      (o) => o.order_title.includes(confirmedKeyword) || o.orderable_shop_name.includes(confirmedKeyword),
-    );
-  }, [orders, confirmedKeyword]);
+    return orders;
+  }, [orders]);
 
   return (
     <>
@@ -100,18 +112,14 @@ export default function OrderList() {
               isScrolled={isScrolled}
               openFilter={() => setIsOpen(true)}
               isFiltered={isFiltered}
-              onReset={() => {
-                setAppliedPeriod('NONE');
-                setAppliedOrder('NONE');
-                setAppliedOrderInfo('NONE');
-              }}
+              onReset={resetFilters}
               onSearchConfirm={(keyword) => setConfirmedKeyword(keyword)}
               periodLabel={getPeriodLabel(appliedPeriod)}
               orderLabel={getOrderLabel(appliedOrder, appliedOrderInfo)}
               isPeriod={appliedPeriod !== 'NONE'}
               isOrder={appliedOrder !== 'NONE' || appliedOrderInfo !== 'NONE'}
             />
-            <div className="pt-[122px]">
+            <div className="pt-[123px]">
               {tab === 'past' &&
                 (shownOrders.length === 0 ? (
                   <EmptyOrders />
@@ -131,16 +139,15 @@ export default function OrderList() {
               onClose={() => setIsOpen(false)}
               defaultFilters={{ period: appliedPeriod, order: appliedOrder, orderInfo: appliedOrderInfo }}
               onApply={({ period, order, orderInfo }) => {
-                setAppliedPeriod(period);
-                setAppliedOrder(order);
-                setAppliedOrderInfo(orderInfo);
-                setIsOpen(false);
+                applyFilters(period, order, orderInfo);
               }}
             />
           )}
         </>
       ) : (
-        <PreparingCardList orders={PreparingOrders} />
+        <div className="pt-[50px]">
+          <PreparingCardList orders={PreparingOrders} />
+        </div>
       )}
     </>
   );
