@@ -92,10 +92,9 @@ export default function FilterModal({ isOpen, onClose, onApply, defaultFilters }
           {periodOptions.map((periodOption) => (
             <Button
               key={periodOption.id}
-              type="button"
               size="sm"
               color={selectedPeriod === periodOption.id ? 'primary' : 'white'}
-              className="shadow-1 grow-0 border-[0.5px] sm:grow"
+              className="shadow-1 border-[0.5px] sm:grow"
               onClick={() => setSelectedPeriod(periodOption.id)}
             >
               {periodOption.label}
@@ -108,10 +107,9 @@ export default function FilterModal({ isOpen, onClose, onApply, defaultFilters }
           {orderOptions.map((orderOption) => (
             <Button
               key={orderOption.id}
-              type="button"
               size="sm"
               color={selectedOrder === orderOption.id ? 'primary' : 'white'}
-              className="shadow-1 grow-0 border-[0.5px] sm:grow"
+              className="shadow-1 border-[0.5px] sm:grow"
               onClick={() => setSelectedOrder(orderOption.id)}
             >
               {orderOption.label}
@@ -123,10 +121,9 @@ export default function FilterModal({ isOpen, onClose, onApply, defaultFilters }
           {orderInfoOptions.map((orderInfoOption) => (
             <Button
               key={orderInfoOption.id}
-              type="button"
               size="sm"
               color={selectedOrderInfo === orderInfoOption.id ? 'primary' : 'white'}
-              className="shadow-1 grow-0 border-[0.5px] sm:grow"
+              className="shadow-1 border-[0.5px] sm:grow"
               onClick={() => setSelectedOrderInfo(orderInfoOption.id)}
             >
               {orderInfoOption.label}
@@ -135,21 +132,15 @@ export default function FilterModal({ isOpen, onClose, onApply, defaultFilters }
         </div>
         <div className="mt-4 flex gap-3">
           <Button
-            type="button"
             color="neutral"
-            className="grow-0 rounded-xl border border-neutral-400 px-4 py-[10px] text-neutral-800 shadow-none sm:grow"
+            className="rounded-xl border border-neutral-400 px-4 py-[10px] text-neutral-800 shadow-none sm:grow"
             onClick={handleReset}
             endIcon={<RefreshIcon />}
           >
             초기화
           </Button>
 
-          <Button
-            type="button"
-            color="primary"
-            className="flex-1 rounded-xl py-[10px] shadow-none"
-            onClick={handleApply}
-          >
+          <Button color="primary" className="flex-1 rounded-xl py-[10px] shadow-none" onClick={handleApply}>
             적용하기
           </Button>
         </div>
