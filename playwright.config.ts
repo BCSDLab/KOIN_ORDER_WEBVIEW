@@ -4,7 +4,8 @@ import dotenv from 'dotenv';
 
 dotenv.config({ path: path.join(process.cwd(), '.env') });
 
-const BASE_URL = process.env.BASE_URL || 'http://localhost:3000';
+export const BASE_URL = process.env.BASE_URL || 'http://localhost:3000';
+export const BROWSERS = ['Mobile Chrome', 'Desktop Firefox', 'Desktop Chrome', 'Desktop Safari'];
 const is_CI = !!process.env.CI;
 
 export default defineConfig({
@@ -20,7 +21,10 @@ export default defineConfig({
   use: {
     baseURL: BASE_URL,
     trace: 'on-first-retry',
+    storageState: 'tests/.auth/user.json',
   },
+
+  globalSetup: './tests/globalSetup.ts',
 
   expect: {
     toHaveScreenshot: {
@@ -31,6 +35,10 @@ export default defineConfig({
   },
 
   projects: [
+    {
+      name: 'setup db',
+      testMatch: /global\.setup\.ts/,
+    },
     // 우선 테스트를 위해 모바일 브라우저 중 1개만 활성화, 이후 다른 브라우저도 활성화 예정
     // {
     //   name: 'chromium',
