@@ -82,56 +82,49 @@ export default function FilteringSearchBar({
       )}
 
       {isFiltered ? (
-        <>
-          <div className="flex gap-2 text-[14px] leading-[160%] font-semibold text-neutral-500">
-            <button
-              className="shadow-1 flex items-center gap-[6px] rounded-2xl bg-white px-2 py-[6px]"
-              onClick={onReset}
-            >
-              <span>초기화</span>
-              <RefreshIcon />
-            </button>
-            <button
-              onClick={openFilter}
-              className={clsx(
-                'shadow-1 flex items-center gap-[6px] rounded-2xl px-2 py-[6px]',
-                isPeriod ? 'bg-primary-500 text-[#F8F8FA]' : 'bg-white text-neutral-500',
-              )}
-            >
-              <span>{periodLabel}</span>
-              {isPeriod ? <ArrowDownIcon fill="white" /> : <ArrowDownIcon />}
-            </button>
-            <button
-              onClick={openFilter}
-              className={clsx(
-                'shadow-1 flex items-center gap-[6px] rounded-2xl px-2 py-[6px]',
-                isOrder ? 'bg-primary-500 text-[#F8F8FA]' : 'bg-white text-neutral-500',
-              )}
-            >
-              <span>{orderLabel}</span>
-              {isOrder ? <ArrowDownIcon fill="white" /> : <ArrowDownIcon />}
-            </button>
-          </div>
-        </>
+        <div className="flex gap-2 text-[14px] leading-[160%] font-semibold text-neutral-500">
+          <button className="shadow-1 flex items-center gap-[6px] rounded-2xl bg-white px-2 py-[6px]" onClick={onReset}>
+            <span>초기화</span>
+            <RefreshIcon />
+          </button>
+          <button
+            onClick={openFilter}
+            className={clsx(
+              'shadow-1 flex items-center gap-[6px] rounded-2xl px-2 py-[6px]',
+              isPeriod ? 'bg-primary-500 text-[#F8F8FA]' : 'bg-white text-neutral-500',
+            )}
+          >
+            <span>{periodLabel}</span>
+            {isPeriod ? <ArrowDownIcon fill="white" /> : <ArrowDownIcon />}
+          </button>
+          <button
+            onClick={openFilter}
+            className={clsx(
+              'shadow-1 flex items-center gap-[6px] rounded-2xl px-2 py-[6px]',
+              isOrder ? 'bg-primary-500 text-[#F8F8FA]' : 'bg-white text-neutral-500',
+            )}
+          >
+            <span>{orderLabel}</span>
+            {isOrder ? <ArrowDownIcon fill="white" /> : <ArrowDownIcon />}
+          </button>
+        </div>
       ) : (
-        <>
-          <div className="fontfamily-pretendard flex gap-2 text-[14px] leading-[160%] font-semibold text-neutral-500">
-            <button
-              onClick={openFilter}
-              className="shadow-1 flex items-center gap-[6px] rounded-2xl bg-white px-2 py-[6px]"
-            >
-              {periodLabel}
-              <ArrowDownIcon />
-            </button>
-            <button
-              onClick={openFilter}
-              className="shadow-1 flex items-center gap-[6px] rounded-2xl bg-white px-2 py-[6px]"
-            >
-              {orderLabel}
-              <ArrowDownIcon />
-            </button>
-          </div>
-        </>
+        <div className="flex gap-2 text-[14px] leading-[160%] font-semibold text-neutral-500">
+          <button
+            onClick={openFilter}
+            className="shadow-1 flex items-center gap-[6px] rounded-2xl bg-white px-2 py-[6px]"
+          >
+            {periodLabel}
+            <ArrowDownIcon />
+          </button>
+          <button
+            onClick={openFilter}
+            className="shadow-1 flex items-center gap-[6px] rounded-2xl bg-white px-2 py-[6px]"
+          >
+            {orderLabel}
+            <ArrowDownIcon />
+          </button>
+        </div>
       )}
     </div>
   );
