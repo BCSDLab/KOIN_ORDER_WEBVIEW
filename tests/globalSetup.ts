@@ -27,20 +27,42 @@ export default async function globalSetup() {
   console.log('\n▶ 네이티브 브릿지 mock 설정 시작');
 
   const browser = await chromium.launch();
-  const context = await browser.newContext(devices['iPhone 14 Pro']);
+  const context = await browser.newContext(devices['Pixel 5']);
   const page = await context.newPage();
 
-  // 네이티브 브릿지 mock (로그인 전에 필요)
+  /*
+  ▶ 네이티브 브릿지 mock 
+    - 웹 로그인 페이지 없을 때 사용
+    - 네이티브에서 토큰 주입하는 것을 테스트 (env에 TEST_ACCESS_TOKEN 추가해야 함)
+
   await page.addInitScript(() => {
+    const testToken = process.env.TEST_ACCESS_TOKEN || '';
+
     window.Android = {
-      getUserTokens: () =>
-        JSON.stringify({
-          access: '',
+      getUserTokens: () => {
+        console.log('Android 브릿지 호출');
+        return JSON.stringify({
+          access: 'testToken',
           refresh: '',
           userType: 'STUDENT',
-        }),
+        });
+      },
     };
+
+    window.webkit = {
+      messageHandlers: {
+        tokenBridge: {
+          postMessage: (message: string) => {
+            console.log('iOS 브릿지 호출', message);
+          },
+        },
+      },
+    };
+
+    ▶ 쿠키/로컬스토리지에 직접 주입
+    document.cookie = `AUTH_TOKEN_KEY=${testToken}; path=/`;
   });
+   */
 
   try {
     await page.goto(BASE_URL + '/');
