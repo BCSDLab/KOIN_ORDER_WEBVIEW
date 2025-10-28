@@ -181,7 +181,7 @@ export interface ShopInfoSummaryResponse {
   name: string;
   introduction: string | null;
   pay_card: boolean;
-  pqy_bank: boolean;
+  pay_bank: boolean;
   is_delivery_available?: boolean;
   is_takeout_available?: boolean;
   minimum_order_amount?: number;
