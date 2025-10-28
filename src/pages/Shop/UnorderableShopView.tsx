@@ -5,6 +5,7 @@ import ImageCarousel from './components/ImageCarousel';
 import ShopMenuGroups from './components/ShopMenuGroups';
 import ShopMenus from './components/ShopMenus';
 import ShopSummary from './components/ShopSummary';
+import { useGetUnorderableSummaryShopInfo } from './hooks/useGetShopDetail';
 import { useGetUnorderableShopInfoSummary } from './hooks/useGetShopInfo';
 import { useGetUnorderableShopMenuGroups } from './hooks/useGetShopInfo';
 import { useGetUnorderableShopMenus } from './hooks/useGetShopInfo';
@@ -27,6 +28,7 @@ export default function UnorderableShopView() {
   const { data: shopInfoSummary } = useGetUnorderableShopInfoSummary(Number(shopId));
   const { data: unorderableShopMenuGroups } = useGetUnorderableShopMenuGroups(Number(shopId));
   const { data: unorderableShopMenus } = useGetUnorderableShopMenus(Number(shopId));
+  const { data: unorderableShopInfo } = useGetUnorderableSummaryShopInfo(Number(shopId));
   const { data: cartInfo } = useCart(orderType);
 
   const totalQuantity = cartInfo.items.reduce((sum, item) => sum + item.quantity, 0);
@@ -35,7 +37,12 @@ export default function UnorderableShopView() {
     <>
       <Header name={shopInfoSummary.name} targetRef={targetRef} cartItemCount={totalQuantity} />
       <ImageCarousel images={shopInfoSummary.images} targetRef={targetRef} />
-      <ShopSummary id={shopId} shopInfoSummary={shopInfoSummary} isOrderable={false} />
+      <ShopSummary
+        id={shopId}
+        shopInfoSummary={shopInfoSummary}
+        isOrderable={false}
+        UnOrderableShopInfo={unorderableShopInfo}
+      />
       <ShopMenuGroups
         selectedMenu={selectedMenu}
         onSelect={handleScrollTo}
