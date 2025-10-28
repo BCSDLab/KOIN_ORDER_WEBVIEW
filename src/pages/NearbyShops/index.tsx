@@ -159,6 +159,7 @@ export default function NearbyShops() {
                 rating={shop.average_rate}
                 reviewCount={shop.review_count}
                 img={formattedImages}
+                isOrderable={false}
               />
             );
           })

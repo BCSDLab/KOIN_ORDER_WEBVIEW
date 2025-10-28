@@ -8,6 +8,7 @@ interface MenuCardProps {
   name: string;
   rating: number;
   reviewCount: number;
+  isOrderable: boolean;
   isDelivery?: boolean;
   deliver?: number;
   isTakeout?: boolean;
@@ -31,13 +32,14 @@ export default function ShopCard({
   isTakeout,
   isService,
   img,
+  isOrderable,
 }: MenuCardProps) {
   const navigate = useNavigate();
   const thumbnailUrl = img.find((image) => image.is_thumbnail)?.image_url || '';
 
   return (
     <button
-      onClick={() => navigate(`/shop/true/${shopId}`)}
+      onClick={() => navigate(isOrderable ? `/shop/true/${shopId}` : `/shop/false/${shopId}`)}
       data-testid={`shopCard-${shopId}`}
       className="relative flex items-center gap-5 overflow-hidden rounded-lg border-[0.5px] border-neutral-200 bg-white"
       type="button"
