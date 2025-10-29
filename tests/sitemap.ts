@@ -110,18 +110,7 @@ export async function createSiteMap(baseURL: string, page: Page) {
       console.log(`    ✓ ${route.name}: ${path}`);
     }
   } else {
-    const fallbackPaymentId = process.env.TEST_PAYMENT_ID;
-
-    if (fallbackPaymentId) {
-      console.log('    -  fallback paymentId 사용');
-      for (const route of dynamicRoutes) {
-        const path = route.path.replace(':paymentId', fallbackPaymentId);
-        routes.push(path);
-        console.log(`    ✓ ${route.name}: ${path} (fallback)`);
-      }
-    } else {
-      console.log('        -  payment 관련 라우트 제외');
-    }
+    console.log('        - 진행 중인 주문 없음. paymentId 관련 라우트 제외');
   }
 
   writeFileSync(SITEMAP, JSON.stringify(routes, null, 4));
