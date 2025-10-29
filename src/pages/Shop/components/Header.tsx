@@ -1,16 +1,17 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ArrowBackIcon from '@/assets/Main/arrow-back-icon.svg';
-import CartIcon from '@/assets/Shop/cart-icon.svg';
+// import CartIcon from '@/assets/Shop/cart-icon.svg';
 import { backButtonTapped } from '@/util/bridge/nativeAction';
 
 interface HeaderProps {
   name: string;
   targetRef: React.RefObject<HTMLDivElement | null>;
-  cartItemCount: number;
+  // cartItemCount: number;
   noImage?: boolean;
 }
-export default function Header({ name, targetRef, cartItemCount, noImage }: HeaderProps) {
+// export default function Header({ name, targetRef, cartItemCount, noImage }: HeaderProps) {
+export default function Header({ name, targetRef, noImage }: HeaderProps) {
   const navigate = useNavigate();
   const [opacity, setOpacity] = useState(0);
 
@@ -79,7 +80,8 @@ export default function Header({ name, targetRef, cartItemCount, noImage }: Head
       >
         {name}
       </span>
-      <div className="absolute top-1/2 right-6 -translate-y-1/2">
+      {/* TODO: 배달 배포 시 추가 예정 */}
+      {/* <div className="absolute top-1/2 right-6 -translate-y-1/2">
         <button
           type="button"
           aria-label="장바구니 이동"
@@ -93,7 +95,7 @@ export default function Header({ name, targetRef, cartItemCount, noImage }: Head
             </div>
           )}
         </button>
-      </div>
+      </div> */}
     </header>
   );
 }

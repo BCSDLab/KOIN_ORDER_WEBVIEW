@@ -10,12 +10,12 @@ import { useGetUnorderableShopInfoSummary } from './hooks/useGetShopInfo';
 import { useGetUnorderableShopMenuGroups } from './hooks/useGetShopInfo';
 import { useGetUnorderableShopMenus } from './hooks/useGetShopInfo';
 import { useMenuGroupScroll } from './hooks/useMenuGroupScroll';
-import useCart from '@/pages/Payment/hooks/useCart';
-import { useOrderStore } from '@/stores/useOrderStore';
+// import useCart from '@/pages/Payment/hooks/useCart';
+// import { useOrderStore } from '@/stores/useOrderStore';
 
 export default function UnorderableShopView() {
   const { shopId } = useParams();
-  const { orderType } = useOrderStore();
+  // const { orderType } = useOrderStore();
 
   if (!shopId) {
     throw new Error('Shop ID is required');
@@ -29,13 +29,15 @@ export default function UnorderableShopView() {
   const { data: unorderableShopMenuGroups } = useGetUnorderableShopMenuGroups(Number(shopId));
   const { data: unorderableShopMenus } = useGetUnorderableShopMenus(Number(shopId));
   const { data: unorderableShopInfo } = useGetUnorderableSummaryShopInfo(Number(shopId));
-  const { data: cartInfo } = useCart(orderType);
+  // const { data: cartInfo } = useCart(orderType);
 
-  const totalQuantity = cartInfo.items.reduce((sum, item) => sum + item.quantity, 0);
+  // const totalQuantity = cartInfo.items.reduce((sum, item) => sum + item.quantity, 0);
 
   return (
     <>
-      <Header name={shopInfoSummary.name} targetRef={targetRef} cartItemCount={totalQuantity} />
+      {/*TODO: 배달 배포 시 교체 예정*/}
+      {/* <Header name={shopInfoSummary.name} targetRef={targetRef} cartItemCount={totalQuantity} /> */}
+      <Header name={shopInfoSummary.name} targetRef={targetRef} />
       <ImageCarousel images={shopInfoSummary.images} targetRef={targetRef} />
       <ShopSummary
         id={shopId}
