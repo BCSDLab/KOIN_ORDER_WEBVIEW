@@ -16,16 +16,16 @@ const staticRoutes = [
   { path: '/search', name: 'Search' },
 
   // Shop 관련 (standalone)
-  { path: '/shop/true/:shopId', name: 'OrderableShopView', testParams: { shopId: '1' } },
-  { path: '/shop/false/:shopId', name: 'UnorderableShopView', testParams: { shopId: '1' } },
-  { path: '/shop/true/:shopId/menus/:menuId', name: 'MenuDetail', testParams: { shopId: '1', menuId: '1' } },
+  { path: '/shop/true/:shopId', name: 'OrderableShopView', testParams: { shopId: '2' } }, // 굿모닝살로만치킨
+  { path: '/shop/false/:shopId', name: 'UnorderableShopView', testParams: { shopId: '21' } }, // 돈家네 돌판 삼겹살
+  { path: '/shop/true/:shopId/menus/:menuId', name: 'MenuDetail', testParams: { shopId: '2', menuId: '11' } }, // 굿모닝살로만치킨-후라이드 치킨
 
   // Payment 관련 (standalone)
   { path: '/payment/return', name: 'PaymentConfirm' },
 
   // AppLayout 그룹
-  { path: '/shop-detail/true/:shopId', name: 'OrderableShopDetail', testParams: { shopId: '1' } },
-  { path: '/shop-detail/false/:shopId', name: 'UnorderableShopDetail', testParams: { shopId: '1' } },
+  { path: '/shop-detail/true/:shopId', name: 'OrderableShopDetail', testParams: { shopId: '2' } },
+  { path: '/shop-detail/false/:shopId', name: 'UnorderableShopDetail', testParams: { shopId: '21' } },
   { path: '/cart', name: 'Cart' },
 
   // Delivery 하위 라우트
