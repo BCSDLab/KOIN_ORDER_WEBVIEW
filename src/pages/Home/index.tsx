@@ -240,6 +240,7 @@ export default function Home() {
                 isTakeout={shop.is_takeout_available}
                 isService={shop.service_event}
                 img={shop.images}
+                isOrderable={true}
               />
             );
           })

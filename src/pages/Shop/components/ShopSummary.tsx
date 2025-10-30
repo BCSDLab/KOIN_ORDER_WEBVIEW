@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import type { ShopInfoSummaryResponse } from '@/api/shop/entity.ts';
+import type { ShopInfoSummaryResponse, UnorderableShopDetailInfoResponse } from '@/api/shop/entity.ts';
 import ChevronRightIcon from '@/assets/Common/chevron-right.svg';
 import StarIcon from '@/assets/Common/star-icon.svg';
 import SpeakerIcon from '@/assets/Shop/speaker-icon.svg';
@@ -7,11 +7,12 @@ import Badge from '@/components/UI/Badge';
 
 interface ShopSummaryProps {
   id: string;
-  shopInfoSummary: ShopInfoSummaryResponse;
   isOrderable: boolean;
+  shopInfoSummary: ShopInfoSummaryResponse;
+  UnOrderableShopInfo?: UnorderableShopDetailInfoResponse;
 }
 
-export default function ShopSummary({ shopInfoSummary, id, isOrderable }: ShopSummaryProps) {
+export default function ShopSummary({ shopInfoSummary, id, isOrderable, UnOrderableShopInfo }: ShopSummaryProps) {
   return (
     <>
       <div className="flex flex-col items-center justify-center p-6">
@@ -38,10 +39,16 @@ export default function ShopSummary({ shopInfoSummary, id, isOrderable }: ShopSu
             </div>
           </Link>
         </div>
-        {isOrderable && (
+        {isOrderable ? (
           <div className="mt-4 self-start">
             {shopInfoSummary.is_delivery_available && <Badge label="배달 가능" color="white" size="xs" font="xs" />}
             {shopInfoSummary.is_takeout_available && <Badge label="포장 가능" color="white" size="xs" font="xs" />}
+          </div>
+        ) : (
+          <div className="mt-4 self-start">
+            {UnOrderableShopInfo?.delivery && <Badge label="배달 불가능" color="white" size="xs" font="xs" />}
+            {UnOrderableShopInfo?.pay_card && <Badge label="카드 가능" color="white" size="xs" font="xs" />}
+            {UnOrderableShopInfo?.pay_bank && <Badge label="계좌이체 가능" color="white" size="xs" font="xs" />}
           </div>
         )}
         <div className="mt-4 flex w-full justify-between gap-3 self-start">
