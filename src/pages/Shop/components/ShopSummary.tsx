@@ -4,6 +4,7 @@ import ChevronRightIcon from '@/assets/Common/chevron-right.svg';
 import StarIcon from '@/assets/Common/star-icon.svg';
 import SpeakerIcon from '@/assets/Shop/speaker-icon.svg';
 import Badge from '@/components/UI/Badge';
+import useLogger from '@/util/hooks/analytics/useLogger';
 
 interface ShopSummaryProps {
   id: string;
@@ -13,6 +14,15 @@ interface ShopSummaryProps {
 }
 
 export default function ShopSummary({ shopInfoSummary, id, isOrderable, UnOrderableShopInfo }: ShopSummaryProps) {
+  const logger = useLogger();
+  const handleShopInfoClick = () => {
+    logger.actionEventClick({
+      team: 'BUSINESS',
+      event_label: 'shop_detail_view_info',
+      value: shopInfoSummary.name,
+    });
+  };
+
   return (
     <>
       <div className="flex flex-col items-center justify-center p-6">
@@ -32,6 +42,7 @@ export default function ShopSummary({ shopInfoSummary, id, isOrderable, UnOrdera
           <Link
             to={isOrderable ? `/shop-detail/true/${id}` : `/shop-detail/false/${id}`}
             className="shadow-1 flex items-center justify-center gap-1 rounded-full border-[0.5px] border-neutral-400 bg-white py-1 pr-2 pl-3"
+            onClick={handleShopInfoClick}
           >
             <div className="text-[10px] text-neutral-500">가게정보·원산지</div>
             <div className="flex h-4 w-4 items-center justify-center">
@@ -56,6 +67,7 @@ export default function ShopSummary({ shopInfoSummary, id, isOrderable, UnOrdera
             <Link
               to={`/shop-detail/true/${id}#배달금액`}
               className="shadow-1 flex h-14 w-full min-w-fit items-center justify-between gap-1 rounded-xl bg-white py-2 pr-2 pl-3"
+              onClick={handleShopInfoClick}
             >
               <div className="flex w-fit flex-col gap-[2px]">
                 <div className="flex gap-2">
@@ -88,6 +100,7 @@ export default function ShopSummary({ shopInfoSummary, id, isOrderable, UnOrdera
           <Link
             to={isOrderable ? `/shop-detail/true/${id}#가게알림` : `/shop-detail/false/${id}#가게알림`}
             className="shadow-1 flex h-14 w-full items-center justify-between gap-1 rounded-xl bg-white py-2 pr-2 pl-3"
+            onClick={handleShopInfoClick}
           >
             <SpeakerIcon />
             <span className="h-9.5 w-24 overflow-hidden text-[12px] leading-[1.6] text-ellipsis">

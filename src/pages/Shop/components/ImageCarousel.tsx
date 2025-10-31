@@ -2,17 +2,25 @@ import { useRef, useState, useEffect } from 'react';
 import clsx from 'clsx';
 import type { ShopInfoSummaryResponse } from '@/api/shop/entity';
 import ImageViewer from '@/pages/Shop/components/ImageViewer';
+import useLogger from '@/util/hooks/analytics/useLogger';
 import useBooleanState from '@/util/hooks/useBooleanState';
+
 interface ImageCarouselProps {
   images: ShopInfoSummaryResponse['images'];
   targetRef: React.RefObject<HTMLDivElement | null>;
+  shopName?: string;
 }
 
-export default function ImageCarousel({ images, targetRef }: ImageCarouselProps) {
+export default function ImageCarousel({ images, targetRef, shopName }: ImageCarouselProps) {
+  const logger = useLogger();
   const containerRef = useRef<HTMLDivElement>(null);
   const [scrollIndex, setScrollIndex] = useState(0);
   const [isInteracting, setIsInteracting] = useState(false);
   const [isImageViewerOpen, openImageViewer, closeImageViewer] = useBooleanState(false);
+
+  const prevIndexRef = useRef(0);
+  const lastScrollLeftRef = useRef(0);
+
   const scrollToIndex = (index: number) => {
     if (containerRef.current) {
       containerRef.current.scrollTo({
@@ -39,6 +47,23 @@ export default function ImageCarousel({ images, targetRef }: ImageCarouselProps)
     const width = containerRef.current.clientWidth;
     const index = Math.round(scrollLeft / width);
     setScrollIndex(index);
+
+    // 자동 슬라이드 시
+    if (!isInteracting) {
+      lastScrollLeftRef.current = scrollLeft;
+      return;
+    }
+
+    // 인덱스 변화 없을 때
+    if (index !== prevIndexRef.current) {
+      lastScrollLeftRef.current = scrollLeft;
+      return;
+    }
+    logger.actionEventSwipe({
+      team: 'BUSINESS',
+      event_label: 'shop_picture_swipe',
+      value: shopName || '',
+    });
   };
 
   useEffect(() => {
