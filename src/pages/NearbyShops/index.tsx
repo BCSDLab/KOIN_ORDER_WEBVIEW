@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect } from 'react';
 import clsx from 'clsx';
 import { ShopInfo } from '@/api/shop/entity';
 import CheckIcon from '@/assets/Home/check-icon.svg';
@@ -16,6 +16,10 @@ import SearchBar from '@/pages/Home/components/SearchBar';
 import ShopCard from '@/pages/Home/components/ShopCard';
 import { useShopCategories } from '@/pages/Home/hooks/useShopCategories';
 import { useShopList } from '@/pages/Home/hooks/useShopList';
+import useLogger from '@/util/hooks/analytics/useLogger';
+import { useScrollLogging } from '@/util/hooks/analytics/useScrollLogging';
+import useQueryState from '@/util/hooks/state/useQueryState';
+import useBooleanState from '@/util/hooks/useBooleanState';
 
 interface Category {
   id: number;
@@ -31,23 +35,57 @@ interface SortOption {
 type CategoryType = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
 type SortType = 'NONE' | 'COUNT' | 'COUNT_ASC' | 'COUNT_DESC' | 'RATING' | 'RATING_ASC' | 'RATING_DESC';
 
+const SORT_VALID: SortType[] = ['NONE', 'COUNT', 'COUNT_ASC', 'COUNT_DESC', 'RATING', 'RATING_ASC', 'RATING_DESC'];
+
+const SORT_TRACKING_MAP: Record<SortType, string> = {
+  NONE: 'check_default',
+  COUNT: 'check_review',
+  COUNT_ASC: 'check_review',
+  COUNT_DESC: 'check_review',
+  RATING: 'check_star',
+  RATING_ASC: 'check_star',
+  RATING_DESC: 'check_star',
+};
+
 const sortOptions: SortOption[] = [
   { id: 'RATING_DESC', label: '별점 높은 순' },
   { id: 'COUNT_DESC', label: '리뷰순' },
   { id: 'NONE', label: '기본순' },
 ];
 
+function parseCategory(query: string | null): CategoryType {
+  const categoryNumber = Number(query);
+  const valid = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12] as const;
+  return valid.includes(categoryNumber as CategoryType) ? (categoryNumber as CategoryType) : 1;
+}
+
+function parseSort(query: string | null): SortType {
+  return SORT_VALID.includes(query as SortType) ? (query as SortType) : 'NONE';
+}
+
+function parseFilter(query: string | null): 'OPEN' | null {
+  return query === 'OPEN' ? 'OPEN' : null;
+}
+
 export default function NearbyShops() {
+  const logger = useLogger();
+
   const { data: categories } = useShopCategories();
   const categoriesWithAll = categories.shop_categories.map((category: Category) => ({
     ...category,
   }));
 
-  const [selectedCategory, setSelectedCategory] = useState<CategoryType>(1);
-  const [selectedFilters, setSelectedFilters] = useState<string | null>('OPEN');
-  const [selectedSort, setSelectedSort] = useState<SortType>('NONE');
+  const [selectedCategory, setSelectedCategory] = useQueryState<CategoryType>('category', parseCategory, (value) =>
+    String(value),
+  );
+  const [selectedSort, setSelectedSort] = useQueryState<SortType>('sort', parseSort, (value) =>
+    value === 'NONE' ? null : value,
+  );
+  const [selectedFilters, setSelectedFilters] = useQueryState<'OPEN' | null>('filter', parseFilter, (value) =>
+    value === 'OPEN' ? 'OPEN' : null,
+  );
 
-  const [isSortModalOpen, setIsSortModalOpen] = useState(false);
+  const [isSortModalOpen, sortModalOpen, sortModalClose] = useBooleanState(false);
 
   const { data } = useShopList({
     sorter: selectedSort !== 'NONE' ? selectedSort : undefined,
@@ -60,16 +98,75 @@ export default function NearbyShops() {
   };
 
   const handleSortSelect = (sortId: SortType) => {
+    const currentCategoryId = selectedCategory === undefined ? 0 : selectedCategory;
+    const categoryName =
+      categories.shop_categories.find((category) => category.id === currentCategoryId)?.name || '전체보기';
+    const sortTrackingLabel = SORT_TRACKING_MAP[sortId];
+
+    logger.actionEventClick({
+      team: 'BUSINESS',
+      event_label: 'shop_can',
+      value: `${sortTrackingLabel} in ${categoryName}`,
+    });
     setSelectedSort(sortId);
-    setIsSortModalOpen(false);
+    sortModalClose();
   };
 
-  const toggleFilter = (filterId: string) => {
-    setSelectedFilters((prev) => {
-      if (prev === filterId) return null;
-      else return filterId;
+  const toggleFilter = () => {
+    const currentCategoryId = selectedCategory === undefined ? 0 : selectedCategory;
+    const categoryName =
+      categories.shop_categories.find((category) => category.id === currentCategoryId)?.name || '전체보기';
+    logger.actionEventClick({
+      team: 'BUSINESS',
+      event_label: 'shop_can',
+      value: `check_open_${categoryName}`,
+    });
+    setSelectedFilters(selectedFilters === 'OPEN' ? null : 'OPEN', { replace: true });
+  };
+
+  const handleCategorySelect = (category: Category) => {
+    logger.actionEventClick({
+      team: 'BUSINESS',
+      event_label: 'shop_categories',
+      value: category.name,
+      duration_time: (new Date().getTime() - Number(sessionStorage.getItem('selectedCategoryTime'))) / 1000,
+      event_category: 'shop_category_click',
+      previous_page:
+        categories.shop_categories.find((category) => category.id === selectedCategory)?.name || '전체보기',
+      current_page: category.name,
+    });
+    setSelectedCategory(category.id as CategoryType);
+  };
+
+  const shopScrollLogging = () => {
+    const currentCategoryId = selectedCategory === undefined ? 0 : selectedCategory;
+    const categoryName =
+      categories.shop_categories.find((category) => category.id === currentCategoryId)?.name || '전체보기';
+    logger.actionEventClick({
+      team: 'BUSINESS',
+      event_label: 'shop_categories',
+      value: `scroll in ${categoryName}`,
+      event_category: 'scroll',
     });
   };
+  useScrollLogging(shopScrollLogging);
+
+  useEffect(() => {
+    sessionStorage.setItem('selectedCategoryTime', new Date().getTime().toString());
+  }, [selectedCategory]);
+
+  useEffect(() => {
+    sessionStorage.setItem('swipeToBack', 'false');
+    const handleWheel = (e: WheelEvent) => {
+      if (e.deltaX < -100) {
+        sessionStorage.setItem('swipeToBack', 'true');
+      }
+    };
+    window.addEventListener('wheel', handleWheel);
+    return () => {
+      window.removeEventListener('wheel', handleWheel);
+    };
+  }, []);
 
   return (
     <div className="flex h-full w-full flex-col items-center justify-center gap-4">
@@ -78,11 +175,11 @@ export default function NearbyShops() {
       </div>
 
       {/* 카테고리 */}
-      <div className="scrollbar-responsive ml-6 flex w-[calc(100%-24px)] snap-x snap-mandatory gap-6 overflow-x-auto pt-2 pb-4 min-[960px]:ml-0 min-[960px]:snap-none min-[960px]:justify-center">
+      <div className="scrollbar-responsive mx-6 flex w-[calc(100%-24px)] snap-x snap-mandatory gap-2 overflow-x-auto pt-2 pb-4 min-[960px]:ml-0 min-[960px]:snap-none min-[960px]:justify-center">
         {categoriesWithAll.map((category) => (
           <button
             key={category.id}
-            onClick={() => setSelectedCategory(category.id as CategoryType)}
+            onClick={() => handleCategorySelect(category)}
             className="flex w-14 shrink-0 snap-start flex-col items-center justify-center gap-3"
             type="button"
           >
@@ -103,7 +200,7 @@ export default function NearbyShops() {
       <div className="flex w-full pr-4 min-[604px]:justify-center">
         <div className="flex w-full min-[604px]:flex-wrap min-[604px]:justify-center min-[604px]:gap-2">
           <button
-            onClick={() => setIsSortModalOpen(true)}
+            onClick={sortModalOpen}
             className="mr-4 ml-4 inline-flex shrink-0 items-center justify-center pb-2 leading-none min-[604px]:mr-0 min-[604px]:ml-0 min-[604px]:pb-0 [@media(pointer:coarse)]:pb-0"
           >
             <Badge
@@ -118,7 +215,7 @@ export default function NearbyShops() {
 
           <div className="scrollbar-responsive flex flex-1 snap-x snap-mandatory gap-2 overflow-x-auto min-[604px]:flex-initial min-[604px]:snap-none min-[604px]:overflow-visible">
             <button
-              onClick={() => toggleFilter('OPEN')}
+              onClick={toggleFilter}
               className="flex shrink-0 snap-start items-center justify-center transition-colors"
             >
               <Badge
@@ -174,10 +271,10 @@ export default function NearbyShops() {
       </div>
 
       {/* 정렬 BottomSheet */}
-      <BottomModal isOpen={isSortModalOpen} onClose={() => setIsSortModalOpen(false)}>
+      <BottomModal isOpen={isSortModalOpen} onClose={sortModalClose}>
         <BottomModalHeader>
           <div className="text-primary-500 font-semibold select-none"> 가게 정렬</div>
-          <button onClick={() => setIsSortModalOpen(false)}>
+          <button onClick={sortModalClose}>
             <CloseIcon />
           </button>
         </BottomModalHeader>
