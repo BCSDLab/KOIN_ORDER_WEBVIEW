@@ -47,12 +47,6 @@ jobs:
           mkdir -p tests/visual/visual.e2e.ts-snapshots
           aws s3 sync s3://front-snapshot-test/ tests/visual/visual.e2e.ts-snapshots/ --exclude "*" --include "*.png"
       
-      - name: Start app
-        run: pnpm start &
-      
-      - name: Wait for app
-        run: npx wait-on http://localhost:3000
-      
       - name: Run test
         id: test
         continue-on-error: true
