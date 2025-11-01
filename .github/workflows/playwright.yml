@@ -24,6 +24,14 @@ jobs:
       - name: Install dependencies
         run: npm install -g pnpm && pnpm install
 
+      - name: Create .env file
+        run: |
+          echo "VITE_NAVER_MAPS_CLIENT_ID=${{ secrets.VITE_NAVER_MAPS_CLIENT_ID }}" >> .env
+          echo "VITE_API_PATH=${{ secrets.VITE_API_PATH }}" >> .env
+          echo "VITE_PAYMENTS_API_PATH=${{ secrets.VITE_PAYMENTS_API_PATH }}" >> .env
+          echo "TEST_USER_ID=${{ secrets.TEST_USER_ID }}" >> .env
+          echo "TEST_USER_PASSWORD=${{ secrets.TEST_USER_PASSWORD }}" >> .env
+
       - name: Cache Playwright browsers
         uses: actions/cache@v4
         id: playwright-cache
