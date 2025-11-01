@@ -60,11 +60,11 @@ jobs:
         continue-on-error: true
         run: pnpm e2e
 
-      - name: Update snapshots on failure
-        if: steps.test.outcome == 'failure'
+      - name: Update snapshots for baseline
+        if: (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop') && github.event_name == 'push'
         run: |
-          echo "=== Test failed, updating snapshots ==="
-          npx playwright test --update-snapshots
+            echo "=== Updating snapshots for baseline ==="
+            npx playwright test --update-snapshots
 
       - name: Upload new baseline to S3
         if: (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop') && github.event_name == 'push'
