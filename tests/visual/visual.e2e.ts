@@ -62,6 +62,7 @@ test.describe('비주얼테스트', () => {
           await page.waitForLoadState('networkidle');
 
           await page.getByRole('button', { name: '후라이드 치킨' }).click();
+          await page.getByText('뼈/순살 변경').waitFor();
 
           await expect(page).toHaveScreenshot(`${route}.png`);
         });
@@ -92,10 +93,12 @@ test.describe('비주얼테스트', () => {
           await expect(page).toHaveScreenshot(`${route}-delivery.png`);
         });
         test(`${route}-pickUp Visual Test`, async ({ page }) => {
+          //픽업으로 안찍힘 ㅂ달로 찍힘
           await page.goto(route);
           await page.waitForLoadState('networkidle');
 
           await page.getByRole('button', { name: '포장' }).click();
+          await page.getByText('주문 가능').waitFor();
 
           await expect(page).toHaveScreenshot(`${route}-pickUp.png`);
         });
@@ -126,11 +129,13 @@ test.describe('비주얼테스트', () => {
         });
         break;
 
-      case '/payment':
+      case '/payment': // 여기도 주문하는 이미지가 안찍힘
         test(`${route}?orderType=DELIVERY Visual Test`, async ({ page }) => {
           await page.goto(`/cart`);
           await page.waitForLoadState('networkidle');
+
           await page.getByText('주문하기').click();
+          await page.getByText('배달 받을 위치를 선택해주세요.').waitFor();
 
           await expect(page).toHaveScreenshot(`${route}.png`, { fullPage: true });
 
