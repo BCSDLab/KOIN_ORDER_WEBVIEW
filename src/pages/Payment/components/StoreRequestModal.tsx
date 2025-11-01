@@ -48,7 +48,7 @@ export default function StoreRequestModal({
     <BottomModal isOpen={isOpen} onClose={onClose}>
       <BottomModalHeader>
         <div className="flex w-full justify-between">사장님에게</div>
-        <button type="button" onClick={onClose}>
+        <button type="button" onClick={onClose} data-testid="storeRequest-modal-close">
           <CloseIcon />
         </button>
       </BottomModalHeader>
