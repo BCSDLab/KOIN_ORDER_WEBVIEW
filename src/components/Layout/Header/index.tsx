@@ -25,7 +25,7 @@ export default function Header() {
           team: 'BUSINESS',
           event_label: 'shop_categories_back',
           value: '',
-          previous_page: `${categoryName}`,
+          previous_page: categoryName,
           current_page: '메인',
           duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enterTimetablePage'))) / 1000,
         });
@@ -37,7 +37,7 @@ export default function Header() {
         event_label: 'shop_categories_back',
         value: '',
         duration_time: (new Date().getTime() - Number(sessionStorage.getItem('selectedCategoryTime'))) / 1000,
-        previous_page: `${categoryName}`,
+        previous_page: categoryName,
         current_page: '메인',
       });
     }
