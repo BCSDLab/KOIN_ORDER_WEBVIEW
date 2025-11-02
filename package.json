@@ -13,7 +13,7 @@
     "e2e": "playwright test",
     "e2e:report": "playwright show-report",
     "e2e:ui": "playwright test --ui",
-    "test:all": "pnpm test:run && pnpm e2e"
+    "visual": "playwright test tests/visual/snapshots.visual.ts"
   },
   "dependencies": {
     "@bcsdlab/utils": "^0.0.15",
