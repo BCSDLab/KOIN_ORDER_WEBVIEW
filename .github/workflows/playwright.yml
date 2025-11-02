@@ -52,9 +52,9 @@ jobs:
       
       - name: Download baseline from S3
         run: |
-          mkdir -p tests/visual/visual.e2e.ts-snapshots
-          aws s3 sync s3://front-snapshot-test/ tests/visual/visual.e2e.ts-snapshots/ --exclude "*" --include "*.png"
-      
+          mkdir -p tests/visual/visualTest.visual.ts-snapshots
+          aws s3 sync s3://front-snapshot-test/ tests/visual/visualTest.visual.ts-snapshots/ --exclude "*" --include "*.png"
+
       - name: Run test
         id: test
         continue-on-error: true
@@ -69,7 +69,7 @@ jobs:
       - name: Upload new baseline to S3
         if: (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop') && github.event_name == 'push'
         run: |
-          aws s3 sync tests/visual/visual.e2e.ts-snapshots/ s3://front-snapshot-test/ --exclude "*" --include "*.png"
+          aws s3 sync tests/visual/visualTest.visual.ts-snapshots/ s3://front-snapshot-test/ --exclude "*" --include "*.png"
 
       - name: Upload Playwright Report
         if: always()

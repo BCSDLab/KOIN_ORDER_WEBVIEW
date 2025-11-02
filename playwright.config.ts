@@ -18,7 +18,7 @@ export default defineConfig({
   retries: is_CI ? 2 : 0,
   workers: is_CI ? 1 : undefined,
   reporter: [['list'], ['html']],
-  snapshotPathTemplate: '{testDir}/visual/visual.e2e.ts-snapshots/{arg}{ext}',
+  snapshotPathTemplate: '{testDir}/visual/visualTest.visual.ts-snapshots/{arg}{ext}',
   use: {
     baseURL: BASE_URL,
     trace: 'on-first-retry',
