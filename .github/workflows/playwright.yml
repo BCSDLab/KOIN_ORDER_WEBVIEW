@@ -58,7 +58,7 @@ jobs:
       - name: Run test
         id: test
         continue-on-error: true
-        run: pnpm e2e
+        run: pnpm visual
 
       - name: Update snapshots for baseline
         if: (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop') && github.event_name == 'push'
