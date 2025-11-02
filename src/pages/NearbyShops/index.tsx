@@ -20,6 +20,7 @@ import useLogger from '@/util/hooks/analytics/useLogger';
 import { useScrollLogging } from '@/util/hooks/analytics/useScrollLogging';
 import useQueryState from '@/util/hooks/state/useQueryState';
 import useBooleanState from '@/util/hooks/useBooleanState';
+import { useSwipeToBack } from '@/util/hooks/useSwipeToBack';
 import { getLoggingTime, setStartLoggingTime } from '@/util/ts/analytics/loggingTime';
 
 interface Category {
@@ -70,6 +71,7 @@ function parseFilter(query: string | null): 'OPEN' | null {
 
 export default function NearbyShops() {
   const logger = useLogger();
+  useSwipeToBack();
 
   const { data: categories } = useShopCategories();
   const categoriesWithAll = categories.shop_categories.map((category: Category) => ({
@@ -150,19 +152,6 @@ export default function NearbyShops() {
   useEffect(() => {
     setStartLoggingTime('selectedCategoryTime');
   }, [selectedCategory]);
-
-  useEffect(() => {
-    sessionStorage.setItem('swipeToBack', 'false');
-    const handleWheel = (e: WheelEvent) => {
-      if (e.deltaX < -100) {
-        sessionStorage.setItem('swipeToBack', 'true');
-      }
-    };
-    window.addEventListener('wheel', handleWheel);
-    return () => {
-      window.removeEventListener('wheel', handleWheel);
-    };
-  }, []);
 
   return (
     <div className="flex h-full w-full flex-col items-center justify-center gap-4">

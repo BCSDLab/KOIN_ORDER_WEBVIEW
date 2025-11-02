@@ -12,11 +12,13 @@ import { useGetUnorderableShopMenus } from './hooks/useGetShopInfo';
 import { useMenuGroupScroll } from './hooks/useMenuGroupScroll';
 import useLogger from '@/util/hooks/analytics/useLogger';
 import { useScrollLogging } from '@/util/hooks/analytics/useScrollLogging';
+import { useSwipeToBack } from '@/util/hooks/useSwipeToBack';
 import { setStartLoggingTime } from '@/util/ts/analytics/loggingTime';
 // import useCart from '@/pages/Payment/hooks/useCart';
 // import { useOrderStore } from '@/stores/useOrderStore';
 
 export default function UnorderableShopView() {
+  useSwipeToBack();
   const logger = useLogger();
   const { shopId } = useParams();
   // const { orderType } = useOrderStore();
@@ -51,19 +53,6 @@ export default function UnorderableShopView() {
     setStartLoggingTime('enteredShopDetail');
     sessionStorage.setItem('enteredShopName', shopInfoSummary.name);
   }, [shopInfoSummary.name]);
-
-  useEffect(() => {
-    sessionStorage.setItem('swipeToBack', 'false');
-    const handleWheel = (e: WheelEvent) => {
-      if (e.deltaX < -100) {
-        sessionStorage.setItem('swipeToBack', 'true');
-      }
-    };
-    window.addEventListener('wheel', handleWheel);
-    return () => {
-      window.removeEventListener('wheel', handleWheel);
-    };
-  }, []);
 
   return (
     <>
