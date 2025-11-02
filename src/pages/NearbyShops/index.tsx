@@ -20,6 +20,7 @@ import useLogger from '@/util/hooks/analytics/useLogger';
 import { useScrollLogging } from '@/util/hooks/analytics/useScrollLogging';
 import useQueryState from '@/util/hooks/state/useQueryState';
 import useBooleanState from '@/util/hooks/useBooleanState';
+import { getLoggingTime, setStartLoggingTime } from '@/util/ts/analytics/loggingTime';
 
 interface Category {
   id: number;
@@ -93,14 +94,15 @@ export default function NearbyShops() {
     category: selectedCategory,
   });
 
+  const currentCategoryId = !!selectedCategory ? selectedCategory : 0;
+  const categoryName =
+    categories.shop_categories.find((category) => category.id === currentCategoryId)?.name || '전체보기';
+
   const getCurrentSortLabel = () => {
     return sortOptions.find((option) => option.id === selectedSort)?.label || '기본순';
   };
 
   const handleSortSelect = (sortId: SortType) => {
-    const currentCategoryId = selectedCategory === undefined ? 0 : selectedCategory;
-    const categoryName =
-      categories.shop_categories.find((category) => category.id === currentCategoryId)?.name || '전체보기';
     const sortTrackingLabel = SORT_TRACKING_MAP[sortId];
 
     logger.actionEventClick({
@@ -113,9 +115,6 @@ export default function NearbyShops() {
   };
 
   const toggleFilter = () => {
-    const currentCategoryId = selectedCategory === undefined ? 0 : selectedCategory;
-    const categoryName =
-      categories.shop_categories.find((category) => category.id === currentCategoryId)?.name || '전체보기';
     logger.actionEventClick({
       team: 'BUSINESS',
       event_label: 'shop_can',
@@ -129,7 +128,7 @@ export default function NearbyShops() {
       team: 'BUSINESS',
       event_label: 'shop_categories',
       value: category.name,
-      duration_time: (new Date().getTime() - Number(sessionStorage.getItem('selectedCategoryTime'))) / 1000,
+      duration_time: getLoggingTime('selectedCategoryTime'),
       event_category: 'shop_category_click',
       previous_page:
         categories.shop_categories.find((category) => category.id === selectedCategory)?.name || '전체보기',
@@ -139,9 +138,6 @@ export default function NearbyShops() {
   };
 
   const shopScrollLogging = () => {
-    const currentCategoryId = selectedCategory === undefined ? 0 : selectedCategory;
-    const categoryName =
-      categories.shop_categories.find((category) => category.id === currentCategoryId)?.name || '전체보기';
     logger.actionEventClick({
       team: 'BUSINESS',
       event_label: 'shop_categories',
@@ -152,7 +148,7 @@ export default function NearbyShops() {
   useScrollLogging(shopScrollLogging);
 
   useEffect(() => {
-    sessionStorage.setItem('selectedCategoryTime', new Date().getTime().toString());
+    setStartLoggingTime('selectedCategoryTime');
   }, [selectedCategory]);
 
   useEffect(() => {

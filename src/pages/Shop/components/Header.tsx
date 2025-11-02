@@ -4,6 +4,7 @@ import ArrowBackIcon from '@/assets/Main/arrow-back-icon.svg';
 // import CartIcon from '@/assets/Shop/cart-icon.svg';
 import { backButtonTapped } from '@/util/bridge/nativeAction';
 import useLogger from '@/util/hooks/analytics/useLogger';
+import { getLoggingTime } from '@/util/ts/analytics/loggingTime';
 
 interface HeaderProps {
   name: string;
@@ -25,7 +26,7 @@ export default function Header({ name, targetRef, noImage }: HeaderProps) {
         team: 'BUSINESS',
         event_label: 'shop_detail_view_back',
         value: sessionStorage.getItem('enteredShopName') || '',
-        duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enteredShopDetail'))) / 1000,
+        duration_time: getLoggingTime('enteredShopDetail'),
         current_page: sessionStorage.getItem('currentCategory') || '전체보기',
       });
       return;
@@ -35,7 +36,7 @@ export default function Header({ name, targetRef, noImage }: HeaderProps) {
       team: 'BUSINESS',
       event_label: 'shop_detail_view_back',
       value: sessionStorage.getItem('enteredShopName') || '',
-      duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enteredShopDetail'))) / 1000,
+      duration_time: getLoggingTime('enteredShopDetail'),
       current_page: sessionStorage.getItem('currentCategory') || '전체보기',
     });
 

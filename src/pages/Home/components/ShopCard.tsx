@@ -3,6 +3,7 @@ import Delivery from '@/assets/Home/delivery-icon.svg';
 import StarIcon from '@/assets/Home/star-icon.svg';
 import { getCategoryNameById } from '@/constants/shopCategories';
 import useLogger from '@/util/hooks/analytics/useLogger';
+import { getLoggingTime } from '@/util/ts/analytics/loggingTime';
 
 interface MenuCardProps {
   shopId: number;
@@ -48,7 +49,7 @@ export default function ShopCard({
       team: 'BUSINESS',
       event_label: 'shop_clicked',
       value: `${name}`,
-      duration_time: (new Date().getTime() - Number(sessionStorage.getItem('selectedCategoryTime'))) / 1000,
+      duration_time: getLoggingTime('selectedCategoryTime'),
       previous_page: categoryName,
       current_page: `${name}`,
     });

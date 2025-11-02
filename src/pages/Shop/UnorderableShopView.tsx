@@ -12,6 +12,7 @@ import { useGetUnorderableShopMenus } from './hooks/useGetShopInfo';
 import { useMenuGroupScroll } from './hooks/useMenuGroupScroll';
 import useLogger from '@/util/hooks/analytics/useLogger';
 import { useScrollLogging } from '@/util/hooks/analytics/useScrollLogging';
+import { setStartLoggingTime } from '@/util/ts/analytics/loggingTime';
 // import useCart from '@/pages/Payment/hooks/useCart';
 // import { useOrderStore } from '@/stores/useOrderStore';
 
@@ -47,7 +48,7 @@ export default function UnorderableShopView() {
   useScrollLogging(shopDetailScrollLogging);
 
   useEffect(() => {
-    sessionStorage.setItem('enteredShopDetail', new Date().getTime().toString());
+    setStartLoggingTime('enteredShopDetail');
     sessionStorage.setItem('enteredShopName', shopInfoSummary.name);
   }, [shopInfoSummary.name]);
 

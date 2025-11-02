@@ -4,6 +4,7 @@ import NavigateStoreIcon from '/src/assets/Home/navigate-store-icon.svg';
 import { Link, useSearchParams } from 'react-router-dom';
 import useLogger from '@/util/hooks/analytics/useLogger';
 import { getCategoryNameById } from '@/constants/shopCategories';
+import { getLoggingTime } from '@/util/ts/analytics/loggingTime';
 
 interface RelatedSearchItemProps {
   tag: 'store' | 'menu';
@@ -22,7 +23,7 @@ export default function RelateSearchItem({ tag, shop_name, menu_name, to }: Rela
       team: 'BUSINESS',
       event_label: 'shop_clicked',
       value: `${shop_name}`,
-      duration_time: (new Date().getTime() - Number(sessionStorage.getItem('selectedCategoryTime'))) / 1000,
+      duration_time: getLoggingTime('selectedCategoryTime'),
       previous_page: getCategoryNameById(categoryParam ? Number(categoryParam) : undefined),
       current_page: `${shop_name}`,
     });

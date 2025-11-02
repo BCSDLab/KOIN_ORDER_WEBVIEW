@@ -9,6 +9,7 @@ import { getCategoryNameById } from '@/constants/shopCategories';
 import { isAndroid, isNative } from '@/util/bridge/bridge';
 import { backButtonTapped } from '@/util/bridge/nativeAction';
 import useLogger from '@/util/hooks/analytics/useLogger';
+import { getLoggingTime } from '@/util/ts/analytics/loggingTime';
 
 export default function Header() {
   const logger = useLogger();
@@ -27,7 +28,7 @@ export default function Header() {
           value: '',
           previous_page: categoryName,
           current_page: '메인',
-          duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enterTimetablePage'))) / 1000,
+          duration_time: getLoggingTime('selectedCategoryTime'),
         });
         return;
       }
@@ -36,7 +37,7 @@ export default function Header() {
         team: 'BUSINESS',
         event_label: 'shop_categories_back',
         value: '',
-        duration_time: (new Date().getTime() - Number(sessionStorage.getItem('selectedCategoryTime'))) / 1000,
+        duration_time: getLoggingTime('selectedCategoryTime'),
         previous_page: categoryName,
         current_page: '메인',
       });
