@@ -3,6 +3,7 @@ import clsx from 'clsx';
 import ArrowDownIcon from '@/assets/OrderHistory/arrow-down-icon.svg';
 import RefreshIcon from '@/assets/OrderHistory/refresh-icon.svg';
 import SearchIconGray from '@/assets/OrderHistory/search-icon-gray.svg';
+import Button from '@/components/UI/Button';
 import useBooleanState from '@/util/hooks/useBooleanState';
 import useScrollLock from '@/util/hooks/useScrollLock';
 
@@ -68,7 +69,7 @@ export default function FilteringSearchBar({
           />
         </div>
         {keyword && (
-          <button type="button" onClick={handleCancel} className="flex font-semibold text-neutral-500">
+          <button onClick={handleCancel} className="flex font-semibold text-neutral-500">
             취소
           </button>
         )}
@@ -82,48 +83,56 @@ export default function FilteringSearchBar({
       )}
 
       {isFiltered ? (
-        <div className="flex gap-2 text-[14px] leading-[160%] font-semibold text-neutral-500">
-          <button className="shadow-1 flex items-center gap-[6px] rounded-2xl bg-white px-2 py-[6px]" onClick={onReset}>
-            <span>초기화</span>
-            <RefreshIcon />
-          </button>
-          <button
-            onClick={openFilter}
-            className={clsx(
-              'shadow-1 flex items-center gap-[6px] rounded-2xl px-2 py-[6px]',
-              isPeriod ? 'bg-primary-500 text-[#F8F8FA]' : 'bg-white text-neutral-500',
-            )}
+        <div className="flex gap-2 leading-[160%]">
+          <Button
+            size="sm"
+            color="white"
+            onClick={onReset}
+            endIcon={<RefreshIcon />}
+            className="rounded-2xl border-0 px-2 py-[6px] text-[15px]"
           >
-            <span>{periodLabel}</span>
-            {isPeriod ? <ArrowDownIcon fill="white" /> : <ArrowDownIcon />}
-          </button>
-          <button
+            초기화
+          </Button>
+
+          <Button
+            size="sm"
+            color={isPeriod ? 'primary' : 'white'}
             onClick={openFilter}
-            className={clsx(
-              'shadow-1 flex items-center gap-[6px] rounded-2xl px-2 py-[6px]',
-              isOrder ? 'bg-primary-500 text-[#F8F8FA]' : 'bg-white text-neutral-500',
-            )}
-          >
-            <span>{orderLabel}</span>
-            {isOrder ? <ArrowDownIcon fill="white" /> : <ArrowDownIcon />}
-          </button>
-        </div>
-      ) : (
-        <div className="flex gap-2 text-[14px] leading-[160%] font-semibold text-neutral-500">
-          <button
-            onClick={openFilter}
-            className="shadow-1 flex items-center gap-[6px] rounded-2xl bg-white px-2 py-[6px]"
+            endIcon={isPeriod ? <ArrowDownIcon fill="white" /> : <ArrowDownIcon />}
+            className="rounded-2xl border-0 px-2 py-[6px] text-[15px]"
           >
             {periodLabel}
-            <ArrowDownIcon />
-          </button>
-          <button
+          </Button>
+          <Button
+            size="sm"
+            color={isOrder ? 'primary' : 'white'}
             onClick={openFilter}
-            className="shadow-1 flex items-center gap-[6px] rounded-2xl bg-white px-2 py-[6px]"
+            endIcon={isOrder ? <ArrowDownIcon fill="white" /> : <ArrowDownIcon />}
+            className="rounded-2xl border-0 px-2 py-[6px] text-[15px]"
           >
             {orderLabel}
-            <ArrowDownIcon />
-          </button>
+          </Button>
+        </div>
+      ) : (
+        <div className="flex gap-2 leading-[160%]">
+          <Button
+            size="sm"
+            color="white"
+            onClick={openFilter}
+            endIcon={<ArrowDownIcon />}
+            className="rounded-2xl border-0 px-2 py-[6px] text-[15px]"
+          >
+            {periodLabel}
+          </Button>
+          <Button
+            size="sm"
+            color="white"
+            onClick={openFilter}
+            endIcon={<ArrowDownIcon />}
+            className="rounded-2xl border-0 px-2 py-[6px] text-[15px]"
+          >
+            {orderLabel}
+          </Button>
         </div>
       )}
     </div>
