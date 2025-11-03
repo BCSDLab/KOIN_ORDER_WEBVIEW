@@ -47,6 +47,7 @@ export default function UnorderableShopView() {
       event_category: 'scroll',
     });
   };
+
   useScrollLogging(shopDetailScrollLogging);
 
   useEffect(() => {

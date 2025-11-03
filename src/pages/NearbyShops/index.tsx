@@ -147,6 +147,7 @@ export default function NearbyShops() {
       event_category: 'scroll',
     });
   };
+
   useScrollLogging(shopScrollLogging);
 
   useEffect(() => {
