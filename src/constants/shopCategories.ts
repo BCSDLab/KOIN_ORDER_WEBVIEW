@@ -1,19 +1,18 @@
-const SHOP_CATEGORIES = [
-  { id: 1, name: '전체보기' },
-  { id: 2, name: '치킨' },
-  { id: 3, name: '피자/버거' },
-  { id: 7, name: '고깃집' },
-  { id: 4, name: '도시락/분식' },
-  { id: 9, name: '주점' },
-  { id: 8, name: '한식' },
-  { id: 6, name: '중국집' },
-  { id: 5, name: '족발' },
-  { id: 10, name: '카페' },
-  { id: 11, name: '콜밴' },
-  { id: 12, name: '기타' },
-] as const;
+const SHOP_CATEGORIES = new Map<number, string>([
+  [1, '전체보기'],
+  [2, '치킨'],
+  [3, '피자/버거'],
+  [7, '고깃집'],
+  [4, '도시락/분식'],
+  [9, '주점'],
+  [8, '한식'],
+  [6, '중국집'],
+  [5, '족발'],
+  [10, '카페'],
+  [11, '콜밴'],
+  [12, '기타'],
+]);
 
 export function getCategoryNameById(id?: number | null): string {
-  if (!id) return '전체보기';
-  return SHOP_CATEGORIES.find((c) => c.id === id)?.name ?? '전체보기';
+  return id ? (SHOP_CATEGORIES.get(id) ?? '전체보기') : '전체보기';
 }
