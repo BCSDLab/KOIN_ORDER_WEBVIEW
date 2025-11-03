@@ -37,7 +37,10 @@ export default function RelateSearchItem({ tag, shop_name, menu_name, to }: Rela
     >
       <div className="flex items-center gap-1">
         {tag === 'store' ? <StoreIcon /> : <MenuIcon />}
-        <p className="text-[10px] text-neutral-500">{menu_name ? `${menu_name} | ${shop_name}` : shop_name}</p>
+        <p className="text-[10px] text-neutral-500">
+          {menu_name && `${menu_name} | `}
+          {shop_name}
+        </p>
       </div>
       <NavigateStoreIcon />
     </Link>
