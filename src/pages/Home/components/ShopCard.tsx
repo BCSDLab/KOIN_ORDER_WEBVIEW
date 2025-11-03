@@ -41,10 +41,10 @@ export default function ShopCard({
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const thumbnailUrl = img.find((image) => image.is_thumbnail)?.image_url || '';
-  const categoryParam = searchParams.get('category');
 
   const handleShopCardClick = () => {
-    const categoryName = getCategoryNameById(categoryParam ? Number(categoryParam) : undefined);
+    const categoryId = Number(searchParams.get('category')) || undefined;
+    const categoryName = getCategoryNameById(categoryId);
     logger.actionEventClick({
       team: 'BUSINESS',
       event_label: 'shop_clicked',

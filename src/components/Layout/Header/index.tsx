@@ -19,8 +19,9 @@ export default function Header() {
 
   const backToPreviousPage = () => {
     if (pathname === '/shops') {
-      const categoryParam = searchParams.get('category');
-      const categoryName = getCategoryNameById(categoryParam ? Number(categoryParam) : undefined);
+      const categoryId = Number(searchParams.get('category')) || undefined;
+      const categoryName = getCategoryNameById(categoryId);
+
       if (sessionStorage.getItem('swipeToBack') === 'true') {
         logger.actionEventSwipe({
           team: 'BUSINESS',

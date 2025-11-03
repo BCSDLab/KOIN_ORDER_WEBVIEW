@@ -16,7 +16,7 @@ interface RelatedSearchItemProps {
 export default function RelateSearchItem({ tag, shop_name, menu_name, to }: RelatedSearchItemProps) {
   const logger = useLogger();
   const [searchParams] = useSearchParams();
-  const categoryParam = searchParams.get('category');
+  const categoryId = Number(searchParams.get('category')) || undefined;
 
   const handleSearchItemClick = () => {
     logger.actionEventClick({
@@ -24,7 +24,7 @@ export default function RelateSearchItem({ tag, shop_name, menu_name, to }: Rela
       event_label: 'shop_clicked',
       value: `${shop_name}`,
       duration_time: getLoggingTime('selectedCategoryTime'),
-      previous_page: getCategoryNameById(categoryParam ? Number(categoryParam) : undefined),
+      previous_page: getCategoryNameById(categoryId),
       current_page: `${shop_name}`,
     });
   };

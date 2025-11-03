@@ -9,8 +9,9 @@ export default function SearchBar() {
   const [searchParams] = useSearchParams();
 
   const handleSearchBarClick = () => {
-    const categoryParam = searchParams.get('category');
-    const categoryName = getCategoryNameById(categoryParam ? Number(categoryParam) : undefined);
+    const categoryId = Number(searchParams.get('category')) || undefined;
+    const categoryName = getCategoryNameById(categoryId);
+
     logger.actionEventClick({
       team: 'BUSINESS',
       event_label: 'search_bar_clicked',
