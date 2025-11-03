@@ -8,6 +8,13 @@ export const useGetShopDetail = (orderableShopId: number) => {
   });
 };
 
+export const useGetUnorderableSummaryShopInfo = (UnorderableShopId: number) => {
+  return useSuspenseQuery({
+    queryKey: ['unorderableShopInfo', UnorderableShopId],
+    queryFn: () => getUnorderableShopInfo({ UnorderableShopId }),
+  });
+};
+
 export const useGetUnorderableShopDetail = (UnorderableShopId: number) => {
   return useSuspenseQuery({
     queryKey: ['unorderableShopDetail', UnorderableShopId],
