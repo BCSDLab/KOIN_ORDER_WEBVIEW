@@ -48,22 +48,25 @@ export default function ImageCarousel({ images, targetRef, shopName }: ImageCaro
     const index = Math.round(scrollLeft / width);
     setScrollIndex(index);
 
-    // 자동 슬라이드 시
-    if (!isInteracting) {
-      lastScrollLeftRef.current = scrollLeft;
-      return;
-    }
+    if (shopName) {
+      // 자동 슬라이드 시
+      if (!isInteracting) {
+        lastScrollLeftRef.current = scrollLeft;
+        return;
+      }
 
-    // 인덱스 변화 없을 때
-    if (index !== prevIndexRef.current) {
-      lastScrollLeftRef.current = scrollLeft;
-      return;
+      // 인덱스 변화 없을 때
+      if (index !== prevIndexRef.current) {
+        lastScrollLeftRef.current = scrollLeft;
+        return;
+      }
+
+      logger.actionEventSwipe({
+        team: 'BUSINESS',
+        event_label: 'shop_picture_swipe',
+        value: shopName,
+      });
     }
-    logger.actionEventSwipe({
-      team: 'BUSINESS',
-      event_label: 'shop_picture_swipe',
-      value: shopName || '',
-    });
   };
 
   useEffect(() => {
