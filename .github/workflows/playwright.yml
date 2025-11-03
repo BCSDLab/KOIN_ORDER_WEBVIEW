@@ -32,12 +32,12 @@ jobs:
           echo "TEST_USER_ID=${{ secrets.TEST_USER_ID }}" >> .env
           echo "TEST_USER_PASSWORD=${{ secrets.TEST_USER_PASSWORD }}" >> .env
 
-      - name: Cache Playwright browsers
-        uses: actions/cache@v4
+      - name: Restore Playwright browsers cache
+        uses: actions/cache/restore@v4
         id: playwright-cache
         with:
           path: ~/.cache/ms-playwright
-          key: ${{ runner.os }}-playwright-${{ hashFiles('**/pnpm-lock.yaml') }}  
+          key: ${{ runner.os }}-playwright-${{ hashFiles('**/pnpm-lock.yaml') }}
       
       - name: Install Playwright browsers
         if: steps.playwright-cache.outputs.cache-hit != 'true'
@@ -110,6 +110,13 @@ jobs:
               repo: context.repo.repo,
               body: `${status}\n\n[Playwright Report](${reportUrl}) (Test 실행 커밋: ${sha.substring(0, 7)})`
             });
+
+      - name: Save Playwright browsers cache
+        if: always() && steps.playwright-cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ hashFiles('**/pnpm-lock.yaml') }}
       
       - name: Check test result
         if: steps.test.outcome == 'failure'
