@@ -1,8 +1,7 @@
-import { render, screen } from '@testing-library/react';
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, type Mock } from 'vitest';
 import BottomModal, { BottomModalHeader, BottomModalContent, BottomModalFooter } from './BottomModal/BottomModal';
 import Modal, { ModalHeader, ModalContent, ModalFooter } from './CenterModal/Modal';
-import useHandleOutside from '@/util/hooks/useHandleOutside';
+import { render, screen } from '@/../tests/test-utils';
 import useScrollLock from '@/util/hooks/useScrollLock';
 import useTouchOutside from '@/util/hooks/useTouchOutside';
 
@@ -51,14 +50,26 @@ describe('CenterModal', () => {
     expect(dialog.className).toContain('custom-modal');
   });
 
-  it('useTouchOutside 훅이 호출되어야 한다', () => {
+  it('useTouchOutside에 ref와 handler가 전달되고, handler 실행 시 onClose가 호출된다', () => {
     const onClose = vi.fn();
     render(
       <Modal isOpen={true} onClose={onClose}>
         내용
       </Modal>,
     );
-    expect(useTouchOutside).toHaveBeenCalled();
+
+    const calls = (useTouchOutside as unknown as Mock).mock.calls;
+    expect(calls.length).toBeGreaterThan(0);
+
+    const [ref, handler] = calls[calls.length - 1] as [React.RefObject<HTMLElement>, (e: Event) => void];
+    expect(ref && typeof handler).toBeTruthy();
+    expect(typeof handler).toBe('function');
+
+    const dialog = screen.getByRole('dialog');
+    expect(ref?.current).toBe(dialog);
+
+    handler(new Event('test'));
+    expect(onClose).toHaveBeenCalledTimes(1);
   });
 
   it('useScrollLock 훅이 isOpen 값으로 호출되어야 한다', () => {
@@ -103,14 +114,26 @@ describe('BottomModal', () => {
     expect(dialog.className).toContain('custom-bottom');
   });
 
-  it('useHandleOutside 훅이 호출되어야 한다', () => {
+  it('useHandleOutside에 ref와 handler가 전달되고, handler 실행 시 onClose가 호출된다', () => {
     const onClose = vi.fn();
     render(
       <BottomModal isOpen={true} onClose={onClose}>
         내용
       </BottomModal>,
     );
-    expect(useHandleOutside).toHaveBeenCalled();
+
+    const calls = (useTouchOutside as unknown as Mock).mock.calls;
+    expect(calls.length).toBeGreaterThan(0);
+
+    const [ref, handler] = calls[calls.length - 1] as [React.RefObject<HTMLElement>, (e: Event) => void];
+    expect(ref && typeof handler).toBeTruthy();
+    expect(typeof handler).toBe('function');
+
+    const dialog = screen.getByRole('dialog');
+    expect(ref?.current).toBe(dialog);
+
+    handler(new Event('test'));
+    expect(onClose).toHaveBeenCalledTimes(1);
   });
 
   it('useScrollLock 훅이 isOpen 값으로 호출되어야 한다', () => {
