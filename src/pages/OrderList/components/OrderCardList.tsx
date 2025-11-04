@@ -33,7 +33,7 @@ export default function OrderCardList({ orders, onLoadMore, hasNextPage, isFetch
   }, [hasNextPage, onLoadMore, isFetchingNextPage]);
 
   return (
-    <div className="mt-4 flex flex-col gap-4 px-6">
+    <div className="flex flex-col gap-4 px-6">
       {orders.map((order) => (
         <OrderCard key={order.id} orderInfo={order} />
       ))}
