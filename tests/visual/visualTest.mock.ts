@@ -1,19 +1,59 @@
 import { StudentUserResponse } from '@/api/auth/entity';
-import { CartResponse } from '@/api/cart/entity';
-import { AddressSearchResponse } from '@/api/delivery/entity';
+import { CartResponse, CartSummaryResponse } from '@/api/cart/entity';
+import { AddressSearchResponse, CampusDeliveryAddressResponse, RiderRequestResponse } from '@/api/delivery/entity';
 import { InProgressOrder, OrderResponse } from '@/api/order/entity';
 import {
   OrderableShopsResponse,
   RelatedSearchResponse,
   ShopCategoriesResponse,
+  ShopDeliveryInfoResponse,
   ShopDetailInfoResponse,
   ShopInfoResponse,
   ShopInfoSummaryResponse,
+  ShopListResponse,
   ShopMenuDetailResponse,
   ShopMenuGroupsResponse,
   UnorderableShopDetailInfoResponse,
   UnorderableShopMenusResponse,
 } from '@/api/shop/entity';
+
+interface MOCK_IMAGESType {
+  [key: string]: string;
+}
+
+const MOCK_SHOPS_CATEGORIES_IMAGES: MOCK_IMAGESType = {
+  all: '/src/assets/test/all.webp',
+  chicken: '/src/assets/test/chicken.webp',
+  pizzaAndBurger: '/src/assets/test/pizzaAndBurger.webp',
+  meat: '/src/assets/test/meat.webp',
+  packedLunchAndSnackFood: '/src/assets/test/packedLunchAndSnackFood.webp',
+  bar: '/src/assets/test/bar.webp',
+  koreanFood: '/src/assets/test/koreanFood.webp',
+  chineseFood: '/src/assets/test/chineseFood.webp',
+  jokbal: '/src/assets/test/jokbal.webp',
+  cafe: '/src/assets/test/cafe.webp',
+  callBen: '/src/assets/test/callBen.webp',
+  others: '/src/assets/test/others.webp',
+};
+
+const MOCK_ORDER_TEST_IMAGE: string = '/src/assets/test/kimbapHeaven.webp';
+
+const MOCK_ORDER_SHOP_2_IMAGE: string = '/src/assets/test/goodMorningSalomanChicken.webp';
+
+const MOCK_ORDER_SHOP_2_MENU_IMAGE: string = '/src/assets/test/menu.webp';
+
+const MOCK_ORDER_SHOPS_IMAGES: MOCK_IMAGESType = {
+  kimbapHeaven: '/src/assets/test/kimbapHeaven.webp',
+  maslen: '/src/assets/test/maslen.webp',
+  byeongcheonRawFishRestaurant: '/src/assets/test/byeongcheonRawFishRestaurant.webp',
+};
+
+const MOCK_SHOP_21_IMAGE: string = '/src/assets/test/stoneGrilledPorkBelly.webp';
+
+const MOCK_SHOP_IMAGES: MOCK_IMAGESType = {
+  universityStore: '/src/assets/test/universityStore.webp',
+  bungBungCallBen: '/src/assets/test/bungBungCallBen.webp',
+};
 
 export const MOCK_ORDER_SHOP_SEARCH_RELATED_RESULTS: RelatedSearchResponse = {
   search_keyword: '피자',
@@ -95,80 +135,68 @@ export const MOCK_SHOPS_CATEGORIES_RESULTS: ShopCategoriesResponse = {
   shop_categories: [
     {
       id: 1,
-      image_url:
-        'https://stage-static.koreatech.in/upload/SHOPS/2025/7/28/92f62534-7f06-4f15-b739-1662d7f95fe0/output (4).png',
+      image_url: MOCK_SHOPS_CATEGORIES_IMAGES.all,
       name: '전체보기',
     },
     {
       id: 2,
-      image_url:
-        'https://stage-static.koreatech.in/upload/SHOPS/2025/7/22/f50127c7-1f1f-496c-bd76-f74321e867c8/Layer 31 (3).png',
+      image_url: MOCK_SHOPS_CATEGORIES_IMAGES.chicken,
       name: '치킨',
     },
     {
       id: 3,
-      image_url:
-        'https://stage-static.koreatech.in/upload/SHOPS/2025/7/22/7ccb32a7-1246-458b-a634-5287c8a32dce/Group (1).png',
+      image_url: MOCK_SHOPS_CATEGORIES_IMAGES.pizzaAndBurger,
       name: '피자/버거',
     },
     {
       id: 7,
-      image_url:
-        'https://stage-static.koreatech.in/upload/SHOPS/2025/7/22/ff8a149f-528f-4f62-92d3-734e0fd667b2/Layer_99.png',
+      image_url: MOCK_SHOPS_CATEGORIES_IMAGES.meat,
       name: '고깃집',
     },
     {
       id: 4,
-      image_url:
-        'https://stage-static.koreatech.in/upload/SHOPS/2025/7/22/683f4a41-be47-4ba4-b9c8-df99120f27ff/Group (2).png',
+      image_url: MOCK_SHOPS_CATEGORIES_IMAGES.packedLunchAndSnackFood,
       name: '도시락/분식',
     },
     {
       id: 9,
-      image_url:
-        'https://stage-static.koreatech.in/upload/SHOPS/2025/7/22/b36c9a3f-0551-465e-8e59-8bed2da8c8c1/Capa_1 (1).png',
+      image_url: MOCK_SHOPS_CATEGORIES_IMAGES.bar,
       name: '주점',
     },
     {
       id: 8,
-      image_url:
-        'https://stage-static.koreatech.in/upload/SHOPS/2025/7/22/b2011e9d-89da-4ffb-9861-6903f757170c/Capa_1.png',
+      image_url: MOCK_SHOPS_CATEGORIES_IMAGES.koreanFood,
       name: '한식',
     },
     {
       id: 6,
-      image_url:
-        'https://stage-static.koreatech.in/upload/SHOPS/2025/7/22/67bfb6ed-48a3-4f39-b722-f6d82167b9ff/Capa_1 (2).png',
+      image_url: MOCK_SHOPS_CATEGORIES_IMAGES.chineseFood,
       name: '중국집',
     },
     {
       id: 5,
-      image_url:
-        'https://stage-static.koreatech.in/upload/SHOPS/2025/7/22/6b1d3823-42cf-4e03-afbb-75c28bdfc8c5/Group 1000002912.png',
+      image_url: MOCK_SHOPS_CATEGORIES_IMAGES.jokbal,
       name: '족발',
     },
     {
       id: 10,
-      image_url:
-        'https://stage-static.koreatech.in/upload/SHOPS/2025/7/22/57ea33ac-86c8-4d78-ab03-c4aeae65e994/Group (3).png',
+      image_url: MOCK_SHOPS_CATEGORIES_IMAGES.cafe,
       name: '카페',
     },
     {
       id: 11,
-      image_url:
-        'https://stage-static.koreatech.in/upload/SHOPS/2025/7/22/12fedbf1-e711-4124-abc6-633b1232e7b3/Frame.png',
+      image_url: MOCK_SHOPS_CATEGORIES_IMAGES.callBen,
       name: '콜밴',
     },
     {
       id: 12,
-      image_url:
-        'https://stage-static.koreatech.in/upload/SHOPS/2025/7/22/cedb5b41-4605-463a-a99c-658aa493b3ad/icn.png',
+      image_url: MOCK_SHOPS_CATEGORIES_IMAGES.others,
       name: '기타',
     },
   ],
 };
 
-export const MOCK_ORDER_RESULTS: OrderResponse = {
+export const MOCK_ORDER_RESULTS1: OrderResponse = {
   total_count: 10,
   current_count: 5,
   total_page: 2,
@@ -180,7 +208,28 @@ export const MOCK_ORDER_RESULTS: OrderResponse = {
       orderable_shop_id: 1,
       orderable_shop_name: '김밥 천국',
       open_status: false,
-      orderable_shop_thumbnail: 'https://static.koreatech.in/test.png',
+      orderable_shop_thumbnail: MOCK_ORDER_TEST_IMAGE,
+      order_date: '2025-11-02',
+      order_status: 'DELIVERED',
+      order_title: '김밥 외 1건',
+      total_amount: 12300,
+    },
+  ],
+};
+
+export const MOCK_ORDER_RESULTS2: OrderResponse = {
+  total_count: 10,
+  current_count: 5,
+  total_page: 2,
+  current_page: 2,
+  orders: [
+    {
+      id: 2,
+      payment_id: 2,
+      orderable_shop_id: 2,
+      orderable_shop_name: '김밥 천국ㅁㅁ',
+      open_status: false,
+      orderable_shop_thumbnail: MOCK_ORDER_TEST_IMAGE,
       order_date: '2025-11-02',
       order_status: 'DELIVERED',
       order_title: '김밥 외 1건',
@@ -195,12 +244,12 @@ export const MOCK_ORDER_IN_PROGRESS_RESULTS: InProgressOrder[] = [
     orderable_shop_id: 14,
     payment_id: 1,
     order_type: 'TAKE_OUT',
-    orderable_shop_name: '코인 병천점',
-    orderable_shop_thumbnail: 'https://static.koreatech.in/test.png',
+    orderable_shop_name: '김밥 천국',
+    orderable_shop_thumbnail: MOCK_ORDER_TEST_IMAGE,
     estimated_at: '17:45',
     order_status: 'COOKING',
-    order_title: '족발 외 1건',
-    total_amount: 50000,
+    order_title: '라면 외 1건',
+    total_amount: 10000,
   },
 ];
 
@@ -221,11 +270,17 @@ export const MOCK_ORDER_SHOP_2_SUMMARY_RESULTS: ShopInfoSummaryResponse = {
   maximum_delivery_tip: 3500,
   images: [
     {
-      image_url:
-        'https://static.koreatech.in/upload/owners/2024/03/28/ebef80af-9d18-44c8-b4dd-44c64f21a520-1711617869236/1693645787165.jpg',
+      image_url: MOCK_ORDER_SHOP_2_IMAGE,
       is_thumbnail: true,
     },
   ],
+};
+
+export const MOCK_SUMMARY_2_RESULTS: CartSummaryResponse = {
+  orderable_shop_id: 101,
+  shop_minimum_order_amount: 20000,
+  cart_items_amount: 17500,
+  is_available: true,
 };
 
 export const MOCK_SHOP_2_MENUS_GROUPS_RESULTS: ShopMenuGroupsResponse = {
@@ -241,7 +296,7 @@ export const MOCK_SHOP_2_MENUS_GROUPS_RESULTS: ShopMenuGroupsResponse = {
     },
     {
       id: 9,
-      name: '세트메뉴',
+      name: '세트메뉴ㅁ',
     },
     {
       id: 10,
@@ -263,8 +318,7 @@ export const MOCK_ORDER_SHOP_2_MENUS_RESULTS: ShopInfoResponse[] = [
         id: 11,
         name: '후라이드 치킨',
         description: '바삭하고 고소한 오리지널 후라이드',
-        thumbnail_image:
-          'https://static.koreatech.in/upload/owners/2024/03/06/2d7687d6-57dd-4241-988a-26d2b2855030-1709732308684/20240304_182511.jpg',
+        thumbnail_image: MOCK_ORDER_SHOP_2_MENU_IMAGE,
         is_sold_out: false,
         prices: [
           {
@@ -279,8 +333,7 @@ export const MOCK_ORDER_SHOP_2_MENUS_RESULTS: ShopInfoResponse[] = [
         id: 12,
         name: '양념 치킨',
         description: '달콤매콤한 특제 양념 소스',
-        thumbnail_image:
-          'https://static.koreatech.in/upload/owners/2024/03/06/2d7687d6-57dd-4241-988a-26d2b2855030-1709732308684/20240304_182511.jpg',
+        thumbnail_image: MOCK_ORDER_SHOP_2_MENU_IMAGE,
         is_sold_out: false,
         prices: [
           {
@@ -295,8 +348,7 @@ export const MOCK_ORDER_SHOP_2_MENUS_RESULTS: ShopInfoResponse[] = [
         id: 13,
         name: '간장마늘 치킨',
         description: '짭쪼름한 간장과 알싸한 마늘의 조화',
-        thumbnail_image:
-          'https://static.koreatech.in/upload/owners/2024/03/06/2d7687d6-57dd-4241-988a-26d2b2855030-1709732308684/20240304_182511.jpg',
+        thumbnail_image: MOCK_ORDER_SHOP_2_MENU_IMAGE,
         is_sold_out: true,
         prices: [
           {
@@ -317,8 +369,7 @@ export const MOCK_ORDER_SHOP_2_MENUS_RESULTS: ShopInfoResponse[] = [
         id: 14,
         name: '반반치킨',
         description: '두 가지 맛을 한 번에!',
-        thumbnail_image:
-          'https://static.koreatech.in/upload/owners/2024/03/06/2d7687d6-57dd-4241-988a-26d2b2855030-1709732308684/20240304_182511.jpg',
+        thumbnail_image: MOCK_ORDER_SHOP_2_MENU_IMAGE,
         is_sold_out: false,
         prices: [
           {
@@ -333,8 +384,7 @@ export const MOCK_ORDER_SHOP_2_MENUS_RESULTS: ShopInfoResponse[] = [
         id: 15,
         name: '치떡세트',
         description: '치킨 한마리와 매콤달콤 떡볶이',
-        thumbnail_image:
-          'https://static.koreatech.in/upload/owners/2024/03/06/2d7687d6-57dd-4241-988a-26d2b2855030-1709732308684/20240304_182511.jpg',
+        thumbnail_image: MOCK_ORDER_SHOP_2_MENU_IMAGE,
         is_sold_out: false,
         prices: [
           {
@@ -355,8 +405,7 @@ export const MOCK_ORDER_SHOP_2_MENUS_RESULTS: ShopInfoResponse[] = [
         id: 14,
         name: '반반치킨',
         description: '두 가지 맛을 한 번에!',
-        thumbnail_image:
-          'https://static.koreatech.in/upload/owners/2024/03/06/2d7687d6-57dd-4241-988a-26d2b2855030-1709732308684/20240304_182511.jpg',
+        thumbnail_image: MOCK_ORDER_SHOP_2_MENU_IMAGE,
         is_sold_out: false,
         prices: [
           {
@@ -371,8 +420,7 @@ export const MOCK_ORDER_SHOP_2_MENUS_RESULTS: ShopInfoResponse[] = [
         id: 15,
         name: '치떡세트',
         description: '치킨 한마리와 매콤달콤 떡볶이',
-        thumbnail_image:
-          'https://static.koreatech.in/upload/owners/2024/03/06/2d7687d6-57dd-4241-988a-26d2b2855030-1709732308684/20240304_182511.jpg',
+        thumbnail_image: MOCK_ORDER_SHOP_2_MENU_IMAGE,
         is_sold_out: false,
         prices: [
           {
@@ -393,8 +441,7 @@ export const MOCK_ORDER_SHOP_2_MENUS_RESULTS: ShopInfoResponse[] = [
         id: 16,
         name: '감자튀김',
         description: '치킨과 함께 먹으면 더욱 맛있는 바삭한 감자튀김',
-        thumbnail_image:
-          'https://static.koreatech.in/upload/owners/2024/03/06/2d7687d6-57dd-4241-988a-26d2b2855030-1709732308684/20240304_182511.jpg',
+        thumbnail_image: MOCK_ORDER_SHOP_2_MENU_IMAGE,
         is_sold_out: true,
         prices: [
           {
@@ -415,8 +462,7 @@ export const MOCK_ORDER_SHOP_2_MENUS_RESULTS: ShopInfoResponse[] = [
         id: 17,
         name: '치즈볼',
         description: '쫀득한 찹쌀 안에 고소한 치즈가 듬뿍',
-        thumbnail_image:
-          'https://static.koreatech.in/upload/owners/2024/03/06/2d7687d6-57dd-4241-988a-26d2b2855030-1709732308684/20240304_182511.jpg',
+        thumbnail_image: MOCK_ORDER_SHOP_2_MENU_IMAGE,
         is_sold_out: false,
         prices: [
           {
@@ -437,8 +483,7 @@ export const MOCK_ORDER_SHOP_2_MENUS_RESULTS: ShopInfoResponse[] = [
         id: 18,
         name: '콜라 1.25L',
         description: '',
-        thumbnail_image:
-          'https://static.koreatech.in/upload/owners/2024/03/06/2d7687d6-57dd-4241-988a-26d2b2855030-1709732308684/20240304_182511.jpg',
+        thumbnail_image: MOCK_ORDER_SHOP_2_MENU_IMAGE,
         is_sold_out: false,
         prices: [
           {
@@ -453,8 +498,7 @@ export const MOCK_ORDER_SHOP_2_MENUS_RESULTS: ShopInfoResponse[] = [
         id: 19,
         name: '사이다 1.25L',
         description: '',
-        thumbnail_image:
-          'https://static.koreatech.in/upload/owners/2024/03/06/2d7687d6-57dd-4241-988a-26d2b2855030-1709732308684/20240304_182511.jpg',
+        thumbnail_image: MOCK_ORDER_SHOP_2_MENU_IMAGE,
         is_sold_out: false,
         prices: [
           {
@@ -475,8 +519,7 @@ export const MOCK_ORDER_SHOP_2_MENUS_RESULTS: ShopInfoResponse[] = [
         id: 14,
         name: '반반치킨',
         description: '두 가지 맛을 한 번에!',
-        thumbnail_image:
-          'https://static.koreatech.in/upload/owners/2024/03/06/2d7687d6-57dd-4241-988a-26d2b2855030-1709732308684/20240304_182511.jpg',
+        thumbnail_image: MOCK_ORDER_SHOP_2_MENU_IMAGE,
         is_sold_out: false,
         prices: [
           {
@@ -493,8 +536,7 @@ export const MOCK_ORDER_SHOP_2_MENUS_RESULTS: ShopInfoResponse[] = [
 
 export const MOCK_CART_RESULTS: CartResponse = {
   shop_name: '굿모닝살로만치킨',
-  shop_thumbnail_image_url:
-    'https://static.koreatech.in/upload/owners/2024/03/28/ebef80af-9d18-44c8-b4dd-44c64f21a520-1711617869236/1693645787165.jpg',
+  shop_thumbnail_image_url: MOCK_ORDER_SHOP_2_IMAGE,
   orderable_shop_id: 2,
   is_delivery_available: true,
   is_takeout_available: true,
@@ -504,8 +546,7 @@ export const MOCK_CART_RESULTS: CartResponse = {
       cart_menu_item_id: 1002,
       orderable_shop_menu_id: 11,
       name: '후라이드 치킨',
-      menu_thumbnail_image_url:
-        'https://static.koreatech.in/upload/owners/2024/03/06/2d7687d6-57dd-4241-988a-26d2b2855030-1709732308684/20240304_182511.jpg',
+      menu_thumbnail_image_url: MOCK_ORDER_SHOP_2_MENU_IMAGE,
       quantity: 1,
       total_amount: 19000,
       price: {
@@ -527,9 +568,7 @@ export const MOCK_ORDER_SHOP_2_MENUS_11_RESULTS: ShopMenuDetailResponse = {
   quantity: 1,
   name: '후라이드 치킨',
   description: '바삭하고 고소한 오리지널 후라이드',
-  images: [
-    'https://static.koreatech.in/upload/owners/2024/03/06/2d7687d6-57dd-4241-988a-26d2b2855030-1709732308684/20240304_182511.jpg',
-  ],
+  images: [MOCK_ORDER_SHOP_2_MENU_IMAGE],
   prices: [
     {
       id: 23,
@@ -661,6 +700,222 @@ export const MOCK_ADDRESS_SEARCH_RESULTS: AddressSearchResponse = {
   ],
 };
 
+export const MOCK_ADDRESS_DELIVERY_CAMPUS_DORMITORY_RESULTS: CampusDeliveryAddressResponse = {
+  count: 11,
+  addresses: [
+    {
+      id: 1,
+      type: '기숙사',
+      full_address: '충청남도 천안시 동남구 병천면 충절로 1600 한국기술교육대학교 제1캠퍼스 생활관 101동',
+      short_address: '101동(해울)',
+      address: '충청남도 천안시 동남구 병천면 충절로 1600 한국기술교육대학교 제1캠퍼스 생활관rr',
+      latitude: 36.76125794,
+      longitude: 127.28372942,
+    },
+    {
+      id: 2,
+      type: '기숙사',
+      full_address: '충청남도 천안시 동남구 병천면 충절로 1600 한국기술교육대학교 제1캠퍼스 생활관 102동',
+      short_address: '102동(예지)',
+      address: '충청남도 천안시 동남구 병천면 충절로 1600 한국기술교육대학교 제1캠퍼스 생활관',
+      latitude: 36.76156794,
+      longitude: 127.28315659,
+    },
+    {
+      id: 3,
+      type: '기숙사',
+      full_address: '충청남도 천안시 동남구 병천면 충절로 1600 한국기술교육대학교 제1캠퍼스 생활관 103동',
+      short_address: '103동(예솔)',
+      address: '충청남도 천안시 동남구 병천면 충절로 1600 한국기술교육대학교 제1캠퍼스 생활관',
+      latitude: 36.76186385,
+      longitude: 127.28376805,
+    },
+    {
+      id: 4,
+      type: '기숙사',
+      full_address: '충청남도 천안시 동남구 병천면 충절로 1600 한국기술교육대학교 제1캠퍼스 생활관 104동',
+      short_address: '104동(다솔)',
+      address: '충청남도 천안시 동남구 병천면 충절로 1600 한국기술교육대학교 제1캠퍼스 생활관',
+      latitude: 36.76242319,
+      longitude: 127.28349572,
+    },
+    {
+      id: 5,
+      type: '기숙사',
+      full_address: '충청남도 천안시 동남구 병천면 충절로 1600 한국기술교육대학교 제1캠퍼스 생활관 105동',
+      short_address: '105동(함지)',
+      address: '충청남도 천안시 동남구 병천면 충절로 1600 한국기술교육대학교 제1캠퍼스 생활관',
+      latitude: 36.76202833,
+      longitude: 127.28281109,
+    },
+    {
+      id: 6,
+      type: '기숙사',
+      full_address: '충청남도 천안시 동남구 병천면 충절로 1600 한국기술교육대학교 제1캠퍼스 생활관 106동',
+      short_address: '106동(한울)',
+      address: '충청남도 천안시 동남구 병천면 충절로 1600 한국기술교육대학교 제1캠퍼스 생활관',
+      latitude: 36.76163337,
+      longitude: 127.28216566,
+    },
+    {
+      id: 7,
+      type: '기숙사',
+      full_address: '충청남도 천안시 동남구 병천면 충절로 1600 한국기술교육대학교 제1캠퍼스 생활관 201동',
+      short_address: '201동(솔빛)',
+      address: '충청남도 천안시 동남구 병천면 충절로 1600 한국기술교육대학교 제1캠퍼스 생활관',
+      latitude: 36.7613011,
+      longitude: 127.28168287,
+    },
+    {
+      id: 8,
+      type: '기숙사',
+      full_address: '충청남도 천안시 동남구 병천면 충절로 1600 한국기술교육대학교 제1캠퍼스 생활관 202동',
+      short_address: '202동(청솔)',
+      address: '충청남도 천안시 동남구 병천면 충절로 1600 한국기술교육대학교 제1캠퍼스 생활관',
+      latitude: 36.76084201,
+      longitude: 127.2814796,
+    },
+    {
+      id: 9,
+      type: '기숙사',
+      full_address: '충청남도 천안시 동남구 병천면 충절로 1600 한국기술교육대학교 제1캠퍼스 생활관 203동',
+      short_address: '203동(IH)',
+      address: '충청남도 천안시 동남구 병천면 충절로 1600 한국기술교육대학교 제1캠퍼스 생활관',
+      latitude: 36.76049078,
+      longitude: 127.28139432,
+    },
+    {
+      id: 10,
+      type: '기숙사',
+      full_address: '충청남도 천안시 동남구 병천면 충절로 1600 한국기술교육대학교 제1캠퍼스 생활관 204동',
+      short_address: '204동(은솔)',
+      address: '충청남도 천안시 동남구 병천면 충절로 1600 한국기술교육대학교 제1캠퍼스 생활관',
+      latitude: 36.76015392,
+      longitude: 127.28094511,
+    },
+    {
+      id: 11,
+      type: '기숙사',
+      full_address: '충청남도 천안시 동남구 병천면 충절로 1600 한국기술교육대학교 제1캠퍼스 생활관 205동',
+      short_address: '205동(참빛)',
+      address: '충청남도 천안시 동남구 병천면 충절로 1600 한국기술교육대학교 제1캠퍼스 생활관',
+      latitude: 36.76083418,
+      longitude: 127.28098119,
+    },
+  ],
+};
+
+export const MOCK_ADDRESS_DELIVERY_CAMPUS_COLLEGE_BUILDING_RESULTS: CampusDeliveryAddressResponse = {
+  count: 7,
+  addresses: [
+    {
+      id: 12,
+      type: '공학관',
+      full_address: '충청남도 천안시 동남구 병천면 충절로 1600 한국기술교육대학교 공학 1관',
+      short_address: '공학 1관',
+      address: '충청남도 천안시 동남구 병천면 충절로 1600 한국기술교육대학교rr',
+      latitude: 36.7654853,
+      longitude: 127.28040455,
+    },
+    {
+      id: 13,
+      type: '공학관',
+      full_address: '충청남도 천안시 동남구 병천면 충절로 1600 한국기술교육대학교 공학 2관',
+      short_address: '공학 2관',
+      address: '충청남도 천안시 동남구 병천면 충절로 1600 한국기술교육대학교',
+      latitude: 36.76674321,
+      longitude: 127.28194918,
+    },
+    {
+      id: 14,
+      type: '공학관',
+      full_address: '충청남도 천안시 동남구 병천면 충절로 1600 한국기술교육대학교 공학 3관',
+      short_address: '공학 3관',
+      address: '충청남도 천안시 동남구 병천면 충절로 1600 한국기술교육대학교',
+      latitude: 36.7648384,
+      longitude: 127.27959579,
+    },
+    {
+      id: 15,
+      type: '공학관',
+      full_address: '충청남도 천안시 동남구 병천면 충절로 1600 한국기술교육대학교 공학4관 A동',
+      short_address: '공학4관 A동',
+      address: '충청남도 천안시 동남구 병천면 충절로 1600 한국기술교육대학교',
+      latitude: 36.76146765,
+      longitude: 127.27984115,
+    },
+    {
+      id: 16,
+      type: '공학관',
+      full_address: '충청남도 천안시 동남구 병천면 충절로 1600 한국기술교육대학교 공학4관 B동',
+      short_address: '공학4관 B동',
+      address: '충청남도 천안시 동남구 병천면 충절로 1600 한국기술교육대학교',
+      latitude: 36.76174156,
+      longitude: 127.28023413,
+    },
+    {
+      id: 17,
+      type: '공학관',
+      full_address: '충청남도 천안시 동남구 병천면 충절로 1600 한국기술교육대학교 담헌실학관',
+      short_address: '담헌실학관',
+      address: '충청남도 천안시 동남구 병천면 충절로 1600 한국기술교육대학교',
+      latitude: 36.76590843,
+      longitude: 127.28247253,
+    },
+    {
+      id: 18,
+      type: '공학관',
+      full_address: '충청남도 천안시 동남구 병천면 충절로 1600 한국기술교육대학교 인문경영관',
+      short_address: '인문경영관',
+      address: '충청남도 천안시 동남구 병천면 충절로 1600 한국기술교육대학교',
+      latitude: 36.76498642,
+      longitude: 127.28178594,
+    },
+  ],
+};
+
+export const MOCK_ADDRESS_DELIVERY_CAMPUS_ETC_RESULTS: CampusDeliveryAddressResponse = {
+  count: 4,
+  addresses: [
+    {
+      id: 19,
+      type: '그 외',
+      full_address: '충청남도 천안시 동남구 병천면 충절로 1600 한국기술교육대학교 테니스장',
+      short_address: '테니스장',
+      address: '충청남도 천안시 동남구 병천면 충절로 1600 한국기술교육대학교rr',
+      latitude: 36.76282473,
+      longitude: 127.2832676,
+    },
+    {
+      id: 20,
+      type: '그 외',
+      full_address: '충청남도 천안시 동남구 병천면 충절로 1600 한국기술교육대학교 학생회관',
+      short_address: '학생회관',
+      address: '충청남도 천안시 동남구 병천면 충절로 1600 한국기술교육대학교',
+      latitude: 36.76302056,
+      longitude: 127.28238914,
+    },
+    {
+      id: 21,
+      type: '그 외',
+      full_address: '충청남도 천안시 동남구 병천면 충절로 1600 한국기술교육대학교 다산정보관',
+      short_address: '다산정보관',
+      address: '충청남도 천안시 동남구 병천면 충절로 1600 한국기술교육대학교',
+      latitude: 36.76362895,
+      longitude: 127.28042579,
+    },
+    {
+      id: 22,
+      type: '그 외',
+      full_address: '충청남도 천안시 동남구 병천면 충절로 1600 한국기술교육대학교 복지관',
+      short_address: '복지관',
+      address: '충청남도 천안시 동남구 병천면 충절로 1600 한국기술교육대학교',
+      latitude: 36.76303229,
+      longitude: 127.28124121,
+    },
+  ],
+};
+
 export const MOCK_USER_STUDENT_ME_RESULT: StudentUserResponse = {
   id: 6675,
   login_id: 'visualtest',
@@ -692,8 +947,7 @@ export const MOCK_ORDER_SHOPS_RESULTS: OrderableShopsResponse[] = [
     category_ids: [1, 2],
     images: [
       {
-        image_url:
-          'https://static.koreatech.in/upload/owners/2024/03/28/ebef80af-9d18-44c8-b4dd-44c64f21a520-1711617869236/1693645787165.jpg',
+        image_url: MOCK_ORDER_SHOP_2_IMAGE,
         is_thumbnail: true,
       },
     ],
@@ -715,13 +969,11 @@ export const MOCK_ORDER_SHOPS_RESULTS: OrderableShopsResponse[] = [
     category_ids: [2, 8],
     images: [
       {
-        image_url:
-          'https://static.koreatech.in/upload/market/2021/05/29/85d5a49a-ecd8-4223-8582-ae316f251e27-1622292361626.jpg',
+        image_url: MOCK_ORDER_SHOPS_IMAGES.kimbapHeaven,
         is_thumbnail: true,
       },
       {
-        image_url:
-          'https://static.koreatech.in/upload/market/2022/03/26/c7024c9d-9d61-48f2-88e6-869346cdf96d-1648289790217.jpeg',
+        image_url: MOCK_ORDER_SHOPS_IMAGES.kimbapHeaven,
         is_thumbnail: false,
       },
     ],
@@ -743,8 +995,7 @@ export const MOCK_ORDER_SHOPS_RESULTS: OrderableShopsResponse[] = [
     category_ids: [1],
     images: [
       {
-        image_url:
-          'https://static.koreatech.in/upload/market/2023/03/28/b5266a5e-6675-4052-ac60-f2a7b59e5b4e-1680006634236.jpg',
+        image_url: MOCK_ORDER_SHOPS_IMAGES.maslen,
         is_thumbnail: true,
       },
     ],
@@ -766,13 +1017,11 @@ export const MOCK_ORDER_SHOPS_RESULTS: OrderableShopsResponse[] = [
     category_ids: [1, 7],
     images: [
       {
-        image_url:
-          'https://static.koreatech.in/upload/market/2021/05/29/0d5c6918-6ffe-4136-9f47-04333f29b62e-1622292495740.jpg',
+        image_url: MOCK_ORDER_SHOPS_IMAGES.byeongcheonRawFishRestaurant,
         is_thumbnail: true,
       },
       {
-        image_url:
-          'https://static.koreatech.in/upload/market/2021/05/29/2bf57d9e-8c82-48d6-8a46-6a2314501d4f-1622292492895.jpg',
+        image_url: MOCK_ORDER_SHOPS_IMAGES.byeongcheonRawFishRestaurant,
         is_thumbnail: false,
       },
     ],
@@ -797,15 +1046,196 @@ export const MOCK_ORDER_SHOPS_RESULTS: OrderableShopsResponse[] = [
   },
 ];
 
+export const MOCK_SHOP_RESULTS: ShopListResponse = {
+  count: 120,
+  shops: [
+    {
+      category_ids: [1],
+      delivery: false,
+      id: 41,
+      name: '복지관 매점',
+      pay_bank: false,
+      pay_card: true,
+      phone: '041-560-1279',
+      open: [
+        {
+          day_of_week: 'MONDAY',
+          closed: false,
+          open_time: '00:00',
+          close_time: '00:00',
+        },
+        {
+          day_of_week: 'TUESDAY',
+          closed: false,
+          open_time: '00:00',
+          close_time: '00:00',
+        },
+        {
+          day_of_week: 'WEDNESDAY',
+          closed: false,
+          open_time: '00:00',
+          close_time: '00:00',
+        },
+        {
+          day_of_week: 'THURSDAY',
+          closed: false,
+          open_time: '00:00',
+          close_time: '00:00',
+        },
+        {
+          day_of_week: 'FRIDAY',
+          closed: false,
+          open_time: '00:00',
+          close_time: '00:00',
+        },
+        {
+          day_of_week: 'SATURDAY',
+          closed: false,
+          open_time: '00:00',
+          close_time: '00:00',
+        },
+        {
+          day_of_week: 'SUNDAY',
+          closed: false,
+          open_time: '00:00',
+          close_time: '00:00',
+        },
+      ],
+      is_event: false,
+      is_open: true,
+      average_rate: 0,
+      review_count: 0,
+      benefit_details: 'test',
+      images: [MOCK_SHOP_IMAGES.universityStore],
+    },
+    {
+      category_ids: [1],
+      delivery: false,
+      id: 46,
+      name: '붕붕콜밴',
+      pay_bank: true,
+      pay_card: true,
+      phone: '010-8553-8222',
+      open: [
+        {
+          day_of_week: 'MONDAY',
+          closed: false,
+          open_time: '00:00',
+          close_time: '00:00',
+        },
+        {
+          day_of_week: 'TUESDAY',
+          closed: false,
+          open_time: '00:00',
+          close_time: '00:00',
+        },
+        {
+          day_of_week: 'WEDNESDAY',
+          closed: false,
+          open_time: '00:00',
+          close_time: '00:00',
+        },
+        {
+          day_of_week: 'THURSDAY',
+          closed: false,
+          open_time: '00:00',
+          close_time: '00:00',
+        },
+        {
+          day_of_week: 'FRIDAY',
+          closed: false,
+          open_time: '00:00',
+          close_time: '00:00',
+        },
+        {
+          day_of_week: 'SATURDAY',
+          closed: false,
+          open_time: '00:00',
+          close_time: '00:00',
+        },
+        {
+          day_of_week: 'SUNDAY',
+          closed: false,
+          open_time: '00:00',
+          close_time: '00:00',
+        },
+      ],
+      is_event: false,
+      is_open: true,
+      average_rate: 0,
+      review_count: 0,
+      benefit_details: 'test',
+      images: [MOCK_SHOP_IMAGES.bungBungCallBen],
+    },
+    {
+      category_ids: [1],
+      delivery: false,
+      id: 55,
+      name: '승천콜밴',
+      pay_bank: true,
+      pay_card: true,
+      phone: '080-566-0055',
+      open: [
+        {
+          day_of_week: 'MONDAY',
+          closed: false,
+          open_time: '00:00',
+          close_time: '00:00',
+        },
+        {
+          day_of_week: 'TUESDAY',
+          closed: false,
+          open_time: '00:00',
+          close_time: '00:00',
+        },
+        {
+          day_of_week: 'WEDNESDAY',
+          closed: false,
+          open_time: '00:00',
+          close_time: '00:00',
+        },
+        {
+          day_of_week: 'THURSDAY',
+          closed: false,
+          open_time: '00:00',
+          close_time: '00:00',
+        },
+        {
+          day_of_week: 'FRIDAY',
+          closed: false,
+          open_time: '00:00',
+          close_time: '00:00',
+        },
+        {
+          day_of_week: 'SATURDAY',
+          closed: false,
+          open_time: '00:00',
+          close_time: '00:00',
+        },
+        {
+          day_of_week: 'SUNDAY',
+          closed: false,
+          open_time: '00:00',
+          close_time: '00:00',
+        },
+      ],
+      is_event: false,
+      is_open: true,
+      average_rate: 0,
+      review_count: 0,
+      benefit_details: 'test',
+      images: [],
+    },
+  ],
+};
+
 export const MOCK_SHOPS_21_RESULTS: UnorderableShopDetailInfoResponse = {
   address: '충청남도 천안시 동남구 목천읍 충절로 876',
   delivery: false,
   delivery_price: 0,
   description: '-',
   id: 21,
-  image_urls: [
-    'https://static.koreatech.in/upload/market/2022/05/15/d6099d3a-4a69-4634-868c-0a3d900d9df5-1652608401069.jpeg',
-  ],
+  image_urls: [MOCK_SHOP_21_IMAGE],
   menu_categories: [
     {
       id: 24,
@@ -899,9 +1329,34 @@ export const MOCK_SHOPS_21_SUMMARY_RESULTS: ShopInfoSummaryResponse = {
   review_count: 2,
   images: [
     {
-      image_url:
-        'https://static.koreatech.in/upload/market/2022/05/15/d6099d3a-4a69-4634-868c-0a3d900d9df5-1652608401069.jpeg',
+      image_url: MOCK_SHOP_21_IMAGE,
       is_thumbnail: true,
+    },
+  ],
+};
+
+export const MOCK_ORDER_SHOP_2_DELIVERY_RESULTS: ShopDeliveryInfoResponse = {
+  campus_delivery: true,
+  off_campus_delivery: true,
+};
+
+export const MOCK_DELIVERY_RIDER_MESSAGE_RESULTS: RiderRequestResponse = {
+  count: 5,
+  contents: [
+    {
+      content: '문 앞에 놔주세요 (벨 눌러주세요)',
+    },
+    {
+      content: '문 앞에 놔주세요 (노크해주세요)',
+    },
+    {
+      content: '문 앞에 놔주세요 (벨X, 노크 X)',
+    },
+    {
+      content: '직접 받을게요',
+    },
+    {
+      content: '전화주시면 마중 나갈게요',
     },
   ],
 };
@@ -911,7 +1366,7 @@ export const MOCK_SHOPS_21_MENUS_RESULTS: UnorderableShopMenusResponse = {
   menu_categories: [
     {
       id: 151,
-      name: '메인 메뉴',
+      name: '메인 메뉴a',
       menus: [
         {
           id: 395,
