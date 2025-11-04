@@ -1,7 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { readSiteMap } from '../sitemap';
 import {
-  MOCK_ORDER_RESULTS,
   MOCK_ORDER_IN_PROGRESS_RESULTS,
   MOCK_ORDER_SHOP_SEARCH_RELATED_RESULTS,
   MOCK_SHOPS_CATEGORIES_RESULTS,
@@ -17,6 +16,15 @@ import {
   MOCK_SHOPS_21_SUMMARY_RESULTS,
   MOCK_SHOPS_21_RESULTS,
   MOCK_SHOPS_21_MENUS_RESULTS,
+  MOCK_SHOP_RESULTS,
+  MOCK_ORDER_RESULTS1,
+  MOCK_ORDER_RESULTS2,
+  MOCK_SUMMARY_2_RESULTS,
+  MOCK_ADDRESS_DELIVERY_CAMPUS_DORMITORY_RESULTS,
+  MOCK_ADDRESS_DELIVERY_CAMPUS_COLLEGE_BUILDING_RESULTS,
+  MOCK_ADDRESS_DELIVERY_CAMPUS_ETC_RESULTS,
+  MOCK_DELIVERY_RIDER_MESSAGE_RESULTS,
+  MOCK_ORDER_SHOP_2_DELIVERY_RESULTS,
 } from './visualTest.mock';
 
 test.describe('비주얼테스트', () => {
@@ -34,11 +42,25 @@ test.describe('비주얼테스트', () => {
             });
           });
 
-          await page.route('**/order/shops', async (route) => {
+          await page.route(
+            (url) =>
+              url.href.includes('/order/shops') &&
+              url.searchParams.get('filter') === 'IS_OPEN' &&
+              url.searchParams.get('category_filter') === '1',
+            async (route) => {
+              await route.fulfill({
+                status: 200,
+                contentType: 'application/json',
+                body: JSON.stringify(MOCK_ORDER_SHOPS_RESULTS),
+              });
+            },
+          );
+
+          await page.route('**/cart?type=DELIVERY', async (route) => {
             await route.fulfill({
               status: 200,
               contentType: 'application/json',
-              body: JSON.stringify(MOCK_ORDER_SHOPS_RESULTS),
+              body: JSON.stringify(MOCK_CART_RESULTS),
             });
           });
 
@@ -59,6 +81,25 @@ test.describe('비주얼테스트', () => {
             });
           });
 
+          await page.route('**/cart?type=DELIVERY', async (route) => {
+            await route.fulfill({
+              status: 200,
+              contentType: 'application/json',
+              body: JSON.stringify(MOCK_CART_RESULTS),
+            });
+          });
+
+          await page.route(
+            (url) => url.href.includes('/v3/shops') && url.searchParams.get('filter') === 'OPEN',
+            async (route) => {
+              await route.fulfill({
+                status: 200,
+                contentType: 'application/json',
+                body: JSON.stringify(MOCK_SHOP_RESULTS),
+              });
+            },
+          );
+
           await page.goto(route);
           await page.waitForLoadState('networkidle');
 
@@ -72,7 +113,31 @@ test.describe('비주얼테스트', () => {
             await route.fulfill({
               status: 200,
               contentType: 'application/json',
-              body: JSON.stringify(MOCK_ORDER_RESULTS),
+              body: JSON.stringify(MOCK_ORDER_RESULTS1),
+            });
+          });
+
+          await page.route('**/order?page=2&limit=10&period=NONE&status=NONE&type=NONE&query=', async (route) => {
+            await route.fulfill({
+              status: 200,
+              contentType: 'application/json',
+              body: JSON.stringify(MOCK_ORDER_RESULTS2),
+            });
+          });
+
+          await page.route('**/order/in-progress', async (route) => {
+            await route.fulfill({
+              status: 200,
+              contentType: 'application/json',
+              body: JSON.stringify(MOCK_ORDER_IN_PROGRESS_RESULTS),
+            });
+          });
+
+          await page.route('**/cart?type=DELIVERY', async (route) => {
+            await route.fulfill({
+              status: 200,
+              contentType: 'application/json',
+              body: JSON.stringify(MOCK_CART_RESULTS),
             });
           });
 
@@ -83,11 +148,27 @@ test.describe('비주얼테스트', () => {
         });
 
         test(`${route}-preparing Visual Test`, async ({ page }) => {
+          await page.route('**/order?page=1&limit=10&period=NONE&status=NONE&type=NONE&query=', async (route) => {
+            await route.fulfill({
+              status: 200,
+              contentType: 'application/json',
+              body: JSON.stringify(MOCK_ORDER_RESULTS1),
+            });
+          });
+
           await page.route('**/order/in-progress', async (route) => {
             await route.fulfill({
               status: 200,
               contentType: 'application/json',
               body: JSON.stringify(MOCK_ORDER_IN_PROGRESS_RESULTS),
+            });
+          });
+
+          await page.route('**/cart?type=DELIVERY', async (route) => {
+            await route.fulfill({
+              status: 200,
+              contentType: 'application/json',
+              body: JSON.stringify(MOCK_CART_RESULTS),
             });
           });
 
@@ -146,7 +227,15 @@ test.describe('비주얼테스트', () => {
             });
           });
 
-          await page.route('**/cart', async (route) => {
+          await page.route('**/cart/summary/2', async (route) => {
+            await route.fulfill({
+              status: 200,
+              contentType: 'application/json',
+              body: JSON.stringify(MOCK_SUMMARY_2_RESULTS),
+            });
+          });
+
+          await page.route('**/cart?type=DELIVERY', async (route) => {
             await route.fulfill({
               status: 200,
               contentType: 'application/json',
@@ -163,6 +252,14 @@ test.describe('비주얼테스트', () => {
 
       case '/shop/false/21':
         test(`${route} Visual Test`, async ({ page }) => {
+          await page.route('**/shops/21/summary', async (route) => {
+            await route.fulfill({
+              status: 200,
+              contentType: 'application/json',
+              body: JSON.stringify(MOCK_SHOPS_21_SUMMARY_RESULTS),
+            });
+          });
+
           await page.route('**/shops/21/menus', async (route) => {
             await route.fulfill({
               status: 200,
@@ -179,15 +276,7 @@ test.describe('비주얼테스트', () => {
             });
           });
 
-          await page.route('**/shop/21/summary', async (route) => {
-            await route.fulfill({
-              status: 200,
-              contentType: 'application/json',
-              body: JSON.stringify(MOCK_SHOPS_21_SUMMARY_RESULTS),
-            });
-          });
-
-          await page.route('**/cart', async (route) => {
+          await page.route('**/cart?type=DELIVERY', async (route) => {
             await route.fulfill({
               status: 200,
               contentType: 'application/json',
@@ -204,7 +293,7 @@ test.describe('비주얼테스트', () => {
 
       case '/shop/true/2/menus/11':
         test(`${route} Visual Test`, async ({ page }) => {
-          await page.route('**/cart', async (route) => {
+          await page.route('**/cart?type=DELIVERY', async (route) => {
             await route.fulfill({
               status: 200,
               contentType: 'application/json',
@@ -244,6 +333,7 @@ test.describe('비주얼테스트', () => {
               body: JSON.stringify(MOCK_ORDER_SHOP_2_DETAIL_RESULTS),
             });
           });
+
           await page.goto(route);
           await page.waitForLoadState('networkidle');
 
@@ -285,6 +375,14 @@ test.describe('비주얼테스트', () => {
         });
 
         test(`${route}-takeOut Visual Test`, async ({ page }) => {
+          await page.route('**/cart?type=DELIVERY', async (route) => {
+            await route.fulfill({
+              status: 200,
+              contentType: 'application/json',
+              body: JSON.stringify(MOCK_CART_RESULTS),
+            });
+          });
+
           await page.route('**/cart?type=TAKE_OUT', async (route) => {
             await route.fulfill({
               status: 200,
@@ -303,7 +401,7 @@ test.describe('비주얼테스트', () => {
         });
         break;
 
-      case '/delivery/outside/detail': //api x
+      case '/delivery/outside/detail':
         test(`${route} Visual Test`, async ({ page }) => {
           await page.goto(route);
           await page.waitForLoadState('networkidle');
@@ -334,8 +432,32 @@ test.describe('비주얼테스트', () => {
         });
         break;
 
-      case '/delivery/campus': //api x
+      case '/delivery/campus':
         test(`${route} Visual Test`, async ({ page }) => {
+          await page.route('**/address/delivery/campus?filter=DORMITORY', async (route) => {
+            await route.fulfill({
+              status: 200,
+              contentType: 'application/json',
+              body: JSON.stringify(MOCK_ADDRESS_DELIVERY_CAMPUS_DORMITORY_RESULTS),
+            });
+          });
+
+          await page.route('**/address/delivery/campus?filter=COLLEGE_BUILDING', async (route) => {
+            await route.fulfill({
+              status: 200,
+              contentType: 'application/json',
+              body: JSON.stringify(MOCK_ADDRESS_DELIVERY_CAMPUS_COLLEGE_BUILDING_RESULTS),
+            });
+          });
+
+          await page.route('**/address/delivery/campus?filter=ETC', async (route) => {
+            await route.fulfill({
+              status: 200,
+              contentType: 'application/json',
+              body: JSON.stringify(MOCK_ADDRESS_DELIVERY_CAMPUS_ETC_RESULTS),
+            });
+          });
+
           await page.goto(route);
           await page.waitForLoadState('networkidle');
 
@@ -359,6 +481,22 @@ test.describe('비주얼테스트', () => {
               status: 200,
               contentType: 'application/json',
               body: JSON.stringify(MOCK_CART_RESULTS),
+            });
+          });
+
+          await page.route('**/order/shop/2/delivery', async (route) => {
+            await route.fulfill({
+              status: 200,
+              contentType: 'application/json',
+              body: JSON.stringify(MOCK_ORDER_SHOP_2_DELIVERY_RESULTS),
+            });
+          });
+
+          await page.route('**/delivery/rider-message', async (route) => {
+            await route.fulfill({
+              status: 200,
+              contentType: 'application/json',
+              body: JSON.stringify(MOCK_DELIVERY_RIDER_MESSAGE_RESULTS),
             });
           });
 
@@ -394,6 +532,14 @@ test.describe('비주얼테스트', () => {
               status: 200,
               contentType: 'application/json',
               body: JSON.stringify(MOCK_CART_RESULTS),
+            });
+          });
+
+          await page.route('**/delivery/rider-message', async (route) => {
+            await route.fulfill({
+              status: 200,
+              contentType: 'application/json',
+              body: JSON.stringify(MOCK_DELIVERY_RIDER_MESSAGE_RESULTS),
             });
           });
 
