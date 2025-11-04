@@ -15,8 +15,8 @@ import { useGetShopMenuDetail } from '../hooks/useGetShopInfo';
 import { useMenuSelection } from '../hooks/useMenuSelection';
 import useGetCartItemOptions from '@/pages/Cart/hooks/useGetCartItemOptions';
 import useUpdateCartItemOptions from '@/pages/Cart/hooks/useUpdateCartItemOptions';
-import useCart from '@/pages/Payment/hooks/useCart';
-import { useOrderStore } from '@/stores/useOrderStore';
+// import useCart from '@/pages/Payment/hooks/useCart';
+// import { useOrderStore } from '@/stores/useOrderStore';
 import useBooleanState from '@/util/hooks/useBooleanState';
 import { useToast } from '@/util/hooks/useToast';
 
@@ -40,8 +40,8 @@ export default function MenuDetail() {
   const navigate = useNavigate();
   const { showToast } = useToast();
 
-  const { orderType } = useOrderStore();
-  const { data: cartInfo } = useCart(orderType);
+  // const { orderType } = useOrderStore();
+  // const { data: cartInfo } = useCart(orderType);
   const { data: menuInfo } = useGetShopMenuDetail(Number(shopId), Number(menuId));
   const { data: editInfo } = useGetCartItemOptions(Number(editCartItemId), isEdit);
   const { mutate: addToCart } = useAddCart();
@@ -55,7 +55,7 @@ export default function MenuDetail() {
   const info = isEdit && editInfo ? editInfo : menuInfo;
 
   const AUTH_FAIL = ''; //이 케이스는 올바르지 않은 인증정보일 떄 발생합니다. 백엔드 작업이 끝난 후에 다시 작업해야함.
-  const totalQuantity = cartInfo.items.reduce((sum, item) => sum + item.quantity, 0);
+  // const totalQuantity = cartInfo.items.reduce((sum, item) => sum + item.quantity, 0);
 
   const {
     priceId,
@@ -117,7 +117,9 @@ export default function MenuDetail() {
 
   return (
     <div className="pb-24">
-      <Header name={info.name} targetRef={targetRef} cartItemCount={totalQuantity} noImage={!hasImage} />
+      {/*TODO: 배달 배포 시 교체 예정*/}
+      {/* <Header name={info.name} targetRef={targetRef} cartItemCount={totalQuantity} noImage={!hasImage} /> */}
+      <Header name={info.name} targetRef={targetRef} noImage={!hasImage} />
       {hasImage && <ImageCarousel images={imagesForCarousel} targetRef={targetRef} />}
       <MenuDescription
         name={info.name}

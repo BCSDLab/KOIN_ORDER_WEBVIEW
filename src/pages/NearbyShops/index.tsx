@@ -139,7 +139,8 @@ export default function NearbyShops() {
         </div>
       </div>
 
-      <div className="flex h-25 items-center justify-center text-center">광고배너</div>
+      {/* TODO: 배달 배포 시 작업 예정*/}
+      {/* <div className="flex h-25 items-center justify-center text-center">광고배너</div> */}
 
       {/* 메뉴 리스트 */}
       <div className="grid w-full grid-cols-1 gap-6 px-6 min-[730px]:grid-cols-2 min-[1050px]:grid-cols-3 min-[1400px]:grid-cols-4">

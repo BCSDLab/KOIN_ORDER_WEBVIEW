@@ -18,7 +18,8 @@ const useLogin = () => {
     },
     onSuccess: (response) => {
       setCookie('AUTH_TOKEN_KEY', response.token);
-      navigate('/home'); //메인화면으로 이동
+      // navigate('/home'); //메인화면으로 이동
+      navigate('/shops'); // 주변 상점 배포를 위해 임시 변경
     },
     onError: (error) => {
       console.error('로그인 실패:', error);
