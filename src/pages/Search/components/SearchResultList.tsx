@@ -21,12 +21,13 @@ export default function SearchResultList({ keyword }: SearchResultListProps) {
   return (
     <div className="flex w-full flex-col items-center">
       {shop?.map(({ orderable_shop_name, orderable_shop_id }) => (
-        <RelateSearchItem tag="store" content={orderable_shop_name} to={`/shop/true/${orderable_shop_id}`} />
+        <RelateSearchItem tag="store" shop_name={orderable_shop_name} to={`/shop/true/${orderable_shop_id}`} />
       ))}
       {menu?.map(({ menu_name, orderable_shop_name, orderable_shop_id }) => (
         <RelateSearchItem
           tag="menu"
-          content={`${menu_name} | ${orderable_shop_name}`}
+          shop_name={orderable_shop_name}
+          menu_name={menu_name}
           to={`/shop/true/${orderable_shop_id}`}
         />
       ))}

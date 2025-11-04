@@ -1,18 +1,49 @@
 import clsx from 'clsx';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 // import CartCountButton from './components/CartCountButton';
 import CartResetButton from './components/CartResetButton';
 import { ROUTE_TITLES } from './routeTitles';
 import ArrowBackIcon from '@/assets/Main/arrow-back-icon.svg';
 import CloseIcon from '@/assets/Main/close-icon.svg';
+import { getCategoryNameById } from '@/constants/shopCategories';
 import { isAndroid, isNative } from '@/util/bridge/bridge';
 import { backButtonTapped } from '@/util/bridge/nativeAction';
+import useLogger from '@/util/hooks/analytics/useLogger';
+import { getLoggingTime } from '@/util/ts/analytics/loggingTime';
 
 export default function Header() {
+  const logger = useLogger();
   const navigate = useNavigate();
   const { pathname } = useLocation();
+  const [searchParams] = useSearchParams();
 
   const backToPreviousPage = () => {
+    if (pathname === '/shops') {
+      const categoryId = Number(searchParams.get('category')) || undefined;
+      const categoryName = getCategoryNameById(categoryId);
+
+      if (sessionStorage.getItem('swipeToBack') === 'true') {
+        logger.actionEventSwipe({
+          team: 'BUSINESS',
+          event_label: 'shop_categories_back',
+          value: '',
+          previous_page: categoryName,
+          current_page: '메인',
+          duration_time: getLoggingTime('selectedCategoryTime'),
+        });
+        return;
+      }
+
+      logger.actionEventClick({
+        team: 'BUSINESS',
+        event_label: 'shop_categories_back',
+        value: '',
+        duration_time: getLoggingTime('selectedCategoryTime'),
+        previous_page: categoryName,
+        current_page: '메인',
+      });
+    }
+
     if (pathname.startsWith('/payment')) {
       if (isAndroid()) {
         return backButtonTapped();

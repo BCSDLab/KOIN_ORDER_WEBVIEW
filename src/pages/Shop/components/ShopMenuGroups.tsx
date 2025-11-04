@@ -1,16 +1,29 @@
 import { useEffect, useRef } from 'react';
 import type { ShopMenuGroupsResponse } from '@/api/shop/entity';
 import Badge from '@/components/UI/Badge';
+import useLogger from '@/util/hooks/analytics/useLogger';
 
 interface ShopMenuGroupsProps {
+  shopName: string;
   selectedMenu: string;
   shopMenuGroups: ShopMenuGroupsResponse;
   onSelect: (name: string) => void;
 }
 
-export default function ShopMenuGroups({ selectedMenu, onSelect, shopMenuGroups }: ShopMenuGroupsProps) {
+export default function ShopMenuGroups({ shopName, selectedMenu, onSelect, shopMenuGroups }: ShopMenuGroupsProps) {
+  const logger = useLogger();
+
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const badgeRefs = useRef<Record<string, HTMLButtonElement | null>>({});
+
+  const handleBadgeClick = (groupName: string) => () => {
+    logger.actionEventClick({
+      team: 'BUSINESS',
+      event_label: 'shop_detail_view',
+      value: shopName,
+    });
+    onSelect(groupName);
+  };
 
   useEffect(() => {
     if (!selectedMenu || !badgeRefs.current[selectedMenu] || !scrollContainerRef.current) return;
@@ -42,7 +55,7 @@ export default function ShopMenuGroups({ selectedMenu, onSelect, shopMenuGroups 
               ref={(el) => {
                 badgeRefs.current[group.name] = el;
               }}
-              onClick={() => onSelect(group.name)}
+              onClick={handleBadgeClick(group.name)}
               className="focus:outline-none"
             >
               <Badge

@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import ArrowBackIcon from '@/assets/Main/arrow-back-icon.svg';
 // import CartIcon from '@/assets/Shop/cart-icon.svg';
 import { backButtonTapped } from '@/util/bridge/nativeAction';
+import useLogger from '@/util/hooks/analytics/useLogger';
+import { getLoggingTime } from '@/util/ts/analytics/loggingTime';
 
 interface HeaderProps {
   name: string;
@@ -12,12 +14,32 @@ interface HeaderProps {
 }
 // export default function Header({ name, targetRef, cartItemCount, noImage }: HeaderProps) {
 export default function Header({ name, targetRef, noImage }: HeaderProps) {
+  const logger = useLogger();
   const navigate = useNavigate();
   const [opacity, setOpacity] = useState(0);
 
   const currentOpacity = noImage ? 1 : opacity;
 
   const backToPreviousPage = () => {
+    if (sessionStorage.getItem('swipeToBack') === 'true') {
+      logger.actionEventSwipe({
+        team: 'BUSINESS',
+        event_label: 'shop_detail_view_back',
+        value: sessionStorage.getItem('enteredShopName') || '',
+        duration_time: getLoggingTime('enteredShopDetail'),
+        current_page: sessionStorage.getItem('currentCategory') || '전체보기',
+      });
+      return;
+    }
+
+    logger.actionEventClick({
+      team: 'BUSINESS',
+      event_label: 'shop_detail_view_back',
+      value: sessionStorage.getItem('enteredShopName') || '',
+      duration_time: getLoggingTime('enteredShopDetail'),
+      current_page: sessionStorage.getItem('currentCategory') || '전체보기',
+    });
+
     // 1. 히스토리 백 시도
     const prevPath = window.location.pathname;
     navigate(-1);

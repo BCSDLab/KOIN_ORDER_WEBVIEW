@@ -1,6 +1,9 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import Delivery from '@/assets/Home/delivery-icon.svg';
 import StarIcon from '@/assets/Home/star-icon.svg';
+import { getCategoryNameById } from '@/constants/shopCategories';
+import useLogger from '@/util/hooks/analytics/useLogger';
+import { getLoggingTime } from '@/util/ts/analytics/loggingTime';
 
 interface MenuCardProps {
   shopId: number;
@@ -34,12 +37,29 @@ export default function ShopCard({
   img,
   isOrderable,
 }: MenuCardProps) {
+  const logger = useLogger();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const thumbnailUrl = img.find((image) => image.is_thumbnail)?.image_url || '';
+
+  const handleShopCardClick = () => {
+    const categoryId = Number(searchParams.get('category')) || undefined;
+    const categoryName = getCategoryNameById(categoryId);
+    logger.actionEventClick({
+      team: 'BUSINESS',
+      event_label: 'shop_clicked',
+      value: `${name}`,
+      duration_time: getLoggingTime('selectedCategoryTime'),
+      previous_page: categoryName,
+      current_page: `${name}`,
+    });
+    sessionStorage.setItem('currentCategory', categoryName);
+    navigate(isOrderable ? `/shop/true/${shopId}` : `/shop/false/${shopId}`);
+  };
 
   return (
     <button
-      onClick={() => navigate(isOrderable ? `/shop/true/${shopId}` : `/shop/false/${shopId}`)}
+      onClick={handleShopCardClick}
       data-testid={`shopCard-${shopId}`}
       className="relative flex items-center gap-5 overflow-hidden rounded-lg border-[0.5px] border-neutral-200 bg-white"
       type="button"

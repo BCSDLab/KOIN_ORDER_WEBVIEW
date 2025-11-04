@@ -1,27 +1,42 @@
-import { useEffect, useRef, useState } from 'react';
-import useMediaQuery from 'util/hooks/layout/useMediaQuery';
+import { useEffect, useRef } from 'react';
 
-export const useScrollLogging = (loggingFunc: () => void, targetPercent = 0.7) => {
-  const [currentHeight, setCurrentHeight] = useState<number>(window.scrollY);
-  const id = useRef<null | NodeJS.Timeout>(null);
-  const debounce = (func: () => void) => {
-    if (id.current) clearTimeout(id.current);
-    id.current = setTimeout(func, 200);
-  };
-  const isMobile = useMediaQuery();
+interface ScrollLoggingOptions {
+  throttleMilliseconds?: number;
+  minimumDeltaPixels?: number;
+}
+
+export function useScrollLogging(loggingFunc: () => void, options: ScrollLoggingOptions = {}) {
+  const { throttleMilliseconds = 800, minimumDeltaPixels = 8 } = options;
+
+  const lastLoggedTimestampRef = useRef(0);
+  const lastScrollTopRef = useRef(0);
+
   useEffect(() => {
-    const onScroll = () =>
-      debounce(() => {
-        if (document.body.scrollHeight * targetPercent > window.scrollY) {
-          setCurrentHeight(window.scrollY);
-        }
-      });
-    window.addEventListener('scroll', onScroll);
-    window.addEventListener('resize', () => setCurrentHeight(window.scrollY));
+    const scrollElement = document.scrollingElement || document.documentElement;
+    lastScrollTopRef.current = scrollElement?.scrollTop ?? 0;
 
-    if ((document.body.scrollHeight - window.innerHeight) * targetPercent < currentHeight) {
-      loggingFunc();
-    }
-    return () => window.removeEventListener('scroll', onScroll); // 웹 사이트 높이의 70퍼센트를 넘을 때 로깅
-  }, [currentHeight, loggingFunc, isMobile, targetPercent]);
-};
+    const handleScroll = () => {
+      const currentTime = Date.now();
+      const currentScrollTop = scrollElement?.scrollTop ?? 0;
+      const scrolledDistance = Math.abs(currentScrollTop - lastScrollTopRef.current);
+
+      const isBeyondMinimumDistance = scrolledDistance >= minimumDeltaPixels;
+      const isBeyondThrottleTime = currentTime - lastLoggedTimestampRef.current >= throttleMilliseconds;
+
+      if (isBeyondMinimumDistance && isBeyondThrottleTime) {
+        lastLoggedTimestampRef.current = currentTime;
+        loggingFunc();
+      }
+
+      lastScrollTopRef.current = currentScrollTop;
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('resize', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleScroll);
+    };
+  }, [loggingFunc, throttleMilliseconds, minimumDeltaPixels]);
+}

@@ -37,9 +37,14 @@ export default function OrderableShopView() {
       {/*TODO: 배달 배포 시 교체 예정*/}
       {/* <Header name={shopInfoSummary.name} targetRef={targetRef} cartItemCount={totalQuantity} /> */}
       <Header name={shopInfoSummary.name} targetRef={targetRef} />
-      <ImageCarousel images={shopInfoSummary.images} targetRef={targetRef} />
+      <ImageCarousel images={shopInfoSummary.images} targetRef={targetRef} shopName={shopInfoSummary.name} />
       <ShopSummary id={shopId} shopInfoSummary={shopInfoSummary} isOrderable={true} />
-      <ShopMenuGroups selectedMenu={selectedMenu} onSelect={handleScrollTo} shopMenuGroups={shopMenuGroups} />
+      <ShopMenuGroups
+        shopName={shopInfoSummary.name}
+        selectedMenu={selectedMenu}
+        onSelect={handleScrollTo}
+        shopMenuGroups={shopMenuGroups}
+      />
       <ShopMenus
         menuGroupRefs={menuGroupRefs}
         handleChangeMenu={handleChangeMenu}
