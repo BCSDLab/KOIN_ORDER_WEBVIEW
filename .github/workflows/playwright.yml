@@ -121,5 +121,3 @@ jobs:
       - name: Check test result
         if: steps.test.outcome == 'failure'
         run: exit 1
-
-# 테스트 용 주석
