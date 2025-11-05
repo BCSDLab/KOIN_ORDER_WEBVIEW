@@ -33,7 +33,7 @@ export default async function globalSetup() {
     await page.click('button:has-text("로그인")');
 
     // 로그인 완료 대기
-    await page.waitForURL('**/home', { timeout: 10000 });
+    await page.waitForURL('**/home', { timeout: 30000 });
 
     // 토큰이 제대로 저장되었는지 확인
     const cookies = await context.cookies();
