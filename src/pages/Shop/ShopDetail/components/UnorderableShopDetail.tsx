@@ -11,5 +11,5 @@ export default function UnorderableShopDetail() {
 
   const { data } = useGetUnorderableShopDetail(Number(shopId));
 
-  return <ShopDetail shopInfo={data} />;
+  return <ShopDetail shopInfo={data} isOrderable={false} />;
 }

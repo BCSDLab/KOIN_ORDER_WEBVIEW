@@ -5,9 +5,10 @@ import type { ShopDetailInfoResponse } from '@/api/shop/entity';
 
 interface ShopDetailProps {
   shopInfo: ShopDetailInfoResponse;
+  isOrderable: boolean;
 }
 
-export default function ShopDetail({ shopInfo }: ShopDetailProps) {
+export default function ShopDetail({ shopInfo, isOrderable }: ShopDetailProps) {
   const decodedId = decodeURIComponent(window.location.hash.replace('#', ''));
 
   useEffect(() => {
@@ -102,33 +103,37 @@ export default function ShopDetail({ shopInfo }: ShopDetailProps) {
           </tbody>
         </table>
       </div>
-      <div className="bg-white px-6 py-3">
-        <p className="py-3 text-[15px] leading-[1.6] font-semibold">사업자 정보</p>
-        <div className="flex flex-col gap-2">
-          <div className="flex gap-4 text-sm leading-[1.6] font-medium">
-            <p className="w-24 shrink-0">대표자명</p>
-            <p>{shopInfo.owner_info.name}</p>
+      {isOrderable && (
+        <>
+          <div className="bg-white px-6 py-3">
+            <p className="py-3 text-[15px] leading-[1.6] font-semibold">사업자 정보</p>
+            <div className="flex flex-col gap-2">
+              <div className="flex gap-4 text-sm leading-[1.6] font-medium">
+                <p className="w-24 shrink-0">대표자명</p>
+                <p>{shopInfo.owner_info.name}</p>
+              </div>
+              <div className="flex gap-4 text-sm leading-[1.6] font-medium">
+                <p className="w-24 shrink-0">상호명</p>
+                <p>{shopInfo.owner_info.shop_name}</p>
+              </div>
+              <div className="flex gap-4 text-sm leading-[1.6] font-medium">
+                <p className="w-24 shrink-0">사업자 주소</p>
+                <p>{shopInfo.owner_info.address}</p>
+              </div>
+              <div className="flex gap-4 text-sm leading-[1.6] font-medium">
+                <p className="w-24 shrink-0">사업자 등록 번호</p>
+                <p>{shopInfo.owner_info.company_registration_number}</p>
+              </div>
+            </div>
           </div>
-          <div className="flex gap-4 text-sm leading-[1.6] font-medium">
-            <p className="w-24 shrink-0">상호명</p>
-            <p>{shopInfo.owner_info.shop_name}</p>
+          <div className="mb-10 bg-white px-6 py-3">
+            <p className="py-3 text-[15px] leading-[1.6] font-semibold">원산지 표기</p>
+            <p className="text-sm leading-[1.6] font-medium">
+              {shopInfo.origins.map((value) => `${value.ingredient}(${value.origin})`).join(', ')}
+            </p>
           </div>
-          <div className="flex gap-4 text-sm leading-[1.6] font-medium">
-            <p className="w-24 shrink-0">사업자 주소</p>
-            <p>{shopInfo.owner_info.address}</p>
-          </div>
-          <div className="flex gap-4 text-sm leading-[1.6] font-medium">
-            <p className="w-24 shrink-0">사업자 등록 번호</p>
-            <p>{shopInfo.owner_info.company_registration_number}</p>
-          </div>
-        </div>
-      </div>
-      <div className="mb-10 bg-white px-6 py-3">
-        <p className="py-3 text-[15px] leading-[1.6] font-semibold">원산지 표기</p>
-        <p className="text-sm leading-[1.6] font-medium">
-          {shopInfo.origins.map((value) => `${value.ingredient}(${value.origin})`).join(', ')}
-        </p>
-      </div>
+        </>
+      )}
     </div>
   );
 }
