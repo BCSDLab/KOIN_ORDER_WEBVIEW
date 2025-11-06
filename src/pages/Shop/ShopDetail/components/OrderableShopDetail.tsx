@@ -11,5 +11,5 @@ export default function OrderableShopDetail() {
 
   const { data } = useGetShopDetail(Number(shopId));
 
-  return <ShopDetail shopInfo={data} />;
+  return <ShopDetail shopInfo={data} isOrderable />;
 }
