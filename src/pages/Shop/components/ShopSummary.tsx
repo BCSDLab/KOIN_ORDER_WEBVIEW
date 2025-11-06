@@ -45,7 +45,7 @@ export default function ShopSummary({ shopInfoSummary, id, isOrderable, UnOrdera
             className="shadow-1 flex items-center justify-center gap-1 rounded-full border-[0.5px] border-neutral-400 bg-white py-1 pr-2 pl-3"
             onClick={handleShopInfoClick}
           >
-            <div className="text-[10px] text-neutral-500">{isOrderable ? '가게정보·원산지' : '가게정보'}</div>
+            <div className="text-[10px] text-neutral-500">가게정보{isOrderable && '·원산지'}</div>
             <div className="flex h-4 w-4 items-center justify-center">
               <ChevronRightIcon fill="#CACACA" />
             </div>
