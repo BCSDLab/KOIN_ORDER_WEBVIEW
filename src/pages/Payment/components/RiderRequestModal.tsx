@@ -56,7 +56,7 @@ export default function RiderRequestModal({ isOpen, onClose, initialValue, onSub
     <BottomModal isOpen={isOpen} onClose={onClose}>
       <BottomModalHeader>
         <div className="text-primary-500 font-semibold">배달기사님에게</div>
-        <button onClick={onClose}>
+        <button type="button" onClick={onClose} data-testid="riderRequest-modal-close">
           <CloseIcon />
         </button>
       </BottomModalHeader>
