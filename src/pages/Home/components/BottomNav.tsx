@@ -1,0 +1,48 @@
+import clsx from 'clsx';
+import { useLocation, useNavigate } from 'react-router-dom';
+import HomeIcon from '/src/assets/Home/home-icon.svg';
+import ShopIcon from '/src/assets/Home/shop-icon.svg';
+import PaperIcon from '/src/assets/Home/paper-icon.svg';
+
+export default function BottomNav() {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const isActive = (path: string) => location.pathname.startsWith(path);
+
+  return (
+    <div className="fixed right-0 bottom-0 left-0 z-40 flex items-center justify-between bg-white px-12 py-4 text-[12px]">
+      <button
+        onClick={() => navigate('/home')}
+        className={clsx(
+          'flex w-[42px] flex-col items-center gap-0.5',
+          isActive('/home') ? 'text-primary-500' : 'text-neutral-500',
+        )}
+      >
+        <HomeIcon className={clsx(isActive('/home') ? 'fill-primary-500' : 'fill-neutral-300')} />홈
+      </button>
+
+      <button
+        onClick={() => navigate('/shops')}
+        className={clsx(
+          'flex w-[42px] flex-col items-center gap-0.5',
+          isActive('/shops') ? 'text-primary-500' : 'text-neutral-500',
+        )}
+      >
+        <ShopIcon className={clsx(isActive('/shops') ? 'fill-primary-500' : 'fill-neutral-300')} />
+        주변상점
+      </button>
+
+      <button
+        onClick={() => navigate('/orders')}
+        className={clsx(
+          'flex w-[42px] flex-col items-center gap-0.5',
+          isActive('/orders') ? 'text-primary-500' : 'text-neutral-500',
+        )}
+      >
+        <PaperIcon className={clsx(isActive('/orders') ? 'fill-primary-500' : 'fill-neutral-300')} />
+        주문내역
+      </button>
+    </div>
+  );
+}

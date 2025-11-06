@@ -1,0 +1,129 @@
+import { useRef, useState, useEffect } from 'react';
+import clsx from 'clsx';
+import type { ShopInfoSummaryResponse } from '@/api/shop/entity';
+import ImageViewer from '@/pages/Shop/components/ImageViewer';
+import useLogger from '@/util/hooks/analytics/useLogger';
+import useBooleanState from '@/util/hooks/useBooleanState';
+
+interface ImageCarouselProps {
+  images: ShopInfoSummaryResponse['images'];
+  targetRef: React.RefObject<HTMLDivElement | null>;
+  shopName?: string;
+}
+
+export default function ImageCarousel({ images, targetRef, shopName }: ImageCarouselProps) {
+  const logger = useLogger();
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [scrollIndex, setScrollIndex] = useState(0);
+  const [isInteracting, setIsInteracting] = useState(false);
+  const [isImageViewerOpen, openImageViewer, closeImageViewer] = useBooleanState(false);
+
+  const prevIndexRef = useRef(0);
+  const lastScrollLeftRef = useRef(0);
+
+  const scrollToIndex = (index: number) => {
+    if (containerRef.current) {
+      containerRef.current.scrollTo({
+        left: index * containerRef.current.clientWidth,
+        behavior: 'smooth',
+      });
+    }
+  };
+
+  useEffect(() => {
+    if (isInteracting) return;
+
+    const interval = setInterval(() => {
+      const nextIndex = (scrollIndex + 1) % images.length;
+      scrollToIndex(nextIndex);
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, [images.length, isInteracting, scrollIndex]);
+
+  const handleScroll = () => {
+    if (!containerRef.current) return;
+    const scrollLeft = containerRef.current.scrollLeft;
+    const width = containerRef.current.clientWidth;
+    const index = Math.round(scrollLeft / width);
+    setScrollIndex(index);
+
+    if (shopName) {
+      // 자동 슬라이드 시
+      if (!isInteracting) {
+        lastScrollLeftRef.current = scrollLeft;
+        return;
+      }
+
+      // 인덱스 변화 없을 때
+      if (index !== prevIndexRef.current) {
+        lastScrollLeftRef.current = scrollLeft;
+        return;
+      }
+
+      logger.actionEventSwipe({
+        team: 'BUSINESS',
+        event_label: 'shop_picture_swipe',
+        value: shopName,
+      });
+    }
+  };
+
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    const startInteraction = () => setIsInteracting(true);
+    const endInteraction = () => setTimeout(() => setIsInteracting(false), 200);
+
+    container.addEventListener('touchstart', startInteraction);
+    container.addEventListener('touchend', endInteraction);
+    container.addEventListener('mousedown', startInteraction);
+    container.addEventListener('mouseup', endInteraction);
+    container.addEventListener('scroll', handleScroll, { passive: true });
+
+    return () => {
+      container.removeEventListener('touchstart', startInteraction);
+      container.removeEventListener('touchend', endInteraction);
+      container.removeEventListener('mousedown', startInteraction);
+      container.removeEventListener('mouseup', endInteraction);
+      container.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
+  return (
+    <div className="relative h-[350px] w-full overflow-hidden" ref={targetRef}>
+      <div
+        ref={containerRef}
+        className="scrollbar-hide flex h-full w-full snap-x snap-mandatory overflow-x-scroll scroll-smooth"
+      >
+        {images.map((image, index) => (
+          <button
+            key={index}
+            className="h-full w-full flex-shrink-0 snap-start"
+            onClick={() => {
+              openImageViewer();
+              setIsInteracting(true);
+            }}
+          >
+            <img src={image.image_url} alt={`slide ${index}`} className="h-full w-full object-cover" />
+          </button>
+        ))}
+      </div>
+
+      <div className="absolute bottom-4 left-1/2 z-10 flex -translate-x-1/2 gap-1">
+        {images.length > 1 &&
+          images.map((_, index) => (
+            <div
+              key={index}
+              className={clsx(
+                'h-1.5 w-1.5 rounded-full transition-colors duration-300',
+                scrollIndex === index ? 'bg-white' : 'bg-neutral-400',
+              )}
+            />
+          ))}
+      </div>
+      {isImageViewerOpen && <ImageViewer images={images} onClose={closeImageViewer} />}
+    </div>
+  );
+}

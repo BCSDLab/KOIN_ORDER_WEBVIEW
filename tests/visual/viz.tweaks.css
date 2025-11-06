@@ -1,0 +1,34 @@
+/* 애니메이션 및 트랜지션 완전 중단 */
+*,
+*::before,
+*::after {
+  animation: none !important;
+  transition: none !important;
+}
+
+/* 폰트 안 깜빡이게 */
+html {
+  font-display: block !important;
+}
+
+/* 시간, 랜덤 요소 숨김 */
+.time-now,
+.random-banner,
+.skeleton,
+.spinner,
+canvas[aria-label="chart"],
+video,
+iframe {
+  visibility: hidden !important;
+}
+
+/* focus 스타일 제거 */
+:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* OS/브라우저 다크모드 영향 차단 */
+html {
+  color-scheme: light !important;
+}

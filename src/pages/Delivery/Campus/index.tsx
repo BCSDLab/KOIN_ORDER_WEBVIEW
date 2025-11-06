@@ -1,0 +1,107 @@
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import AddressTypeDropdown from './AddressTypeDropdown';
+import { AddressCategory } from '@/api/delivery/entity';
+import Building from '@/assets/Delivery/building.svg';
+import NightShelter from '@/assets/Delivery/night-shelter.svg';
+import Badge from '@/components/UI/Badge';
+import Button from '@/components/UI/Button';
+import useMarker from '@/pages/Delivery/hooks/useMarker';
+import useNaverMap from '@/pages/Delivery/hooks/useNaverMap';
+import { useOrderStore } from '@/stores/useOrderStore';
+
+interface Place {
+  id: number;
+  full_address: string;
+  short_address: string;
+  address: string;
+  latitude: number;
+  longitude: number;
+}
+
+const DEFAULT_PLACE: Place = {
+  id: 5,
+  full_address: '충남 천안시 동남구 병천면 충절로 1600 한국기술교육대학교 제1캠퍼스 생활관 105동',
+  short_address: '105동(함지)',
+  address: '충청남도 천안시 동남구 병천면 충절로 1600 한국기술교육대학교 제1캠퍼스 생활관',
+  latitude: 36.76202833,
+  longitude: 127.28281109,
+};
+
+export default function Campus() {
+  const navigate = useNavigate();
+  const [selectedCategory, setSelectedCategory] = useState<AddressCategory | null>(null);
+
+  const { campusAddress, setCampusAddress, setDeliveryType } = useOrderStore();
+
+  const initialPlace: Place = campusAddress
+    ? {
+        id: campusAddress.id,
+        full_address: campusAddress.full_address,
+        short_address: campusAddress.short_address,
+        address: campusAddress.address,
+        latitude: campusAddress.latitude,
+        longitude: campusAddress.longitude,
+      }
+    : DEFAULT_PLACE;
+
+  const [selectedPlace, setSelectedPlace] = useState<Place>(initialPlace);
+
+  const addressState = {
+    selectedCategory,
+    setSelectedCategory,
+    selectedPlace,
+    setSelectedPlace,
+  };
+
+  const map = useNaverMap(selectedPlace.latitude, selectedPlace.longitude);
+  useMarker(map);
+
+  const handleSelectAddress = () => {
+    if (!selectedPlace) return;
+
+    setDeliveryType('CAMPUS');
+    setCampusAddress({
+      id: selectedPlace.id,
+      full_address: selectedPlace.full_address,
+      short_address: selectedPlace.short_address,
+      address: selectedPlace.address,
+      latitude: selectedPlace.latitude,
+      longitude: selectedPlace.longitude,
+    });
+
+    navigate('/payment?orderType=DELIVERY');
+  };
+
+  return (
+    <div className="flex min-h-screen w-full flex-col items-center px-[1.5rem] pb-6">
+      <div className="shadow-1 w-full rounded-xl">
+        <div id="map" className="h-40 w-full rounded-t-xl border border-neutral-300"></div>
+        <div className="flex h-[3.5rem] w-full items-center justify-between rounded-b-xl bg-white px-6 text-[0.813rem] text-neutral-600">
+          {selectedPlace ? (
+            <div className="flex w-full items-center justify-center gap-2">
+              <Badge label={selectedPlace.short_address} color="primary" size="sm" className="text-sm" />
+              <span>앞으로 배달돼요!</span>
+            </div>
+          ) : (
+            <span>배달 받을 위치를 선택해주세요!</span>
+          )}
+        </div>
+      </div>
+
+      <div className="mt-[1.813rem] mb-6 w-full">
+        <div className="text-primary-500 leading-[160%] font-semibold">배달주소</div>
+        <div className="pb-3 text-xs leading-[160%]">배달 받을 위치를 선택해주세요!</div>
+        <div className="flex flex-col gap-3">
+          <AddressTypeDropdown type="DORMITORY" icon={<NightShelter />} addressState={addressState} />
+          <AddressTypeDropdown type="COLLEGE_BUILDING" icon={<Building />} addressState={addressState} />
+          <AddressTypeDropdown type="ETC" icon={<Building />} addressState={addressState} />
+        </div>
+      </div>
+
+      <Button className="mt-auto w-full py-3" onClick={handleSelectAddress}>
+        주소 선택
+      </Button>
+    </div>
+  );
+}
