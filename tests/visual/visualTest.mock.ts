@@ -1254,7 +1254,7 @@ export const MOCK_SHOPS_21_RESULTS: UnorderableShopDetailInfoResponse = {
       name: '사이드 메뉴',
     },
   ],
-  name: '돈家네 돌판 삼겹살',
+  name: '돈가네 돌판 삼겹살',
   open: [
     {
       day_of_week: 'MONDAY',
@@ -1321,7 +1321,7 @@ export const MOCK_SHOPS_21_RESULTS: UnorderableShopDetailInfoResponse = {
 
 export const MOCK_SHOPS_21_SUMMARY_RESULTS: ShopInfoSummaryResponse = {
   shop_id: 21,
-  name: '돈家네 돌판 삼겹살',
+  name: '돈가네 돌판 삼겹살',
   introduction: null,
   pay_card: false,
   pay_bank: false,
@@ -1336,7 +1336,7 @@ export const MOCK_SHOPS_21_SUMMARY_RESULTS: ShopInfoSummaryResponse = {
 };
 
 export const MOCK_ORDER_SHOP_2_DELIVERY_RESULTS: ShopDeliveryInfoResponse = {
-  campus_delivery: true,
+  campus_delivery: false,
   off_campus_delivery: true,
 };
 
