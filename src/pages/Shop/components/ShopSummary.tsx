@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import type { ShopInfoSummaryResponse, UnorderableShopDetailInfoResponse } from '@/api/shop/entity.ts';
 import ChevronRightIcon from '@/assets/Common/chevron-right.svg';
 import StarIcon from '@/assets/Common/star-icon.svg';
+import CallIcon from '@/assets/Shop/call-icon.svg';
 import SpeakerIcon from '@/assets/Shop/speaker-icon.svg';
 import Badge from '@/components/UI/Badge';
 import useLogger from '@/util/hooks/analytics/useLogger';
@@ -44,20 +45,20 @@ export default function ShopSummary({ shopInfoSummary, id, isOrderable, UnOrdera
             className="shadow-1 flex items-center justify-center gap-1 rounded-full border-[0.5px] border-neutral-400 bg-white py-1 pr-2 pl-3"
             onClick={handleShopInfoClick}
           >
-            <div className="text-[10px] text-neutral-500">가게정보·원산지</div>
+            <div className="text-[10px] text-neutral-500">{isOrderable ? '가게정보·원산지' : '가게정보'}</div>
             <div className="flex h-4 w-4 items-center justify-center">
               <ChevronRightIcon fill="#CACACA" />
             </div>
           </Link>
         </div>
         {isOrderable ? (
-          <div className="mt-4 self-start">
+          <div className="mt-4 flex gap-2 self-start">
             {shopInfoSummary.is_delivery_available && <Badge label="배달 가능" color="white" size="xs" font="xs" />}
             {shopInfoSummary.is_takeout_available && <Badge label="포장 가능" color="white" size="xs" font="xs" />}
           </div>
         ) : (
-          <div className="mt-4 self-start">
-            {UnOrderableShopInfo?.delivery && <Badge label="배달 불가능" color="white" size="xs" font="xs" />}
+          <div className="mt-4 flex gap-2 self-start">
+            {UnOrderableShopInfo?.delivery && <Badge label="배달 가능" color="white" size="xs" font="xs" />}
             {UnOrderableShopInfo?.pay_card && <Badge label="카드 가능" color="white" size="xs" font="xs" />}
             {UnOrderableShopInfo?.pay_bank && <Badge label="계좌이체 가능" color="white" size="xs" font="xs" />}
           </div>
@@ -90,12 +91,27 @@ export default function ShopSummary({ shopInfoSummary, id, isOrderable, UnOrdera
             </Link>
           )}
           {!isOrderable && (
-            <div className="shadow-1 flex h-14 w-full justify-center gap-1 rounded-xl bg-white py-2 pr-2 pl-3">
-              <div className="text-center text-xs leading-[1.6] font-medium text-neutral-400">
-                코인 주문이 <br />
-                불가능한 매장이예요.
+            <Link
+              to={`/shop-detail/false/${id}#배달금액`}
+              className="shadow-1 flex h-14 w-full min-w-fit items-center justify-between gap-1 rounded-xl bg-white py-2 pr-2 pl-3"
+              onClick={handleShopInfoClick}
+            >
+              <div className="flex w-fit flex-col gap-[2px]">
+                <div className="flex gap-2">
+                  <span className="text-[12px] leading-[1.6] font-normal">최소주문</span>
+                  <span className="text-[12px] leading-[1.6] font-normal text-neutral-500">0원</span>
+                </div>
+                <div className="flex gap-2">
+                  <span className="text-[12px] leading-[1.6] font-normal">배달금액</span>
+                  <span className="text-[12px] leading-[1.6] font-normal text-neutral-500">
+                    {UnOrderableShopInfo?.delivery_price}원
+                  </span>
+                </div>
               </div>
-            </div>
+              <div className="flex h-5 w-5 items-center justify-center">
+                <ChevronRightIcon fill="#727272" />
+              </div>
+            </Link>
           )}
           <Link
             to={isOrderable ? `/shop-detail/true/${id}#가게알림` : `/shop-detail/false/${id}#가게알림`}
@@ -111,6 +127,13 @@ export default function ShopSummary({ shopInfoSummary, id, isOrderable, UnOrdera
             </div>
           </Link>
         </div>
+        <a href={`tel:${UnOrderableShopInfo?.phone}`} className="mt-3 w-full">
+          <div className="shadow-1 flex w-full items-center justify-center rounded-xl bg-white px-3 py-3 text-center">
+            <CallIcon className="mr-2" />
+            <div className="text-primary-500 mr-5 text-sm leading-[160%] font-semibold">가게에 전화하기</div>
+            <div className="text-xs leading-[160%] font-medium">{UnOrderableShopInfo?.phone}</div>
+          </div>
+        </a>
       </div>
     </>
   );
