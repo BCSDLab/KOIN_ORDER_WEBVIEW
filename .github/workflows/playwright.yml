@@ -1,27 +1,126 @@
 name: Playwright Tests
+
 on:
   push:
-    branches: [ main, master ]
+    branches: ['main', 'develop']
   pull_request:
-    branches: [ main, master ]
+    branches: ['main', 'develop']
+
+permissions:
+  contents: write
+  pull-requests: write
+
 jobs:
   test:
     timeout-minutes: 60
     runs-on: ubuntu-latest
+    
     steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-node@v4
-      with:
-        node-version: lts/*
-    - name: Install dependencies
-      run: npm install -g pnpm && pnpm install
-    - name: Install Playwright Browsers
-      run: pnpm exec playwright install --with-deps
-    - name: Run Playwright tests
-      run: pnpm exec playwright test
-    - uses: actions/upload-artifact@v4
-      if: ${{ !cancelled() }}
-      with:
-        name: playwright-report
-        path: playwright-report/
-        retention-days: 30
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+      
+      - name: Install dependencies
+        run: npm install -g pnpm && pnpm install
+
+      - name: Create .env file
+        run: |
+          echo "VITE_NAVER_MAPS_CLIENT_ID=${{ secrets.VITE_NAVER_MAPS_CLIENT_ID }}" >> .env
+          echo "VITE_API_PATH=${{ secrets.VITE_API_PATH }}" >> .env
+          echo "VITE_PAYMENTS_API_PATH=${{ secrets.VITE_PAYMENTS_API_PATH }}" >> .env
+          echo "TEST_USER_ID=${{ secrets.TEST_USER_ID }}" >> .env
+          echo "TEST_USER_PASSWORD=${{ secrets.TEST_USER_PASSWORD }}" >> .env
+
+      - name: Restore Playwright browsers cache
+        uses: actions/cache/restore@v4
+        id: playwright-cache
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ hashFiles('**/pnpm-lock.yaml') }}
+      
+      - name: Install Playwright browsers
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
+        run: pnpm exec playwright install chromium --with-deps
+
+      - name: Configure AWS
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-northeast-2
+      
+      - name: Download baseline from S3
+        run: |
+          mkdir -p tests/visual/visualTest.visual.ts-snapshots
+          aws s3 sync s3://front-snapshot-test/ tests/visual/visualTest.visual.ts-snapshots/ --exclude "*" --include "*.png"
+
+      - name: Run test
+        id: test
+        continue-on-error: true
+        run: pnpm visual
+
+      - name: Update snapshots for baseline
+        if: (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop') && github.event_name == 'push'
+        run: |
+            echo "=== Updating snapshots for baseline ==="
+            npx playwright test --update-snapshots
+
+      - name: Upload new baseline to S3
+        if: (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop') && github.event_name == 'push'
+        run: |
+          aws s3 sync tests/visual/visualTest.visual.ts-snapshots/ s3://front-snapshot-test/ --exclude "*" --include "*.png"
+
+      - name: Upload Playwright Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30
+
+      - name: Deploy Playwright Report to GitHub Pages
+        if: always()
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./playwright-report
+          destination_dir: playwright-reports/${{ github.sha }} 
+          keep_files: true 
+          commit_message: "Deploy Playwright Report for ${{ github.sha }}"
+
+      - name: Comment on PR
+        if: github.event_name == 'pull_request' && always()
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const testPassed = '${{ steps.test.outcome }}' === 'success';
+            const status = testPassed ? '✅ Visual Tests passed' : '❌ Visual Tests failed';
+            
+            const owner = context.repo.owner;
+            const repoName = context.repo.repo;
+            const sha = context.sha;
+            
+            const reportBaseUrl = `https://${owner}.github.io/${repoName}`;
+            const reportUrl = `${reportBaseUrl}/playwright-reports/${sha}/index.html`;
+
+            await github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `${status}\n\n[Playwright Report](${reportUrl}) (Test 실행 커밋: ${sha.substring(0, 7)})`
+            });
+
+      - name: Save Playwright browsers cache
+        if: always() && steps.playwright-cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ hashFiles('**/pnpm-lock.yaml') }}
+      
+      - name: Check test result
+        if: steps.test.outcome == 'failure'
+        run: exit 1
+
+        # 테스트 용 주석
+        

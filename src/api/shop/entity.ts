@@ -69,6 +69,8 @@ export interface UnorderableShopDetailInfoResponse {
   is_event: boolean;
   bank: string | null;
   account_number: string | null;
+  open_time?: string;
+  close_time?: string;
 }
 
 interface Rating {

@@ -234,7 +234,7 @@ export default function ContactModal({ isOpen, onClose, currentContact, onSubmit
     <BottomModal className="bottomModal" isOpen={isOpen} onClose={onClose}>
       <BottomModalHeader>
         <div className="flex w-full justify-between">연락처</div>
-        <button type="button" onClick={onClose}>
+        <button type="button" onClick={onClose} data-testid="contact-modal-close">
           <CloseIcon />
         </button>
       </BottomModalHeader>

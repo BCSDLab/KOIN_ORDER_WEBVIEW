@@ -60,7 +60,7 @@ export const getShopMenuDetail = async ({ orderableShopId, orderableShopMenuId }
 };
 
 export const getUnorderableShopInfo = async ({ UnorderableShopId }: UnorderableShopInfoParams) => {
-  const response = await apiClient.get<UnorderableShopDetailInfoResponse>(`shops/${UnorderableShopId}`);
+  const response = await apiClient.get<UnorderableShopDetailInfoResponse>(`v2/shops/${UnorderableShopId}`);
   return response;
 };
 
