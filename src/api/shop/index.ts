@@ -18,6 +18,8 @@ import {
   OrderableShopsParams,
   ShopListResponse,
   ShopListParams,
+  NearbyStoresRelateSearchResponse,
+  NearbyStoresRelateSearchParams,
 } from './entity';
 
 export const getShopDetailInfo = async ({ orderableShopId }: ShopDetailInfoParams) => {
@@ -88,6 +90,13 @@ export const getOrderableShops = async (params: OrderableShopsParams) => {
 export const getShopList = async (params: ShopListParams) => {
   const response = await apiClient.get<ShopListResponse, ShopListParams>(`/v3/shops`, {
     params,
+  });
+  return response;
+};
+
+export const getNearbyStoresRelateSearch = async ({ keyword }: NearbyStoresRelateSearchParams) => {
+  const response = await apiClient.get<NearbyStoresRelateSearchResponse>('v2/shops/search/related', {
+    params: { keyword },
   });
   return response;
 };

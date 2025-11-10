@@ -224,6 +224,30 @@ export interface ShopMenuDetailResponse {
   option_groups: OptionGroup[];
 }
 
+export interface NearbyStoresRelateSearchParams {
+  keyword: string;
+}
+
+export interface NearbyStoresRelateSearchResponse {
+  search_keyword: string;
+  processed_search_keyword: string;
+  shop_name_search_result_count: number;
+  menu_name_search_result_count: number;
+  shop_name_search_results: NearByShopResult[];
+  menu_name_search_results: NearByShopMenuResult[];
+}
+
+export interface NearByShopResult {
+  shop_id: number;
+  shop_name: string;
+}
+
+export interface NearByShopMenuResult {
+  shop_id: number;
+  shop_name: string;
+  menu_name: string;
+}
+
 export interface RelatedSearchResponse {
   search_keyword: string;
   processed_search_keyword: string;
