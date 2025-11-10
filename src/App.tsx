@@ -1,3 +1,4 @@
+import { Provider as SpProvider } from '@react-spectrum/provider';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import DevOnlyWrapper from './components/Wrapper/DevOnly';
 import Cart from './pages/Cart';
@@ -22,41 +23,43 @@ import UnorderableShopDetail from '@/pages/Shop/ShopDetail/components/Unorderabl
 
 export default function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route
-          path="/"
-          element={
-            <DevOnlyWrapper>
-              <Login />
-            </DevOnlyWrapper>
-          }
-        />
-        <Route path="shop/true/:shopId" element={<OrderableShopView />} />
-        <Route path="shop/false/:shopId" element={<UnorderableShopView />} />
-        <Route path="shop/true/:shopId/menus/:menuId" element={<MenuDetail />} />
-        <Route path="payment/return" element={<PaymentConfirm />} />
+    <SpProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <DevOnlyWrapper>
+                <Login />
+              </DevOnlyWrapper>
+            }
+          />
+          <Route path="shop/true/:shopId" element={<OrderableShopView />} />
+          <Route path="shop/false/:shopId" element={<UnorderableShopView />} />
+          <Route path="shop/true/:shopId/menus/:menuId" element={<MenuDetail />} />
+          <Route path="payment/return" element={<PaymentConfirm />} />
 
-        <Route element={<HomeLayout />}>
-          <Route path="home" element={<Home />} />
-          <Route path="shops" element={<NearbyShops />} />
-          <Route path="orders" element={<OrderList />} />
-          <Route path="search" element={<Search />} />
-        </Route>
-        <Route element={<AppLayout />}>
-          <Route path="shop-detail/true/:shopId" element={<OrderableShopDetail />} />
-          <Route path="shop-detail/false/:shopId" element={<UnorderableShopDetail />} />
-          <Route path="cart" element={<Cart />} />
-          <Route path="delivery">
-            <Route path="outside/detail" element={<DetailAddress />} />
-            <Route path="outside" element={<DeliveryOutside />} />
-            <Route path="campus" element={<Campus />} />
+          <Route element={<HomeLayout />}>
+            <Route path="home" element={<Home />} />
+            <Route path="shops" element={<NearbyShops />} />
+            <Route path="orders" element={<OrderList />} />
+            <Route path="search" element={<Search />} />
           </Route>
-          <Route path="payment" element={<Payment />} />
-          <Route path="orderCancel/:paymentId" element={<OrderCancel />} />
-          <Route path="result/:paymentId" element={<OrderFinish />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
+          <Route element={<AppLayout />}>
+            <Route path="shop-detail/true/:shopId" element={<OrderableShopDetail />} />
+            <Route path="shop-detail/false/:shopId" element={<UnorderableShopDetail />} />
+            <Route path="cart" element={<Cart />} />
+            <Route path="delivery">
+              <Route path="outside/detail" element={<DetailAddress />} />
+              <Route path="outside" element={<DeliveryOutside />} />
+              <Route path="campus" element={<Campus />} />
+            </Route>
+            <Route path="payment" element={<Payment />} />
+            <Route path="orderCancel/:paymentId" element={<OrderCancel />} />
+            <Route path="result/:paymentId" element={<OrderFinish />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </SpProvider>
   );
 }
