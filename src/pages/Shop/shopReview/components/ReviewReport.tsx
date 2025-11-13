@@ -130,8 +130,8 @@ export default function ReviewReport() {
       </div>
 
       <div
-        className={`fixed right-0 bottom-0 left-0 mx-6 flex gap-[10px] rounded-[8px] ${canSubmit ? 'bg-primary-500 text-white' : 'bg-neutral-300 text-white'
-          }`}
+        className={`fixed right-0 bottom-0 left-0 mx-6 flex gap-[10px] rounded-[8px] ${
+          canSubmit ? 'bg-primary-500 text-white' : 'bg-neutral-300 text-white'}`}
       >
         <button
           disabled={!canSubmit}
