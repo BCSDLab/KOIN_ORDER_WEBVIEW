@@ -20,7 +20,10 @@ import {
   ShopListParams,
   NearbyStoresRelateSearchResponse,
   NearbyStoresRelateSearchParams,
+  UnorderableShopReviewsResponse,
+  ReportReviewRequest,
 } from './entity';
+import { getAuthHeader } from '@/util/ts/auth';
 
 export const getShopDetailInfo = async ({ orderableShopId }: ShopDetailInfoParams) => {
   const response = await apiClient.get<ShopDetailInfoResponse>(`order/shop/${orderableShopId}/detail`);
@@ -99,4 +102,16 @@ export const getNearbyStoresRelateSearch = async ({ keyword }: NearbyStoresRelat
     params: { keyword },
   });
   return response;
+};
+
+export const getShopTotalReview = async (shopId: string) => {
+  const response = await apiClient.get<UnorderableShopReviewsResponse>(`/shops/${shopId}/reviews`);
+  return response;
+};
+
+export const reportReview = async (shopId: string, reviewId: number, body: ReportReviewRequest) => {
+  return await apiClient.post(`/shops/${shopId}/reviews/${reviewId}/reports`, {
+    body,
+    headers: getAuthHeader(),
+  });
 };
