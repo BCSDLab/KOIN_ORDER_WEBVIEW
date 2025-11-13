@@ -12,6 +12,7 @@ import Search from './pages/Search';
 import MenuDetail from './pages/Shop/MenuDetail';
 import OrderableShopView from './pages/Shop/OrderableShopView';
 import OrderableShopDetail from './pages/Shop/ShopDetail/components/OrderableShopDetail';
+import ReviewReport from './pages/Shop/shopReview/components/ReviewReport';
 import UnorderableShopView from './pages/Shop/UnorderableShopView';
 import AppLayout, { HomeLayout } from '@/components/Layout';
 import Campus from '@/pages/Delivery/Campus';
@@ -19,6 +20,8 @@ import DetailAddress from '@/pages/Delivery/Outside/DetailAddress';
 import OrderFinish from '@/pages/OrderFinish';
 import Payment from '@/pages/Payment';
 import UnorderableShopDetail from '@/pages/Shop/ShopDetail/components/UnorderableShopDetail';
+import OrderableShopReview from '@/pages/Shop/shopReview/components/OrderableShopReview';
+import UnorderableShopReview from '@/pages/Shop/shopReview/components/UnorderableShopReview';
 
 export default function App() {
   return (
@@ -46,6 +49,9 @@ export default function App() {
         <Route element={<AppLayout />}>
           <Route path="shop-detail/true/:shopId" element={<OrderableShopDetail />} />
           <Route path="shop-detail/false/:shopId" element={<UnorderableShopDetail />} />
+          <Route path="shop-review/true/:shopId" element={<OrderableShopReview />} />
+          <Route path="shop-review/false/:shopId" element={<UnorderableShopReview />} />
+          <Route path="shop-review/report/:shopId" element={<ReviewReport />} />
           <Route path="cart" element={<Cart />} />
           <Route path="delivery">
             <Route path="outside/detail" element={<DetailAddress />} />
