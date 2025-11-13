@@ -7,9 +7,17 @@ interface LoginRequiredModalProps {
   isOpen: boolean;
   onClose: () => void;
   menuOptions?: AddCartRequest;
+  title?: string;
+  subTitle?: string;
 }
 
-export default function LoginRequiredModal({ isOpen, onClose, menuOptions }: LoginRequiredModalProps) {
+export default function LoginRequiredModal({
+  isOpen,
+  onClose,
+  menuOptions,
+  title = ' 코인 주문을 이용하기 위해선 \n 로그인이 필요해요',
+  subTitle = '로그인 후 코인의 주문 기능을 이용해보세요!',
+}: LoginRequiredModalProps) {
   const clickLoginButton = () => {
     if (menuOptions) {
       localStorage.setItem('menuOptions', JSON.stringify(menuOptions));
@@ -22,14 +30,8 @@ export default function LoginRequiredModal({ isOpen, onClose, menuOptions }: Log
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalContent>
         <div className="flex flex-col items-center gap-2 text-center leading-[160%] font-normal">
-          <div className="text-lg font-medium">
-            코인 주문을 이용하기 위해선 <br />
-            로그인이 필요해요.
-          </div>
-          <div className="text-sm text-neutral-500">
-            로그인 후 코인의 주문 기능을 <br />
-            이용해보세요!
-          </div>
+          <div className="text-lg font-medium whitespace-pre-wrap">{title}</div>
+          <div className="text-sm text-neutral-500">{subTitle}</div>
         </div>
         <div className="flex w-full gap-2">
           <Button
