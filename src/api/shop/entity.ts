@@ -343,3 +343,10 @@ export interface OpenInfo {
   open_time: string;
   close_time: string;
 }
+
+export interface ReportReviewRequest {
+  reports: {
+    title: string;
+    content: string;
+  }[];
+}
