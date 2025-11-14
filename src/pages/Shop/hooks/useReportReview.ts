@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { reportReview } from '@/api/shop';
 import { ReportReviewRequest } from '@/api/shop/entity';
 
-export default function useReportReview(shopId: string, reviewId: number) {
+export default function useReportReview(shopId: number, reviewId: number) {
   const queryClient = useQueryClient();
 
   return useMutation({
