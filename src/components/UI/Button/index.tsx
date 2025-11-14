@@ -17,7 +17,7 @@ const COLOR = {
   neutral: 'bg-white text-primary-500 border border-neutral-200',
   gray: 'bg-white text-neutral-500 border border-neutral-300',
   white: 'bg-white text-neutral-500 border border-neutral-200',
-  darkGray: 'bg-[#EEE] text-neutral-500 border border-[#EEE]',
+  darkGray: 'bg-neutral-200 text-neutral-500 border border-[#EEE]',
 };
 
 const SIZE = {
