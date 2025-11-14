@@ -69,7 +69,7 @@ export default function Header() {
   const title = ROUTE_TITLES.find((item) => item.match(pathname))?.title ?? '';
 
   const bgClass = clsx({
-    'bg-white': pathname.startsWith('/shop-detail') || pathname.startsWith('/result'),
+    'bg-white': pathname.startsWith('/shop-detail') || pathname.startsWith('/result') || pathname.startsWith('/review'),
     'bg-[#f8f8fa]': true,
   });
 
