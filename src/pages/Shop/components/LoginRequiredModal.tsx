@@ -15,8 +15,8 @@ export default function LoginRequiredModal({
   isOpen,
   onClose,
   menuOptions,
-  title = ' 코인 주문을 이용하기 위해선 \n 로그인이 필요해요',
-  subTitle = '로그인 후 코인의 주문 기능을 이용해보세요!',
+  title = ' 코인 주문을 이용하기 위해선\n로그인이 필요해요',
+  subTitle = '로그인 후 코인의 주문 기능을\n이용해보세요!',
 }: LoginRequiredModalProps) {
   const clickLoginButton = () => {
     if (menuOptions) {
