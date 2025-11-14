@@ -1,19 +1,32 @@
-import React, { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useParams, useSearchParams, useNavigate } from 'react-router-dom';
+import { GetReviewReportCategories } from '../../components/GetReviewReportCategories';
 import useReportReview from '../../hooks/useReportReview';
 import CheckIcon from '@/assets/Home/check-icon.svg';
+import Button from '@/components/UI/Button';
 import { useToast } from '@/util/hooks/useToast';
 
 export default function ReviewReport() {
   const [selected, setSelected] = useState<string[]>([]);
   const [etcText, setEtcText] = useState('');
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
-  const { showToast } = useToast();
+
   const { shopId } = useParams();
   const [searchParams] = useSearchParams();
   const reviewIdParam = searchParams.get('reviewId');
   const navigate = useNavigate();
-  const { mutate: reportReview } = useReportReview(String(shopId), Number(reviewIdParam));
+
+  const { showToast } = useToast();
+  const { mutate: reportReview } = useReportReview(Number(shopId), Number(reviewIdParam));
+  const { data: categoriesData } = GetReviewReportCategories();
+
+  const options =
+    categoriesData?.categories.map((catagory) => ({
+      value: catagory.name,
+      label: catagory.name,
+      subtitle: catagory.detail || undefined,
+      hasTextarea: catagory.name === '기타',
+    })) ?? [];
 
   useEffect(() => {
     if (textareaRef.current) {
@@ -22,15 +35,7 @@ export default function ReviewReport() {
     }
   }, [etcText, selected]);
 
-  const options: { value: string; label: string; subtitle?: string; hasTextarea?: boolean }[] = [
-    { value: '1', label: '주제와 맞지 않음', subtitle: '분실물과 관련 없는 내용입니다.' },
-    { value: '2', label: '스팸', subtitle: '홍보성 글입니다.' },
-    { value: '3', label: '욕설', subtitle: '비방, 모욕 등이 포함된 글입니다.' },
-    { value: '4', label: '개인정보', subtitle: '개인정보가 포함된 글입니다.' },
-    { value: '5', label: '기타', hasTextarea: true },
-  ];
-
-  const isEtcSelected = selected.includes('5');
+  const isEtcSelected = selected.includes('기타');
 
   const canSubmit = Boolean(selected.length > 0 && (!isEtcSelected || etcText.trim().length > 0));
 
@@ -53,19 +58,17 @@ export default function ReviewReport() {
       ],
     };
     reportReview(body, {
-      onSuccess: () => {
-        setTimeout(() => {
-          showToast('리뷰가 신고되었어요');
-        }, 0);
-
+      onSuccess: async () => {
+        showToast('리뷰가 신고되었어요');
+        await Promise.resolve();
         navigate(-1);
       },
     });
   };
 
   return (
-    <div className="flex w-full flex-col">
-      <div className="mt-6 mr-[71px] ml-7 flex flex-col items-start justify-center gap-2 pr-1">
+    <div className="flex w-full flex-col pb-32">
+      <div className="mt-6 flex flex-col items-start justify-center gap-2 pr-1 pr-[71px] pl-7">
         <span className="text-[18px] font-semibold">신고 이유를 선택해주세요.</span>
         <span className="text-[14px] text-[#8E8E8E]">
           접수된 신고는 관계자 확인 하에 블라인드 처리됩니다.
@@ -74,11 +77,12 @@ export default function ReviewReport() {
         </span>
       </div>
 
-      <div className="mt-6 flex w-full flex-col gap-4 px-6 pb-24">
+      <div className="mt-6 flex w-full flex-col gap-4 px-6 pb-10">
         {options.map((opt) => {
-          const hasSubtitle = Boolean(opt.subtitle);
-          const isEtc = Boolean(opt.hasTextarea);
+          const hasSubtitle = !!opt.subtitle;
+          const isEtc = !!opt.hasTextarea;
           const checked = selected.includes(opt.value);
+
           return (
             <label key={opt.value} className={`flex flex-col pb-4 ${isEtc ? '' : 'border-b border-neutral-300'}`}>
               <div className="flex items-start gap-4 px-2">
@@ -130,17 +134,18 @@ export default function ReviewReport() {
       </div>
 
       <div
-        className={`fixed right-0 bottom-0 left-0 mx-6 flex gap-[10px] rounded-[8px] ${
-          canSubmit ? 'bg-primary-500 text-white' : 'bg-neutral-300 text-white'
-        }`}
+        className={`fixed right-0 bottom-[20px] left-0 mx-6 flex gap-[10px] rounded-[8px] text-white ${canSubmit ? 'bg-primary-500' : 'bg-neutral-300'
+          }`}
       >
-        <button
-          disabled={!canSubmit}
+        <Button
+          fullWidth
+          color="primary"
+          state={canSubmit ? 'default' : 'disabled'}
           onClick={handleSubmit}
-          className="flex w-full items-center justify-center py-[11px] text-[15px] font-semibold"
+          className="py-[11px] text-[15px]"
         >
           신고하기
-        </button>
+        </Button>
       </div>
     </div>
   );
