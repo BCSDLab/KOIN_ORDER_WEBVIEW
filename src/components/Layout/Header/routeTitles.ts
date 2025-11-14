@@ -1,5 +1,3 @@
-import { matchPath } from '@/util/ts/matchPath';
-
 export interface RouteTitle {
   match: (pathname: string) => boolean;
   title: string;
@@ -15,7 +13,7 @@ export const ROUTE_TITLES: RouteTitle[] = [
     title: '주문',
   },
   {
-    match: (pathname) => matchPath('/shop-detail/true/:id', pathname) || matchPath('/shop-detail/false/:id', pathname),
+    match: (pathname) => pathname.startsWith('/shop-detail'),
     title: '가게정보·원산지',
   },
   {
@@ -27,7 +25,7 @@ export const ROUTE_TITLES: RouteTitle[] = [
     title: '장바구니',
   },
   {
-    match: (pathname) => pathname === '/shops',
+    match: (pathname) => pathname.startsWith('/shops'),
     title: '주변상점',
   },
   {
