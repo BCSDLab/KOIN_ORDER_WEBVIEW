@@ -22,6 +22,7 @@ import {
   NearbyStoresRelateSearchParams,
   UnorderableShopReviewsResponse,
   ReportReviewRequest,
+  ReviewReportCategoriesResponse,
 } from './entity';
 import { getAuthHeader } from '@/util/ts/auth';
 
@@ -104,14 +105,52 @@ export const getNearbyStoresRelateSearch = async ({ keyword }: NearbyStoresRelat
   return response;
 };
 
-export const getShopTotalReview = async (shopId: string) => {
-  const response = await apiClient.get<UnorderableShopReviewsResponse>(`/shops/${shopId}/reviews`);
+export const getShopTotalReview = async ({
+  shopId,
+  page,
+  limit,
+  sorter,
+}: {
+  shopId: string;
+  page?: number;
+  limit?: number;
+  sorter?: string;
+}) => {
+  const params: Record<string, string | number> = {};
+
+  if (page !== undefined) params.page = page;
+  if (limit !== undefined) params.limit = limit;
+  if (sorter !== undefined) params.sorter = sorter;
+
+  const response = await apiClient.get<UnorderableShopReviewsResponse>(`/shops/${shopId}/reviews`, {
+    params,
+  });
+
   return response;
 };
 
-export const reportReview = async (shopId: string, reviewId: number, body: ReportReviewRequest) => {
+export const reportReview = async (shopId: number, reviewId: number, body: ReportReviewRequest) => {
   return await apiClient.post(`/shops/${shopId}/reviews/${reviewId}/reports`, {
     body,
     headers: getAuthHeader(),
   });
+};
+
+export const getReviewReportCategories = async () => {
+  const response = await apiClient.get<ReviewReportCategoriesResponse>('/shops/reviews/reports/categories');
+  return response;
+};
+
+export const getMyShopReviews = async ({ shopId, sorter }: { shopId: string; sorter?: string }) => {
+  const params: Record<string, string> = {};
+
+  if (sorter) {
+    params.sorter = sorter;
+  }
+
+  const response = await apiClient.get<UnorderableShopReviewsResponse>(`/shops/${shopId}/reviews/me`, {
+    params,
+  });
+
+  return response;
 };
