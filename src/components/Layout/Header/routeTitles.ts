@@ -39,12 +39,11 @@ export const ROUTE_TITLES: RouteTitle[] = [
     title: '검색',
   },
   {
-    match: (pathname) =>
-      matchPath('shop-review/true/:shopId', pathname) || matchPath('shop-review/false/:shopId', pathname),
+    match: (pathname) => matchPath('review/true/:shopId', pathname) || matchPath('review/false/:shopId', pathname),
     title: '리뷰',
   },
   {
-    match: (pathname) => matchPath('shop-review/report/:shopId', pathname),
+    match: (pathname) => matchPath('review/report/:shopId', pathname),
     title: '리뷰 신고하기',
   },
 ];

@@ -30,7 +30,7 @@ export default function ShopSummary({ shopInfoSummary, id, isOrderable, UnOrdera
         <span className="mb-2 self-start text-xl leading-[1.6] font-bold">{shopInfoSummary.name}</span>
         <div className="flex w-full justify-between">
           <Link
-            to={isOrderable ? `/shop-review/true/${id}` : `/shop-review/false/${id}`}
+            to={isOrderable ? `/review/true/${id}` : `/review/false/${id}`}
             className="flex items-center justify-between gap-1"
           >
             <div className="flex h-[25px] w-[25px] items-center justify-center">
