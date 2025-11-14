@@ -350,3 +350,12 @@ export interface ReportReviewRequest {
     content: string;
   }[];
 }
+export interface ReviewReportCategory {
+  name: string;
+  detail: string;
+}
+
+export interface ReviewReportCategoriesResponse {
+  count: number;
+  categories: ReviewReportCategory[];
+}
