@@ -49,9 +49,9 @@ export default function App() {
         <Route element={<AppLayout />}>
           <Route path="shop-detail/true/:shopId" element={<OrderableShopDetail />} />
           <Route path="shop-detail/false/:shopId" element={<UnorderableShopDetail />} />
-          <Route path="shop-review/true/:shopId" element={<OrderableShopReview />} />
-          <Route path="shop-review/false/:shopId" element={<UnorderableShopReview />} />
-          <Route path="shop-review/report/:shopId" element={<ReviewReport />} />
+          <Route path="review/true/:shopId" element={<OrderableShopReview />} />
+          <Route path="review/false/:shopId" element={<UnorderableShopReview />} />
+          <Route path="review/report/:shopId" element={<ReviewReport />} />
           <Route path="cart" element={<Cart />} />
           <Route path="delivery">
             <Route path="outside/detail" element={<DetailAddress />} />
