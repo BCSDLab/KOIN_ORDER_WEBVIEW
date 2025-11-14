@@ -134,8 +134,9 @@ export default function ReviewReport() {
       </div>
 
       <div
-        className={`fixed right-0 bottom-[20px] left-0 mx-6 flex gap-[10px] rounded-[8px] text-white ${canSubmit ? 'bg-primary-500' : 'bg-neutral-300'
-          }`}
+        className={`fixed right-0 bottom-[20px] left-0 mx-6 flex gap-[10px] rounded-[8px] text-white ${
+  canSubmit ? 'bg-primary-500' : 'bg-neutral-300'
+}`}
       >
         <Button
           fullWidth
