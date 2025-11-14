@@ -1,6 +1,6 @@
 import { useParams } from 'react-router-dom';
-import { useShopTotalReview } from '../hooks/useGetShopReview';
-import { useSortedReviews } from '../hooks/useSortedReviews';
+import { GetMyShopReview } from '../components/GetMyShopReview';
+import { GetShopReview } from '../components/GetShopReview';
 import ReviewCard from './ReviewCard';
 import type { SortType } from './SortModal';
 import EmptyReview from '@/pages/Shop/components/EmptyReview';
@@ -14,28 +14,18 @@ export default function ReviewList({ showMineOnly = false, sort = 'LATEST' }: Re
   const { shopId } = useParams();
   if (!shopId) return null;
 
-  const { data } = useShopTotalReview(shopId);
-  const reviews = data?.reviews ?? [];
+  const { data: totalData } = GetShopReview(shopId, sort);
+  const { data: myData } = GetMyShopReview(shopId, sort);
 
-  const sortedReviews = useSortedReviews(reviews, sort, showMineOnly);
+  const totalReviews = totalData?.reviews ?? [];
+  const myReviews = myData?.reviews ?? [];
+
+  const visibleReviews = showMineOnly ? myReviews : totalReviews;
 
   return (
     <div className="mt-[18px] flex w-full flex-col items-start gap-6">
-      {sortedReviews.length > 0 ? (
-        sortedReviews.map((r) => (
-          <ReviewCard
-            rating={r.rating}
-            nick_name={r.nick_name}
-            content={r.content}
-            image_urls={r.image_urls}
-            menu_names={r.menu_names}
-            is_mine={r.is_mine}
-            is_modified={r.is_modified}
-            is_reported={r.is_reported}
-            created_at={r.created_at}
-            review_id={r.review_id}
-          />
-        ))
+      {visibleReviews.length > 0 ? (
+        visibleReviews.map((review) => <ReviewCard key={review.review_id} review={review} />)
       ) : (
         <EmptyReview />
       )}
