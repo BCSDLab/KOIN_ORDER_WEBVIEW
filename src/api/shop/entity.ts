@@ -359,3 +359,10 @@ export interface ReviewReportCategoriesResponse {
   count: number;
   categories: ReviewReportCategory[];
 }
+
+export interface GetShopTotalReviewParams {
+  shopId: string;
+  page?: number;
+  limit?: number;
+  sorter?: string;
+}

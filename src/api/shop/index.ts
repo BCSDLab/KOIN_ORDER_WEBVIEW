@@ -23,6 +23,7 @@ import {
   UnorderableShopReviewsResponse,
   ReportReviewRequest,
   ReviewReportCategoriesResponse,
+  GetShopTotalReviewParams,
 } from './entity';
 import { getAuthHeader } from '@/util/ts/auth';
 
@@ -105,26 +106,14 @@ export const getNearbyStoresRelateSearch = async ({ keyword }: NearbyStoresRelat
   return response;
 };
 
-export const getShopTotalReview = async ({
-  shopId,
-  page,
-  limit,
-  sorter,
-}: {
-  shopId: string;
-  page?: number;
-  limit?: number;
-  sorter?: string;
-}) => {
+export const getShopTotalReview = async ({ shopId, page, limit, sorter }: GetShopTotalReviewParams) => {
   const params: Record<string, string | number> = {};
 
   if (page !== undefined) params.page = page;
   if (limit !== undefined) params.limit = limit;
   if (sorter !== undefined) params.sorter = sorter;
 
-  const response = await apiClient.get<UnorderableShopReviewsResponse>(`/shops/${shopId}/reviews`, {
-    params,
-  });
+  const response = await apiClient.get<UnorderableShopReviewsResponse>(`/shops/${shopId}/reviews`, { params });
 
   return response;
 };
