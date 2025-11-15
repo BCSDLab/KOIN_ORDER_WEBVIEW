@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { useParams, useSearchParams, useNavigate } from 'react-router-dom';
-import { GetReviewReportCategories } from '../../components/GetReviewReportCategories';
+import { useGetReviewReportCategories } from '../../hooks/useGetReviewReportCategories';
 import useReportReview from '../../hooks/useReportReview';
 import CheckIcon from '@/assets/Home/check-icon.svg';
 import Button from '@/components/UI/Button';
@@ -18,7 +18,7 @@ export default function ReviewReport() {
 
   const { showToast } = useToast();
   const { mutate: reportReview } = useReportReview(Number(shopId), Number(reviewIdParam));
-  const { data: categoriesData } = GetReviewReportCategories();
+  const { data: categoriesData } = useGetReviewReportCategories();
 
   const options =
     categoriesData?.categories.map((catagory) => ({
@@ -67,8 +67,8 @@ export default function ReviewReport() {
   };
 
   return (
-    <div className="flex w-full flex-col pb-32">
-      <div className="mt-6 flex flex-col items-start justify-center gap-2 pr-1 pr-[71px] pl-7">
+    <div className="flex min-h-[calc(100vh-60px)] w-full flex-col">
+      <div className="mt-6 flex flex-col items-start justify-center gap-2 px-7">
         <span className="text-[18px] font-semibold">신고 이유를 선택해주세요.</span>
         <span className="text-[14px] text-[#8E8E8E]">
           접수된 신고는 관계자 확인 하에 블라인드 처리됩니다.
@@ -77,7 +77,7 @@ export default function ReviewReport() {
         </span>
       </div>
 
-      <div className="mt-6 flex w-full flex-col gap-4 px-6 pb-10">
+      <div className="mt-6 flex w-full flex-1 flex-col gap-4 px-6">
         {options.map((opt) => {
           const hasSubtitle = !!opt.subtitle;
           const isEtc = !!opt.hasTextarea;
@@ -131,22 +131,17 @@ export default function ReviewReport() {
             </label>
           );
         })}
-      </div>
-
-      <div
-        className={`fixed right-0 bottom-[20px] left-0 mx-6 flex gap-[10px] rounded-[8px] text-white ${
-          canSubmit ? 'bg-primary-500' : 'bg-neutral-300'
-        }`}
-      >
-        <Button
-          fullWidth
-          color="primary"
-          state={canSubmit ? 'default' : 'disabled'}
-          onClick={handleSubmit}
-          className="py-[11px] text-[15px]"
-        >
-          신고하기
-        </Button>
+        <div className="mt-auto pb-4">
+          <Button
+            fullWidth
+            color="primary"
+            state={canSubmit ? 'default' : 'disabled'}
+            onClick={handleSubmit}
+            className="py-[11px] text-[15px]"
+          >
+            신고하기
+          </Button>
+        </div>
       </div>
     </div>
   );

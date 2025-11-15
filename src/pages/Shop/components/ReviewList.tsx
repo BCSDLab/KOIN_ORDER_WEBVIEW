@@ -1,6 +1,6 @@
 import { useParams } from 'react-router-dom';
-import { GetMyShopReview } from '../components/GetMyShopReview';
-import { GetShopReview } from '../components/GetShopReview';
+import { useGetMyShopReview } from '../hooks/useGetMyShopReview';
+import { useShopReview } from '../hooks/useGetShopReview';
 import ReviewCard from './ReviewCard';
 import type { SortType } from './SortModal';
 import EmptyReview from '@/pages/Shop/components/EmptyReview';
@@ -14,8 +14,8 @@ export default function ReviewList({ showMineOnly = false, sort = 'LATEST' }: Re
   const { shopId } = useParams();
   if (!shopId) return null;
 
-  const { data: totalData } = GetShopReview(shopId, sort);
-  const { data: myData } = GetMyShopReview(shopId, sort);
+  const { data: totalData } = useShopReview(shopId, { sort });
+  const { data: myData } = useGetMyShopReview(shopId, sort);
 
   const totalReviews = totalData?.reviews ?? [];
   const myReviews = myData?.reviews ?? [];
