@@ -2,8 +2,10 @@ import { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import AverageRating from '../components/AverageRating';
 import ReviewList from '../components/ReviewList';
-import SortModal, { SortType } from '../components/SortModal';
+import SortModal, { type SortType } from '../components/SortModal';
 import DownArrowIcon from '@/assets/Home/down-arrow-icon.svg';
+import CheckboxFalse from '@/assets/Shop/checkbox-false.svg';
+import CheckboxTrue from '@/assets/Shop/checkbox-true.svg';
 import useBooleanState from '@/util/hooks/useBooleanState';
 
 const sortOptions: { id: SortType; label: string }[] = [
@@ -26,16 +28,20 @@ export default function ShopReview() {
   const getCurrentSortLabel = () => sortOptions.find((o) => o.id === selectedSort)?.label || '최신순';
 
   const handleChangeSort = (sort: SortType) => {
-    setSearchParams((prev) => {
-      const next = new URLSearchParams(prev);
-      if (sort === 'LATEST') {
-        next.delete('sort');
-      } else {
-        next.set('sort', sort);
-      }
-      return next;
-    });
+    setSearchParams(
+      (prev) => {
+        const next = new URLSearchParams(prev);
+        if (sort === 'LATEST') {
+          next.delete('sort');
+        } else {
+          next.set('sort', sort);
+        }
+        return next;
+      },
+      { replace: true },
+    );
   };
+
   return (
     <div className="flex flex-col items-center justify-center px-6 pb-10">
       <button className="border-primary-500 text-primary-500 mt-[30px] flex w-full items-center justify-center rounded-lg border py-[9px] text-[14px]">
@@ -49,14 +55,15 @@ export default function ShopReview() {
           <span>{getCurrentSortLabel()}</span>
           <DownArrowIcon fill="#727272" />
         </button>
-        <label className="flex items-center gap-1">
+        <label className="flex cursor-pointer items-center gap-1">
           <input
             type="checkbox"
-            className="h-[14px] w-[14px]"
+            className="hidden"
             checked={showMineOnly}
             onChange={(e) => setShowMineOnly(e.target.checked)}
           />
-          내가 작성한 리뷰
+          {showMineOnly ? <CheckboxTrue className="h-5 w-5" /> : <CheckboxFalse className="h-5 w-5" />}
+          <span className="pt-[2px]">내가 작성한 리뷰</span>
         </label>
       </div>
       <ReviewList showMineOnly={showMineOnly} sort={selectedSort} />
