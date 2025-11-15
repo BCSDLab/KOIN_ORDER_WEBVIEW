@@ -360,14 +360,18 @@ export interface ReviewReportCategoriesResponse {
   categories: ReviewReportCategory[];
 }
 
+export type ReviewSorter = 'LATEST' | 'OLDEST' | 'HIGHEST_RATING' | 'LOWEST_RATING';
+
 export interface GetShopTotalReviewParams {
   shopId: string;
   page: number;
   limit: number;
-  sorter: string;
+  sorter: ReviewSorter;
 }
 
 export interface GetMyShopReviewsParams {
   shopId: string;
-  sorter: string;
+  params: {
+    sorter: ReviewSorter;
+  };
 }
