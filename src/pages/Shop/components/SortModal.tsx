@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import type { ReviewSorter } from '@/api/shop/entity';
 import CheckIcon from '@/assets/Home/check-icon.svg';
 import CloseIcon from '@/assets/Main/close-icon.svg';
 import BottomModal, {
@@ -7,31 +8,24 @@ import BottomModal, {
   BottomModalHeader,
 } from '@/components/UI/BottomModal/BottomModal';
 
-export type SortType = 'LATEST' | 'OLDEST' | 'RATING_DESC' | 'RATING_ASC';
-
-interface SortOption {
-  id: SortType;
-  label: string;
-}
-
-const sortOptions: SortOption[] = [
+export const sortOptions: { id: ReviewSorter; label: string }[] = [
   { id: 'LATEST', label: '최신순' },
   { id: 'OLDEST', label: '오래된순' },
-  { id: 'RATING_DESC', label: '평점 높은순' },
-  { id: 'RATING_ASC', label: '평점 낮은순' },
+  { id: 'HIGHEST_RATING', label: '평점 높은순' },
+  { id: 'LOWEST_RATING', label: '평점 낮은순' },
 ];
 
 interface SortModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onApply: (sort: SortType) => void;
-  defaultSort: SortType;
+  onApply: (sort: ReviewSorter) => void;
+  defaultSort: ReviewSorter;
 }
 
 export default function SortModal({ isOpen, onClose, onApply, defaultSort }: SortModalProps) {
-  const [selectedSort, setSelectedSort] = useState<SortType>('LATEST');
+  const [selectedSort, setSelectedSort] = useState<ReviewSorter>('LATEST');
 
-  const handleSelect = (sortId: SortType) => {
+  const handleSelect = (sortId: ReviewSorter) => {
     setSelectedSort(sortId);
     onApply(sortId);
     onClose();
