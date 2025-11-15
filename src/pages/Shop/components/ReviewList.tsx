@@ -15,7 +15,7 @@ export default function ReviewList({ showMineOnly = false, sort = 'LATEST' }: Re
   if (!shopId) return null;
 
   const { data: totalData } = useShopReview({ shopId, sort });
-  const { data: myData } = useGetMyShopReview(shopId, sort);
+  const { data: myData } = useGetMyShopReview({ shopId, sort });
 
   const totalReviews = totalData?.reviews ?? [];
   const myReviews = myData?.reviews ?? [];

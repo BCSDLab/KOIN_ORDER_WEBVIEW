@@ -1,18 +1,20 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 import type { UnorderableShopReviewsResponse } from '@/api/shop/entity';
-import type { SortType } from '@/pages/Shop/components/SortModal';
+import type { ReviewSorter } from '@/api/shop/entity';
 import { getMyShopReviews } from '@/api/shop';
-import { mapSortTypeToServer } from '@/util/ts/ReviewSorterMapper';
 
-export const useGetMyShopReview = (shopId: string, sort: SortType = 'LATEST') => {
-  const serverSorter = mapSortTypeToServer(sort);
+interface UseGetMyShopReviewParams {
+  shopId: string;
+  sort?: ReviewSorter;
+}
 
+export const useGetMyShopReview = ({ shopId, sort = 'LATEST' }: UseGetMyShopReviewParams) => {
   const { data } = useSuspenseQuery<UnorderableShopReviewsResponse>({
-    queryKey: ['shopMyReview', shopId, serverSorter],
+    queryKey: ['shopMyReview', shopId, sort],
     queryFn: () =>
       getMyShopReviews({
         shopId,
-        sorter: serverSorter,
+        params: { sorter: sort },
       }),
   });
 
