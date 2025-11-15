@@ -2,34 +2,25 @@ import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import LoginRequiredModal from './LoginRequiredModal';
 import StarList from './StarList';
+import type { Review } from '@/api/shop/entity';
 import CheckBookMark from '@/assets/Shop/check-bookmark.svg';
 import NoImageIcon from '@/assets/Shop/no-image-icon.svg';
+import Portal from '@/components/Portal';
 import Button from '@/components/UI/Button';
-import Modal from '@/components/UI/CenterModal/Modal';
 import useBooleanState from '@/util/hooks/useBooleanState';
+import useScrollLock from '@/util/hooks/useScrollLock';
 import { getCookie } from '@/util/ts/cookie';
 import { formatDate } from '@/util/ts/formatDate';
 
 interface ReviewCardProps {
-  review: {
-    rating: number;
-    nick_name: string;
-    content: string;
-    image_urls: string[];
-    menu_names: string[];
-    is_mine: boolean;
-    is_modified: boolean;
-    is_reported: boolean;
-    created_at: string;
-    review_id: number;
-  };
+  review: Review;
 }
-
 export default function ReviewCard({ review }: ReviewCardProps) {
   const [loginModalOpen, openLoginModal, closeLoginModal] = useBooleanState(false);
   const [previewOpen, openPreview, closePreview] = useBooleanState(false);
-  const [previewSrc, setPreviewSrc] = useState<string | null>(null);
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
 
+  useScrollLock(previewOpen);
   const navigate = useNavigate();
   const { shopId } = useParams();
 
@@ -57,17 +48,18 @@ export default function ReviewCard({ review }: ReviewCardProps) {
   };
 
   const handleImageClick = (src: string) => {
-    setPreviewSrc(src);
+    if (previewOpen) return;
+    setPreviewImage(src);
     openPreview();
   };
 
   const handleClosePreview = () => {
     closePreview();
-    setPreviewSrc(null);
+    setPreviewImage(null);
   };
 
   return (
-    <div className="flex w-full flex-col items-start gap-[10px] pb-1">
+    <div className={`flex w-full flex-col items-start gap-[10px] pb-1 ${previewOpen && 'pointer-events-none'}`}>
       {is_mine && (
         <div className="text-primary-500 flex items-center text-[12px]">
           <CheckBookMark />
@@ -97,7 +89,7 @@ export default function ReviewCard({ review }: ReviewCardProps) {
       </div>
       <span className="flex text-[14px]">{content}</span>
       {image_urls?.length > 0 && (
-        <div className="flex w-full gap-2 overflow-x-auto">
+        <div className="scrollbar-hide flex w-full gap-2 overflow-x-auto">
           {image_urls.map((url, idx) => (
             <button key={idx} type="button" className="shrink-0" onClick={() => handleImageClick(url)}>
               <img
@@ -116,7 +108,7 @@ export default function ReviewCard({ review }: ReviewCardProps) {
           {menu_names.map((name, idx) => (
             <span
               key={idx}
-              className="border-primary-300 text-primary-300 flex inline-block max-w-full items-center justify-center rounded-[5px] border px-[10px] py-[3px] text-[12px] break-words"
+              className="border-primary-300 text-primary-300 inline-block max-w-full rounded-[5px] border px-[10px] py-[3px] text-[12px] break-all"
             >
               {name}
             </span>
@@ -130,13 +122,25 @@ export default function ReviewCard({ review }: ReviewCardProps) {
         subTitle={`리뷰작성은 회원만 사용 가능합니다.`}
       />
 
-      <Modal
-        isOpen={previewOpen}
-        onClose={handleClosePreview}
-        className="max-h-[90vh] max-w-[90vw] border-none bg-transparent p-0"
-      >
-        {previewSrc && <img src={previewSrc} className="max-h-[90vh] max-w-[90vw] rounded-[12px] object-contain" />}
-      </Modal>
+      {previewOpen && previewImage && (
+        <Portal>
+          <div
+            role="presentation"
+            tabIndex={-1}
+            className="fixed inset-0 z-[120] flex items-center justify-center bg-[rgba(0,0,0,0.8)]"
+            onClick={handleClosePreview}
+          >
+            <div
+              role="presentation"
+              tabIndex={-1}
+              className="max-h-[90vh] max-w-[90vw]"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <img src={previewImage} className="max-h-[90vh] max-w-[90vw] rounded-[12px] object-contain" />
+            </div>
+          </div>
+        </Portal>
+      )}
     </div>
   );
 }
