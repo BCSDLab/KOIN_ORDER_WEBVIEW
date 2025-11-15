@@ -1,15 +1,15 @@
 import { useParams } from 'react-router-dom';
-import { GetShopReview } from '../components/GetShopReview';
+import { useShopTotalReview } from '../hooks/useGetShopTotalReview';
 import Rating from './Rating';
 import StarList from './StarList';
 
 export default function AverageRating() {
   const { shopId } = useParams();
-  const { data: useShopTotalReviews } = GetShopReview(shopId!);
+  const { data: totalReviews } = useShopTotalReview(shopId!);
 
-  const average = useShopTotalReviews.statistics.average_rating;
-  const ratings = useShopTotalReviews.statistics.ratings;
-  const totalReviewCount = useShopTotalReviews.total_count;
+  const average = totalReviews.statistics.average_rating;
+  const ratings = totalReviews.statistics.ratings;
+  const totalReviewCount = totalReviews.total_count;
   const rateList = ['5', '4', '3', '2', '1'] as const;
 
   return (
