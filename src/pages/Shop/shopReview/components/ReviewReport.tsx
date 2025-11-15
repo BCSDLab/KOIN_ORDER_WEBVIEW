@@ -21,11 +21,11 @@ export default function ReviewReport() {
   const { data: categoriesData } = useGetReviewReportCategories();
 
   const options =
-    categoriesData?.categories.map((catagory) => ({
-      value: catagory.name,
-      label: catagory.name,
-      subtitle: catagory.detail || undefined,
-      hasTextarea: catagory.name === '기타',
+    categoriesData?.categories.map((category) => ({
+      value: category.name,
+      label: category.name,
+      subtitle: category.detail || undefined,
+      hasTextarea: category.name === '기타',
     })) ?? [];
 
   useEffect(() => {
@@ -131,17 +131,15 @@ export default function ReviewReport() {
             </label>
           );
         })}
-        <div className="mt-auto pb-4">
-          <Button
-            fullWidth
-            color="primary"
-            state={canSubmit ? 'default' : 'disabled'}
-            onClick={handleSubmit}
-            className="py-[11px] text-[15px]"
-          >
-            신고하기
-          </Button>
-        </div>
+        <Button
+          fullWidth
+          color="primary"
+          state={canSubmit ? 'default' : 'disabled'}
+          onClick={handleSubmit}
+          className="mt-auto mb-4 py-[11px] text-[15px]"
+        >
+          신고하기
+        </Button>
       </div>
     </div>
   );
