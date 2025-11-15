@@ -86,7 +86,7 @@ interface ReviewStatistics {
   ratings: Rating;
 }
 
-interface Review {
+export interface Review {
   review_id: number;
   rating: number;
   nick_name: string;
@@ -362,7 +362,12 @@ export interface ReviewReportCategoriesResponse {
 
 export interface GetShopTotalReviewParams {
   shopId: string;
-  page?: number;
-  limit?: number;
-  sorter?: string;
+  page: number;
+  limit: number;
+  sorter: string;
+}
+
+export interface GetMyShopReviewsParams {
+  shopId: string;
+  sorter: string;
 }
