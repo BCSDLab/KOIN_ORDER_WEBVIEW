@@ -1,4 +1,4 @@
-import type { SortType } from './SortModal';
+import type { SortType } from '@/pages/Shop/components/SortModal';
 
 export function mapSortTypeToServer(sort: SortType) {
   switch (sort) {
