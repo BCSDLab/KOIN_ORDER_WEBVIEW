@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import clsx from 'clsx';
 import { useNavigate, useParams } from 'react-router-dom';
 import LoginRequiredModal from './LoginRequiredModal';
 import StarList from './StarList';
@@ -59,7 +60,7 @@ export default function ReviewCard({ review }: ReviewCardProps) {
   };
 
   return (
-    <div className={`flex w-full flex-col items-start gap-[10px] pb-1 ${previewOpen && 'pointer-events-none'}`}>
+    <div className={clsx('flex w-full flex-col items-start gap-[10px] pb-1', previewOpen && 'pointer-events-none')}>
       {is_mine && (
         <div className="text-primary-500 flex items-center text-[12px]">
           <CheckBookMark />
@@ -108,7 +109,7 @@ export default function ReviewCard({ review }: ReviewCardProps) {
           {menu_names.map((name, idx) => (
             <span
               key={idx}
-              className="border-primary-300 text-primary-300 inline-block max-w-full rounded-[5px] border px-[10px] py-[3px] text-[12px] break-all"
+              className="border-primary-300 text-primary-300 rounded-[5px] border px-[10px] py-[3px] text-[12px] break-all"
             >
               {name}
             </span>
@@ -127,7 +128,7 @@ export default function ReviewCard({ review }: ReviewCardProps) {
           <div
             role="presentation"
             tabIndex={-1}
-            className="fixed inset-0 z-[120] flex items-center justify-center bg-[rgba(0,0,0,0.8)]"
+            className="fixed inset-0 z-[120] flex items-center justify-center bg-black/80"
             onClick={handleClosePreview}
           >
             <div
