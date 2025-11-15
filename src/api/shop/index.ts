@@ -24,6 +24,7 @@ import {
   ReportReviewRequest,
   ReviewReportCategoriesResponse,
   GetShopTotalReviewParams,
+  GetMyShopReviewsParams,
 } from './entity';
 import { getAuthHeader } from '@/util/ts/auth';
 
@@ -107,11 +108,7 @@ export const getNearbyStoresRelateSearch = async ({ keyword }: NearbyStoresRelat
 };
 
 export const getShopTotalReview = async ({ shopId, page, limit, sorter }: GetShopTotalReviewParams) => {
-  const params: Record<string, string | number> = {};
-
-  if (page !== undefined) params.page = page;
-  if (limit !== undefined) params.limit = limit;
-  if (sorter !== undefined) params.sorter = sorter;
+  const params = { page, limit, sorter };
 
   const response = await apiClient.get<UnorderableShopReviewsResponse>(`/shops/${shopId}/reviews`, { params });
 
@@ -130,16 +127,10 @@ export const getReviewReportCategories = async () => {
   return response;
 };
 
-export const getMyShopReviews = async ({ shopId, sorter }: { shopId: string; sorter?: string }) => {
-  const params: Record<string, string> = {};
+export const getMyShopReviews = async ({ shopId, sorter }: GetMyShopReviewsParams) => {
+  const params = { sorter };
 
-  if (sorter) {
-    params.sorter = sorter;
-  }
-
-  const response = await apiClient.get<UnorderableShopReviewsResponse>(`/shops/${shopId}/reviews/me`, {
-    params,
-  });
+  const response = await apiClient.get<UnorderableShopReviewsResponse>(`/shops/${shopId}/reviews/me`, { params });
 
   return response;
 };
