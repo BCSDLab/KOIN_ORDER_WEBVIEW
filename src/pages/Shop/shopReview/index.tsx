@@ -2,17 +2,18 @@ import { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import AverageRating from '../components/AverageRating';
 import ReviewList from '../components/ReviewList';
-import SortModal, { type SortType } from '../components/SortModal';
+import SortModal from '../components/SortModal';
+import type { ReviewSorter } from '@/api/shop/entity';
 import DownArrowIcon from '@/assets/Home/down-arrow-icon.svg';
 import CheckboxFalse from '@/assets/Shop/checkbox-false.svg';
 import CheckboxTrue from '@/assets/Shop/checkbox-true.svg';
 import useBooleanState from '@/util/hooks/useBooleanState';
 
-const sortOptions: { id: SortType; label: string }[] = [
+const sortOptions: { id: ReviewSorter; label: string }[] = [
   { id: 'LATEST', label: '최신순' },
   { id: 'OLDEST', label: '오래된순' },
-  { id: 'RATING_DESC', label: '평점 높은순' },
-  { id: 'RATING_ASC', label: '평점 낮은순' },
+  { id: 'HIGHEST_RATING', label: '평점 높은순' },
+  { id: 'LOWEST_RATING', label: '평점 낮은순' },
 ];
 
 export default function ShopReview() {
@@ -22,12 +23,12 @@ export default function ShopReview() {
 
   const rawSort = searchParams.get('sort');
 
-  const selectedSort: SortType =
-    rawSort && sortOptions.some((o) => o.id === rawSort) ? (rawSort as SortType) : 'LATEST';
+  const selectedSort: ReviewSorter =
+    rawSort && sortOptions.some((o) => o.id === rawSort) ? (rawSort as ReviewSorter) : 'LATEST';
 
   const getCurrentSortLabel = () => sortOptions.find((o) => o.id === selectedSort)?.label || '최신순';
 
-  const handleChangeSort = (sort: SortType) => {
+  const handleChangeSort = (sort: ReviewSorter) => {
     setSearchParams(
       (prev) => {
         const next = new URLSearchParams(prev);
