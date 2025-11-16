@@ -1,5 +1,3 @@
-import { matchPath } from '@/util/ts/matchPath';
-
 export interface RouteTitle {
   match: (pathname: string) => boolean;
   title: string;
