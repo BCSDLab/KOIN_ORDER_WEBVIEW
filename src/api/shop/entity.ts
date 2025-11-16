@@ -86,7 +86,7 @@ interface ReviewStatistics {
   ratings: Rating;
 }
 
-interface Review {
+export interface Review {
   review_id: number;
   rating: number;
   nick_name: string;
@@ -342,4 +342,36 @@ export interface OpenInfo {
   closed: boolean;
   open_time: string;
   close_time: string;
+}
+
+export interface ReportReviewRequest {
+  reports: {
+    title: string;
+    content: string;
+  }[];
+}
+export interface ReviewReportCategory {
+  name: string;
+  detail: string;
+}
+
+export interface ReviewReportCategoriesResponse {
+  count: number;
+  categories: ReviewReportCategory[];
+}
+
+export type ReviewSorter = 'LATEST' | 'OLDEST' | 'HIGHEST_RATING' | 'LOWEST_RATING';
+
+export interface GetShopTotalReviewParams {
+  shopId: string;
+  page: number;
+  limit: number;
+  sorter: ReviewSorter;
+}
+
+export interface GetMyShopReviewsParams {
+  shopId: string;
+  params: {
+    sorter: ReviewSorter;
+  };
 }
