@@ -39,8 +39,8 @@ export default function ReviewForm() {
   }, []);
 
   return (
-    <div className="flex w-full flex-col pb-32">
-      <div className="mt-6 mr-[50px] ml-6 flex flex-col items-start justify-center gap-[5px]">
+    <div className="flex min-h-[calc(100vh-60px)] w-full flex-col px-6">
+      <div className="mt-6 flex flex-col items-start justify-center gap-[5px]">
         <span className="text-[20px] font-[700]">{shopName}</span>
         <span className="text-[14px] text-neutral-500">
           리뷰를 남겨주시면 사장님과 다른 분들에게 도움이 됩니다.
@@ -49,21 +49,21 @@ export default function ReviewForm() {
         </span>
       </div>
 
-      <div className="mt-4 flex items-center gap-[10px] pr-[139px] pl-6">
+      <div className="mt-4 flex items-center gap-[10px]">
         <StarList average_rating={rating} size={40} editable value={rating} onChange={setRating} />
         <span className="text-[16px] font-semibold">{rating}</span>
       </div>
 
-      <div className="mt-6 px-5">
+      <div className="mt-6">
         <div className="h-[1px] w-full bg-neutral-300" />
       </div>
 
-      <div className="mt-6 flex flex-col items-start px-6">
+      <div className="mt-6 flex flex-col items-start">
         <span className="font-nomal text-[16px]">사진</span>
         <span className="text-[12px] text-neutral-500">리뷰와 관련된 사진을 업로드해주세요.</span>
       </div>
 
-      <div className="flex flex-nowrap gap-4 overflow-x-scroll overflow-y-visible pt-[6px] pl-6">
+      <div className="flex flex-nowrap gap-4 overflow-x-scroll overflow-y-visible pt-[6px]">
         <label className="flex h-[96px] w-[96px] shrink-0 flex-col items-center justify-center rounded-[8px] border-[2px] border-dashed border-neutral-300 bg-white">
           <AddThumbnail />
           <span className="text-[14px] font-medium text-neutral-500">{existingImageUrls.length + images.length}/3</span>
@@ -109,11 +109,11 @@ export default function ReviewForm() {
       </div>
 
       <div className="mt-6">
-        <div className="mb-3 flex items-center justify-between px-6">
+        <div className="mb-3 flex items-center justify-between">
           <span className="text-[16px] font-[500]">내용</span>
           <span className="text-[12px] text-neutral-500">{content.length}/500</span>
         </div>
-        <div className="mx-6 rounded-[4px] border border-neutral-300 bg-white px-4 py-3">
+        <div className="rounded-[4px] border border-neutral-300 bg-white px-4 py-3">
           <textarea
             ref={textareaRef}
             value={content}
@@ -126,7 +126,7 @@ export default function ReviewForm() {
       </div>
 
       <div className="mt-6">
-        <div className="mb-3 flex flex-col px-6">
+        <div className="mb-3 flex flex-col">
           <span className="text-[16px] font-[500]">주문메뉴</span>
 
           <div className="flex items-center justify-between">
@@ -151,7 +151,7 @@ export default function ReviewForm() {
           )}
         </div>
 
-        <div className="mx-6 rounded-[4px] border border-neutral-300 bg-white px-4 py-3">
+        <div className="rounded-[4px] border border-neutral-300 bg-white px-4 py-3">
           <textarea
             value={menuInput}
             onChange={(e) => setMenuInput(e.target.value)}
@@ -163,20 +163,16 @@ export default function ReviewForm() {
         </div>
       </div>
 
-      <div
-        className={`fixed right-0 bottom-[20px] left-0 mx-6 flex gap-[10px] rounded-[8px] text-white ${isFormValid ? 'bg-primary-500' : 'bg-neutral-300'
-          }`}
+      <Button
+        fullWidth
+        color="primary"
+        onClick={handleSubmit}
+        state={isFormValid ? 'default' : 'disabled'}
+        className="mt-auto mb-4 py-[11px] text-[15px]"
       >
-        <Button
-          fullWidth
-          color="primary"
-          onClick={handleSubmit}
-          state={isFormValid ? 'default' : 'disabled'}
-          className="py-[11px] text-[15px]"
-        >
-          {reviewId ? '수정하기' : '작성하기'}
-        </Button>
-      </div>
+        {reviewId ? '수정하기' : '작성하기'}
+      </Button>
+
       <Modal isOpen={exitModalOpen} onClose={() => setExitModalOpen(false)}>
         <div className="flex flex-col items-center justify-center gap-6 px-8 py-6">
           <p className="text-center text-[15px] text-neutral-600">리뷰 수정을 그만하시겠어요?</p>
