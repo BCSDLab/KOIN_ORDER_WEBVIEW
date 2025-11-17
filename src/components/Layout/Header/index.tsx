@@ -18,7 +18,7 @@ export default function Header() {
   const [searchParams] = useSearchParams();
 
   const backToPreviousPage = () => {
-    if (pathname.startsWith('/review')) {
+    if (pathname.startsWith('/review/edit')) {
       window.dispatchEvent(new CustomEvent('openReviewExitModal'));
       return;
     }
