@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import AverageRating from '../components/AverageRating';
 import ReviewList from '../components/ReviewList';
 import SortModal from '../components/SortModal';
@@ -7,7 +7,9 @@ import type { ReviewSorter } from '@/api/shop/entity';
 import DownArrowIcon from '@/assets/Home/down-arrow-icon.svg';
 import CheckboxFalse from '@/assets/Shop/checkbox-false.svg';
 import CheckboxTrue from '@/assets/Shop/checkbox-true.svg';
+import LoginRequiredModal from '@/pages/Shop/components/LoginRequiredModal';
 import useBooleanState from '@/util/hooks/useBooleanState';
+import { getCookie } from '@/util/ts/cookie';
 
 const sortOptions: { id: ReviewSorter; label: string }[] = [
   { id: 'LATEST', label: '최신순' },
@@ -17,8 +19,12 @@ const sortOptions: { id: ReviewSorter; label: string }[] = [
 ];
 
 export default function ShopReview() {
+  const { shopId } = useParams();
+  const navigate = useNavigate();
+
   const [showMineOnly, setShowMineOnly] = useState(false);
   const [isSortModalOpen, openSortModal, closeSortModal] = useBooleanState(false);
+  const [loginModalOpen, openLoginModal, closeLoginModal] = useBooleanState(false);
   const [searchParams, setSearchParams] = useSearchParams();
 
   const rawSort = searchParams.get('sort');
@@ -43,9 +49,22 @@ export default function ShopReview() {
     );
   };
 
+  const handleButtonClick = () => {
+    const isLogin = getCookie('AUTH_TOKEN_KEY');
+    if (!isLogin) {
+      openLoginModal();
+      return;
+    }
+
+    navigate(`/review/new/${shopId}`);
+  };
+
   return (
     <div className="flex flex-col items-center justify-center px-6 pb-10">
-      <button className="border-primary-500 text-primary-500 mt-[30px] flex w-full items-center justify-center rounded-lg border py-[9px] text-[14px]">
+      <button
+        className="border-primary-500 text-primary-500 mt-[30px] flex w-full items-center justify-center rounded-lg border py-[9px] text-[14px]"
+        onClick={handleButtonClick}
+      >
         리뷰 작성하기
       </button>
       <div className="mt-3 flex w-full items-center justify-center">
@@ -74,6 +93,13 @@ export default function ShopReview() {
         onClose={closeSortModal}
         defaultSort={selectedSort}
         onApply={handleChangeSort}
+      />
+
+      <LoginRequiredModal
+        isOpen={loginModalOpen}
+        onClose={closeLoginModal}
+        title={`리뷰를 작성하기 위해\n로그인이 필요해요.`}
+        subTitle={`리뷰작성은 회원만 사용 가능합니다.`}
       />
     </div>
   );

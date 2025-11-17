@@ -18,6 +18,11 @@ export default function Header() {
   const [searchParams] = useSearchParams();
 
   const backToPreviousPage = () => {
+    if (pathname.startsWith('/review/edit')) {
+      window.dispatchEvent(new CustomEvent('openReviewExitModal'));
+      return;
+    }
+
     if (pathname === '/shops') {
       const categoryId = Number(searchParams.get('category')) || undefined;
       const categoryName = getCategoryNameById(categoryId);

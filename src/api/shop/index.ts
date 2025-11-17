@@ -25,6 +25,8 @@ import {
   ReviewReportCategoriesResponse,
   GetShopTotalReviewParams,
   GetMyShopReviewsParams,
+  CreateReviewRequest,
+  UploadShopFilesResponse,
 } from './entity';
 import { getAuthHeader } from '@/util/ts/auth';
 
@@ -131,4 +133,31 @@ export const getMyShopReviews = async ({ shopId, params }: GetMyShopReviewsParam
   const response = await apiClient.get<UnorderableShopReviewsResponse>(`/shops/${shopId}/reviews/me`, { params });
 
   return response;
+};
+
+export const postShopReview = async (shopId: number, body: CreateReviewRequest) => {
+  return await apiClient.post(`/shops/${shopId}/reviews`, { body, headers: getAuthHeader() });
+};
+
+export async function uploadShopFiles(files: File[]): Promise<string[]> {
+  const formData = new FormData();
+
+  files.forEach((file) => {
+    formData.append('files', file);
+  });
+
+  const result = await apiClient.post<UploadShopFilesResponse>('/SHOPS/upload/files', {
+    body: formData,
+  });
+  return result.file_urls ?? [];
+}
+
+export const updateShopReview = async (shopId: number, reviewId: number, body: CreateReviewRequest) => {
+  return await apiClient.put(`/shops/${shopId}/reviews/${reviewId}`, { body, headers: getAuthHeader() });
+};
+
+export const deleteShopReview = async (shopId: number, reviewId: number) => {
+  return await apiClient.delete(`/shops/${shopId}/reviews/${reviewId}`, {
+    headers: getAuthHeader(),
+  });
 };

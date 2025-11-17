@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import clsx from 'clsx';
 import { useNavigate, useParams } from 'react-router-dom';
+import { DeleteReview } from '../hooks/useDeleteReview';
 import LoginRequiredModal from './LoginRequiredModal';
 import StarList from './StarList';
 import type { Review } from '@/api/shop/entity';
@@ -8,8 +9,10 @@ import CheckBookMark from '@/assets/Shop/check-bookmark.svg';
 import NoImageIcon from '@/assets/Shop/no-image-icon.svg';
 import Portal from '@/components/Portal';
 import Button from '@/components/UI/Button';
+import Modal from '@/components/UI/CenterModal/Modal';
 import useBooleanState from '@/util/hooks/useBooleanState';
 import useScrollLock from '@/util/hooks/useScrollLock';
+import { useToast } from '@/util/hooks/useToast';
 import { getCookie } from '@/util/ts/cookie';
 import { formatDate } from '@/util/ts/formatDate';
 
@@ -20,14 +23,18 @@ export default function ReviewCard({ review }: ReviewCardProps) {
   const [loginModalOpen, openLoginModal, closeLoginModal] = useBooleanState(false);
   const [previewOpen, openPreview, closePreview] = useBooleanState(false);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
+  const [deleteModalOpen, openDeleteModal, closeDeleteModal] = useBooleanState(false);
 
   useScrollLock(previewOpen);
   const navigate = useNavigate();
   const { shopId } = useParams();
+  const { showToast } = useToast();
 
   const { rating, nick_name, content, image_urls, menu_names, is_mine, is_reported, created_at, review_id } = review;
 
   if (!shopId) return null;
+
+  const { mutate: deleteReview } = DeleteReview(Number(shopId), review_id);
 
   if (is_reported) {
     return (
@@ -38,14 +45,48 @@ export default function ReviewCard({ review }: ReviewCardProps) {
     );
   }
 
-  const handleReportClick = () => {
+  const ensureLogin = () => {
     const isLogin = getCookie('AUTH_TOKEN_KEY');
     if (!isLogin) {
       openLoginModal();
-      return;
+      return false;
     }
+    return true;
+  };
 
+  const handleReportClick = () => {
+    if (!ensureLogin()) return;
     navigate(`/review/report/${shopId}?reviewId=${review_id}`);
+  };
+
+  const handleEditClick = () => {
+    if (!ensureLogin()) return;
+
+    navigate(`/review/edit/${shopId}/${review_id}`, {
+      state: {
+        review: {
+          rating,
+          content,
+          menu_names,
+          image_urls,
+        },
+      },
+    });
+  };
+
+  const handleDeleteClick = () => {
+    if (!ensureLogin()) return;
+    openDeleteModal();
+  };
+
+  const handleConfirmDelete = () => {
+    deleteReview(undefined, {
+      onSuccess: () => {
+        showToast('리뷰가 삭제되었어요');
+        closeDeleteModal();
+        navigate(0);
+      },
+    });
   };
 
   const handleImageClick = (src: string) => {
@@ -71,10 +112,10 @@ export default function ReviewCard({ review }: ReviewCardProps) {
         <span className="text-[16px] font-medium">{nick_name}</span>
         {is_mine ? (
           <div className="flex gap-[6px]">
-            <Button color="darkGray" size="sm" className="text-[12px] !shadow-none">
+            <Button color="darkGray" size="sm" className="text-[12px] !shadow-none" onClick={handleEditClick}>
               수정
             </Button>
-            <Button color="darkGray" size="sm" className="text-[12px] !shadow-none">
+            <Button color="darkGray" size="sm" className="text-[12px] !shadow-none" onClick={handleDeleteClick}>
               삭제
             </Button>
           </div>
@@ -116,6 +157,7 @@ export default function ReviewCard({ review }: ReviewCardProps) {
           ))}
         </div>
       )}
+
       <LoginRequiredModal
         isOpen={loginModalOpen}
         onClose={closeLoginModal}
@@ -142,6 +184,29 @@ export default function ReviewCard({ review }: ReviewCardProps) {
           </div>
         </Portal>
       )}
+
+      <Modal isOpen={deleteModalOpen} onClose={closeDeleteModal}>
+        <div className="flex flex-col items-center justify-center gap-6 px-8 py-6">
+          <p className="text-center text-[15px] font-[400] text-neutral-600">
+            삭제한 리뷰는 되돌릴 수 없습니다. <br /> 삭제 하시겠습니까?
+          </p>
+          <div className="flex w-full gap-2">
+            <Button type="button" color="gray" size="lg" className="shodow-none flex-1" onClick={closeDeleteModal}>
+              취소
+            </Button>
+
+            <Button
+              type="button"
+              color="primary"
+              size="lg"
+              className="shodow-none flex-1"
+              onClick={handleConfirmDelete}
+            >
+              삭제하기
+            </Button>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 }

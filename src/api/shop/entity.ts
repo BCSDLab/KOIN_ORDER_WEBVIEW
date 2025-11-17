@@ -375,3 +375,13 @@ export interface GetMyShopReviewsParams {
     sorter: ReviewSorter;
   };
 }
+
+export interface CreateReviewRequest {
+  rating: number;
+  content: string;
+  image_urls: string[];
+  menu_names: string[];
+}
+export interface UploadShopFilesResponse {
+  file_urls: string[];
+}
