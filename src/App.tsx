@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import DevOnlyWrapper from './components/Wrapper/DevOnly';
+import Wrapper from './components/Wrapper/PageWrapper';
 import Cart from './pages/Cart';
 import DeliveryOutside from './pages/Delivery/Outside';
 import Home from './pages/Home';
@@ -36,13 +37,13 @@ export default function App() {
           }
         />
         <Route path="shop/true/:shopId" element={<OrderableShopView />} />
-        <Route path="shop/false/:shopId" element={<UnorderableShopView />} />
+        <Route path="shop/false/:shopId" element={<Wrapper title="상점 상세" element={<UnorderableShopView />} />} />
         <Route path="shop/true/:shopId/menus/:menuId" element={<MenuDetail />} />
         <Route path="payment/return" element={<PaymentConfirm />} />
 
         <Route element={<HomeLayout />}>
           <Route path="home" element={<Home />} />
-          <Route path="shops" element={<NearbyShops />} />
+          <Route path="shops" element={<Wrapper title="상점" element={<NearbyShops />} />} />
           <Route path="orders" element={<OrderList />} />
           <Route path="search" element={<Search />} />
         </Route>
