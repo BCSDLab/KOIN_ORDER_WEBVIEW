@@ -115,12 +115,12 @@ export default function ShopSummary({ shopInfoSummary, id, isOrderable, UnOrdera
                 >
                   <div className="flex w-fit flex-col gap-[2px]">
                     <div className="flex gap-2">
-                      <span className="text-[12px] leading-[1.6] font-normal">최소주문</span>
-                      <span className="text-[12px] leading-[1.6] font-normal text-neutral-500">0원</span>
+                      <span className="text-[12px] leading-[1.6]">최소주문</span>
+                      <span className="text-[12px] leading-[1.6] text-neutral-500">0원</span>
                     </div>
                     <div className="flex gap-2">
-                      <span className="text-[12px] leading-[1.6] font-normal">배달금액</span>
-                      <span className="text-[12px] leading-[1.6] font-normal text-neutral-500">
+                      <span className="text-[12px] leading-[1.6]">배달금액</span>
+                      <span className="text-[12px] leading-[1.6] text-neutral-500">
                         {UnOrderableShopInfo?.delivery_price}원
                       </span>
                     </div>
