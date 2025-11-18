@@ -18,7 +18,7 @@ const queryClient = new QueryClient({
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <SpProvider theme={theme}>
+    <SpProvider theme={theme} colorScheme="light">
       <QueryClientProvider client={queryClient}>
         <ToastProvider>
           <App />
