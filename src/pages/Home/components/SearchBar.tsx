@@ -14,7 +14,7 @@ export default function SearchBar() {
 
     logger.actionEventClick({
       team: 'BUSINESS',
-      event_label: 'search_bar_clicked',
+      event_label: 'shop_categories_search',
       value: `search in ${categoryName}`,
     });
     navigate('/search');

@@ -47,7 +47,7 @@ export default function ShopCard({
     const categoryName = getCategoryNameById(categoryId);
     logger.actionEventClick({
       team: 'BUSINESS',
-      event_label: 'shop_clicked',
+      event_label: 'shop_click',
       value: `${name}`,
       duration_time: getLoggingTime('selectedCategoryTime'),
       previous_page: categoryName,

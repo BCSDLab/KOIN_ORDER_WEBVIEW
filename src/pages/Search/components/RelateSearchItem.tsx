@@ -21,7 +21,7 @@ export default function RelateSearchItem({ tag, shop_name, menu_name, to }: Rela
   const handleSearchItemClick = () => {
     logger.actionEventClick({
       team: 'BUSINESS',
-      event_label: 'shop_clicked',
+      event_label: 'shop_categories_search_click',
       value: `${shop_name}`,
       duration_time: getLoggingTime('selectedCategoryTime'),
       previous_page: getCategoryNameById(categoryId),
