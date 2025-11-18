@@ -110,7 +110,7 @@ export default function NearbyShops() {
     logger.actionEventClick({
       team: 'BUSINESS',
       event_label: 'shop_can',
-      value: `${sortTrackingLabel} in ${categoryName}`,
+      value: `${sortTrackingLabel}_${categoryName}`,
     });
     setSelectedSort(sortId);
     sortModalClose();
