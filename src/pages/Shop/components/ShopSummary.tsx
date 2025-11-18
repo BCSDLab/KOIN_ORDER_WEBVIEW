@@ -29,7 +29,11 @@ export default function ShopSummary({ shopInfoSummary, id, isOrderable, UnOrdera
       <div className="flex flex-col items-center justify-center p-6">
         <span className="mb-2 self-start text-xl leading-[1.6] font-bold">{shopInfoSummary.name}</span>
         <div className="flex w-full justify-between">
-          <div className="flex items-center justify-between gap-1">
+          <Link
+            to={isOrderable ? `/review/true/${id}` : `/review/false/${id}`}
+            className="flex items-center justify-between gap-1"
+            state={{ shopName: shopInfoSummary.name }}
+          >
             <div className="flex h-[25px] w-[25px] items-center justify-center">
               <StarIcon />
             </div>
@@ -39,7 +43,7 @@ export default function ShopSummary({ shopInfoSummary, id, isOrderable, UnOrdera
             <div className="flex h-5 w-5 items-center justify-center">
               <ChevronRightIcon fill="black" />
             </div>
-          </div>
+          </Link>
           <Link
             to={isOrderable ? `/shop-detail/true/${id}` : `/shop-detail/false/${id}`}
             className="shadow-1 flex items-center justify-center gap-1 rounded-full border-[0.5px] border-neutral-400 bg-white py-1 pr-2 pl-3"

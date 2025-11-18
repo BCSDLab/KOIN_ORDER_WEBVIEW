@@ -86,7 +86,7 @@ interface ReviewStatistics {
   ratings: Rating;
 }
 
-interface Review {
+export interface Review {
   review_id: number;
   rating: number;
   nick_name: string;
@@ -224,6 +224,30 @@ export interface ShopMenuDetailResponse {
   option_groups: OptionGroup[];
 }
 
+export interface NearbyStoresRelateSearchParams {
+  keyword: string;
+}
+
+export interface NearbyStoresRelateSearchResponse {
+  search_keyword: string;
+  processed_search_keyword: string;
+  shop_name_search_result_count: number;
+  menu_name_search_result_count: number;
+  shop_name_search_results: NearByShopResult[];
+  menu_name_search_results: NearByShopMenuResult[];
+}
+
+export interface NearByShopResult {
+  shop_id: number;
+  shop_name: string;
+}
+
+export interface NearByShopMenuResult {
+  shop_id: number;
+  shop_name: string;
+  menu_name: string;
+}
+
 export interface RelatedSearchResponse {
   search_keyword: string;
   processed_search_keyword: string;
@@ -318,4 +342,46 @@ export interface OpenInfo {
   closed: boolean;
   open_time: string;
   close_time: string;
+}
+
+export interface ReportReviewRequest {
+  reports: {
+    title: string;
+    content: string;
+  }[];
+}
+export interface ReviewReportCategory {
+  name: string;
+  detail: string;
+}
+
+export interface ReviewReportCategoriesResponse {
+  count: number;
+  categories: ReviewReportCategory[];
+}
+
+export type ReviewSorter = 'LATEST' | 'OLDEST' | 'HIGHEST_RATING' | 'LOWEST_RATING';
+
+export interface GetShopTotalReviewParams {
+  shopId: string;
+  page: number;
+  limit: number;
+  sorter: ReviewSorter;
+}
+
+export interface GetMyShopReviewsParams {
+  shopId: string;
+  params: {
+    sorter: ReviewSorter;
+  };
+}
+
+export interface CreateReviewRequest {
+  rating: number;
+  content: string;
+  image_urls: string[];
+  menu_names: string[];
+}
+export interface UploadShopFilesResponse {
+  file_urls: string[];
 }

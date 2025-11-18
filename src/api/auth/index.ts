@@ -1,5 +1,5 @@
 import { apiClient } from '..';
-import { LoginResponse, SmsSendResponse, StudentUserResponse } from './entity';
+import { GeneralUserResponse, LoginResponse, SmsSendResponse, StudentUserResponse } from './entity';
 import { getAuthHeader } from '@/util/ts/auth';
 
 export const Login = async (login_id: string, login_pw: string) => {
@@ -23,5 +23,11 @@ export const sendSmsVerificationCode = async (phone_number: string) => {
 export const verifySmsCode = async (phone_number: string, verification_code: string) => {
   return await apiClient.post<SmsSendResponse>('users/verification/sms/verify', {
     body: { phone_number, verification_code },
+  });
+};
+
+export const getGeneralInfo = async () => {
+  return await apiClient.get<GeneralUserResponse>('/v2/users/me', {
+    headers: getAuthHeader(),
   });
 };
