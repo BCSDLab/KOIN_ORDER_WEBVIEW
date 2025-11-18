@@ -5,6 +5,6 @@ export function isStudentUser(user: UnionUserResponse | null): user is StudentUs
   return (user as StudentUserResponse).user_type === 'STUDENT';
 }
 
-export function isGeneralUser(user: UnionUserResponse | null): user is StudentUserResponse {
+export function isGeneralUser(user: UnionUserResponse | null): user is GeneralUserResponse {
   return (user as GeneralUserResponse).user_type === 'GENERAL';
 }
