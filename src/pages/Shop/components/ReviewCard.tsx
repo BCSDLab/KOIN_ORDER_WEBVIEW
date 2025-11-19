@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import clsx from 'clsx';
 import { useNavigate, useParams } from 'react-router-dom';
-import { DeleteReview } from '../hooks/useDeleteReview';
+import { useDeleteReview } from '../hooks/useDeleteReview';
 import LoginRequiredModal from './LoginRequiredModal';
 import StarList from './StarList';
 import type { Review } from '@/api/shop/entity';
@@ -34,7 +34,7 @@ export default function ReviewCard({ review }: ReviewCardProps) {
 
   if (!shopId) return null;
 
-  const { mutate: deleteReview } = DeleteReview(Number(shopId), review_id);
+  const { mutateAsync: deleteReview, isPending } = useDeleteReview(Number(shopId), review.review_id);
 
   if (is_reported) {
     return (
@@ -60,33 +60,23 @@ export default function ReviewCard({ review }: ReviewCardProps) {
   };
 
   const handleEditClick = () => {
-    if (!ensureLogin()) return;
-
-    navigate(`/review/edit/${shopId}/${review_id}`, {
-      state: {
-        review: {
-          rating,
-          content,
-          menu_names,
-          image_urls,
-        },
-      },
-    });
+    navigate(`/review/edit/${shopId}/${review_id}`);
   };
 
   const handleDeleteClick = () => {
-    if (!ensureLogin()) return;
     openDeleteModal();
   };
 
-  const handleConfirmDelete = () => {
-    deleteReview(undefined, {
-      onSuccess: () => {
-        showToast('리뷰가 삭제되었어요');
-        closeDeleteModal();
-        navigate(0);
-      },
-    });
+  const handleConfirmDelete = async () => {
+    try {
+      await deleteReview();
+
+      showToast('리뷰가 삭제되었어요');
+      closeDeleteModal();
+    } catch (error) {
+      console.error(error);
+      showToast('리뷰 삭제에 실패했어요');
+    }
   };
 
   const handleImageClick = (src: string) => {
@@ -109,7 +99,7 @@ export default function ReviewCard({ review }: ReviewCardProps) {
         </div>
       )}
       <div className="flex w-full items-center justify-between gap-[6px]">
-        <span className="text-[16px] font-medium">{nick_name}</span>
+        <span className="font-medium">{nick_name}</span>
         {is_mine ? (
           <div className="flex gap-[6px]">
             <Button color="darkGray" size="sm" className="text-[12px] !shadow-none" onClick={handleEditClick}>
@@ -187,11 +177,11 @@ export default function ReviewCard({ review }: ReviewCardProps) {
 
       <Modal isOpen={deleteModalOpen} onClose={closeDeleteModal}>
         <div className="flex flex-col items-center justify-center gap-6 px-8 py-6">
-          <p className="text-center text-[15px] font-[400] text-neutral-600">
+          <p className="text-center text-[15px] text-neutral-600">
             삭제한 리뷰는 되돌릴 수 없습니다. <br /> 삭제 하시겠습니까?
           </p>
           <div className="flex w-full gap-2">
-            <Button type="button" color="gray" size="lg" className="shodow-none flex-1" onClick={closeDeleteModal}>
+            <Button type="button" color="gray" size="lg" className="flex-1 shadow-none" onClick={closeDeleteModal}>
               취소
             </Button>
 
@@ -199,8 +189,9 @@ export default function ReviewCard({ review }: ReviewCardProps) {
               type="button"
               color="primary"
               size="lg"
-              className="shodow-none flex-1"
+              className="flex-1 shadow-none"
               onClick={handleConfirmDelete}
+              state={isPending ? 'disabled' : 'default'}
             >
               삭제하기
             </Button>
