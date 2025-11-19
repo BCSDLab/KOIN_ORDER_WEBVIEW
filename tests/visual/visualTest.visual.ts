@@ -28,6 +28,7 @@ import {
 } from './visualTest.mock';
 
 test.describe('비주얼테스트', () => {
+  test.setTimeout(15_000);
   const routes: string[] = readSiteMap();
 
   routes.forEach((route) => {
@@ -183,7 +184,7 @@ test.describe('비주얼테스트', () => {
 
       case '/search':
         test(`${route} Visual Test`, async ({ page }) => {
-          await page.route('**/order/shop/search/related*', async (route) => {
+          await page.route('**/v2/shops/search/related**', async (route) => {
             await route.fulfill({
               status: 200,
               contentType: 'application/json',
@@ -194,8 +195,11 @@ test.describe('비주얼테스트', () => {
           await page.goto(route);
           await page.waitForLoadState('networkidle');
 
-          await page.getByPlaceholder('검색어를 입력해주세요.').fill('피자');
-          await page.getByText('고구마 쌀피자').waitFor();
+          const input = page.getByPlaceholder('검색어를 입력해주세요.');
+          await input.fill('피자');
+          await input.press('Enter');
+
+          await page.getByText('고구마 쌀피자').waitFor({ timeout: 5000 });
 
           await expect(page).toHaveScreenshot(`${route}.png`);
         });
@@ -395,7 +399,7 @@ test.describe('비주얼테스트', () => {
           await page.waitForLoadState('networkidle');
 
           await page.getByRole('button', { name: '포장' }).click();
-          await page.getByText('주문 가능').waitFor();
+          await page.getByText('주문 가능').waitFor({ timeout: 5000 });
 
           await expect(page).toHaveScreenshot(`${route}-takeOut.png`);
         });
@@ -426,7 +430,7 @@ test.describe('비주얼테스트', () => {
           await page.getByPlaceholder('주소를 입력해주세요.').fill('충절로 1600');
           await page.keyboard.press('Enter');
 
-          await page.getByText('한국기술교육대학교').waitFor();
+          await page.getByText('한국기술교육대학교').waitFor({ timeout: 5000 });
 
           await expect(page).toHaveScreenshot(`${route}-search.png`);
         });
@@ -501,7 +505,7 @@ test.describe('비주얼테스트', () => {
           });
 
           await page.goto(`/payment?orderType=DELIVERY`);
-          await page.getByText('사장님에게').waitFor();
+          await page.getByText('사장님에게').waitFor({ timeout: 5000 });
 
           await expect(page).toHaveScreenshot(`${route}-delivery.png`, { fullPage: true });
 
@@ -544,7 +548,7 @@ test.describe('비주얼테스트', () => {
           });
 
           await page.goto(`/payment?orderType=TAKE_OUT`);
-          await page.getByText('사장님에게').waitFor();
+          await page.getByText('사장님에게').waitFor({ timeout: 5000 });
 
           await expect(page).toHaveScreenshot(`${route}-takeOut.png`, { fullPage: true });
         });
