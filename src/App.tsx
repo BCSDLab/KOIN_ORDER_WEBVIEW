@@ -13,7 +13,8 @@ import Search from './pages/Search';
 import MenuDetail from './pages/Shop/MenuDetail';
 import OrderableShopView from './pages/Shop/OrderableShopView';
 import OrderableShopDetail from './pages/Shop/ShopDetail/components/OrderableShopDetail';
-import ReviewForm from './pages/Shop/shopReview/components/ReviewForm';
+import ReviewCreateForm from './pages/Shop/shopReview/components/ReviewCreateForm';
+import ReviewEditForm from './pages/Shop/shopReview/components/ReviewEditForm';
 import ReviewReport from './pages/Shop/shopReview/components/ReviewReport';
 import UnorderableShopView from './pages/Shop/UnorderableShopView';
 import AppLayout, { HomeLayout } from '@/components/Layout';
@@ -54,8 +55,8 @@ export default function App() {
           <Route path="review/true/:shopId" element={<OrderableShopReview />} />
           <Route path="review/false/:shopId" element={<UnorderableShopReview />} />
           <Route path="review/report/:shopId" element={<ReviewReport />} />
-          <Route path="review/new/:shopId" element={<ReviewForm />} />
-          <Route path="review/edit/:shopId/:reviewId" element={<ReviewForm />} />
+          <Route path="review/new/:shopId" element={<ReviewCreateForm />} />
+          <Route path="review/edit/:shopId/:reviewId" element={<ReviewEditForm />} />
           <Route path="cart" element={<Cart />} />
           <Route path="delivery">
             <Route path="outside/detail" element={<DetailAddress />} />
