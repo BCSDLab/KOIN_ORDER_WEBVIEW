@@ -1,4 +1,4 @@
-name: Playwright Tests
+name: Playwright Visual Tests
 
 on:
   push:
@@ -23,55 +23,70 @@ jobs:
       VITE_PAYMENTS_API_PATH: ${{ secrets.VITE_PAYMENTS_API_PATH }}
       TEST_USER_ID: ${{ secrets.TEST_USER_ID }}
       TEST_USER_PASSWORD: ${{ secrets.TEST_USER_PASSWORD }}
-    
+
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
           node-version: lts/*
-      
-      - name: Install dependencies
-        run: npm install -g pnpm && pnpm install
+          cache: 'pnpm'
 
+      - name: Install pnpm & dependencies
+        run: |
+          npm install -g pnpm
+          pnpm install
+
+      # --- Playwright 브라우저 캐시 ---
       - name: Restore Playwright browsers cache
         uses: actions/cache/restore@v4
         id: playwright-cache
         with:
           path: ~/.cache/ms-playwright
           key: ${{ runner.os }}-playwright-${{ hashFiles('**/pnpm-lock.yaml') }}
-      
+
       - name: Install Playwright browsers
         if: steps.playwright-cache.outputs.cache-hit != 'true'
         run: pnpm exec playwright install chromium --with-deps
 
+      # --- AWS & 스냅샷 baseline 가져오기 ---
       - name: Configure AWS
         uses: aws-actions/configure-aws-credentials@v5.1.0
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ap-northeast-2
-      
+
       - name: Download baseline from S3
         run: |
           mkdir -p tests/visual/visualTest.visual.ts-snapshots
           aws s3 sync s3://front-snapshot-test/ tests/visual/visualTest.visual.ts-snapshots/ --exclude "*" --include "*.png"
 
-      - name: Run test
-        id: test
+      # --- 비주얼 테스트 실행 (PR / push 공통) ---
+      - name: Run visual tests
+        id: visual_test
         continue-on-error: true
         run: pnpm visual
 
-      - name: Update snapshots for baseline
-        if: (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop') && github.event_name == 'push'
+      # --- main/develop에 머지(or 직접 push)될 때: 베이스라인 갱신 ---
+      - name: Update snapshots for baseline (push to main/develop)
+        id: update_snapshots
+        if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop')
+        continue-on-error: true
         run: |
-            echo "=== Updating snapshots for baseline ==="
-            npx playwright test --update-snapshots
+          echo "=== Updating snapshots for baseline ==="
+          # 테스트와 동일한 타겟만 스냅샷 갱신
+          pnpm exec playwright test tests/visual/visualTest.visual.ts --update-snapshots
 
       - name: Upload new baseline to S3
-        if: (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop') && github.event_name == 'push'
+        if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop')
         run: |
+          echo "=== Uploading updated snapshots to S3 ==="
           aws s3 sync tests/visual/visualTest.visual.ts-snapshots/ s3://front-snapshot-test/ --exclude "*" --include "*.png"
 
+      # --- 리포트 업로드 & PR 코멘트 ---
       - name: Upload Playwright Report
         if: always()
         uses: actions/upload-artifact@v4
@@ -86,8 +101,8 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./playwright-report
-          destination_dir: playwright-reports/${{ github.sha }} 
-          keep_files: true 
+          destination_dir: playwright-reports/${{ github.sha }}
+          keep_files: true
           commit_message: "Deploy Playwright Report for ${{ github.sha }}"
 
       - name: Comment on PR
@@ -95,13 +110,13 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
-            const testPassed = '${{ steps.test.outcome }}' === 'success';
+            const testPassed = '${{ steps.visual_test.outcome }}' === 'success';
             const status = testPassed ? '✅ Visual Tests passed' : '❌ Visual Tests failed';
-            
+
             const owner = context.repo.owner;
             const repoName = context.repo.repo;
             const sha = context.sha;
-            
+
             const reportBaseUrl = `https://${owner}.github.io/${repoName}`;
             const reportUrl = `${reportBaseUrl}/playwright-reports/${sha}/index.html`;
 
@@ -112,16 +127,15 @@ jobs:
               body: `${status}\n\n[Playwright Report](${reportUrl}) (Test 실행 커밋: ${sha.substring(0, 7)})`
             });
 
+      # --- Playwright 브라우저 캐시 저장 ---
       - name: Save Playwright browsers cache
         if: always() && steps.playwright-cache.outputs.cache-hit != 'true'
         uses: actions/cache/save@v4
         with:
           path: ~/.cache/ms-playwright
           key: ${{ runner.os }}-playwright-${{ hashFiles('**/pnpm-lock.yaml') }}
-      
-      - name: Check test result
-        if: steps.test.outcome == 'failure'
-        run: exit 1
 
-        # 테스트 용 주석
-        
+      # --- 최종 결과: PR일 때만 실패 처리 ---
+      - name: Fail job if visual tests failed (PR only)
+        if: github.event_name == 'pull_request' && steps.visual_test.outcome == 'failure'
+        run: exit 1
