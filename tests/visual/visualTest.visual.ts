@@ -183,7 +183,7 @@ test.describe('비주얼테스트', () => {
 
       case '/search':
         test(`${route} Visual Test`, async ({ page }) => {
-          await page.route('**/order/shop/search/related*', async (route) => {
+          await page.route('**/v2/shops/search/related**', async (route) => {
             await route.fulfill({
               status: 200,
               contentType: 'application/json',
@@ -194,7 +194,10 @@ test.describe('비주얼테스트', () => {
           await page.goto(route);
           await page.waitForLoadState('networkidle');
 
-          await page.getByPlaceholder('검색어를 입력해주세요.').fill('피자');
+          const input = page.getByPlaceholder('검색어를 입력해주세요.');
+          await input.fill('피자');
+          await input.press('Enter');
+
           await page.getByText('고구마 쌀피자').waitFor();
 
           await expect(page).toHaveScreenshot(`${route}.png`);
