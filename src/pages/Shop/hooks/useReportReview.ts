@@ -10,6 +10,7 @@ export default function useReportReview(shopId: number, reviewId: number) {
     mutationFn: (body: ReportReviewRequest) => reportReview(shopId, reviewId, body),
 
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['shopMyReview', shopId] });
       queryClient.invalidateQueries({ queryKey: ['shopTotalReview', shopId] });
     },
   });
