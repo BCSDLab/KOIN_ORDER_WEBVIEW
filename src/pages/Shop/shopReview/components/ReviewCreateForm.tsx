@@ -1,14 +1,15 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
+import CloseIcon from '@/assets/Main/close-icon.svg';
 import AddThumbnail from '@/assets/Shop/add-thumbnail.svg';
 import Button from '@/components/UI/Button';
 import Modal from '@/components/UI/CenterModal/Modal';
 import StarList from '@/pages/Shop/components/StarList';
-import { useReviewForm } from '@/pages/Shop/hooks/useReviewForm';
+import { useCreateReviewForm } from '@/pages/Shop/hooks/useCreateReviewForm';
+import { useGetUnorderableShopDetail } from '@/pages/Shop/hooks/useGetShopDetail';
 
-export default function ReviewForm() {
+export default function ReviewCreateForm() {
   const {
-    shopName,
     content,
     setContent,
     rating,
@@ -16,18 +17,21 @@ export default function ReviewForm() {
     menus,
     menuInput,
     setMenuInput,
-    existingImageUrls,
-    images,
     textareaRef,
     isFormValid,
-    handleAddImages,
-    handleRemoveImage,
     handleMenuKeyDown,
     handleRemoveMenu,
-    handleRemoveExistingImage,
     handleSubmit,
     reviewId,
-  } = useReviewForm();
+    imageUrls,
+    imgRef,
+    saveImgFile,
+    removeImage,
+  } = useCreateReviewForm();
+
+  const { shopId } = useParams<{ shopId: string }>();
+  const { data: shopDetail } = useGetUnorderableShopDetail(Number(shopId));
+  const shopName = shopDetail.name;
 
   const [exitModalOpen, setExitModalOpen] = useState(false);
   const navigate = useNavigate();
@@ -66,43 +70,26 @@ export default function ReviewForm() {
       <div className="flex flex-nowrap gap-4 overflow-x-scroll overflow-y-visible pt-[6px]">
         <label className="flex h-[96px] w-[96px] shrink-0 flex-col items-center justify-center rounded-[8px] border-[2px] border-dashed border-neutral-300 bg-white">
           <AddThumbnail />
-          <span className="text-[14px] font-medium text-neutral-500">{existingImageUrls.length + images.length}/3</span>
+          <span className="text-[14px] font-medium text-neutral-500">{imageUrls.length}/3</span>
           <input
             type="file"
             accept="image/*"
             multiple
+            ref={imgRef}
             className="hidden"
-            onChange={handleAddImages}
-            disabled={existingImageUrls.length + images.length >= 3}
+            onChange={saveImgFile}
+            disabled={imageUrls.length >= 3}
           />
         </label>
 
-        {existingImageUrls.map((url, idx) => (
-          <div key={url} className="relative h-[96px] w-[96px] shrink-0">
-            <img src={url} alt={`existing-${idx}`} className="h-full w-full rounded-[8px] object-cover" />
+        {imageUrls.map((url, idx) => (
+          <div key={`${url}-${idx}`} className="relative h-[96px] w-[96px] shrink-0">
+            <img src={url} alt={`review-${idx}`} className="h-full w-full rounded-[8px] object-cover" />
             <button
-              type="button"
-              onClick={() => handleRemoveExistingImage(idx)}
+              onClick={() => removeImage(idx)}
               className="absolute top-[-5px] right-[-5px] flex h-4 w-4 items-center justify-center rounded-full bg-neutral-500 text-[14px] text-white"
             >
-              ×
-            </button>
-          </div>
-        ))}
-
-        {images.map((file, idx) => (
-          <div key={idx} className="relative h-[96px] w-[96px] shrink-0">
-            <img
-              src={URL.createObjectURL(file)}
-              alt={`preview-${idx}`}
-              className="h-full w-full rounded-[8px] object-cover"
-            />
-            <button
-              type="button"
-              onClick={() => handleRemoveImage(idx)}
-              className="absolute top-[-5px] right-[-5px] flex h-4 w-4 items-center justify-center rounded-full bg-neutral-500 text-[14px] text-white"
-            >
-              ×
+              <CloseIcon width={12} height={12} fill="white" />
             </button>
           </div>
         ))}
@@ -142,9 +129,7 @@ export default function ReviewForm() {
                   className="border-primary-300 text-primary-300 flex items-center gap-1 rounded-[5px] border px-[10px] py-[3px] text-[12px]"
                 >
                   <span>{menu}</span>
-                  <button onClick={() => handleRemoveMenu(idx)} className="text-primary-300 text-[12px]">
-                    ×
-                  </button>
+                  <CloseIcon fill="#ce86fd" onClick={() => handleRemoveMenu(idx)} width={12} height={12} />
                 </div>
               ))}
             </div>
@@ -152,13 +137,12 @@ export default function ReviewForm() {
         </div>
 
         <div className="rounded-[4px] border border-neutral-300 bg-white px-4 py-3">
-          <textarea
+          <input
             value={menuInput}
             onChange={(e) => setMenuInput(e.target.value)}
             onKeyDown={handleMenuKeyDown}
             placeholder="메뉴명을 입력해주세요"
-            rows={1}
-            className="w-full resize-none text-[14px] placeholder-neutral-400 outline-none"
+            className="w-full text-[14px] placeholder-neutral-400 outline-none"
           />
         </div>
       </div>
@@ -175,7 +159,7 @@ export default function ReviewForm() {
 
       <Modal isOpen={exitModalOpen} onClose={() => setExitModalOpen(false)}>
         <div className="flex flex-col items-center justify-center gap-6 px-8 py-6">
-          <p className="text-center text-[15px] text-neutral-600">리뷰 수정을 그만하시겠어요?</p>
+          <p className="text-center text-[15px] text-neutral-600">리뷰 작성을 그만하시겠어요?</p>
 
           <div className="flex w-full gap-2">
             <Button
