@@ -133,8 +133,3 @@ jobs:
         with:
           path: ~/.cache/ms-playwright
           key: ${{ runner.os }}-playwright-${{ hashFiles('**/pnpm-lock.yaml') }}
-
-      # # --- 최종 결과: PR일 때만 실패 처리 ---
-      # - name: Fail job if visual tests failed (PR only)
-      #   if: github.event_name == 'pull_request' && steps.visual_test.outcome == 'failure'
-      #   run: exit 1
