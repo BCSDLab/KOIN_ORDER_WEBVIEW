@@ -4,7 +4,7 @@ import type { ReviewSorter } from '@/api/shop/entity';
 import { getMyShopReviews } from '@/api/shop';
 
 interface UseGetMyShopReviewParams {
-  shopId: string;
+  shopId: number;
   sort?: ReviewSorter;
 }
 
