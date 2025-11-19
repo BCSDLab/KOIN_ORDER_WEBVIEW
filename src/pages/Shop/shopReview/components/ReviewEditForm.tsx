@@ -24,7 +24,6 @@ export default function ReviewEditForm() {
     handleRemoveMenu,
     handleRemoveExistingImage,
     handleSubmit,
-    reviewId,
     imageUrls,
     imgRef,
     saveImgFile,
@@ -170,7 +169,7 @@ export default function ReviewEditForm() {
         state={isFormValid ? 'default' : 'disabled'}
         className="mt-auto mb-4 py-[11px] text-[15px]"
       >
-        {reviewId ? '수정하기' : '작성하기'}
+        수정하기
       </Button>
 
       <Modal isOpen={exitModalOpen} onClose={() => setExitModalOpen(false)}>

@@ -22,7 +22,6 @@ export default function ReviewCreateForm() {
     handleMenuKeyDown,
     handleRemoveMenu,
     handleSubmit,
-    reviewId,
     imageUrls,
     imgRef,
     saveImgFile,
@@ -55,7 +54,7 @@ export default function ReviewCreateForm() {
 
       <div className="mt-4 flex items-center gap-[10px]">
         <StarList average_rating={rating} size={40} editable value={rating} onChange={setRating} />
-        <span className="text-[16px] font-semibold">{rating}</span>
+        <span className="font-semibold">{rating}</span>
       </div>
 
       <div className="mt-6">
@@ -63,7 +62,7 @@ export default function ReviewCreateForm() {
       </div>
 
       <div className="mt-6 flex flex-col items-start">
-        <span className="font-nomal text-[16px]">사진</span>
+        <span>사진</span>
         <span className="text-[12px] text-neutral-500">리뷰와 관련된 사진을 업로드해주세요.</span>
       </div>
 
@@ -154,7 +153,7 @@ export default function ReviewCreateForm() {
         state={isFormValid ? 'default' : 'disabled'}
         className="mt-auto mb-4 py-[11px] text-[15px]"
       >
-        {reviewId ? '수정하기' : '작성하기'}
+        작성하기
       </Button>
 
       <Modal isOpen={exitModalOpen} onClose={() => setExitModalOpen(false)}>
