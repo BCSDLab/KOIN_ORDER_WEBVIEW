@@ -63,7 +63,6 @@ export function useCreateReviewForm() {
   return {
     ...base,
     handleSubmit,
-    reviewId: undefined,
     imageUrls,
     imgRef,
     saveImgFile,
