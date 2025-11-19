@@ -43,7 +43,6 @@ export default function ShopSummary({ shopInfoSummary, id, isOrderable, UnOrdera
           <Link
             to={isOrderable ? `/review/true/${id}` : `/review/false/${id}`}
             className="flex items-center justify-between gap-1"
-            state={{ shopName: shopInfoSummary.name }}
           >
             <div className="flex h-[25px] w-[25px] items-center justify-center">
               <StarIcon />
