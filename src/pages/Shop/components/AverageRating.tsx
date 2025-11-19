@@ -8,7 +8,7 @@ export default function AverageRating() {
 
   if (!shopId) return null;
 
-  const { data: totalReviews } = useShopReview({ shopId });
+  const { data: totalReviews } = useShopReview({ shopId: Number(shopId) });
 
   const average = totalReviews.statistics.average_rating;
   const ratings = totalReviews.statistics.ratings;
