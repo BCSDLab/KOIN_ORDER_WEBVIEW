@@ -27,6 +27,7 @@ import {
   GetMyShopReviewsParams,
   CreateReviewRequest,
   UploadShopFilesResponse,
+  ReviewDetailResponse,
 } from './entity';
 import { getAuthHeader } from '@/util/ts/auth';
 
@@ -160,4 +161,10 @@ export const deleteShopReview = async (shopId: number, reviewId: number) => {
   return await apiClient.delete(`/shops/${shopId}/reviews/${reviewId}`, {
     headers: getAuthHeader(),
   });
+};
+
+export const getShopReviewDetail = async (shopId: number, reviewId: number) => {
+  const response = await apiClient.get<ReviewDetailResponse>(`/shops/${shopId}/reviews/${reviewId}`);
+
+  return response;
 };
