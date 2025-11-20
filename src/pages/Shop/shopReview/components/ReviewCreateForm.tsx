@@ -105,7 +105,7 @@ export default function ReviewCreateForm() {
             value={content}
             onChange={(e) => setContent(e.target.value.slice(0, 500))}
             placeholder="리뷰를 작성해주세요"
-            maxLength={500}
+            //maxLength={500}
             className="w-full resize-none overflow-hidden text-[14px] placeholder-neutral-400 outline-none"
           />
         </div>
