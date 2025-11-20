@@ -53,17 +53,21 @@ export function useReviewImageUpload({ maxLength = 3 }: UseReviewImageUploadOpti
       showToast(`이미지는 최대 ${maxLength}개까지만 업로드되어, 일부 이미지는 제외됐어요.`);
     }
 
-    for (const file of toUpload) {
-      if (file.size > MAXSIZE) {
-        setUploadError('413');
-        showToast('이미지 용량은 10MB 이하로 업로드해주세요.');
-        if (imgRef.current) imgRef.current.value = '';
-        return;
-      }
+    const oversizeFiles = toUpload.filter((file) => file.size > MAXSIZE);
+    const validFiles = toUpload.filter((file) => file.size <= MAXSIZE);
+
+    if (oversizeFiles.length > 0) {
+      setUploadError('413');
+      showToast('이미지 용량은 10MB 이하로 업로드해주세요.');
+    }
+
+    if (validFiles.length === 0) {
+      if (imgRef.current) imgRef.current.value = '';
+      return;
     }
 
     try {
-      const uploadedUrls: string[] = await uploadShopFiles(toUpload);
+      const uploadedUrls: string[] = await uploadShopFiles(validFiles);
 
       setImageFile((prev) => [...prev, ...uploadedUrls]);
       setUploadError('');
