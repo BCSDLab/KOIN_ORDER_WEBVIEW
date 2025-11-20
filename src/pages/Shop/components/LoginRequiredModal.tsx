@@ -1,6 +1,8 @@
+import { useNavigate } from 'react-router-dom';
 import type { AddCartRequest } from '@/api/cart/entity';
 import Button from '@/components/UI/Button';
 import Modal, { ModalContent } from '@/components/UI/CenterModal/Modal';
+import { isNative } from '@/util/bridge/bridge';
 import { redirectToLogin } from '@/util/bridge/nativeAction';
 
 interface LoginRequiredModalProps {
@@ -18,12 +20,44 @@ export default function LoginRequiredModal({
   title = ' 코인 주문을 이용하기 위해선\n로그인이 필요해요',
   subTitle = '로그인 후 코인의 주문 기능을\n이용해보세요!',
 }: LoginRequiredModalProps) {
-  const clickLoginButton = () => {
+  const navigate = useNavigate();
+
+  const getWebLoginUrl = () => {
+    const { hostname } = window.location;
+
+    if (hostname === 'localhost') {
+      return '/';
+    }
+
+    const isStage = import.meta.env.VITE_API_PATH.includes('stage');
+    return isStage ? 'https://next.stage.koreatech.in/auth' : 'https://koreatech.in/auth';
+  };
+
+  const handleWebLogin = () => {
+    const url = getWebLoginUrl();
+
+    if (url.startsWith('http')) {
+      window.location.href = url;
+    } else {
+      navigate(url);
+    }
+  };
+
+  const handleNativeLogin = () => {
     if (menuOptions) {
       localStorage.setItem('menuOptions', JSON.stringify(menuOptions));
     }
     redirectToLogin();
     onClose();
+  };
+
+  const clickLoginButton = () => {
+    if (!isNative()) {
+      handleWebLogin();
+      return;
+    }
+
+    handleNativeLogin();
   };
 
   return (

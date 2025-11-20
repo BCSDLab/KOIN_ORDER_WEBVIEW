@@ -131,7 +131,10 @@ export const getReviewReportCategories = async () => {
 };
 
 export const getMyShopReviews = async ({ shopId, params }: GetMyShopReviewsParams) => {
-  const response = await apiClient.get<UnorderableShopReviewsResponse>(`/shops/${shopId}/reviews/me`, { params });
+  const response = await apiClient.get<UnorderableShopReviewsResponse | null>(`/shops/${shopId}/reviews/me`, {
+    params,
+    requiresAuth: true,
+  });
 
   return response;
 };
