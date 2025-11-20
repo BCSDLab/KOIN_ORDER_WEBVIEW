@@ -52,7 +52,7 @@ export default function SortModal({ isOpen, onClose, onApply, defaultSort }: Sor
               <button
                 key={option.id}
                 onClick={() => handleSelect(option.id)}
-                className={`flex w-full items-center justify-between text-[16px] ${isActive ? 'text-primary-500' : ''}`}
+                className={`flex w-full items-center justify-between ${isActive ? 'text-primary-500' : ''}`}
               >
                 {option.label}
                 {isActive && <CheckIcon className="fill-primary-500" />}

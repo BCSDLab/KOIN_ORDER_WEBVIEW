@@ -363,14 +363,14 @@ export interface ReviewReportCategoriesResponse {
 export type ReviewSorter = 'LATEST' | 'OLDEST' | 'HIGHEST_RATING' | 'LOWEST_RATING';
 
 export interface GetShopTotalReviewParams {
-  shopId: string;
+  shopId: number;
   page: number;
   limit: number;
   sorter: ReviewSorter;
 }
 
 export interface GetMyShopReviewsParams {
-  shopId: string;
+  shopId: number;
   params: {
     sorter: ReviewSorter;
   };
@@ -382,6 +382,18 @@ export interface CreateReviewRequest {
   image_urls: string[];
   menu_names: string[];
 }
+
 export interface UploadShopFilesResponse {
   file_urls: string[];
+}
+
+export interface ReviewDetailResponse {
+  review_id: number;
+  rating: number;
+  nick_name: string;
+  content: string;
+  image_urls: string[];
+  menu_names: string[];
+  is_modified: boolean;
+  created_at: string;
 }

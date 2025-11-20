@@ -4,7 +4,7 @@ import type { ReviewSorter } from '@/api/shop/entity';
 import { getShopTotalReview } from '@/api/shop';
 
 interface UseShopReviewProps {
-  shopId: string;
+  shopId: number;
   page?: number;
   limit?: number;
   sort?: ReviewSorter;

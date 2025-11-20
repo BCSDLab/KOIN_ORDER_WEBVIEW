@@ -104,7 +104,7 @@ export default function ReviewReport() {
 
                 <div className="flex-1">
                   <div className="flex items-center justify-between">
-                    <div className="text-[16px] font-medium">{opt.label}</div>
+                    <div className="font-medium">{opt.label}</div>
                     {isEtc && (
                       <div className={`text-[12px] text-neutral-400 ${etcText.length > 0 ? 'text-primary-500' : ''}`}>
                         {etcText.length}/150
