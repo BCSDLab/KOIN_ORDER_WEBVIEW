@@ -82,7 +82,7 @@ export default function ReviewCreateForm() {
         </label>
 
         {imageUrls.map((url, idx) => (
-          <div key={`${url}-${idx}`} className="relative h-[96px] w-[96px] shrink-0">
+          <div key={idx} className="relative h-[96px] w-[96px] shrink-0">
             <img src={url} alt={`review-${idx}`} className="h-full w-full rounded-[8px] object-cover" />
             <button
               onClick={() => removeImage(idx)}
