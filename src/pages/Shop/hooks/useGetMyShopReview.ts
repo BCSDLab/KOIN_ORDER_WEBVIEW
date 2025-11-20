@@ -9,7 +9,7 @@ interface UseGetMyShopReviewParams {
 }
 
 export const useGetMyShopReview = ({ shopId, sort = 'LATEST' }: UseGetMyShopReviewParams) => {
-  const { data } = useSuspenseQuery<UnorderableShopReviewsResponse>({
+  const { data } = useSuspenseQuery<UnorderableShopReviewsResponse | null>({
     queryKey: ['shopMyReview', shopId, sort],
     queryFn: () =>
       getMyShopReviews({
