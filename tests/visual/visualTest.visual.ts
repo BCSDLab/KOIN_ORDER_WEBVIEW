@@ -90,16 +90,13 @@ test.describe('비주얼테스트', () => {
             });
           });
 
-          await page.route(
-            (url) => url.href.includes('/v3/shops') && url.searchParams.get('filter') === 'OPEN',
-            async (route) => {
-              await route.fulfill({
-                status: 200,
-                contentType: 'application/json',
-                body: JSON.stringify(MOCK_SHOP_RESULTS),
-              });
-            },
-          );
+          await page.route('**/v3/shops**', async (route) => {
+            await route.fulfill({
+              status: 200,
+              contentType: 'application/json',
+              body: JSON.stringify(MOCK_SHOP_RESULTS),
+            });
+          });
 
           await page.goto(route);
           await page.waitForLoadState('networkidle');
