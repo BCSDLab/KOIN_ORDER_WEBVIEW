@@ -12,12 +12,14 @@ import { useGetUnorderableShopMenus } from './hooks/useGetShopInfo';
 import { useMenuGroupScroll } from './hooks/useMenuGroupScroll';
 import useLogger from '@/util/hooks/analytics/useLogger';
 import { useScrollLogging } from '@/util/hooks/analytics/useScrollLogging';
+import useScrollToTop from '@/util/hooks/ui/useScrollToTop';
 import { useSwipeToBack } from '@/util/hooks/useSwipeToBack';
 import { setStartLoggingTime } from '@/util/ts/analytics/loggingTime';
 // import useCart from '@/pages/Payment/hooks/useCart';
 // import { useOrderStore } from '@/stores/useOrderStore';
 
 export default function UnorderableShopView() {
+  useScrollToTop();
   useSwipeToBack();
   const logger = useLogger();
   const { shopId } = useParams();
