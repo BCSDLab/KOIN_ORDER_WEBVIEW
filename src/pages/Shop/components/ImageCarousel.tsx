@@ -15,6 +15,7 @@ export default function ImageCarousel({ images, targetRef, shopName }: ImageCaro
   const logger = useLogger();
   const containerRef = useRef<HTMLDivElement>(null);
   const [scrollIndex, setScrollIndex] = useState(0);
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [isInteracting, setIsInteracting] = useState(false);
   const [isImageViewerOpen, openImageViewer, closeImageViewer] = useBooleanState(false);
 
@@ -103,6 +104,7 @@ export default function ImageCarousel({ images, targetRef, shopName }: ImageCaro
             className="h-full w-full flex-shrink-0 snap-start"
             onClick={() => {
               openImageViewer();
+              setSelectedImageIndex(index);
               setIsInteracting(true);
             }}
           >
@@ -123,7 +125,9 @@ export default function ImageCarousel({ images, targetRef, shopName }: ImageCaro
             />
           ))}
       </div>
-      {isImageViewerOpen && <ImageViewer images={images} onClose={closeImageViewer} />}
+      {isImageViewerOpen && (
+        <ImageViewer images={images} onClose={closeImageViewer} initialIndex={selectedImageIndex} />
+      )}
     </div>
   );
 }
