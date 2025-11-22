@@ -92,6 +92,22 @@ export default function ImageCarousel({ images, targetRef, shopName }: ImageCaro
     };
   }, []);
 
+  useEffect(() => {
+    if (!isImageViewerOpen) return;
+
+    window.history.pushState({ imageViewer: true }, '');
+
+    const handlePopState = () => {
+      closeImageViewer();
+    };
+
+    window.addEventListener('popstate', handlePopState);
+
+    return () => {
+      window.removeEventListener('popstate', handlePopState);
+    };
+  }, [isImageViewerOpen, closeImageViewer]);
+
   return (
     <div className="relative h-[350px] w-full overflow-hidden" ref={targetRef}>
       <div
