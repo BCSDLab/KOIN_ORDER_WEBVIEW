@@ -9,9 +9,10 @@ import 'swiper/swiper-bundle.css';
 interface ImageViewerProps {
   images: ShopInfoSummaryResponse['images'];
   onClose: () => void;
+  initialIndex?: number;
 }
 
-export default function ImageViewer({ images, onClose }: ImageViewerProps) {
+export default function ImageViewer({ images, onClose, initialIndex = 0 }: ImageViewerProps) {
   const swiperStyles: CSSWithCustomProperties = {
     '--swiper-navigation-color': '#fff',
     '--swiper-pagination-color': '#fff',
@@ -24,22 +25,19 @@ export default function ImageViewer({ images, onClose }: ImageViewerProps) {
         <button className="absolute top-4 right-4 z-50 h-7 w-7 text-2xl text-white" onClick={onClose}>
           ✕
         </button>
+
         <Swiper
-          zoom={true}
-          navigation={true}
-          pagination={{
-            clickable: true,
-          }}
+          zoom
+          navigation
+          pagination={{ clickable: true }}
           modules={[Zoom, Navigation, Pagination]}
           style={swiperStyles}
           className="flex h-full w-full items-center justify-center"
+          initialSlide={initialIndex} // ✅ 클릭한 인덱스에서 시작
         >
           {images.map((image) => (
             <SwiperSlide key={image.image_url} className="flex items-center justify-center">
-              <div
-                className="swiper-zoom-container flex h-full w-full items-center justify-center"
-                key={image.image_url}
-              >
+              <div className="swiper-zoom-container flex h-full w-full items-center justify-center">
                 <img src={image.image_url} />
               </div>
             </SwiperSlide>

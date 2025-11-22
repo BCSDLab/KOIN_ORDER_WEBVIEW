@@ -8,6 +8,7 @@ import {
   getUnorderableShopInfoSummary,
   getUnorderableShopMenus,
 } from '@/api/shop';
+import { Price } from '@/api/shop/entity';
 
 export const useGetShopInfo = (orderableShopId: number) => {
   return useSuspenseQuery({
@@ -83,27 +84,42 @@ export const useGetUnorderableShopInfoSummary = (UnorderableShopId: number) => {
   });
 };
 
-export const useGetUnorderableShopMenus = (UnorderableShopId: number) => {
+export const useGetUnorderableShopMenus = (unorderableShopId: number) => {
   return useSuspenseQuery({
-    queryKey: ['unorderableShopMenus', UnorderableShopId],
-    queryFn: () => getUnorderableShopMenus({ UnorderableShopId }),
+    queryKey: ['unorderableShopMenus', unorderableShopId],
+    queryFn: () => getUnorderableShopMenus({ UnorderableShopId: unorderableShopId }),
     select: (data) =>
       data.menu_categories.map((category) => ({
         menu_group_id: category.id,
         menu_group_name: category.name,
-        menus: category.menus.map((menu) => ({
-          id: menu.id,
-          name: menu.name,
-          description: menu.description ?? '',
-          thumbnail_image: menu.image_urls?.[0] || '',
-          is_sold_out: false,
-          prices: (menu.option_prices || []).map((price, index) => ({
-            id: index,
-            name: price.option,
-            price: price.price,
-            is_selected: false,
-          })),
-        })),
+        menus: category.menus.map((menu) => {
+          const hasOptions = menu.option_prices && menu.option_prices.length > 0;
+
+          const prices: Price[] = hasOptions
+            ? menu.option_prices.map((option, index) => ({
+                id: index,
+                name: option.option ?? null,
+                price: option.price,
+                is_selected: false,
+              }))
+            : [
+                {
+                  id: 0,
+                  name: null,
+                  price: menu.single_price,
+                  is_selected: false,
+                },
+              ];
+
+          return {
+            id: menu.id,
+            name: menu.name,
+            description: menu.description ?? '',
+            thumbnail_image: menu.image_urls?.[0] || '',
+            is_sold_out: menu.is_hidden,
+            prices,
+          };
+        }),
       })),
   });
 };

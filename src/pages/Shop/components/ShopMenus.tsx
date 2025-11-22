@@ -87,7 +87,7 @@ export default function ShopMenus({
                 disabled={menu.is_sold_out || !isOrderable}
                 onClick={() => navigate(`menus/${menu.id}`)}
               >
-                <div className="flex flex-col">
+                <div className="flex min-w-0 flex-[1_1_0] flex-col">
                   <span className="flex h-auto text-start text-lg leading-[1.6] font-semibold">{menu.name}</span>
                   {menu.description && (
                     <span className="line-clamp-2 text-left text-[12px] leading-[1.6] font-normal break-keep text-neutral-500">
@@ -103,9 +103,14 @@ export default function ShopMenus({
                       );
                     }
                     return (
-                      <div key={price.id} className="m-1 flex h-[1.1375rem] gap-1">
-                        <span className="text-sm leading-[1.6] font-normal">{price.name} : </span>
-                        <span className="text-sm leading-[1.6] font-semibold">{price.price.toLocaleString()}원</span>
+                      <div className="m-1 flex items-center justify-between">
+                        <span className="block max-w-[80%] overflow-hidden text-sm text-ellipsis whitespace-nowrap">
+                          {price.name} :
+                        </span>
+
+                        <span className="text-sm font-semibold whitespace-nowrap">
+                          {price.price.toLocaleString()}원
+                        </span>
                       </div>
                     );
                   })}

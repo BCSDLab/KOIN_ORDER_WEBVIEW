@@ -59,6 +59,16 @@ export default function ShopReview() {
     navigate(`/review/new/${shopId}`);
   };
 
+  const handleCheckboxClick = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const isLogin = getCookie('AUTH_TOKEN_KEY');
+    if (!isLogin) {
+      openLoginModal();
+      return;
+    }
+
+    setShowMineOnly(e.target.checked);
+  };
+
   return (
     <div className="flex flex-col items-center justify-center px-6 pb-10">
       <button
@@ -76,12 +86,7 @@ export default function ShopReview() {
           <DownArrowIcon fill="#727272" />
         </button>
         <label className="flex cursor-pointer items-center gap-1">
-          <input
-            type="checkbox"
-            className="hidden"
-            checked={showMineOnly}
-            onChange={(e) => setShowMineOnly(e.target.checked)}
-          />
+          <input type="checkbox" className="hidden" checked={showMineOnly} onChange={handleCheckboxClick} />
           {showMineOnly ? <CheckboxTrue className="h-5 w-5" /> : <CheckboxFalse className="h-5 w-5" />}
           <span className="pt-[2px]">내가 작성한 리뷰</span>
         </label>

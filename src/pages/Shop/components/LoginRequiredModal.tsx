@@ -33,13 +33,25 @@ export default function LoginRequiredModal({
     return isStage ? 'https://next.stage.koreatech.in/auth' : 'https://koreatech.in/auth';
   };
 
-  const handleWebLogin = () => {
-    const url = getWebLoginUrl();
+  const buildRedirectParam = () => {
+    const { hostname, pathname, search, href } = window.location;
 
-    if (url.startsWith('http')) {
-      window.location.href = url;
+    if (hostname === 'localhost') {
+      const path = pathname + search;
+      return encodeURIComponent(path || '/');
+    }
+
+    return encodeURIComponent(href);
+  };
+
+  const handleWebLogin = () => {
+    const loginBaseUrl = getWebLoginUrl();
+    const redirect = buildRedirectParam();
+
+    if (loginBaseUrl.startsWith('http')) {
+      window.location.href = `${loginBaseUrl}?redirect=${redirect}`;
     } else {
-      navigate(url);
+      navigate(`${loginBaseUrl}?redirect=${redirect}`);
     }
   };
 
