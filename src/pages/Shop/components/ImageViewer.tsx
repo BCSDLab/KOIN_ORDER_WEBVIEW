@@ -33,7 +33,7 @@ export default function ImageViewer({ images, onClose, initialIndex = 0 }: Image
           modules={[Zoom, Navigation, Pagination]}
           style={swiperStyles}
           className="flex h-full w-full items-center justify-center"
-          initialSlide={initialIndex} // ✅ 클릭한 인덱스에서 시작
+          initialSlide={initialIndex}
         >
           {images.map((image) => (
             <SwiperSlide key={image.image_url} className="flex items-center justify-center">
