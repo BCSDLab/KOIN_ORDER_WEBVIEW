@@ -29,6 +29,23 @@ export default function ReviewReport() {
     })) ?? [];
 
   useEffect(() => {
+    const trimmed = etcText.trim();
+
+    setSelected((prev) => {
+      const hasEtc = prev.includes('기타');
+
+      if (trimmed.length > 0 && !hasEtc) {
+        return [...prev, '기타'];
+      }
+      if (trimmed.length === 0 && hasEtc) {
+        return prev.filter((v) => v !== '기타');
+      }
+
+      return prev;
+    });
+  }, [etcText]);
+
+  useEffect(() => {
     if (textareaRef.current) {
       textareaRef.current.style.height = 'auto';
       textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
@@ -86,7 +103,7 @@ export default function ReviewReport() {
           return (
             <label key={opt.value} className={`flex flex-col pb-4 ${isEtc ? '' : 'border-b border-neutral-300'}`}>
               <div className="flex items-start gap-4 px-2">
-                <div className={`relative flex items-center ${isEtc ? '' : 'mt-3'}`}>
+                <div className={`relative flex items-center ${isEtc ? 'mt-1' : 'mt-3'}`}>
                   <input
                     name="reason"
                     type="checkbox"
@@ -116,7 +133,7 @@ export default function ReviewReport() {
               </div>
 
               {isEtc && (
-                <div className="pt-2 pr-[7px] pl-2">
+                <div className="pt-2 pr-[7px] pb-1 pl-2">
                   <textarea
                     ref={textareaRef}
                     className="w-full resize-none overflow-hidden rounded-[5px] border border-neutral-300 bg-white px-4 pt-2 text-[14px] text-[#8E8E8E] placeholder:text-neutral-400 focus:outline-none"
