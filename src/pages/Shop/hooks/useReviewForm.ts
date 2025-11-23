@@ -16,7 +16,7 @@ export function useReviewFormBase() {
     setExistingImageUrls((prev) => prev.filter((_, i) => i !== index));
   };
 
-  const handleMenuKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleMenuKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key !== 'Enter') return;
 
     e.preventDefault();
@@ -24,13 +24,12 @@ export function useReviewFormBase() {
 
     if (!value) return;
 
-    if (menus.includes(value)) {
-      setMenuInput('');
-      return;
-    }
-    if (menus.length >= 5) return;
+    setMenus((prev) => {
+      if (prev.length >= 5) return prev;
 
-    setMenus((prev) => [...prev, value]);
+      if (prev.includes(value)) return prev;
+      return [...prev, value];
+    });
     setMenuInput('');
   };
 
