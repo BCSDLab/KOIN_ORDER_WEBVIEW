@@ -80,31 +80,32 @@ export default function ShopDetail({ shopInfo, isOrderable }: ShopDetailProps) {
         <p className="py-3 text-[15px] leading-[1.6] font-semibold">가게 알림</p>
         <p className="text-sm leading-[1.6] font-medium">{shopInfo.notice}</p>
       </div>
-      <div
-        id="배달금액"
-        className={clsx('px-6 py-3', {
-          'bg-neutral-100': decodedId === '배달금액',
-          'bg-white': decodedId !== '배달금액',
-        })}
-      >
-        <p className="py-3 text-[15px] leading-[1.6] font-semibold">주문금액별 총 배달팁</p>
-        <table className="w-full border border-gray-200 text-left text-sm">
-          <tbody>
-            {shopInfo.delivery_tips.map((tips) => (
-              <tr key={`${tips.from_amount}-${tips.to_amount}-${tips.fee}`} className="border-b border-gray-200">
-                <td className="border-r border-gray-200 px-4 py-2">
-                  {tips.to_amount
-                    ? `${tips.from_amount.toLocaleString()} ~ ${tips.to_amount.toLocaleString()}원 미만`
-                    : `${tips.from_amount.toLocaleString()} 이상`}
-                </td>
-                <td className="px-4 py-2">{tips.fee.toLocaleString()}원</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+
       {isOrderable && (
         <>
+          <div
+            id="배달금액"
+            className={clsx('px-6 py-3', {
+              'bg-neutral-100': decodedId === '배달금액',
+              'bg-white': decodedId !== '배달금액',
+            })}
+          >
+            <p className="py-3 text-[15px] leading-[1.6] font-semibold">주문금액별 총 배달팁</p>
+            <table className="w-full border border-gray-200 text-left text-sm">
+              <tbody>
+                {shopInfo.delivery_tips.map((tips) => (
+                  <tr key={`${tips.from_amount}-${tips.to_amount}-${tips.fee}`} className="border-b border-gray-200">
+                    <td className="border-r border-gray-200 px-4 py-2">
+                      {tips.to_amount
+                        ? `${tips.from_amount.toLocaleString()} ~ ${tips.to_amount.toLocaleString()}원 미만`
+                        : `${tips.from_amount.toLocaleString()} 이상`}
+                    </td>
+                    <td className="px-4 py-2">{tips.fee.toLocaleString()}원</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
           <div className="bg-white px-6 py-3">
             <p className="py-3 text-[15px] leading-[1.6] font-semibold">사업자 정보</p>
             <div className="flex flex-col gap-2">
