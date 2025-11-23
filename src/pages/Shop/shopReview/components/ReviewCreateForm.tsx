@@ -128,7 +128,13 @@ export default function ReviewCreateForm() {
                   className="border-primary-300 text-primary-300 flex items-center gap-1 rounded-[5px] border px-[10px] py-[3px] text-[12px]"
                 >
                   <span>{menu}</span>
-                  <CloseIcon fill="#ce86fd" onClick={() => handleRemoveMenu(idx)} width={12} height={12} />
+                  <CloseIcon
+                    fill="#ce86fd"
+                    className="flex-shrink-0"
+                    onClick={() => handleRemoveMenu(idx)}
+                    width={12}
+                    height={12}
+                  />
                 </div>
               ))}
             </div>
