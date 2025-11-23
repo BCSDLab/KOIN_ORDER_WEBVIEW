@@ -103,7 +103,7 @@ export default function ShopMenus({
                       );
                     }
                     return (
-                      <div className="m-1 flex items-center justify-between">
+                      <div className="m-1 flex items-center gap-1">
                         <span className="block max-w-[80%] overflow-hidden text-sm text-ellipsis whitespace-nowrap">
                           {price.name} :
                         </span>
