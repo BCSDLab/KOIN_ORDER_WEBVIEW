@@ -17,6 +17,8 @@ export function useReviewFormBase() {
   };
 
   const handleMenuKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.nativeEvent.isComposing) return;
+
     if (e.key !== 'Enter') return;
 
     e.preventDefault();
