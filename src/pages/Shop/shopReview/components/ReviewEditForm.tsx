@@ -127,11 +127,11 @@ export default function ReviewEditForm() {
         </div>
       </div>
 
-      <div className="mt-6">
+      <div className="my-6">
         <div className="mb-3 flex flex-col">
           <span className="text-[16px] font-[500]">주문메뉴</span>
 
-          <div className="justify_between flex items-center">
+          <div className="flex items-center justify-between">
             <span className="text-[12px] text-neutral-500">입력한 메뉴가 태그로 추가돼요</span>
             {menus.length > 0 && <span className="text-[12px] text-neutral-500">{menus.length}/5</span>}
           </div>
@@ -152,12 +152,13 @@ export default function ReviewEditForm() {
         </div>
 
         <div className="rounded-[4px] border border-neutral-300 bg-white px-4 py-3">
-          <input
+          <textarea
             value={menuInput}
             onChange={(e) => setMenuInput(e.target.value)}
             onKeyDown={handleMenuKeyDown}
             placeholder="메뉴명을 입력해주세요"
-            className="w-full text-[14px] placeholder-neutral-400 outline-none"
+            className="w-full resize-none overflow-y-auto text-[14px] placeholder-neutral-400 outline-none"
+            rows={1}
           />
         </div>
       </div>

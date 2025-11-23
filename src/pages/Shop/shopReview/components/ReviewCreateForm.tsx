@@ -99,19 +99,19 @@ export default function ReviewCreateForm() {
           <span className="text-[16px] font-[500]">내용</span>
           <span className="text-[12px] text-neutral-500">{content.length}/500</span>
         </div>
-        <div className="rounded-[4px] border border-neutral-300 bg-white px-4 py-3">
+        <div className="rounded-[4px] border border-neutral-300 bg-white px-4 pt-3 pb-1">
           <textarea
             ref={textareaRef}
             value={content}
             onChange={(e) => setContent(e.target.value.slice(0, 500))}
             placeholder="리뷰를 작성해주세요"
-            //maxLength={500}
-            className="w-full resize-none overflow-hidden text-[14px] placeholder-neutral-400 outline-none"
+            className="overflow-none w-full resize-none text-[14px] placeholder-neutral-400 outline-none"
+            rows={1}
           />
         </div>
       </div>
 
-      <div className="mt-6">
+      <div className="my-6">
         <div className="mb-3 flex flex-col">
           <span className="text-[16px] font-[500]">주문메뉴</span>
 
@@ -135,13 +135,14 @@ export default function ReviewCreateForm() {
           )}
         </div>
 
-        <div className="rounded-[4px] border border-neutral-300 bg-white px-4 py-3">
-          <input
+        <div className="rounded-[4px] border border-neutral-300 bg-white px-4 pt-3 pb-1">
+          <textarea
             value={menuInput}
             onChange={(e) => setMenuInput(e.target.value)}
             onKeyDown={handleMenuKeyDown}
             placeholder="메뉴명을 입력해주세요"
-            className="w-full text-[14px] placeholder-neutral-400 outline-none"
+            className="w-full resize-none overflow-y-auto text-[14px] placeholder-neutral-400 outline-none"
+            rows={1}
           />
         </div>
       </div>
