@@ -9,6 +9,7 @@ export function useReviewFormBase() {
   const [existingImageUrls, setExistingImageUrls] = useState<string[]>([]);
 
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
+  const menuTextareaRef = useRef<HTMLTextAreaElement | null>(null);
 
   const isFormValid = rating > 0 && content.trim().length > 0;
 
@@ -16,7 +17,9 @@ export function useReviewFormBase() {
     setExistingImageUrls((prev) => prev.filter((_, i) => i !== index));
   };
 
-  const handleMenuKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleMenuKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.nativeEvent.isComposing) return;
+
     if (e.key !== 'Enter') return;
 
     e.preventDefault();
@@ -24,13 +27,12 @@ export function useReviewFormBase() {
 
     if (!value) return;
 
-    if (menus.includes(value)) {
-      setMenuInput('');
-      return;
-    }
-    if (menus.length >= 5) return;
+    setMenus((prev) => {
+      if (prev.length >= 5) return prev;
 
-    setMenus((prev) => [...prev, value]);
+      if (prev.includes(value)) return prev;
+      return [...prev, value];
+    });
     setMenuInput('');
   };
 
@@ -45,6 +47,13 @@ export function useReviewFormBase() {
     textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
   }, [content]);
 
+  useEffect(() => {
+    if (!menuTextareaRef.current) return;
+
+    menuTextareaRef.current.style.height = 'auto';
+    menuTextareaRef.current.style.height = `${menuTextareaRef.current.scrollHeight}px`;
+  }, [menuInput]);
+
   return {
     content,
     setContent,
@@ -57,6 +66,7 @@ export function useReviewFormBase() {
     existingImageUrls,
     setExistingImageUrls,
     textareaRef,
+    menuTextareaRef,
     isFormValid,
     handleRemoveExistingImage,
     handleMenuKeyDown,

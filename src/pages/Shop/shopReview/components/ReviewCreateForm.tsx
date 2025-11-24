@@ -18,6 +18,7 @@ export default function ReviewCreateForm() {
     menuInput,
     setMenuInput,
     textareaRef,
+    menuTextareaRef,
     isFormValid,
     handleMenuKeyDown,
     handleRemoveMenu,
@@ -99,19 +100,19 @@ export default function ReviewCreateForm() {
           <span className="text-[16px] font-[500]">내용</span>
           <span className="text-[12px] text-neutral-500">{content.length}/500</span>
         </div>
-        <div className="rounded-[4px] border border-neutral-300 bg-white px-4 py-3">
+        <div className="rounded-[4px] border border-neutral-300 bg-white px-4 pt-3 pb-1">
           <textarea
             ref={textareaRef}
             value={content}
             onChange={(e) => setContent(e.target.value.slice(0, 500))}
             placeholder="리뷰를 작성해주세요"
-            //maxLength={500}
-            className="w-full resize-none overflow-hidden text-[14px] placeholder-neutral-400 outline-none"
+            className="overflow-none w-full resize-none text-[14px] placeholder-neutral-400 outline-none"
+            rows={1}
           />
         </div>
       </div>
 
-      <div className="mt-6">
+      <div className="my-6">
         <div className="mb-3 flex flex-col">
           <span className="text-[16px] font-[500]">주문메뉴</span>
 
@@ -128,20 +129,28 @@ export default function ReviewCreateForm() {
                   className="border-primary-300 text-primary-300 flex items-center gap-1 rounded-[5px] border px-[10px] py-[3px] text-[12px]"
                 >
                   <span>{menu}</span>
-                  <CloseIcon fill="#ce86fd" onClick={() => handleRemoveMenu(idx)} width={12} height={12} />
+                  <CloseIcon
+                    fill="#ce86fd"
+                    className="flex-shrink-0"
+                    onClick={() => handleRemoveMenu(idx)}
+                    width={12}
+                    height={12}
+                  />
                 </div>
               ))}
             </div>
           )}
         </div>
 
-        <div className="rounded-[4px] border border-neutral-300 bg-white px-4 py-3">
-          <input
+        <div className="rounded-[4px] border border-neutral-300 bg-white px-4 pt-3 pb-1">
+          <textarea
+            ref={menuTextareaRef}
             value={menuInput}
             onChange={(e) => setMenuInput(e.target.value)}
             onKeyDown={handleMenuKeyDown}
             placeholder="메뉴명을 입력해주세요"
-            className="w-full text-[14px] placeholder-neutral-400 outline-none"
+            className="w-full resize-none overflow-y-hidden text-[14px] break-words whitespace-pre-wrap placeholder-neutral-400 outline-none"
+            rows={1}
           />
         </div>
       </div>

@@ -119,7 +119,7 @@ export default function ReviewCard({ review }: ReviewCardProps) {
         <StarList average_rating={rating} />
         <span>{formatDate(created_at)}</span>
       </div>
-      <span className="flex text-[14px]">{content}</span>
+      <span className="flex text-[14px] whitespace-pre-line">{content}</span>
       {image_urls?.length > 0 && (
         <div className="scrollbar-hide flex w-full gap-2 overflow-x-auto">
           {image_urls.map((url, idx) => (
@@ -136,7 +136,7 @@ export default function ReviewCard({ review }: ReviewCardProps) {
       )}
 
       {menu_names?.length > 0 && (
-        <div className="flex w-full flex-wrap items-start gap-[10px]">
+        <div className="flex w-full flex-wrap items-start gap-[10px] whitespace-pre-line">
           {menu_names.map((name, idx) => (
             <span
               key={idx}
