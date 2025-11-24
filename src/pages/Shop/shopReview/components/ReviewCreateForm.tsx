@@ -18,6 +18,7 @@ export default function ReviewCreateForm() {
     menuInput,
     setMenuInput,
     textareaRef,
+    menuTextareaRef,
     isFormValid,
     handleMenuKeyDown,
     handleRemoveMenu,
@@ -143,11 +144,12 @@ export default function ReviewCreateForm() {
 
         <div className="rounded-[4px] border border-neutral-300 bg-white px-4 pt-3 pb-1">
           <textarea
+            ref={menuTextareaRef}
             value={menuInput}
             onChange={(e) => setMenuInput(e.target.value)}
             onKeyDown={handleMenuKeyDown}
             placeholder="메뉴명을 입력해주세요"
-            className="w-full resize-none overflow-y-auto text-[14px] placeholder-neutral-400 outline-none"
+            className="w-full resize-none overflow-y-hidden text-[14px] break-words whitespace-pre-wrap placeholder-neutral-400 outline-none"
             rows={1}
           />
         </div>

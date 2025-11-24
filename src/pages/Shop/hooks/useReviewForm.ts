@@ -9,6 +9,7 @@ export function useReviewFormBase() {
   const [existingImageUrls, setExistingImageUrls] = useState<string[]>([]);
 
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
+  const menuTextareaRef = useRef<HTMLTextAreaElement | null>(null);
 
   const isFormValid = rating > 0 && content.trim().length > 0;
 
@@ -46,6 +47,13 @@ export function useReviewFormBase() {
     textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
   }, [content]);
 
+  useEffect(() => {
+    if (!menuTextareaRef.current) return;
+
+    menuTextareaRef.current.style.height = 'auto';
+    menuTextareaRef.current.style.height = `${menuTextareaRef.current.scrollHeight}px`;
+  }, [menuInput]);
+
   return {
     content,
     setContent,
@@ -58,6 +66,7 @@ export function useReviewFormBase() {
     existingImageUrls,
     setExistingImageUrls,
     textareaRef,
+    menuTextareaRef,
     isFormValid,
     handleRemoveExistingImage,
     handleMenuKeyDown,
