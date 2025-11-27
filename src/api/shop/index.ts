@@ -20,7 +20,16 @@ import {
   ShopListParams,
   NearbyStoresRelateSearchResponse,
   NearbyStoresRelateSearchParams,
+  UnorderableShopReviewsResponse,
+  ReportReviewRequest,
+  ReviewReportCategoriesResponse,
+  GetShopTotalReviewParams,
+  GetMyShopReviewsParams,
+  CreateReviewRequest,
+  UploadShopFilesResponse,
+  ReviewDetailResponse,
 } from './entity';
+import { getAuthHeader } from '@/util/ts/auth';
 
 export const getShopDetailInfo = async ({ orderableShopId }: ShopDetailInfoParams) => {
   const response = await apiClient.get<ShopDetailInfoResponse>(`order/shop/${orderableShopId}/detail`);
@@ -98,5 +107,67 @@ export const getNearbyStoresRelateSearch = async ({ keyword }: NearbyStoresRelat
   const response = await apiClient.get<NearbyStoresRelateSearchResponse>('v2/shops/search/related', {
     params: { keyword },
   });
+  return response;
+};
+
+export const getShopTotalReview = async ({ shopId, page, limit, sorter }: GetShopTotalReviewParams) => {
+  const params = { page, limit, sorter };
+
+  const response = await apiClient.get<UnorderableShopReviewsResponse>(`/shops/${shopId}/reviews`, { params });
+
+  return response;
+};
+
+export const reportReview = async (shopId: number, reviewId: number, body: ReportReviewRequest) => {
+  return await apiClient.post(`/shops/${shopId}/reviews/${reviewId}/reports`, {
+    body,
+    headers: getAuthHeader(),
+  });
+};
+
+export const getReviewReportCategories = async () => {
+  const response = await apiClient.get<ReviewReportCategoriesResponse>('/shops/reviews/reports/categories');
+  return response;
+};
+
+export const getMyShopReviews = async ({ shopId, params }: GetMyShopReviewsParams) => {
+  const response = await apiClient.get<UnorderableShopReviewsResponse | null>(`/shops/${shopId}/reviews/me`, {
+    params,
+    requiresAuth: true,
+  });
+
+  return response;
+};
+
+export const postShopReview = async (shopId: number, body: CreateReviewRequest) => {
+  return await apiClient.post(`/shops/${shopId}/reviews`, { body, headers: getAuthHeader() });
+};
+
+export async function uploadShopFiles(files: File[]): Promise<string[]> {
+  const formData = new FormData();
+
+  files.forEach((file) => {
+    formData.append('files', file);
+  });
+
+  const result = await apiClient.post<UploadShopFilesResponse>('/SHOPS/upload/files', {
+    body: formData,
+  });
+  return result.file_urls ?? [];
+}
+
+export const updateShopReview = async (shopId: number, reviewId: number, body: CreateReviewRequest) => {
+  return await apiClient.put(`/shops/${shopId}/reviews/${reviewId}`, { body, headers: getAuthHeader() });
+};
+
+export const deleteShopReview = async (shopId: number, reviewId: number) => {
+  return await apiClient.delete(`/shops/${shopId}/reviews/${reviewId}`, {
+    headers: getAuthHeader(),
+  });
+};
+
+export const getShopReviewDetail = async (shopId: number, reviewId: number) => {
+  const response = await apiClient.get<ReviewDetailResponse>(`/shops/${shopId}/reviews/${reviewId}`);
+
   return response;
 };

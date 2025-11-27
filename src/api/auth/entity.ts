@@ -9,6 +9,17 @@ export interface LoginResponse {
   user_type: string;
 }
 
+export interface GeneralUserResponse {
+  id: number;
+  login_id: string;
+  email: string;
+  gender: 0 | 1;
+  name: string;
+  nickname: string;
+  phone_number: string;
+  user_type: 'GENERAL';
+}
+
 export interface StudentUserResponse {
   id: number;
   login_id: string;

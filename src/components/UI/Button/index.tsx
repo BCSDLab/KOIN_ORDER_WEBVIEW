@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLAttributes<HTMLButtonElement> {
-  color?: 'primary' | 'neutral' | 'gray' | 'white';
+  color?: 'primary' | 'neutral' | 'gray' | 'white' | 'darkGray';
   size?: 'sm' | 'md' | 'lg';
   startIcon?: ReactElement<SVGProps<SVGSVGElement>>;
   endIcon?: ReactElement<SVGProps<SVGSVGElement>>;
@@ -17,6 +17,7 @@ const COLOR = {
   neutral: 'bg-white text-primary-500 border border-neutral-200',
   gray: 'bg-white text-neutral-500 border border-neutral-300',
   white: 'bg-white text-neutral-500 border border-neutral-200',
+  darkGray: 'bg-neutral-200 text-neutral-500 border border-neutral-200',
 };
 
 const SIZE = {

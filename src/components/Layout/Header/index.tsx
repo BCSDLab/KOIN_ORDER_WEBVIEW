@@ -18,6 +18,11 @@ export default function Header() {
   const [searchParams] = useSearchParams();
 
   const backToPreviousPage = () => {
+    if (pathname.startsWith('/review/edit')) {
+      window.dispatchEvent(new CustomEvent('openReviewExitModal'));
+      return;
+    }
+
     if (pathname === '/shops') {
       const categoryId = Number(searchParams.get('category')) || undefined;
       const categoryName = getCategoryNameById(categoryId);
@@ -69,7 +74,7 @@ export default function Header() {
   const title = ROUTE_TITLES.find((item) => item.match(pathname))?.title ?? '';
 
   const bgClass = clsx({
-    'bg-white': pathname.startsWith('/shop-detail') || pathname.startsWith('/result'),
+    'bg-white': pathname.startsWith('/shop-detail') || pathname.startsWith('/result') || pathname.startsWith('/review'),
     'bg-[#f8f8fa]': true,
   });
 

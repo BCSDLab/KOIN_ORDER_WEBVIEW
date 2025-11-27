@@ -13,6 +13,7 @@ interface FetchOptions<P extends object = Record<string, QueryParamValue>> exten
   headers?: Record<string, string>;
   body?: unknown;
   params?: P;
+  requiresAuth?: boolean;
 }
 
 export const apiClient = {
@@ -66,13 +67,17 @@ async function sendRequest<T = unknown, P extends object = Record<string, QueryP
   options: FetchOptions<P> = {},
   timeout: number = 10000,
 ): Promise<T> {
-  const { headers, body, method, params, ...restOptions } = options;
+  const { headers, body, method, params, requiresAuth, ...restOptions } = options;
 
   if (!method) {
     throw new Error('HTTP method가 설정되지 않았습니다.');
   }
 
   const token = getCookie('AUTH_TOKEN_KEY');
+
+  if (requiresAuth && !token) {
+    return null as T;
+  }
 
   let url = joinUrl(BASE_URL, endPoint);
   if (params && Object.keys(params).length > 0) {
