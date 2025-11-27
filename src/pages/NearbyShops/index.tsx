@@ -34,9 +34,7 @@ interface SortOption {
   label: string;
 }
 
-type CategoryType = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
 type SortType = 'NONE' | 'COUNT' | 'COUNT_ASC' | 'COUNT_DESC' | 'RATING' | 'RATING_ASC' | 'RATING_DESC';
-
 const SORT_VALID: SortType[] = ['NONE', 'COUNT', 'COUNT_ASC', 'COUNT_DESC', 'RATING', 'RATING_ASC', 'RATING_DESC'];
 
 const SORT_TRACKING_MAP: Record<SortType, string> = {
@@ -55,10 +53,9 @@ const sortOptions: SortOption[] = [
   { id: 'NONE', label: '기본순' },
 ];
 
-function parseCategory(query: string | null): CategoryType {
+function parseCategory(query: string | null) {
   const categoryNumber = Number(query);
-  const valid = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12] as const;
-  return valid.includes(categoryNumber as CategoryType) ? (categoryNumber as CategoryType) : 1;
+  return Number.isNaN(categoryNumber) || categoryNumber <= 0 ? 1 : categoryNumber;
 }
 
 function parseSort(query: string | null): SortType {
@@ -78,17 +75,16 @@ export default function NearbyShops() {
     ...category,
   }));
 
-  const [selectedCategory, setSelectedCategory] = useQueryState<CategoryType>('category', parseCategory, (value) =>
-    String(value),
-  );
+  const [isSortModalOpen, sortModalOpen, sortModalClose] = useBooleanState(false);
+  const [selectedCategory, setSelectedCategory] = useQueryState('category', parseCategory, (value) => String(value));
+
   const [selectedSort, setSelectedSort] = useQueryState<SortType>('sort', parseSort, (value) =>
     value === 'NONE' ? null : value,
   );
+
   const [selectedFilters, setSelectedFilters] = useQueryState<'OPEN' | null>('filter', parseFilter, (value) =>
     value === 'OPEN' ? 'OPEN' : null,
   );
-
-  const [isSortModalOpen, sortModalOpen, sortModalClose] = useBooleanState(false);
 
   const { data } = useShopList({
     sorter: selectedSort !== 'NONE' ? selectedSort : undefined,
@@ -96,7 +92,7 @@ export default function NearbyShops() {
     category: selectedCategory,
   });
 
-  const currentCategoryId = !!selectedCategory ? selectedCategory : 0;
+  const currentCategoryId = selectedCategory || 0;
   const categoryName =
     categories.shop_categories.find((category) => category.id === currentCategoryId)?.name || '전체보기';
 
@@ -112,7 +108,8 @@ export default function NearbyShops() {
       event_label: 'shop_can',
       value: `${sortTrackingLabel}_${categoryName}`,
     });
-    setSelectedSort(sortId);
+
+    setSelectedSort(sortId, { replace: true });
     sortModalClose();
   };
 
@@ -122,6 +119,7 @@ export default function NearbyShops() {
       event_label: 'shop_can',
       value: `check_open_${categoryName}`,
     });
+
     setSelectedFilters(selectedFilters === 'OPEN' ? null : 'OPEN', { replace: true });
   };
 
@@ -132,11 +130,11 @@ export default function NearbyShops() {
       value: category.name,
       duration_time: getLoggingTime('selectedCategoryTime'),
       event_category: 'shop_category_click',
-      previous_page:
-        categories.shop_categories.find((category) => category.id === selectedCategory)?.name || '전체보기',
+      previous_page: categories.shop_categories.find((c) => c.id === selectedCategory)?.name || '전체보기',
       current_page: category.name,
     });
-    setSelectedCategory(category.id as CategoryType);
+
+    setSelectedCategory(category.id, { replace: true });
   };
 
   const shopScrollLogging = () => {
@@ -222,16 +220,13 @@ export default function NearbyShops() {
         </div>
       </div>
 
-      {/* TODO: 배달 배포 시 작업 예정*/}
-      {/* <div className="flex h-25 items-center justify-center text-center">광고배너</div> */}
-
       {/* 메뉴 리스트 */}
       <div className="grid w-full grid-cols-1 gap-6 px-6 min-[730px]:grid-cols-2 min-[1050px]:grid-cols-3 min-[1400px]:grid-cols-4">
         {data && data.shops && data.shops.length > 0 ? (
           data.shops.map((shop: ShopInfo) => {
             const formattedImages = shop.images.map((url, index) => ({
               image_url: url,
-              is_thumbnail: index === 0, // ShopCard의 img의 타입과 달라서 변환 과정을 추가했습니다.
+              is_thumbnail: index === 0, // ShopCard img 타입과 달라서 변환
             }));
 
             return (
