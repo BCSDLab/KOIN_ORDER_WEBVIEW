@@ -49,6 +49,30 @@ export default function Header() {
       });
     }
 
+    if (pathname.startsWith('/review')) {
+      const shopName = sessionStorage.getItem('enteredShopName') || '';
+
+      if (sessionStorage.getItem('swipeToBack') === 'true') {
+        logger.actionEventSwipe({
+          team: 'BUSINESS',
+          event_label: 'shop_detail_view_review_back',
+          value: shopName,
+          duration_time: getLoggingTime('enteredShopReview'),
+          current_page: '',
+          previous_page: '',
+        });
+        return;
+      }
+
+      logger.actionEventClick({
+        team: 'BUSINESS',
+        event_label: 'shop_detail_view_review_back',
+        value: shopName,
+        duration_time: getLoggingTime('enteredShopReview'),
+        current_page: '',
+        previous_page: '',
+      });
+    }
     if (pathname.startsWith('/payment')) {
       if (isAndroid()) {
         return backButtonTapped();
