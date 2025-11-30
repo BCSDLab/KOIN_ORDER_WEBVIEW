@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import AverageRating from '../components/AverageRating';
 import ReviewList from '../components/ReviewList';
@@ -8,7 +8,11 @@ import DownArrowIcon from '@/assets/Home/down-arrow-icon.svg';
 import CheckboxFalse from '@/assets/Shop/checkbox-false.svg';
 import CheckboxTrue from '@/assets/Shop/checkbox-true.svg';
 import LoginRequiredModal from '@/pages/Shop/components/LoginRequiredModal';
+import { useGetUnorderableShopDetail } from '@/pages/Shop/hooks/useGetShopDetail';
+import useLogger from '@/util/hooks/analytics/useLogger';
+import { useScrollLogging } from '@/util/hooks/analytics/useScrollLogging';
 import useBooleanState from '@/util/hooks/useBooleanState';
+import { setStartLoggingTime } from '@/util/ts/analytics/loggingTime';
 import { getCookie } from '@/util/ts/cookie';
 
 const sortOptions: { id: ReviewSorter; label: string }[] = [
@@ -21,6 +25,10 @@ const sortOptions: { id: ReviewSorter; label: string }[] = [
 export default function ShopReview() {
   const { shopId } = useParams();
   const navigate = useNavigate();
+  const logger = useLogger();
+
+  const { data: shopDetail } = useGetUnorderableShopDetail(Number(shopId));
+  const shopName = shopDetail.name;
 
   const [showMineOnly, setShowMineOnly] = useState(false);
   const [isSortModalOpen, openSortModal, closeSortModal] = useBooleanState(false);
@@ -68,6 +76,24 @@ export default function ShopReview() {
 
     setShowMineOnly(e.target.checked);
   };
+
+  const shopScrollLogging = () => {
+    logger.actionEventClick({
+      team: 'BUSINESS',
+      event_label: 'shop_detail_view_review',
+      value: shopName,
+      event_category: 'scroll',
+    });
+  };
+
+  useScrollLogging(shopScrollLogging);
+
+  useEffect(() => {
+    if (!shopName) return;
+
+    sessionStorage.setItem('enteredShopName', shopName);
+    setStartLoggingTime('enteredShopReview');
+  }, [shopName]);
 
   return (
     <div className="flex flex-col items-center justify-center px-6 pb-10">
