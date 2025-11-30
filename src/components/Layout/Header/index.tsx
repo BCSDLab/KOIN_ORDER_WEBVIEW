@@ -49,7 +49,7 @@ export default function Header() {
       });
     }
 
-    if (pathname.startsWith('/review')) {
+    if (pathname.startsWith('/review/false')) {
       const shopName = sessionStorage.getItem('enteredShopName') || '';
 
       if (sessionStorage.getItem('swipeToBack') === 'true') {
