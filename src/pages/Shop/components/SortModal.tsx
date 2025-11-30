@@ -7,6 +7,7 @@ import BottomModal, {
   BottomModalFooter,
   BottomModalHeader,
 } from '@/components/UI/BottomModal/BottomModal';
+import useLogger from '@/util/hooks/analytics/useLogger';
 
 export const sortOptions: { id: ReviewSorter; label: string }[] = [
   { id: 'LATEST', label: '최신순' },
@@ -24,8 +25,17 @@ interface SortModalProps {
 
 export default function SortModal({ isOpen, onClose, onApply, defaultSort }: SortModalProps) {
   const [selectedSort, setSelectedSort] = useState<ReviewSorter>('LATEST');
+  const logger = useLogger();
 
   const handleSelect = (sortId: ReviewSorter) => {
+    const selectedLabel = sortOptions.find((opt) => opt.id === sortId)?.label ?? '';
+
+    logger.actionEventClick({
+      team: 'BUSINESS',
+      event_label: 'shop_detail_view_review_can',
+      value: selectedLabel,
+    });
+
     setSelectedSort(sortId);
     onApply(sortId);
     onClose();
