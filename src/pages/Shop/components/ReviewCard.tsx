@@ -10,6 +10,8 @@ import NoImageIcon from '@/assets/Shop/no-image-icon.svg';
 import Portal from '@/components/Portal';
 import Button from '@/components/UI/Button';
 import Modal from '@/components/UI/CenterModal/Modal';
+import { useGetUnorderableShopDetail } from '@/pages/Shop/hooks/useGetShopDetail';
+import useLogger from '@/util/hooks/analytics/useLogger';
 import useBooleanState from '@/util/hooks/useBooleanState';
 import useScrollLock from '@/util/hooks/useScrollLock';
 import { useToast } from '@/util/hooks/useToast';
@@ -29,6 +31,10 @@ export default function ReviewCard({ review }: ReviewCardProps) {
   const navigate = useNavigate();
   const { shopId } = useParams();
   const { showToast } = useToast();
+  const logger = useLogger();
+
+  const { data: shopDetail } = useGetUnorderableShopDetail(Number(shopId));
+  const shopName = shopDetail.name;
 
   const { rating, nick_name, content, image_urls, menu_names, is_mine, is_reported, created_at, review_id } = review;
 
@@ -64,19 +70,40 @@ export default function ReviewCard({ review }: ReviewCardProps) {
   };
 
   const handleDeleteClick = () => {
+    logger.actionEventClick({
+      team: 'BUSINESS',
+      event_label: 'shop_detail_view_review_delete',
+      value: shopName,
+    });
+
     openDeleteModal();
   };
 
   const handleConfirmDelete = async () => {
+    logger.actionEventClick({
+      team: 'BUSINESS',
+      event_label: 'shop_detail_view_review_delete_done',
+      value: 'O',
+    });
+
     try {
       await deleteReview();
-
       showToast('리뷰가 삭제되었어요');
       closeDeleteModal();
     } catch (error) {
       console.error(error);
       showToast('리뷰 삭제에 실패했어요');
     }
+  };
+
+  const handleDeleteCancel = () => {
+    logger.actionEventClick({
+      team: 'BUSINESS',
+      event_label: 'shop_detail_view_review_delete_done',
+      value: 'X',
+    });
+
+    closeDeleteModal();
   };
 
   const handleImageClick = (src: string) => {
@@ -181,7 +208,7 @@ export default function ReviewCard({ review }: ReviewCardProps) {
             삭제한 리뷰는 되돌릴 수 없습니다. <br /> 삭제 하시겠습니까?
           </p>
           <div className="flex w-full gap-2">
-            <Button type="button" color="gray" size="lg" className="flex-1 shadow-none" onClick={closeDeleteModal}>
+            <Button type="button" color="gray" size="lg" className="flex-1 shadow-none" onClick={handleDeleteCancel}>
               취소
             </Button>
 
