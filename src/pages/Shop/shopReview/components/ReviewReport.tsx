@@ -4,6 +4,7 @@ import { useGetReviewReportCategories } from '../../hooks/useGetReviewReportCate
 import useReportReview from '../../hooks/useReportReview';
 import CheckIcon from '@/assets/Home/check-icon.svg';
 import Button from '@/components/UI/Button';
+import useLogger from '@/util/hooks/analytics/useLogger';
 import { useToast } from '@/util/hooks/useToast';
 
 export default function ReviewReport() {
@@ -11,6 +12,7 @@ export default function ReviewReport() {
   const [etcText, setEtcText] = useState('');
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
+  const logger = useLogger();
   const { shopId } = useParams();
   const [searchParams] = useSearchParams();
   const reviewIdParam = searchParams.get('reviewId');
@@ -62,6 +64,12 @@ export default function ReviewReport() {
 
     const selectedOption = options.find((o) => o.value === selected[0]);
     if (!selectedOption) return;
+
+    logger.actionEventClick({
+      team: 'BUSINESS',
+      event_label: 'shop_detail_view_review_report',
+      value: selectedOption.label,
+    });
 
     const body = {
       reports: [
