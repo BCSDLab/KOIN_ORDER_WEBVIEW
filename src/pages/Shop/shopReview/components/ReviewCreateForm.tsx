@@ -7,6 +7,8 @@ import Modal from '@/components/UI/CenterModal/Modal';
 import StarList from '@/pages/Shop/components/StarList';
 import { useCreateReviewForm } from '@/pages/Shop/hooks/useCreateReviewForm';
 import { useGetUnorderableShopDetail } from '@/pages/Shop/hooks/useGetShopDetail';
+import useLogger from '@/util/hooks/analytics/useLogger';
+import { getLoggingTime, setStartLoggingTime } from '@/util/ts/analytics/loggingTime';
 
 export default function ReviewCreateForm() {
   const {
@@ -29,12 +31,28 @@ export default function ReviewCreateForm() {
     removeImage,
   } = useCreateReviewForm();
 
+  const logger = useLogger();
   const { shopId } = useParams<{ shopId: string }>();
   const { data: shopDetail } = useGetUnorderableShopDetail(Number(shopId));
   const shopName = shopDetail.name;
 
   const [exitModalOpen, setExitModalOpen] = useState(false);
   const navigate = useNavigate();
+
+  const handleSubmitWithLogging = () => {
+    logger.actionEventClick({
+      team: 'BUSINESS',
+      event_label: 'shop_detail_view_review_write_done',
+      value: shopName,
+      duration_time: getLoggingTime('enteredReviewCreatePage'),
+    });
+
+    handleSubmit();
+  };
+
+  useEffect(() => {
+    setStartLoggingTime('enteredReviewCreatePage');
+  }, []);
 
   useEffect(() => {
     const handler = () => setExitModalOpen(true);
@@ -158,7 +176,7 @@ export default function ReviewCreateForm() {
       <Button
         fullWidth
         color="primary"
-        onClick={handleSubmit}
+        onClick={handleSubmitWithLogging}
         state={isFormValid ? 'default' : 'disabled'}
         className="mt-auto mb-4 py-[11px] text-[15px]"
       >
