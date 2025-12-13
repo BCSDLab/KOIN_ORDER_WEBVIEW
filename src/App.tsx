@@ -53,10 +53,12 @@ export default function App() {
           {/* <Route path="shop-detail/true/:shopId" element={<OrderableShopDetail />} /> */}
           <Route path="shop-detail/false/:shopId" element={<UnorderableShopDetail />} />
           {/* <Route path="review/true/:shopId" element={<OrderableShopReview />} /> */}
-          <Route path="review/false/:shopId" element={<UnorderableShopReview />} />
-          <Route path="review/report/:shopId" element={<ReviewReport />} />
-          <Route path="review/new/:shopId" element={<ReviewCreateForm />} />
-          <Route path="review/edit/:shopId/:reviewId" element={<ReviewEditForm />} />
+          <Route path="review">
+            <Route path="false/:shopId" element={<UnorderableShopReview />} />
+            <Route path="report/:shopId" element={<ReviewReport />} />
+            <Route path="new/:shopId" element={<ReviewCreateForm />} />
+            <Route path="edit/:shopId/:reviewId" element={<ReviewEditForm />} />
+          </Route>
           {/* <Route path="cart" element={<Cart />} /> */}
           {/* <Route path="delivery">
             <Route path="outside/detail" element={<DetailAddress />} />
