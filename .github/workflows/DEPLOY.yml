@@ -1,0 +1,116 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - develop
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Deploy branch'
+        required: true
+        default: 'develop'
+        type: choice
+        options:
+          - develop
+          - main
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref_name }}
+  cancel-in-progress: ${{ github.ref_name != 'main' }}
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - uses: pnpm/action-setup@v4
+        name: Install pnpm
+        with:
+          run_install: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Run lint
+        run: pnpm lint
+
+  build-and-deploy:
+    needs: [lint]
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    environment: ${{ github.ref_name == 'main' && 'production' || 'stage' }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - uses: pnpm/action-setup@v4
+        name: Install pnpm
+        with:
+          run_install: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+          cache: 'pnpm'
+
+      - name: Set deploy config
+        run: |
+          if [ "${{ github.ref_name }}" = "main" ]; then
+            echo "ARCHIVE_NAME=dist-production.tar.gz" >> $GITHUB_ENV
+            echo "DEPLOY_PATH=/usr/local/koin/webview-order" >> $GITHUB_ENV
+          else
+            echo "ARCHIVE_NAME=dist-stage.tar.gz" >> $GITHUB_ENV
+            echo "DEPLOY_PATH=/usr/local/koin/webview-order" >> $GITHUB_ENV
+          fi
+
+      - name: Create .env
+        env:
+          VITE_API_PATH: ${{ vars.VITE_API_PATH }}
+          VITE_NAVER_MAPS_CLIENT_ID: ${{ vars.VITE_NAVER_MAPS_CLIENT_ID }}
+          VITE_GOOGLE_ANALYTICS_ID: ${{ vars.VITE_GOOGLE_ANALYTICS_ID }}
+          VITE_GTM_ID: ${{ vars.VITE_GTM_ID }}
+        run: |
+          echo "VITE_API_PATH=$VITE_API_PATH" >> .env
+          echo "VITE_NAVER_MAPS_CLIENT_ID=$VITE_NAVER_MAPS_CLIENT_ID" >> .env
+          echo "VITE_GOOGLE_ANALYTICS_ID=$VITE_GOOGLE_ANALYTICS_ID" >> .env
+          echo "VITE_GTM_ID=$VITE_GTM_ID" >> .env
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Build
+        run: pnpm build
+
+      - name: Create deploy package
+        run: |
+          cd dist && tar -czf ../$ARCHIVE_NAME *
+
+      - name: Setup SSH agent
+        uses: webfactory/ssh-agent@v0.10.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Debug SSH key
+        run: ssh-add -l
+
+      - name: Add SSH known hosts
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -p ${{ secrets.SSH_PORT }} ${{ secrets.DEPLOY_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Deploy
+        run: |
+          scp -o ConnectTimeout=30 -P ${{ secrets.SSH_PORT }} $ARCHIVE_NAME ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}:${{ env.DEPLOY_PATH }}/
+          ssh -o ConnectTimeout=30 -p ${{ secrets.SSH_PORT }} ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }} "tar -xvzf ${{ env.DEPLOY_PATH }}/$ARCHIVE_NAME -C ${{ env.DEPLOY_PATH }}"
