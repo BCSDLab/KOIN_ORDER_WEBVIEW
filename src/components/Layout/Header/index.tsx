@@ -14,7 +14,7 @@ import { getLoggingTime } from '@/util/ts/analytics/loggingTime';
 export default function Header() {
   const logger = useLogger();
   const navigate = useNavigate();
-  const { pathname } = useLocation();
+  const { pathname, state } = useLocation();
   const [searchParams] = useSearchParams();
 
   const backToPreviousPage = () => {
@@ -80,6 +80,17 @@ export default function Header() {
       return navigate('/cart', { replace: true });
     }
 
+    if (pathname.startsWith('/shop-events')) {
+      const shopName =
+        (state as { shopName?: string } | null)?.shopName || sessionStorage.getItem('enteredShopName') || '';
+
+      logger.actionEventClick({
+        team: 'BUSINESS',
+        event_label: 'shop_benefit_back',
+        value: shopName,
+      });
+    }
+
     if (window.history.length > 1) {
       return navigate(-1);
     }
@@ -95,7 +106,12 @@ export default function Header() {
     }
   };
 
-  const title = ROUTE_TITLES.find((item) => item.match(pathname))?.title ?? '';
+  const shopName = (state as { shopName?: string } | null)?.shopName;
+
+  const title =
+    pathname.startsWith('/shop-detail') || pathname.startsWith('/shop-events')
+      ? shopName || sessionStorage.getItem('enteredShopName') || ''
+      : (ROUTE_TITLES.find((item) => item.match(pathname))?.title ?? '');
 
   const bgClass = clsx({
     'bg-white': pathname.startsWith('/shop-detail') || pathname.startsWith('/result') || pathname.startsWith('/review'),

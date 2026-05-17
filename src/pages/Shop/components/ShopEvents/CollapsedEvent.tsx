@@ -1,0 +1,61 @@
+import type { Events } from '@/api/shop/entity';
+import DownArrow from '@/assets/Shop/chevron-down.svg';
+import LottieIcon from '@/assets/Shop/lottie-icon.svg';
+import useLogger from '@/util/hooks/analytics/useLogger';
+import { formatDate } from '@/util/ts/formatDate';
+
+interface EventProps {
+  event: Events;
+  onToggleOpen: () => void;
+  contentId: string;
+  isOpen: boolean;
+}
+
+export default function CollapsedEvent({ event, onToggleOpen, contentId, isOpen }: EventProps) {
+  const thumbnailImage = event.thumbnail_image?.[0];
+  const logger = useLogger();
+
+  const handleDetailClick = () => {
+    logger.actionEventClick({
+      team: 'BUSINESS',
+      event_label: 'shop_benefit_detail',
+      value: event.shop_name,
+    });
+
+    onToggleOpen();
+  };
+
+  return (
+    <div className="flex w-full px-6 py-3">
+      <div>
+        {thumbnailImage ? (
+          <img src={thumbnailImage} alt="이벤트 이미지" className="h-16 w-16 rounded-lg object-cover" />
+        ) : (
+          <LottieIcon className="h-[70px] w-[70px] rounded-lg" />
+        )}
+      </div>
+      <div className="flex min-h-[81px] w-full flex-col">
+        <div className="flex w-full justify-between">
+          <p className="ml-3 text-[15px] leading-[1.6] font-semibold">{event.title}</p>
+          <button
+            type="button"
+            onClick={handleDetailClick}
+            aria-expanded={isOpen}
+            aria-controls={contentId}
+            tabIndex={isOpen ? -1 : 0}
+            className="flex h-[25px] w-16 items-center justify-center"
+          >
+            <p className="text-[12px] leading-[1.6] font-medium text-[#727272]">상세보기</p>
+            <DownArrow />
+          </button>
+        </div>
+        <div className="flex h-full flex-col justify-between">
+          <p className="ml-3 line-clamp-2 text-sm leading-[1.6] font-medium">{event.content}</p>
+          <p className="ml-3 text-xs leading-[1.6] font-medium text-gray-400">
+            {formatDate(event.start_date)}~{formatDate(event.end_date)}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
