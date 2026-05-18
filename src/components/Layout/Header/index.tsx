@@ -106,6 +106,12 @@ export default function Header() {
     }
   };
 
+  const bgWhitePages =
+    pathname.startsWith('/shop-detail') ||
+    pathname.startsWith('/result') ||
+    pathname.startsWith('/review') ||
+    pathname.startsWith('/shop-events');
+
   const shopName = (state as { shopName?: string } | null)?.shopName;
 
   const title =
@@ -114,7 +120,7 @@ export default function Header() {
       : (ROUTE_TITLES.find((item) => item.match(pathname))?.title ?? '');
 
   const bgClass = clsx({
-    'bg-white': pathname.startsWith('/shop-detail') || pathname.startsWith('/result') || pathname.startsWith('/review'),
+    'bg-white': bgWhitePages,
     'bg-[#f8f8fa]': true,
   });
 

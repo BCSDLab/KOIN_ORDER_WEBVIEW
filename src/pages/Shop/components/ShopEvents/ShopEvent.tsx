@@ -1,9 +1,10 @@
 import type { ReactNode } from 'react';
-import { useId, useState } from 'react';
+import { useId } from 'react';
 import clsx from 'clsx';
 import CollapsedEvent from './CollapsedEvent';
 import ExpandedEvent from './ExpandedEvent';
 import type { Events } from '@/api/shop/entity';
+import useBooleanState from '@/util/hooks/useBooleanState';
 
 interface AnimatedSlotProps {
   id?: string;
@@ -31,15 +32,15 @@ function AnimatedSlot({ id, isVisible, offsetDirection, children, 'aria-hidden':
 }
 
 export default function ShopEvent({ event }: { event: Events }) {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, , , toggleIsOpen] = useBooleanState(false);
   const contentId = useId();
 
   const toggleEventDetail = () => {
-    setIsOpen((prev) => !prev);
+    toggleIsOpen();
   };
 
   return (
-    <article className="w-full overflow-hidden border-b-[0.5px] border-[#CACACA] bg-white">
+    <article className="w-full overflow-hidden border-b-[0.5px] border-neutral-400 bg-white">
       <AnimatedSlot isVisible={!isOpen} offsetDirection="up" aria-hidden={isOpen}>
         <CollapsedEvent event={event} onToggleOpen={toggleEventDetail} contentId={contentId} isOpen={isOpen} />
       </AnimatedSlot>

@@ -1,6 +1,7 @@
+import Lottie from 'lottie-react';
 import type { Events } from '@/api/shop/entity';
-import DownArrow from '@/assets/Shop/chevron-down.svg';
-import LottieIcon from '@/assets/Shop/lottie-icon.svg';
+import LoadingLottie from '@/assets/lottie/jumping.json';
+import DownArrow from '@/assets/Shop/chevron-down-icon.svg';
 import useLogger from '@/util/hooks/analytics/useLogger';
 import { formatDate } from '@/util/ts/formatDate';
 
@@ -29,29 +30,29 @@ export default function CollapsedEvent({ event, onToggleOpen, contentId, isOpen 
     <div className="flex w-full px-6 py-3">
       <div>
         {thumbnailImage ? (
-          <img src={thumbnailImage} alt="이벤트 이미지" className="h-16 w-16 rounded-lg object-cover" />
+          <img src={thumbnailImage} alt="이벤트 이미지" className="h-[70px] w-[70px] rounded-lg object-cover" />
         ) : (
-          <LottieIcon className="h-[70px] w-[70px] rounded-lg" />
+          <Lottie animationData={LoadingLottie} className="h-[70px] w-[70px] rounded-lg" />
         )}
       </div>
-      <div className="flex min-h-[81px] w-full flex-col">
+      <div className="ml-3 flex min-h-[70px] w-full flex-col">
         <div className="flex w-full justify-between">
-          <p className="ml-3 text-[15px] leading-[1.6] font-semibold">{event.title}</p>
+          <p className="text-[15px] leading-[1.6] font-semibold">{event.title}</p>
           <button
             type="button"
             onClick={handleDetailClick}
             aria-expanded={isOpen}
             aria-controls={contentId}
             tabIndex={isOpen ? -1 : 0}
-            className="flex h-[25px] w-16 items-center justify-center"
+            className="flex items-center justify-center"
           >
-            <p className="text-[12px] leading-[1.6] font-medium text-[#727272]">상세보기</p>
+            <p className="text-xs leading-[1.6] font-medium text-neutral-500">상세보기</p>
             <DownArrow />
           </button>
         </div>
         <div className="flex h-full flex-col justify-between">
-          <p className="ml-3 line-clamp-2 text-sm leading-[1.6] font-medium">{event.content}</p>
-          <p className="ml-3 text-xs leading-[1.6] font-medium text-gray-400">
+          <p className="line-clamp-2 text-xs leading-[1.6] font-medium">{event.content}</p>
+          <p className="text-xs leading-[1.6] font-[400] text-gray-400">
             {formatDate(event.start_date)}~{formatDate(event.end_date)}
           </p>
         </div>
