@@ -53,7 +53,7 @@ export default function ShopSummary({ shopInfoSummary, id, isOrderable, UnOrdera
   };
 
   const { data: shopEvents } = useGetShopEvents(shopInfoSummary.shop_id);
-  const latestEvent = shopEvents.events[0];
+  const latestEvent = shopEvents?.events[0];
 
   return (
     <>
