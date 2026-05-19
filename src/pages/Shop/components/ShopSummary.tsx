@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { useGetShopEvents } from '../hooks/useGetShopEvents';
 import type { ShopInfoSummaryResponse, UnorderableShopDetailInfoResponse } from '@/api/shop/entity.ts';
 import ChevronRightIcon from '@/assets/Common/chevron-right.svg';
 import StarIcon from '@/assets/Common/star-icon.svg';
@@ -42,6 +43,17 @@ export default function ShopSummary({ shopInfoSummary, id, isOrderable, UnOrdera
       value: shopInfoSummary.name,
     });
   };
+
+  const handleBenefitEntryClick = () => {
+    logger.actionEventClick({
+      team: 'BUSINESS',
+      event_label: 'shop_benefit_entry',
+      value: shopInfoSummary.name,
+    });
+  };
+
+  const { data: shopEvents } = useGetShopEvents(shopInfoSummary.shop_id);
+  const latestEvent = shopEvents?.events[0];
 
   return (
     <>
@@ -148,13 +160,13 @@ export default function ShopSummary({ shopInfoSummary, id, isOrderable, UnOrdera
           )}
 
           <Link
-            to={isOrderable ? `/shop-detail/true/${id}#가게알림` : `/shop-detail/false/${id}#가게알림`}
+            to={`/shop-events/${shopInfoSummary.shop_id}`}
             className="shadow-1 flex h-14 w-full items-center justify-between gap-1 rounded-xl bg-white py-2 pr-2 pl-3"
-            onClick={handleShopInfoClick}
+            onClick={handleBenefitEntryClick}
           >
             <SpeakerIcon />
             <span className="h-9.5 w-24 overflow-hidden text-[12px] leading-[1.6] text-ellipsis">
-              {shopInfoSummary.introduction}
+              {latestEvent?.title ?? '아직 이벤트/공지가 없어요'}
             </span>
             <div className="flex h-5 w-5 items-center justify-center">
               <ChevronRightIcon fill="#727272" />

@@ -16,6 +16,7 @@ import {
   ShopCategoriesResponse,
   OrderableShopsResponse,
   OrderableShopsParams,
+  ShopEventsResponse,
   ShopListResponse,
   ShopListParams,
   NearbyStoresRelateSearchResponse,
@@ -169,5 +170,10 @@ export const deleteShopReview = async (shopId: number, reviewId: number) => {
 export const getShopReviewDetail = async (shopId: number, reviewId: number) => {
   const response = await apiClient.get<ReviewDetailResponse>(`/shops/${shopId}/reviews/${reviewId}`);
 
+  return response;
+};
+
+export const getShopEvent = async (shopId: number) => {
+  const response = await apiClient.get<ShopEventsResponse>(`/shops/${shopId}/events`);
   return response;
 };
