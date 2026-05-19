@@ -62,7 +62,6 @@ export default function ShopSummary({ shopInfoSummary, id, isOrderable, UnOrdera
         <div className="flex w-full justify-between">
           <Link
             to={isOrderable ? `/review/true/${id}` : `/review/false/${id}`}
-            state={{ shopName: shopInfoSummary.name }}
             className="flex items-center justify-between gap-1"
             onClick={handleReviewClick}
           >
@@ -162,7 +161,6 @@ export default function ShopSummary({ shopInfoSummary, id, isOrderable, UnOrdera
 
           <Link
             to={`/shop-events/${shopInfoSummary.shop_id}`}
-            state={{ shopName: shopInfoSummary.name }}
             className="shadow-1 flex h-14 w-full items-center justify-between gap-1 rounded-xl bg-white py-2 pr-2 pl-3"
             onClick={handleBenefitEntryClick}
           >

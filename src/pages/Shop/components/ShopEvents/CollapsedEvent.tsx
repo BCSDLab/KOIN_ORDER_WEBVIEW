@@ -32,7 +32,7 @@ export default function CollapsedEvent({ event, onToggleOpen, contentId, isOpen 
         {thumbnailImage ? (
           <img src={thumbnailImage} alt="이벤트 이미지" className="h-[70px] w-[70px] rounded-lg object-cover" />
         ) : (
-          <Lottie animationData={LoadingLottie} className="h-[70px] w-[70px] rounded-lg" />
+          <Lottie animationData={LoadingLottie} className="size-[70px] rounded-lg" />
         )}
       </div>
       <div className="ml-3 flex min-h-[70px] w-full flex-col">
@@ -52,7 +52,7 @@ export default function CollapsedEvent({ event, onToggleOpen, contentId, isOpen 
         </div>
         <div className="flex h-full flex-col justify-between">
           <p className="line-clamp-2 text-xs leading-[1.6] font-medium">{event.content}</p>
-          <p className="text-xs leading-[1.6] font-[400] text-gray-400">
+          <p className="text-xs leading-[1.6] text-gray-400">
             {formatDate(event.start_date)}~{formatDate(event.end_date)}
           </p>
         </div>

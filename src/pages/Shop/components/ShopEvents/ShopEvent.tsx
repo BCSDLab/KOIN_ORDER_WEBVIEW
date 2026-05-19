@@ -35,17 +35,13 @@ export default function ShopEvent({ event }: { event: Events }) {
   const [isOpen, , , toggleIsOpen] = useBooleanState(false);
   const contentId = useId();
 
-  const toggleEventDetail = () => {
-    toggleIsOpen();
-  };
-
   return (
     <article className="w-full overflow-hidden border-b-[0.5px] border-neutral-400 bg-white">
       <AnimatedSlot isVisible={!isOpen} offsetDirection="up" aria-hidden={isOpen}>
-        <CollapsedEvent event={event} onToggleOpen={toggleEventDetail} contentId={contentId} isOpen={isOpen} />
+        <CollapsedEvent event={event} onToggleOpen={toggleIsOpen} contentId={contentId} isOpen={isOpen} />
       </AnimatedSlot>
       <AnimatedSlot id={contentId} isVisible={isOpen} offsetDirection="down" aria-hidden={!isOpen}>
-        <ExpandedEvent event={event} onToggleOpen={toggleEventDetail} contentId={contentId} isOpen={isOpen} />
+        <ExpandedEvent event={event} onToggleOpen={toggleIsOpen} contentId={contentId} isOpen={isOpen} />
       </AnimatedSlot>
     </article>
   );
