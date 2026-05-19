@@ -13,6 +13,7 @@ import Search from './pages/Search';
 // import MenuDetail from './pages/Shop/MenuDetail';
 // import OrderableShopView from './pages/Shop/OrderableShopView';
 // import OrderableShopDetail from './pages/Shop/ShopDetail/components/OrderableShopDetail';
+import ShopEvents from './pages/Shop/components/ShopEvents';
 import ReviewCreateForm from './pages/Shop/shopReview/components/ReviewCreateForm';
 import ReviewEditForm from './pages/Shop/shopReview/components/ReviewEditForm';
 import ReviewReport from './pages/Shop/shopReview/components/ReviewReport';
@@ -52,6 +53,7 @@ export default function App() {
         <Route element={<AppLayout />}>
           {/* <Route path="shop-detail/true/:shopId" element={<OrderableShopDetail />} /> */}
           <Route path="shop-detail/false/:shopId" element={<UnorderableShopDetail />} />
+          <Route path="shop-events/:shopId" element={<ShopEvents />} />
           {/* <Route path="review/true/:shopId" element={<OrderableShopReview />} /> */}
           <Route path="review">
             <Route path="false/:shopId" element={<UnorderableShopReview />} />

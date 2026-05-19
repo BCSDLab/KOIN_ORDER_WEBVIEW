@@ -122,6 +122,21 @@ export interface UnorderableShopInfoParams {
   UnorderableShopId: number;
 }
 
+export interface Events {
+  shop_id: number;
+  shop_name: string;
+  event_id: number;
+  title: string;
+  content: string;
+  thumbnail_image: string[];
+  start_date: string;
+  end_date: string;
+}
+
+export interface ShopEventsResponse {
+  events: Events[];
+}
+
 export interface Price {
   id: number;
   name: string | null;

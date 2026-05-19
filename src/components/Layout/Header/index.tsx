@@ -80,6 +80,16 @@ export default function Header() {
       return navigate('/cart', { replace: true });
     }
 
+    if (pathname.startsWith('/shop-events')) {
+      const shopName = sessionStorage.getItem('enteredShopName') || '';
+
+      logger.actionEventClick({
+        team: 'BUSINESS',
+        event_label: 'shop_benefit_back',
+        value: shopName,
+      });
+    }
+
     if (window.history.length > 1) {
       return navigate(-1);
     }
@@ -95,10 +105,19 @@ export default function Header() {
     }
   };
 
-  const title = ROUTE_TITLES.find((item) => item.match(pathname))?.title ?? '';
+  const bgWhitePages =
+    pathname.startsWith('/shop-detail') ||
+    pathname.startsWith('/result') ||
+    pathname.startsWith('/review') ||
+    pathname.startsWith('/shop-events');
+
+  const title =
+    pathname.startsWith('/shop-detail') || pathname.startsWith('/shop-events')
+      ? sessionStorage.getItem('enteredShopName') || ''
+      : (ROUTE_TITLES.find((item) => item.match(pathname))?.title ?? '');
 
   const bgClass = clsx({
-    'bg-white': pathname.startsWith('/shop-detail') || pathname.startsWith('/result') || pathname.startsWith('/review'),
+    'bg-white': bgWhitePages,
     'bg-[#f8f8fa]': true,
   });
 
